@@ -6,11 +6,7 @@ class App extends Component {
     return (
       <div className="App">
        
-          This is a temporary placeholder for the new Earthdoom website.
-          <br/>
-          Check back again soon and I will have new content up soon.
-          <br/>
-          Copyright 2019
+         Test
         
       </div>
     );
