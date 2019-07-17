@@ -1,3 +1,4 @@
 # Create React App
 
-Our first Now application
+This is the Earthdoom website.
+New content will be released soon.
