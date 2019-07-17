@@ -1,4 +1,4 @@
-# Create React App
+# Earthdoom
 
 This is the Earthdoom website.
 
