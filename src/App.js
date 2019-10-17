@@ -5,7 +5,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-       
+          <br/>
+          <br/>
           This is a temporary placeholder for the new Earthdoom website.
           <br/>
           Check back again soon and I will have new content up soon.
