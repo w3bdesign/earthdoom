@@ -1,6 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: "Earthdoom Blog",
+    siteUrl: "https://www.earthdoom.com"
   },
   plugins: [
     {
