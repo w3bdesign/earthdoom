@@ -1,3 +1,0 @@
-# Earthdoom
-
-Monorepo for Earthdoom
