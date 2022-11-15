@@ -19,7 +19,7 @@
     "gatsby-plugin-image": "^2.11.1",
     "gatsby-plugin-postcss": "^5.11.0",
     "gatsby-plugin-react-helmet": "^5.11.0",
-    "gatsby-plugin-sharp": "^4.11.1",
+    "gatsby-plugin-sharp": "^4.24.0",
     "gatsby-plugin-sitemap": "^5.11.1",
     "gatsby-source-filesystem": "^4.11.1",
     "gatsby-source-sanity": "^7.4.2",
