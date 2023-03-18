@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+    // Further reading:
+    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    url      = env("DATABASE_URL")
+}
+
+model Example {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Necessary for Next auth
+model Account {
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? // @db.Text
+    access_token      String? // @db.Text
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? // @db.Text
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+// Game models
+
+model pa_users {
+    id               Int    @id @default(autoincrement())
+    name             String
+    nick             String
+    email            String
+    city             String
+    phone            String
+    password         String
+    crystal          BigInt @default(0)
+    metal            BigInt @default(0)
+    energy           BigInt @default(0)
+    r_energy         Int    @default(0)
+    c_energy         Int    @default(0)
+    sats             Int    @default(0)
+    infinitys        Int    @default(0)
+    wraiths          Int    @default(0)
+    warfrigs         Int    @default(0)
+    destroyers       Int    @default(0)
+    scorpions        Int    @default(0)
+    astropods        Int    @default(0)
+    cobras           Int    @default(0)
+    infinitys_base   Int    @default(0)
+    wraiths_base     Int    @default(0)
+    warfrigs_base    Int    @default(0)
+    destroyers_base  Int    @default(0)
+    scorpions_base   Int    @default(0)
+    astropods_base   Int    @default(0)
+    cobras_base      Int    @default(0)
+    p_scorpions      Int    @default(0)
+    p_scorpionst     Int    @default(0)
+    p_cobras         Int    @default(0)
+    p_cobrast        Int    @default(0)
+    missiles         Int    @default(0)
+    score            BigInt @default(0)
+    asteroids        Int    @default(0)
+    asteroid_crystal Int    @default(0)
+    asteroid_metal   Int    @default(0)
+    ui_roids         Int    @default(0)
+    war              Int    @default(0)
+    def              Int    @default(0)
+    wareta           Int    @default(0)
+    defeta           Int    @default(0)
+    c_crystal        Int    @default(0)
+    c_metal          Int    @default(0)
+    c_airport        Int    @default(0)
+    c_abase          Int    @default(0)
+    c_wstation       Int    @default(0)
+    c_amp1           Int    @default(0)
+    c_amp2           Int    @default(0)
+    c_warfactory     Int    @default(0)
+    c_destfact       Int    @default(0)
+    c_scorpfact      Int    @default(0)
+    r_imcrystal      Int    @default(0)
+    r_immetal        Int    @default(0)
+    r_iafs           Int    @default(0)
+    r_aaircraft      Int    @default(0)
+    r_tbeam          Int    @default(0)
+    r_uscan          Int    @default(0)
+    r_oscan          Int    @default(0)
+    p_infinitys      Int    @default(0)
+    p_infinityst     Int    @default(0)
+    p_wraiths        Int    @default(0)
+    p_wraithst       Int    @default(0)
+    p_warfrigs       Int    @default(0)
+    p_warfrigst      Int    @default(0)
+    p_destroyers     Int    @default(0)
+    p_destroyerst    Int    @default(0)
+    p_missiles       Int    @default(0)
+    p_missilest      Int    @default(0)
+    timer            Int    @default(0)
+    size             Int    @default(0)
+    p_astropods      Int    @default(0)
+    p_astropodst     Int    @default(0)
+    tag              String
+    rank             Int    @default(0)
+    rcannons         Int    @default(0)
+    p_rcannons       Int    @default(0)
+    p_rcannonst      Int    @default(0)
+    avengers         Int    @default(0)
+    p_avengers       Int    @default(0)
+    p_avengerst      Int    @default(0)
+    lstalkers        Int    @default(0)
+    p_lstalkers      Int    @default(0)
+    p_lstalkerst     Int    @default(0)
+    r_odg            Int    @default(0)
+    c_odg            Int    @default(0)
+    sleep            Int    @default(0)
+    lastsleep        Int    @default(0)
+    closed           Int    @default(0)
+    x                Int    @default(1)
+    y                Int    @default(1)
+    commander        Int    @default(0)
+    galname          String @default("No name")
+    galpic           String @default("125x125earthdoom1.gif")
+    motd             String
+    vote             String
+    civilians        Int    @default(1000)
+    tax              Int    @default(20)
+    credits          Int    @default(5000)
+    newbie           Int    @default(100)
+}
