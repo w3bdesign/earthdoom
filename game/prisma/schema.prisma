@@ -67,7 +67,7 @@ model VerificationToken {
 
 // Game models
 
-model pa_users {
+model PaUsers {
     id               Int    @id @default(autoincrement())
     name             String
     nick             String
@@ -167,4 +167,78 @@ model pa_users {
     tax              Int    @default(20)
     credits          Int    @default(5000)
     newbie           Int    @default(100)
+}
+
+model PaNew {
+    id     Int    @id @default(autoincrement())
+    time   Int    @default(0)
+    news   String
+    seen   String @default("")
+    header String
+}
+
+model PaLogging {
+    id      Int    @id @default(autoincrement())
+    subject String
+    text    String
+    author  Int    @default(0)
+    stamp   Int    @default(0)
+    toid    Int    @default(0)
+    type    String
+    ip      String
+}
+
+model PaTag {
+    id       Int    @id @default(autoincrement())
+    tag      String
+    leader   String
+    password String
+}
+
+model PaMail {
+    id     Int    @id @default(autoincrement())
+    time   Int    @default(0)
+    news   String
+    seen   String @default("")
+    header String
+}
+
+model PaPolit {
+    id       Int    @id @default(autoincrement())
+    time     Int    @default(0)
+    tekst    String
+    x        Int    @default(1)
+    creator  String
+    threadid String
+    header   String
+}
+
+model PaAlliance {
+    id       Int    @id @default(autoincrement())
+    time     Int    @default(0)
+    tekst    String
+    alliance String
+    creator  String
+    threadid String
+    header   String
+}
+
+model PaSession {
+    id          Int    @id @default(autoincrement())
+    nick        String
+    userid      Int
+    magicnumber String @default("0")
+}
+
+model PaWar {
+    id       Int @id @default(autoincrement())
+    attacker Int
+    defender Int
+}
+
+model Reset {
+    id         Int @id @default(autoincrement())
+    nextreset  Int @default(10080)
+    game_start Int @default(0)
+    game_reset Int @default(1)
 }
