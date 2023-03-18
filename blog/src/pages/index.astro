@@ -14,19 +14,17 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
   <body class="bg-black">
     <Header title={SITE_TITLE} />
     <main>
-      <div class="flex flex-col items-center justify-center h-[530px] lg:h-[700px]">
-        <h1 class="text-white text-6xl font-bold mb-8">Earth Doom</h1>
-        <p class="text-white text-xl mb-12">
-          Explore the galaxy like never before
-        </p>
-        <a
-          href="/register"
-          class="border border-white rounded-full text-sm uppercase py-2 px-4 hover:bg-white hover:text-black transition duration-300 ease-in-out"
-          >Get Started</a
-        >
+      <div
+        class="flex flex-col items-center justify-center h-[530px] lg:h-[700px] bg-large-space-ship"
+      >
+        <div class="bg-black p-2">
+          <h1 class="text-white text-6xl font-bold mb-8 text-center">Earth Doom</h1>
+          <p class="text-white text-xl mb-6 text-center">
+            Explore the galaxy like never before
+          </p>
+        </div>
       </div>
     </main>
     <Footer />
-    
   </body>
 </html>
