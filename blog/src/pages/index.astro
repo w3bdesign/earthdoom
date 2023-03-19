@@ -1,9 +1,10 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+import BaseHead from "../components/Header/BaseHead.astro";
+import Header from "../components/Header/Header.astro";
+import Footer from "../components/Footer/Footer.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Intro from "../components/Index/Intro.astro";
 ---
 
 <!DOCTYPE html>
@@ -17,53 +18,59 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
       <div
         class="flex flex-col items-center justify-center h-[530px] lg:h-[690px] bg-large-space-ship bg-cover bg-left"
       >
-        <div class="bg-neutral-900 p-4 md:p-8 rounded-lg mx-2 md:mx-0 drop-shadow-lg shadow-lg shadow-slate-700">
+        <div
+          class="bg-neutral-900 p-4 md:p-8 rounded-lg mx-2 md:mx-0 drop-shadow-lg shadow-lg shadow-slate-700 md:w-[800px]"
+        >
           <h1
             class="text-white text-xl md:text-3xl font-bold mb-8 text-center fade-in-top"
           >
             Earth Doom
           </h1>
-          <p class="text-white text-sm lg:text-xl mb-6 text-center fade-in-top-second">
+          <p
+            class="text-white text-sm lg:text-xl mb-6 text-center fade-in-top-second"
+          >
             Explore the galaxy like never before
           </p>
         </div>
       </div>
     </main>
+    <Intro />
     <Footer />
-  </body><style>
-    .fade-in-top {
-      opacity: 0;
-      transform: translateY(-30px);
-      animation: fadeInTop 0.7s ease-in-out forwards;
-    }
-
-    @keyframes fadeInTop {
-      from {
+    <style>
+      .fade-in-top {
         opacity: 0;
         transform: translateY(-30px);
+        animation: fadeInTop 0.7s ease-in-out forwards;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+      @keyframes fadeInTop {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
-    }
 
-    .fade-in-top-second {
-      opacity: 0;
-      transform: translateY(-40px);
-      animation: fadeInTop 0.7s ease-in-out forwards;
-      animation-delay: 0.8s;
-    }
-
-    @keyframes fadeInTop {
-      from {
+      .fade-in-top-second {
         opacity: 0;
-        transform: translateY(-4);
+        transform: translateY(-40px);
+        animation: fadeInTop 0.7s ease-in-out forwards;
+        animation-delay: 0.8s;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+      @keyframes fadeInTop {
+        from {
+          opacity: 0;
+          transform: translateY(-4);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
-    }
-  </style>
+    </style>
+  </body>
 </html>
