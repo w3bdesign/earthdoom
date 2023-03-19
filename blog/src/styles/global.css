@@ -13,7 +13,7 @@ body {
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	line-height: 1.5;
-	color: #444;
+	color: #fff;
 }
 h1,
 h2,
@@ -23,7 +23,7 @@ h5,
 h6,
 strong,
 b {
-	color: #222;
+	color: #fff;
 }
 a {
 	color: #3273dc;
