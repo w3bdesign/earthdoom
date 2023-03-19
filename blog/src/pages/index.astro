@@ -2,9 +2,10 @@
 import BaseHead from "../components/Header/BaseHead.astro";
 import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer/Footer.astro";
+import Intro from "../components/Index/Intro.astro";
+import CallToAction from "../components/Index/CallToAction.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import Intro from "../components/Index/Intro.astro";
 ---
 
 <!DOCTYPE html>
@@ -19,7 +20,7 @@ import Intro from "../components/Index/Intro.astro";
         class="flex flex-col items-center justify-center h-[530px] lg:h-[690px] bg-large-space-ship bg-cover bg-left"
       >
         <div
-          class="bg-neutral-900 p-4 md:p-8 rounded-lg mx-2 md:mx-0 drop-shadow-lg shadow-lg shadow-slate-700 md:w-[800px]"
+          class="bg-neutral-900 p-4 md:p-8 rounded-lg mx-2 md:mx-0 drop-shadow-lg shadow-lg shadow-slate-700 md:w-[810px] w-[260px]"
         >
           <h1
             class="text-white text-xl md:text-3xl font-bold mb-8 text-center fade-in-top"
@@ -27,27 +28,11 @@ import Intro from "../components/Index/Intro.astro";
             Earth Doom
           </h1>
           <p
-            class="text-white text-sm lg:text-xl mb-6 text-center fade-in-top-second"
+            class="text-white text-center lg:text-xl mb-6 md:text-center fade-in-top-second"
           >
             Explore the galaxy like never before
           </p>
-          <p class="flex flex-row items-center justify-center mt-2">
-            <button
-              class="ease-in-out duration-300 bg-orange-500 rounded-lg w-[125px] m-2 px-4 py-2 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-75"
-            >
-              Register
-            </button>
-            <button
-              class="ease-in-out duration-300 bg-orange-500 rounded-lg w-[125px] m-2 px-4 py-2 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-75"
-            >
-              Login
-            </button>
-            <button
-              class="ease-in-out duration-300 bg-orange-500 rounded-lg w-[125px] m-2 px-4 py-2 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-75"
-            >
-              Learn more
-            </button>
-          </p>
+          <CallToAction />
         </div>
       </div>
     </main>
