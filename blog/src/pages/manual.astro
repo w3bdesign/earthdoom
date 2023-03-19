@@ -2,6 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import Manual from "../components/Manual.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 ---
@@ -15,9 +16,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
     <Header title={SITE_TITLE} />
     <main>
       <div
-        class="flex flex-col items-center justify-center h-[530px] lg:h-[700px]"
+        class="flex flex-col items-center justify-center p-2"
       >
-        Manual comes here
+        <Manual />
       </div>
     </main>
     <Footer />
