@@ -5,23 +5,29 @@ import { SITE_TITLE } from "../consts";
 ---
 
 <header>
-  <nav class="flex justify-between items-center py-4 px-6">
-    <div>
-    <img src="/images/logo.png" alt="Earthdoom logo" width="90">
-	<h1 class="text-center text-md text-white mt-2">{SITE_TITLE}</h1>
+  <nav class="flex justify-between items-center py-4">
+    <div class="mx-auto md:mx-0">
+      <img src="/images/logo.png" alt="Earthdoom logo" width="90" />
+      <h1 class="text-center text-md text-white mt-2">{SITE_TITLE}</h1>
     </div>
     <div class="hidden sm:block">
       <HeaderLink class="text-white text-md uppercase mx-4 font-bold" href="/">
         Home
       </HeaderLink>
-      <HeaderLink class="text-white text-md uppercase mx-4 font-bold" href="/blog">
+      <HeaderLink
+        class="text-white text-md uppercase mx-4 font-bold"
+        href="/blog"
+      >
         Blog
       </HeaderLink>
-      <HeaderLink class="text-white text-md uppercase mx-4 font-bold" href="/manual">
+      <HeaderLink
+        class="text-white text-md uppercase mx-4 font-bold"
+        href="/manual"
+      >
         Manual
       </HeaderLink>
       <HeaderLink
-        class="bg-neutral-800 hover:bg-neutral-600 text-white text-md uppercase font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out"
+        class="bg-neutral-800 hover:bg-neutral-600 text-white text-md uppercase font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out shadow shadow-slate-900"
         href="/register"
       >
         Register
@@ -31,20 +37,26 @@ import { SITE_TITLE } from "../consts";
   <!-- This is the responsive menu -->
   <div class="sm:hidden">
     <div class="flex justify-center items-center py-4 px-6">
-      <HeaderLink class="text-white block text-lg uppercase px-4 font-bold" href="/">
+      <HeaderLink
+        class="text-white block text-sm uppercase px-4 font-bold"
+        href="/"
+      >
         Home
       </HeaderLink>
-      <HeaderLink class="text-white block text-lg uppercase px-4 font-bold" href="/blog">
+      <HeaderLink
+        class="text-white block text-sm uppercase px-4 font-bold"
+        href="/blog"
+      >
         Blog
       </HeaderLink>
       <HeaderLink
-        class="text-white block text-lg uppercase px-4 font-bold"
+        class="text-white block text-sm uppercase px-4 font-bold"
         href="/manual"
       >
         Manual
       </HeaderLink>
       <HeaderLink
-        class="border border-white rounded-full text-md uppercase py-2 px-4 hover:bg-white hover:text-black transition duration-300 ease-in-out block"
+        class="bg-neutral-800 hover:bg-neutral-600 text-white text-sm uppercase font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out shadow shadow-slate-900"
         href="/register"
       >
         Register
