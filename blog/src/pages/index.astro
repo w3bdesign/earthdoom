@@ -28,7 +28,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
             Earth Doom
           </h1>
           <p
-            class="text-white text-center lg:text-xl mb-6 md:text-center py-6 fade-in-top-second"
+            class="text-white text-center lg:text-xl mb-4 md:text-center py-4 fade-in-top-second"
           >
             Explore the galaxy like never before
           </p>
@@ -88,7 +88,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
         if (textElement) {
           textElement.innerText = text.slice(0, i++);
 
-          const delay = Math.floor(Math.random() * 200) + 150;
+          const delay = Math.floor(Math.random() * 200) + 120;
 
           if (i <= text.length) {
             setTimeout(typewriter, delay);
