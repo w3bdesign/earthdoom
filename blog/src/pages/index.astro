@@ -23,12 +23,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
           class="bg-neutral-900 p-4 md:p-8 rounded-lg mx-2 md:mx-0 drop-shadow-lg shadow-lg shadow-slate-700 md:w-[810px] w-[260px]"
         >
           <h1
-            class="text-white text-xl md:text-3xl font-bold mb-8 text-center fade-in-top"
+            class="typewriter-effect text-white text-xl md:text-3xl font-bold mb-8 text-center"
           >
             Earth Doom
           </h1>
           <p
-            class="text-white text-center lg:text-xl mb-6 md:text-center fade-in-top-second"
+            class="text-white text-center lg:text-xl mb-6 md:text-center py-6 fade-in-top-second"
           >
             Explore the galaxy like never before
           </p>
@@ -39,23 +39,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
     <Intro />
     <Footer />
     <style>
-      .fade-in-top {
-        opacity: 0;
-        transform: translateY(-30px);
-        animation: fadeInTop 0.7s ease-in-out forwards;
-      }
-
-      @keyframes fadeInTop {
-        from {
-          opacity: 0;
-          transform: translateY(-30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
       .fade-in-top-second {
         opacity: 0;
         transform: translateY(-40px);
@@ -66,13 +49,54 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
       @keyframes fadeInTop {
         from {
           opacity: 0;
-          transform: translateY(-4);
+          transform: translateY(-40px);
         }
         to {
           opacity: 1;
           transform: translateY(0);
         }
       }
+
+      .typewriter-effect {
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 0 auto;
+        letter-spacing: 0.15em;
+        animation: typing 3.5s steps(44) 1s 1 normal both,
+          blink 0.5s step-end infinite normal;
+      }
+
+      @keyframes blink {
+        from,
+        to {
+          border-right-color: transparent;
+        }
+        50% {
+        }
+      }
     </style>
+
+    <script>
+      let text = "Earth Doom";
+      let i = 0;
+
+      const typewriter = () => {
+        let textElement = document.querySelector(
+          ".typewriter-effect"
+        ) as HTMLElement;
+
+        if (textElement) {
+          textElement.innerText = text.slice(0, i++);
+
+          const delay = Math.floor(Math.random() * 200) + 150;
+
+          if (i <= text.length) {
+            setTimeout(typewriter, delay);
+          }
+        }
+      };
+
+      typewriter();
+    </script>
   </body>
 </html>
