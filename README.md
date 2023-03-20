@@ -2,4 +2,4 @@
 
 Monorepo for Earthdoom
 
-<img src="https://user-images.githubusercontent.com/45217974/226150609-d59aa669-105e-4199-b5d7-55ae40a17d8f.png" alt="Screenshot" />
+<img src="https://user-images.githubusercontent.com/45217974/226228415-b84cd98a-767d-4626-9e31-7b1f811a6f9b.png" alt="Screenshot" />
