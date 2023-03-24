@@ -3,9 +3,9 @@ import BaseHead from "../components/Header/BaseHead.astro";
 import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer/Footer.astro";
 import Intro from "../components/Index/Intro.astro";
-import CallToAction from "../components/Index/CallToAction.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Hero from "../components/Index/Hero.astro";
 ---
 
 <!DOCTYPE html>
@@ -15,87 +15,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
   </head>
   <body class="bg-neutral-900">
     <Header title={SITE_TITLE} />
-    <main>
-      <div
-        class="flex flex-col items-center justify-center h-[530px] lg:h-[690px] bg-large-space-ship bg-cover bg-left"
-      >
-        <div
-          class="bg-neutral-900 p-4 md:p-8 rounded-lg mx-2 md:mx-0 drop-shadow-lg shadow-lg shadow-slate-700 md:w-[810px] w-[260px]"
-        >
-          <h1
-            class="typewriter-effect text-white text-xl md:text-3xl font-bold mb-8 text-center"
-          >
-            Earth Doom
-          </h1>
-          <p
-            class="text-white text-left text-sm lg:text-xl mb-4 md:text-center py-4 fade-in-top-second"
-          >
-            Explore the galaxy like never before and conquer your enemies.
-          </p>
-          <CallToAction />
-        </div>
-      </div>
-    </main>
+    <Hero />
     <Intro />
     <Footer />
-    <style>
-      .fade-in-top-second {
-        opacity: 0;
-        transform: translateY(-40px);
-        animation: fadeInTop 0.7s ease-in-out forwards;
-        animation-delay: 0.8s;
-      }
-
-      @keyframes fadeInTop {
-        from {
-          opacity: 0;
-          transform: translateY(-40px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .typewriter-effect {
-        overflow: hidden;
-        white-space: nowrap;
-        margin: 0 auto;        
-        animation: typing 3.5s steps(44) 1s 1 normal both,
-          blink 0.5s step-end infinite normal;
-      }
-
-      @keyframes blink {
-        from,
-        to {
-          border-right-color: transparent;
-        }
-        50% {
-        }
-      }
-    </style>
-
-    <script>
-      let text = "Earth Doom";
-      let i = 0;
-
-      const typewriter = () => {
-        let textElement = document.querySelector(
-          ".typewriter-effect"
-        ) as HTMLElement;
-
-        if (textElement) {
-          textElement.innerText = text.slice(0, i++);
-
-          const delay = Math.floor(Math.random() * 200) + 120;
-
-          if (i <= text.length) {
-            setTimeout(typewriter, delay);
-          }
-        }
-      };
-
-      typewriter();
-    </script>
   </body>
 </html>
