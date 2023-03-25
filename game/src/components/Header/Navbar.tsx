@@ -1,12 +1,14 @@
 import "flowbite";
 
+import Link from "next/link";
+
 const Navbar = () => (
   <div className="flex justify-center bg-gray-800">
-    <nav >
+    <nav>
       <button
         id="dropdownHoverButton"
         data-dropdown-toggle="dropdownHover"
-        data-dropdown-trigger="hover"
+        data-dropdown-trigger="click"
         className="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
       >
@@ -36,164 +38,163 @@ const Navbar = () => (
           aria-labelledby="dropdownHoverButton"
         >
           <li>
-            <a
-              href="index2.php"
+            <Link
+              href="/"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              target="a2"
             >
               Main
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="edmanual/manual.html"
+            <Link
+              href="https://earthdoom.com/manual"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               target="new"
             >
               Manual
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="news.php?"
+            <Link
+              href="/news"
               className="block px-4 py-2
               hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               News
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="contnews.php?"
+            <Link
+              href="/contnews"
               className="block px-4 py-2
               hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Contnews
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="communication.php?"
+            <Link
+              href="/communication"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Mail
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="politics.php?"
+            <Link
+              href="/politics"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Politics
-            </a>
+            </Link>
           </li>
           <hr />
           <li>
-            <a
-              href="production.php?"
+            <Link
+              href="/production"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Production
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="construct.php?"
+            <Link
+              href="/construct"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Construct
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="research.php?"
+            <Link
+              href="/research"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Research
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="sats.php?"
+            <Link
+              href="/sats"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Satellites
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="resources.php"
+            <Link
+              href="/resources"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Resources
-            </a>
+            </Link>
           </li>
           <hr />
           <li>
-            <a
-              href="military.php?"
+            <Link
+              href="/military"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Military
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="spying.php?"
+            <Link
+              href="/spying"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Spying
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="ranking.php?"
+            <Link
+              href="/ranking"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Ranking
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="alliance.php?"
+            <Link
+              href="/alliance"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Alliance
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="senate.php?"
+            <Link
+              href="/senate"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Senate
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="country.php?"
+            <Link
+              href="/country"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Country
-            </a>
+            </Link>
           </li>
           <hr />
           <li>
-            <a
-              href="endre.php?"
+            <Link
+              href="/endre"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Preferences
-            </a>
+            </Link>
           </li>
 
           <li>
-            <a
-              href="logout.php?"
+            <Link
+              href="/logout"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Logout
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
