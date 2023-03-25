@@ -3,9 +3,10 @@ import BaseHead from "../components/Header/BaseHead.astro";
 import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer/Footer.astro";
 import Intro from "../components/Index/Intro.astro";
+import Hero from "../components/Index/Hero.astro";
+import Spinner from "../components/common/Spinner.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import Hero from "../components/Index/Hero.astro";
 ---
 
 <!DOCTYPE html>
@@ -17,6 +18,9 @@ import Hero from "../components/Index/Hero.astro";
     <Header title={SITE_TITLE} />
     <Hero />
     <Intro />
+    Spinner:
+    <Spinner />
+
     <Footer />
   </body>
 </html>
