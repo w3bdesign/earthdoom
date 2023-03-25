@@ -7,7 +7,7 @@ import { api } from "@/utils/api";
 
 import Navbar from "@/components/Header/Navbar";
 
-const Game: NextPage = () => {
+const Register: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   return (
@@ -32,7 +32,7 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default Register;
 
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
