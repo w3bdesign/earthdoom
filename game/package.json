@@ -1,5 +1,5 @@
 {
-  "name": "t3-game",
+  "name": "earthdoom-game",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/eslint": "^8.21.3",
-    "@types/node": "^18.15.7",
+    "@types/node": "^18.15.8",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.29",
     "@types/react-dom": "^18.0.11",
