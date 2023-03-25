@@ -37,7 +37,7 @@ const Navbar = () => (
         >
           <li>
             <a
-              href="index2.php"
+              href="/"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               target="a2"
             >
@@ -46,7 +46,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="edmanual/manual.html"
+              href="https://earthdoom.com/manual"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               target="new"
             >
@@ -55,7 +55,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="news.php?"
+              href="/news"
               className="block px-4 py-2
               hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
@@ -64,7 +64,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="contnews.php?"
+              href="/contnews"
               className="block px-4 py-2
               hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
@@ -73,7 +73,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="communication.php?"
+              href="/communication"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Mail
@@ -81,7 +81,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="politics.php?"
+              href="/politics"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Politics
@@ -90,7 +90,7 @@ const Navbar = () => (
           <hr />
           <li>
             <a
-              href="production.php?"
+              href="/production"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Production
@@ -98,7 +98,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="construct.php?"
+              href="/construct"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Construct
@@ -106,7 +106,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="research.php?"
+              href="/research"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Research
@@ -114,7 +114,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="sats.php?"
+              href="/sats"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Satellites
@@ -122,7 +122,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="resources.php"
+              href="/resources"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Resources
@@ -131,7 +131,7 @@ const Navbar = () => (
           <hr />
           <li>
             <a
-              href="military.php?"
+              href="/military"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Military
@@ -139,7 +139,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="spying.php?"
+              href="/spying"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Spying
@@ -147,7 +147,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="ranking.php?"
+              href="/ranking"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Ranking
@@ -155,7 +155,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="alliance.php?"
+              href="/alliance"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Alliance
@@ -163,7 +163,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="senate.php?"
+              href="/senate"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Senate
@@ -171,7 +171,7 @@ const Navbar = () => (
           </li>
           <li>
             <a
-              href="country.php?"
+              href="/country"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Country
@@ -180,7 +180,7 @@ const Navbar = () => (
           <hr />
           <li>
             <a
-              href="endre.php?"
+              href="/endre"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Preferences
@@ -189,7 +189,7 @@ const Navbar = () => (
 
           <li>
             <a
-              href="logout.php?"
+              href="/logout"
               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
             >
               Logout
