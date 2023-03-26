@@ -13,6 +13,8 @@ const Register: NextPage = () => {
 
   const user = useUser();
 
+Console.log(user);
+
   return (
     <>
       <Head>
@@ -27,7 +29,7 @@ const Register: NextPage = () => {
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
               <br />
-              User: {JSON.stringify(user)}
+              
               {!user.isSignedIn && (
                 <SignIn path="/login" routing="path" signUpUrl="/login" />
               )}
