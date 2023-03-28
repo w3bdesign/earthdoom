@@ -7,7 +7,7 @@ import { api } from "@/utils/api";
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
-  const secret = api.example.test.useQuery();
+  const secret = api.paUsers.getSecretMessage.useQuery();
 
   const { data } = api.example.paUser.useQuery();
 
@@ -35,7 +35,10 @@ const Home: NextPage = () => {
           </div>
           <div className="flex flex-col items-center gap-2 bg-neutral-900">
             <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+              {hello.data ? hello.data.greeting : "Loading tRPC query ..."}
+            </p>
+            <p className="text-2xl text-white">
+              {secret.data ? secret.data : "Loading secret message ..."}
             </p>
           </div>
         </div>
