@@ -9,7 +9,8 @@ export const paUsersRouter = createTRPCRouter({
     return ctx.prisma.paUsers.findMany();
   }),
 
-  getSecretMessage: privateProcedure.query(() => {
+  //getSecretMessage: privateProcedure.query(() => {
+    getSecretMessage: publicProcedure.query(() => {
     return "you can now see this secret message!";
   }),
 });
