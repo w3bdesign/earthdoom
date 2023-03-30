@@ -1,12 +1,54 @@
+import { useState, useEffect } from "react";
+
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { api } from "@/utils/api";
-
 import Navbar from "@/components/Header/Navbar";
 
-const Game: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from country" });
+const Country: NextPage = () => {
+  const [myx, setMyx] = useState<number>(1);
+
+  const [galaxyData] = useState("test");
+  /*
+  const [galaxyScore, setGalaxyScore] = useState(0);
+  const [galaxyDetails, setGalaxyDetails] = useState({});*/
+
+  useEffect(() => {
+    fetchData();
+  }, [myx]);
+
+  const fetchData = async () => {
+    if (!myx) return;
+
+    // Fetch data from server with an API call
+    try {
+      //const response = await axios.get("/api/galaxy", { params: { myx } });
+      //const { data, score, details } = response.data;
+      /*setGalaxyData(data);
+      setGalaxyScore(score);
+      setGalaxyDetails(details);*/
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleChange = (event: { target: { value: any } }) => {
+    const { value } = event.target;
+    if (value === "" || Number.isInteger(Number(value))) {
+      setMyx(value);
+    }
+  };
+
+  const handlePrev = () => {
+    const myx = 9;
+    if (myx > 0) {
+      setMyx(myx - 1);
+    }
+  };
+
+  const handleNext = () => {
+    setMyx(myx + 1);
+  };
 
   return (
     <>
@@ -17,17 +59,26 @@ const Game: NextPage = () => {
       </Head>
       <Navbar />
       <main className="flex items-center justify-center bg-neutral-900 min-h-screen">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
-           
-          </div>
+        <div>
+          <button onClick={handlePrev}>&lt;---</button>
+          <input
+            type="text"
+            name="myx"
+            size={5}
+            maxLength={3}
+            value={myx}
+            onChange={handleChange}
+          />
+          <button onClick={handleNext}>---&gt;</button>
         </div>
+        {galaxyData ? (
+          <div>{/* Render galaxyData in a table or any desired layout */}</div>
+        ) : (
+          <div>That continent is empty!</div>
+        )}
       </main>
     </>
   );
 };
 
-export default Game;
+export default Country;
