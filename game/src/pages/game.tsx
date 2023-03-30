@@ -1,8 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 
-
-
 import { api } from "@/utils/api";
 
 import Navbar from "@/components/Header/Navbar";
