@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 import Navbar from "@/components/Header/Navbar";
 
 const Game: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const hello = api.example.hello.useQuery({ text: "from construct" });
 
   return (
     <>

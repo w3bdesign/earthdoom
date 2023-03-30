@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 import Navbar from "@/components/Header/Navbar";
 
 const Game: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const hello = api.example.hello.useQuery({ text: "from Alliance" });
 
   return (
     <>
@@ -20,7 +20,7 @@ const Game: NextPage = () => {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+              {hello.data ? hello.data.greeting : "Loading Alliance query..."}
             </p>
            
           </div>
