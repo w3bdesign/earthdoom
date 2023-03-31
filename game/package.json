@@ -1,6 +1,6 @@
 {
   "name": "earthdoom-game",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -19,8 +19,7 @@
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
     "flowbite": "^1.6.4",
-    "next": "^13.2.4",
-    "nodemailer": "^6.9.1",
+    "next": "^13.2.4",    
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
@@ -29,8 +28,7 @@
   },
   "devDependencies": {
     "@types/eslint": "^8.37.0",
-    "@types/node": "^18.15.11",
-    "@types/nodemailer": "^6.4.7",
+    "@types/node": "^18.15.11",   
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.31",
     "@types/react-dom": "^18.0.11",
