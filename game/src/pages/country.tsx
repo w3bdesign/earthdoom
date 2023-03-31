@@ -137,7 +137,7 @@ const Country: NextPage = () => {
         </div>
 
         <div className="flex items-center justify-center">
-          <table className="table-auto border-collapse border border-gray-300 bg-white ">
+          <table className="table-auto border-collapse border border-gray-300 bg-white">
             <thead>
               <tr>
                 <th className="px-4 py-2">Location:</th>
@@ -151,7 +151,10 @@ const Country: NextPage = () => {
             </thead>
             <tbody>
               {mockData.map((row, index) => (
-                <tr key={index} className="border-b border-gray-300">
+                <tr
+                  key={index}
+                  className="border-b border-gray-300 hover:bg-gray-100"
+                >
                   <td className="px-4 py-2">
                     <b>{row.y}</b>
                   </td>
