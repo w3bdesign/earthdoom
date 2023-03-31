@@ -63,19 +63,20 @@ const Country: NextPage = () => {
     fetchData();
   }, [myx]);
 
-  const fetchData = async () => {
+  const fetchData = () => {
     if (!myx) return;
 
     // Fetch data from server with an API call
+    /*
     try {
       //const response = await axios.get("/api/galaxy", { params: { myx } });
       //const { data, score, details } = response.data;
       /*setGalaxyData(data);
       setGalaxyScore(score);
-      setGalaxyDetails(details);*/
+      setGalaxyDetails(details);
     } catch (error) {
       console.error("Error fetching data:", error);
-    }
+    }*/
   };
 
   const handleChange = (event: { target: { value: any } }) => {
@@ -106,7 +107,7 @@ const Country: NextPage = () => {
       <Navbar />
       <main className="min-h-screen bg-neutral-900">
         <div className="flex justify-center">
-          <div className="mt-16 my-6">
+          <div className="my-6 mt-16">
             <button
               className="mr-2 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
               onClick={handlePrev}
@@ -133,7 +134,7 @@ const Country: NextPage = () => {
           </div>
         </div>
 
-        <div className="flex justify-center my-6">
+        <div className="my-6 flex justify-center">
           <img src="https://via.placeholder.com/150" alt="" />
           <p className="text-white">My Name (10) Score: 1000000</p>
         </div>
