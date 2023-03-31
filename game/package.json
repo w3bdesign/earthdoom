@@ -20,14 +20,17 @@
     "@trpc/server": "^10.18.0",
     "flowbite": "^1.6.4",
     "next": "^13.2.4",
+    "nodemailer": "^6.9.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
     "superjson": "1.12.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/eslint": "^8.37.0",
     "@types/node": "^18.15.11",
+    "@types/nodemailer": "^6.4.7",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.31",
     "@types/react-dom": "^18.0.11",

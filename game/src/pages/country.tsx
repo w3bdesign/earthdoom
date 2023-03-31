@@ -1,12 +1,98 @@
+import { useState, useEffect } from "react";
+import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
+
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { api } from "@/utils/api";
-
 import Navbar from "@/components/Header/Navbar";
 
-const Game: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from country" });
+const mockData = [
+  {
+    id: 1,
+    y: 10,
+    tag: "Tag 1",
+    nick: "Nick 1",
+    commander: 1,
+    score: 1000000,
+    size: "Large",
+    timer: Date.now(),
+  },
+  {
+    id: 2,
+    y: 20,
+    tag: "Tag 2",
+    nick: "Nick 2",
+    commander: 2,
+    score: 500000,
+    size: "Medium",
+    timer: Date.now() - 1000 * 60 * 10,
+  },
+  {
+    id: 3,
+    y: 30,
+    tag: "Tag 3",
+    nick: "Nick 3",
+    commander: 3,
+    score: 250000,
+    size: "Small",
+    timer: Date.now() - 1000 * 60 * 20,
+  },
+];
+
+function getCommanderColor(commander: any) {
+  switch (commander) {
+    case 1:
+      return "#8080ff";
+    case 2:
+      return "#ff3333";
+    case 3:
+      return "#cad100";
+    default:
+      return "#000000";
+  }
+}
+
+const Country: NextPage = () => {
+  const [myx, setMyx] = useState<number>(1);
+
+  /*
+  const [galaxyScore, setGalaxyScore] = useState(0);
+  const [galaxyDetails, setGalaxyDetails] = useState({});*/
+
+  useEffect(() => {
+    fetchData();
+  }, [myx]);
+
+  const fetchData = () => {
+    if (!myx) return;
+
+    // Fetch data from server with an API call
+    /*
+    try {
+      //const response = await axios.get("/api/galaxy", { params: { myx } });
+      //const { data, score, details } = response.data;
+      /*setGalaxyData(data);
+      setGalaxyScore(score);
+      setGalaxyDetails(details);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }*/
+  };
+
+  const handleChange = (event: { target: { value: string | number } }) => {
+    const { value } = event.target;
+    if (Number.isInteger(Number(value))) {
+      setMyx(Number(value));
+    }
+  };
+
+  const handlePrev = () => {
+    setMyx(myx - 1);
+  };
+
+  const handleNext = () => {
+    setMyx(myx + 1);
+  };
 
   return (
     <>
@@ -16,18 +102,96 @@ const Game: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="flex items-center justify-center bg-neutral-900 min-h-screen">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
-           
+      <main className="min-h-screen bg-neutral-900">
+        <div className="flex justify-center">
+          <div className="my-6 mt-16">
+            <button
+              className="mr-2 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+              onClick={handlePrev}
+            >
+              <BsArrowLeft className="mr-2 inline-block" />
+              Previous
+            </button>
+            <input
+              className="mr-2 rounded-lg border px-4 py-2"
+              type="text"
+              name="myx"
+              size={5}
+              maxLength={3}
+              value={myx}
+              onChange={handleChange}
+            />
+            <button
+              className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+              onClick={handleNext}
+            >
+              Next
+              <BsArrowRight className="ml-2 inline-block" />
+            </button>
           </div>
+        </div>
+
+        <div className="my-6 flex justify-center">
+          <img src="https://via.placeholder.com/150" alt="" />
+          <p className="text-white">My Name (10) Score: 1000000</p>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <table className="table-auto border-collapse border border-gray-300 bg-white ">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Location:</th>
+                <th className="px-4 py-2">ID :</th>
+                <th className="px-4 py-2">Tag:</th>
+                <th className="px-4 py-2">Nick:</th>
+                <th className="px-4 py-2">Score:</th>
+                <th className="px-4 py-2">Size:</th>
+                <th className="px-4 py-2">Spying:</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mockData.map((row, index) => (
+                <tr key={index} className="border-b border-gray-300">
+                  <td className="px-4 py-2">
+                    <b>{row.y}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>{row.id}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>{row.tag}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>
+                      <a href={`/communication?til=${row.id}`}>
+                        <span
+                          className={`text-${getCommanderColor(row.commander)}`}
+                        >
+                          {row.nick}
+                        </span>
+                        {Date.now() - row.timer < 600000 && (
+                          <span className="text-green-500"> (ONLINE)</span>
+                        )}
+                      </a>
+                    </b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>{row.score.toLocaleString()}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>{row.size}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <a href={`/spy?id=${row.id}`}>Spy</a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </main>
     </>
   );
 };
 
-export default Game;
+export default Country;
