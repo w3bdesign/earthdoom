@@ -59,8 +59,8 @@ export async function addMail(
     text: txt,
   };
 
-  const info = await transporter.sendMail(mailOptions);
-  console.log(`Message sent: ${info.messageId}`);
+  //const info = await transporter.sendMail(mailOptions);
+  //console.log(`Message sent: ${info.messageId}`);
 }
 
 export {};
