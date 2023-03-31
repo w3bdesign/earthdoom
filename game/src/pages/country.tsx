@@ -1,14 +1,60 @@
 import { useState, useEffect } from "react";
+import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
 import { type NextPage } from "next";
 import Head from "next/head";
 
 import Navbar from "@/components/Header/Navbar";
 
+const mockData = [
+  {
+    id: 1,
+    y: 10,
+    tag: "Tag 1",
+    nick: "Nick 1",
+    commander: 1,
+    score: 1000000,
+    size: "Large",
+    timer: Date.now(),
+  },
+  {
+    id: 2,
+    y: 20,
+    tag: "Tag 2",
+    nick: "Nick 2",
+    commander: 2,
+    score: 500000,
+    size: "Medium",
+    timer: Date.now() - 1000 * 60 * 10,
+  },
+  {
+    id: 3,
+    y: 30,
+    tag: "Tag 3",
+    nick: "Nick 3",
+    commander: 3,
+    score: 250000,
+    size: "Small",
+    timer: Date.now() - 1000 * 60 * 20,
+  },
+];
+
+function getCommanderColor(commander: any) {
+  switch (commander) {
+    case 1:
+      return "#8080ff";
+    case 2:
+      return "#ff3333";
+    case 3:
+      return "#cad100";
+    default:
+      return "#000000";
+  }
+}
+
 const Country: NextPage = () => {
   const [myx, setMyx] = useState<number>(1);
 
-  const [galaxyData] = useState("test");
   /*
   const [galaxyScore, setGalaxyScore] = useState(0);
   const [galaxyDetails, setGalaxyDetails] = useState({});*/
@@ -58,24 +104,93 @@ const Country: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="flex items-center justify-center bg-neutral-900 min-h-screen">
-        <div>
-          <button onClick={handlePrev}>&lt;---</button>
-          <input
-            type="text"
-            name="myx"
-            size={5}
-            maxLength={3}
-            value={myx}
-            onChange={handleChange}
-          />
-          <button onClick={handleNext}>---&gt;</button>
+      <main className="min-h-screen bg-neutral-900">
+        <div className="flex justify-center">
+          <div className="mt-16 my-6">
+            <button
+              className="mr-2 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+              onClick={handlePrev}
+            >
+              <BsArrowLeft className="mr-2 inline-block" />
+              Previous
+            </button>
+            <input
+              className="mr-2 rounded-lg border px-4 py-2"
+              type="text"
+              name="myx"
+              size={5}
+              maxLength={3}
+              value={myx}
+              onChange={handleChange}
+            />
+            <button
+              className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+              onClick={handleNext}
+            >
+              Next
+              <BsArrowRight className="ml-2 inline-block" />
+            </button>
+          </div>
         </div>
-        {galaxyData ? (
-          <div>{/* Render galaxyData in a table or any desired layout */}</div>
-        ) : (
-          <div>That continent is empty!</div>
-        )}
+
+        <div className="flex justify-center my-6">
+          <img src="https://via.placeholder.com/150" alt="" />
+          <p className="text-white">My Name (10) Score: 1000000</p>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <table className="table-auto border-collapse border border-gray-300 bg-white ">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Location:</th>
+                <th className="px-4 py-2">ID :</th>
+                <th className="px-4 py-2">Tag:</th>
+                <th className="px-4 py-2">Nick:</th>
+                <th className="px-4 py-2">Score:</th>
+                <th className="px-4 py-2">Size:</th>
+                <th className="px-4 py-2">Spying:</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mockData.map((row, index) => (
+                <tr key={index} className="border-b border-gray-300">
+                  <td className="px-4 py-2">
+                    <b>{row.y}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>{row.id}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>{row.tag}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>
+                      <a href={`communication.php?til=${row.id}`}>
+                        <span
+                          className={`text-${getCommanderColor(row.commander)}`}
+                        >
+                          {row.nick}
+                        </span>
+                        {Date.now() - row.timer < 600000 && (
+                          <span className="text-green-500"> (ONLINE)</span>
+                        )}
+                      </a>
+                    </b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>{row.score.toLocaleString()}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <b>{row.size}</b>
+                  </td>
+                  <td className="px-4 py-2">
+                    <a href={`spy.php?id=${row.id}`}>Spy</a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </>
   );
