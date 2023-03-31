@@ -163,7 +163,7 @@ const Country: NextPage = () => {
                   </td>
                   <td className="px-4 py-2">
                     <b>
-                      <a href={`communication.php?til=${row.id}`}>
+                      <a href={`/communication?til=${row.id}`}>
                         <span
                           className={`text-${getCommanderColor(row.commander)}`}
                         >
@@ -182,7 +182,7 @@ const Country: NextPage = () => {
                     <b>{row.size}</b>
                   </td>
                   <td className="px-4 py-2">
-                    <a href={`spy.php?id=${row.id}`}>Spy</a>
+                    <a href={`/spy?id=${row.id}`}>Spy</a>
                   </td>
                 </tr>
               ))}
