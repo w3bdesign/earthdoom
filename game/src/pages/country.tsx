@@ -79,18 +79,15 @@ const Country: NextPage = () => {
     }*/
   };
 
-  const handleChange = (event: { target: { value: any } }) => {
+  const handleChange = (event: { target: { value: string | number } }) => {
     const { value } = event.target;
-    if (value === "" || Number.isInteger(Number(value))) {
-      setMyx(value);
+    if (Number.isInteger(Number(value))) {
+      setMyx(Number(value));
     }
   };
 
   const handlePrev = () => {
-    const myx = 9;
-    if (myx > 0) {
-      setMyx(myx - 1);
-    }
+    setMyx(myx - 1);
   };
 
   const handleNext = () => {
