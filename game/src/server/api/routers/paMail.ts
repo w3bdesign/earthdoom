@@ -1,10 +1,4 @@
-import { z } from "zod";
-
-import {
-  createTRPCRouter,
-  privateProcedure,
-  publicProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 export const paMailRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
