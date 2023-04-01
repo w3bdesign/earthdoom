@@ -1,43 +1,11 @@
 import { useState, useEffect } from "react";
+
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
 import { type NextPage } from "next";
 import Head from "next/head";
 
 import Navbar from "@/components/Header/Navbar";
-
-const mockData = [
-  {
-    id: 1,
-    y: 10,
-    tag: "Tag 1",
-    nick: "Nick 1",
-    commander: 1,
-    score: 1000000,
-    size: "Large",
-    timer: Date.now(),
-  },
-  {
-    id: 2,
-    y: 20,
-    tag: "Tag 2",
-    nick: "Nick 2",
-    commander: 2,
-    score: 500000,
-    size: "Medium",
-    timer: Date.now() - 1000 * 60 * 10,
-  },
-  {
-    id: 3,
-    y: 30,
-    tag: "Tag 3",
-    nick: "Nick 3",
-    commander: 3,
-    score: 250000,
-    size: "Small",
-    timer: Date.now() - 1000 * 60 * 20,
-  },
-];
 
 function getCommanderColor(commander: any) {
   switch (commander) {
@@ -94,6 +62,39 @@ const Country: NextPage = () => {
     setMyx(myx + 1);
   };
 
+  const mockData = [
+    {
+      id: 1,
+      y: 10,
+      tag: "Tag 1",
+      nick: "Nick 1",
+      commander: 1,
+      score: 1000000,
+      size: "Large",
+      timer: Date.now(),
+    },
+    {
+      id: 2,
+      y: 20,
+      tag: "Tag 2",
+      nick: "Nick 2",
+      commander: 2,
+      score: 500000,
+      size: "Medium",
+      timer: Date.now() - 1000 * 60 * 10,
+    },
+    {
+      id: 3,
+      y: 30,
+      tag: "Tag 3",
+      nick: "Nick 3",
+      commander: 3,
+      score: 250000,
+      size: "Small",
+      timer: Date.now() - 1000 * 60 * 20,
+    },
+  ];
+
   return (
     <>
       <Head>
@@ -137,7 +138,7 @@ const Country: NextPage = () => {
         </div>
 
         <div className="flex items-center justify-center">
-          <table className="table-auto border-collapse border border-gray-300 bg-white ">
+          <table className="table-auto border-collapse border border-gray-300 bg-white">
             <thead>
               <tr>
                 <th className="px-4 py-2">Location:</th>
@@ -150,8 +151,11 @@ const Country: NextPage = () => {
               </tr>
             </thead>
             <tbody>
-              {mockData.map((row, index) => (
-                <tr key={index} className="border-b border-gray-300">
+              {mockData.map((row) => (
+                <tr
+                  key={row.id}
+                  className="border-b border-gray-300 hover:bg-gray-100"
+                >
                   <td className="px-4 py-2">
                     <b>{row.y}</b>
                   </td>
@@ -165,7 +169,9 @@ const Country: NextPage = () => {
                     <b>
                       <a href={`/communication?til=${row.id}`}>
                         <span
-                          className={`text-${getCommanderColor(row.commander)}`}
+                          className={`text-${
+                            row.commander === 1 ? "red" : "blue"
+                          }`}
                         >
                           {row.nick}
                         </span>
@@ -176,7 +182,7 @@ const Country: NextPage = () => {
                     </b>
                   </td>
                   <td className="px-4 py-2">
-                    <b>{row.score.toLocaleString()}</b>
+                    <b>{row.score.toString()}</b>
                   </td>
                   <td className="px-4 py-2">
                     <b>{row.size}</b>
