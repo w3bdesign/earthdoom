@@ -17,7 +17,7 @@ const Layout = ({ children }: ILayoutProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="flex min-h-screen items-center justify-center bg-neutral-900">
+      <main className="flex min-h-[82.8vh] items-center justify-center">
         {children}
       </main>
       <Footer />
