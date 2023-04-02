@@ -19,8 +19,8 @@ const Layout = ({ children }: ILayoutProps) => {
       <Navbar />
       <main className="flex min-h-screen items-center justify-center bg-neutral-900">
         {children}
-        <Footer />
       </main>
+      <Footer />
     </>
   );
 };
