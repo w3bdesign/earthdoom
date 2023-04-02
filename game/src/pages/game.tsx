@@ -1,13 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { api } from "@/utils/api";
-
 import Navbar from "@/components/Header/Navbar";
 
 const Game: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   return (
     <>
       <Head>
@@ -16,13 +12,10 @@ const Game: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="flex items-center justify-center bg-neutral-900 min-h-screen">
+      <main className="flex min-h-screen items-center justify-center bg-neutral-900">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
-           
+            <p className="text-2xl text-white"></p>
           </div>
         </div>
       </main>
