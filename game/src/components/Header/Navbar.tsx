@@ -21,13 +21,13 @@ const Navbar = () => (
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               className="h-8 w-8"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
               />
             </svg>
@@ -42,7 +42,7 @@ const Navbar = () => (
             <li className="static" data-te-nav-item-ref data-te-dropdown-ref>
               <Link
                 className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold  transition duration-150 ease-in-out hover:text-slate-300  dark:hover:text-white dark:focus:text-white lg:px-2"
-                href="#"
+                href="/"
                 data-te-ripple-init
                 data-te-ripple-color="light"
                 type="button"
