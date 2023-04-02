@@ -3,7 +3,7 @@ import "flowbite";
 import Link from "next/link";
 
 const Navbar = () => (
-  <div className="flex justify-center bg-gray-800">
+  <div className="flex justify-center bg-gray-800 p-6">
     <nav>
       <button
         id="dropdownHoverButton"
