@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 
 import Navbar from "@/components/Header/Navbar";
 import Footer from "./Footer";
+import Information from "@/components/Header/Information";
 
 interface ILayoutProps {
   children: ReactNode;
@@ -21,13 +22,19 @@ const Layout = ({ children }: ILayoutProps) => {
       {
         // Only show navbar when logged in
       }
-      {user.isSignedIn && <Navbar />}
+      {user.isSignedIn && (
+        <>
+          <Navbar />
+          <Information />
+        </>
+      )}
 
       {
         // Do this while developing
       }
       <Navbar />
-      <main className="flex min-h-[79vh] items-center justify-center xl:min-h-[80.8vh]">
+      <Information />
+      <main className="flex min-h-[70vh] items-center justify-center xl:min-h-[73vh]">
         {children}
       </main>
       <Footer />
