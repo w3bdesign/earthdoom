@@ -1,202 +1,227 @@
-import "flowbite";
-
 import Link from "next/link";
 
 const Navbar = () => (
   <div className="flex justify-center bg-gray-800 p-6">
-    <nav>
-      <button
-        id="dropdownHoverButton"
-        data-dropdown-toggle="dropdownHover"
-        data-dropdown-trigger="click"
-        className="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        type="button"
-      >
-        Menu{" "}
-        <svg
-          className="ml-2 h-4 w-4"
-          aria-hidden="true"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+    <nav
+      className="relative flex w-full items-center justify-between bg-gray-800 py-2 text-white  dark:bg-neutral-700 dark:text-neutral-300 lg:flex-wrap lg:justify-center"
+      data-te-navbar-ref
+    >
+      <div className="px-6">
+        <button
+          className="border-0 text-xl leading-none transition-shadow duration-150 ease-in-out dark:hover:text-white dark:focus:text-white lg:hidden"
+          type="button"
+          data-te-collapse-init
+          data-te-target="#navbarSupportedContentX"
+          aria-controls="navbarSupportedContentX"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M19 9l-7 7-7-7"
-          ></path>
-        </svg>
-      </button>
-      <div
-        id="dropdownHover"
-        className="z-10 hidden w-44 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
-      >
-        <ul
-          className="py-2 text-sm text-gray-700 dark:text-gray-200"
-          aria-labelledby="dropdownHoverButton"
+          <span className="[&>svg]:w-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="h-8 w-8"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </span>
+        </button>
+        <div
+          className="!visible hidden flex-grow basis-[100%] items-center lg:!flex lg:basis-auto"
+          id="navbarSupportedContentX"
+          data-te-collapse-item
         >
-          <li>
-            <Link
-              href="/"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Main
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://earthdoom.com/manual"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              target="new"
-            >
-              Manual
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/news"
-              className="block px-4 py-2
-              hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              News
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/contnews"
-              className="block px-4 py-2
-              hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Contnews
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/communication"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Mail
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/politics"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Politics
-            </Link>
-          </li>
-          <hr />
-          <li>
-            <Link
-              href="/production"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Production
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/construct"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Construct
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/research"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Research
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/sats"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Satellites
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/resources"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Resources
-            </Link>
-          </li>
-          <hr />
-          <li>
-            <Link
-              href="/military"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Military
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/spying"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Spying
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/ranking"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Ranking
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/alliance"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Alliance
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/senate"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Senate
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/country"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Country
-            </Link>
-          </li>
-          <hr />
-          <li>
-            <Link
-              href="/endre"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Preferences
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              href="/logout"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Logout
-            </Link>
-          </li>
-        </ul>
+          <ul className="mr-auto flex flex-row" data-te-navbar-nav-ref>
+            <li className="static" data-te-nav-item-ref data-te-dropdown-ref>
+              <Link
+                className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold  transition duration-150 ease-in-out hover:text-slate-300  dark:hover:text-white dark:focus:text-white lg:px-2"
+                href="/"
+                data-te-ripple-init
+                data-te-ripple-color="light"
+                type="button"
+                id="dropdownMenuButtonX"
+                data-te-dropdown-toggle-ref
+                aria-expanded="false"
+                data-te-nav-link-ref
+              >
+                Main menu
+                <span className="ml-2 w-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </Link>
+              <div
+                className="absolute left-0 right-0 top-full z-[1000] mt-0 hidden w-full border-none bg-white bg-clip-padding text-neutral-600  dark:bg-neutral-700 dark:text-neutral-200 [&[data-te-dropdown-show]]:block"
+                aria-labelledby="dropdownMenuButtonX"
+                data-te-dropdown-menu-ref
+              >
+                <div className="px-6 py-5 lg:px-8">
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                    <div>
+                      <Link
+                        href="/"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Main
+                      </Link>
+                      <Link
+                        href="https://earthdoom.com/manual"
+                        target="new"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Manual
+                      </Link>
+                      <Link
+                        href="/news"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        News
+                      </Link>
+                      <Link
+                        href="/contnews"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Contnews
+                      </Link>
+                      <Link
+                        href="/communication"
+                        aria-current="true"
+                        className="block w-full px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-50 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Mail
+                      </Link>
+                    </div>
+                    <div>
+                      <Link
+                        href="/politics"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Politics
+                      </Link>
+                      <Link
+                        href="/production"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Production
+                      </Link>
+                      <Link
+                        href="/construct"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Construct
+                      </Link>
+                      <Link
+                        href="/research"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Research
+                      </Link>
+                      <Link
+                        href="/sats"
+                        aria-current="true"
+                        className="block w-full px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-50 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Sats
+                      </Link>
+                    </div>
+                    <div>
+                      <Link
+                        href="/resources"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Resources
+                      </Link>
+                      <Link
+                        href="/military"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Military
+                      </Link>
+                      <Link
+                        href="/spying"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Spying
+                      </Link>
+                      <Link
+                        href="/ranking"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Ranking
+                      </Link>
+                      <Link
+                        href="/alliance"
+                        aria-current="true"
+                        className="block w-full px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-50 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Alliance
+                      </Link>
+                    </div>
+                    <div>
+                      <Link
+                        href="/senate"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Senate
+                      </Link>
+                      <Link
+                        href="/country"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Country
+                      </Link>
+                      <Link
+                        href="/endre"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Preferences
+                      </Link>
+                      <Link
+                        href="/logout"
+                        aria-current="true"
+                        className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                      >
+                        Logout
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   </div>

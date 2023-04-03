@@ -1,3 +1,5 @@
+import Script from "next/script";
+
 import { type AppType } from "next/app";
 
 import { ClerkProvider } from "@clerk/nextjs";
@@ -10,6 +12,7 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   return (
     <ClerkProvider {...pageProps}>
       <Component {...pageProps} />
+      <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></Script>
     </ClerkProvider>
   );
 };

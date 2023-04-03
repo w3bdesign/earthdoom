@@ -14,11 +14,11 @@ const Home: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 ">
+          <h1 className="text-5xl font-extrabold tracking-tight text-center sm:text-[5rem]">
             Earth Doom
           </h1>
-          <div className="grid grid-cols-1 gap-4 text-white sm:grid-cols-2 md:gap-8">
+          <div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-2 md:gap-8">
             <h3 className="text-2xl font-bold">Name:</h3>
             {data?.map((user) => (
               <div className="text-lg" key={user.id}>
@@ -27,10 +27,10 @@ const Home: NextPage = () => {
             ))}
           </div>
           <div className="flex flex-col items-center gap-2 bg-neutral-900">
-            <p className="p-4 text-2xl text-white">
+            <p className="p-4 text-2xl text-center">
               {hello.data ? hello.data.greeting : <LoadingSpinner />}
             </p>
-            <p className="p-4 text-2xl text-white">
+            <p className="p-4 text-2xl text-center">
               {secret.data ? secret.data : <LoadingSpinner />}
             </p>
           </div>
