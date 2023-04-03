@@ -8,8 +8,8 @@ export const paUsersRouter = createTRPCRouter({
 
   getHostiles: publicProcedure
     .input(z.object({ Userid: z.number() }))
-    .query(({ ctx, input }) => {
-      const users = ctx.prisma.paUsers.findMany({
+    .query(async ({ ctx, input }) => {
+      const users = await ctx.prisma.paUsers.findMany({
         where: {
           war: input.Userid,
         },
@@ -17,13 +17,13 @@ export const paUsersRouter = createTRPCRouter({
 
       console.log(users);
 
-      return {
-        greeting: `Hello `,
-      };
+      if (users.length === 0) {
+        return { hostiles: "You have no incoming hostiles." };
+      }
 
-      /*if (users.length === 0) {
-        return "You have no incoming hostiles.";
-      }*/
+      return {
+        hostiles: `Hello War: ${users} `,
+      };
 
       /*return users
         .map((user) => {
