@@ -8,7 +8,7 @@ const Navbar = () => (
     >
       <div className="px-6">
         <button
-          className="border-0 py-3 text-xl leading-none transition-shadow duration-150 ease-in-out dark:hover:text-white dark:focus:text-white lg:hidden"
+          className="border-0 text-xl leading-none transition-shadow duration-150 ease-in-out dark:hover:text-white dark:focus:text-white lg:hidden"
           type="button"
           data-te-collapse-init
           data-te-target="#navbarSupportedContentX"
