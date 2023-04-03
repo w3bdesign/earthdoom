@@ -8,24 +8,14 @@ export const paUsersRouter = createTRPCRouter({
 
   getHostiles: publicProcedure
     .input(z.object({ Userid: z.number() }))
-    .query(({ ctx, input }) => {
-      const users = ctx.prisma.paUsers.findMany({
+    .query(async ({ ctx, input }) => {
+      const users = await ctx.prisma.paUsers.findMany({
         where: {
           war: input.Userid,
         },
       });
 
-      console.log(users);
-
-      return {
-        greeting: `Hello `,
-      };
-
-      /*if (users.length === 0) {
-        return "You have no incoming hostiles.";
-      }*/
-
-      /*return users
+      const krig = users
         .map((user) => {
           const ships =
             user.astropods +
@@ -35,9 +25,17 @@ export const paUsersRouter = createTRPCRouter({
             user.destroyers +
             user.scorpions;
           const eta = user.wareta >= 5 ? user.wareta - 5 : 0;
-          return `<font color="red">Hostile incoming fleet of ${ships} units: ${user.nick} #${user.id} (ETA: ${eta})</font><br>`;
+          return `Hostile incoming fleet of ${ships} units: ${user.nick} #${user.id} (ETA: ${eta})`;
         })
-        .join("");*/
+        .join("");
+
+      if (users.length === 0) {
+        return { hostiles: "You have no incoming hostiles." };
+      }
+
+      return {
+        hostiles: krig,
+      };
     }),
 
   getSecretMessage: publicProcedure.query(() => {
