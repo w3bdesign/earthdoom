@@ -12,7 +12,7 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
     const use = async () => {
       (await import("tw-elements")).default;
     };
-    use();
+    void use();
   }, []);
 
   return (
