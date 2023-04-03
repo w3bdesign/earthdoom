@@ -25,6 +25,7 @@ const Layout = ({ children }: ILayoutProps) => {
       {user.isSignedIn && (
         <>
           <Navbar />
+          <Information />
         </>
       )}
 
@@ -32,7 +33,7 @@ const Layout = ({ children }: ILayoutProps) => {
         // Do this while developing
       }
       <Navbar />
-      <Information />    
+      <Information />
       <main className="flex min-h-[70vh] items-center justify-center xl:min-h-[73vh]">
         {children}
       </main>
