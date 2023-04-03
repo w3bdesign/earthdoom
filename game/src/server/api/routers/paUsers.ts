@@ -34,7 +34,7 @@ export const paUsersRouter = createTRPCRouter({
       }
 
       return {
-        hostiles: `Incoming hostiles: ${krig} `,
+        hostiles: krig,
       };
     }),
 

@@ -37,7 +37,7 @@ const Home: NextPage = () => {
             <p className="p-4 text-center text-2xl">
               {secret.data ? secret.data : <LoadingSpinner />}
             </p>
-            <p className="p-4 text-center text-2xl">
+            <p className="p-4 text-center text-2xl text-red-600">
               {hostilesData?.hostiles ? (
                 hostilesData.hostiles
               ) : (
