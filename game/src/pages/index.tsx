@@ -11,10 +11,6 @@ const Home: NextPage = () => {
 
   const { data: userData } = api.example.paUser.useQuery();
 
-  const { data: hostilesData } = api.paUsers.getHostiles.useQuery({
-    Userid: 1,
-  });
-
   return (
     <>
       <Layout>
@@ -36,13 +32,6 @@ const Home: NextPage = () => {
             </p>
             <p className="p-4 text-center text-2xl">
               {secret.data ? secret.data : <LoadingSpinner />}
-            </p>
-            <p className="p-4 text-center text-2xl text-red-600">
-              {hostilesData?.hostiles ? (
-                hostilesData.hostiles
-              ) : (
-                <LoadingSpinner />
-              )}
             </p>
           </div>
         </div>
