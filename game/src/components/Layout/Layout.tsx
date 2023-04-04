@@ -34,7 +34,7 @@ const Layout = ({ children }: ILayoutProps) => {
       }
       <Navbar />
       <Information />
-      <main className="flex min-h-[70vh] items-center justify-center xl:min-h-[70vh]">
+      <main className="flex min-h-screen items-center justify-center xl:min-h-[59vh]">
         {children}
       </main>
       <Footer />
