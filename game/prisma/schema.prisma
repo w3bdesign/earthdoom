@@ -156,7 +156,7 @@ model PaMail {
     id     Int    @id @default(autoincrement())
     time   Int    @default(0)
     news   String
-    seen   String @default("")
+    seen   Int    @default(0)
     header String
 }
 
