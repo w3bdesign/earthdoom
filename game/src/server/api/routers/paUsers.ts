@@ -17,16 +17,16 @@ export const paUsersRouter = createTRPCRouter({
       });
 
       const krig = users
-        .map((user) => {
+        .map((defender) => {
           const ships =
-            user.astropods +
-            user.infinitys +
-            user.wraiths +
-            user.warfrigs +
-            user.destroyers +
-            user.scorpions;
-          const eta = user.wareta >= 5 ? user.wareta - 5 : 0;
-          return `Hostile incoming fleet of ${ships} units: ${user.nick} #${user.id} (ETA: ${eta})`;
+            defender.astropods +
+            defender.infinitys +
+            defender.wraiths +
+            defender.warfrigs +
+            defender.destroyers +
+            defender.scorpions;
+          const eta = defender.wareta >= 5 ? defender.wareta - 5 : 0;
+          return `Hostile incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta})`;
         })
         .join("");
 
@@ -38,8 +38,4 @@ export const paUsersRouter = createTRPCRouter({
         hostiles: krig,
       };
     }),
-
-  getSecretMessage: publicProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });
