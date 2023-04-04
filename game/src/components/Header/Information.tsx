@@ -1,5 +1,6 @@
 import { api } from "@/utils/api";
 import LoadingSpinner from "../Loader/LoadingSpinner";
+import Link from "next/link";
 
 const Information = () => {
   const { data: hostilesData } = api.paUsers.getHostiles.useQuery({
@@ -9,8 +10,6 @@ const Information = () => {
   const { data: paMail } = api.paMail.getMailByUserId.useQuery({
     Userid: 1,
   });
-
-  console.log("Epost:", paMail?.email[0]);
 
   return (
     <>
@@ -26,13 +25,14 @@ const Information = () => {
           ) : (
             <LoadingSpinner />
           )}
-
           {paMail?.email ? (
             <div
-              className="mb-4 rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800"
+              className="mb-4 min-w-[434px] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800"
               role="alert"
             >
-              {JSON.stringify(paMail.email[0])}
+              <Link href="/mail" className="font-bold text-info-800">
+                You have unread email
+              </Link>
             </div>
           ) : (
             <LoadingSpinner />

@@ -20,7 +20,6 @@ export const paMailRouter = createTRPCRouter({
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
       const { Userid } = input;
-      console.log("Input: ", Userid);
 
       const mails = await ctx.prisma.paMail.findMany({
         where: {
@@ -30,8 +29,6 @@ export const paMailRouter = createTRPCRouter({
         orderBy: { time: "desc" },
         take: 10,
       });
-
-     
 
       return { email: mails };
     }),
