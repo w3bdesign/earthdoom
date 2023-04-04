@@ -154,6 +154,7 @@ model PaTag {
 
 model PaMail {
     id     Int    @id @default(autoincrement())
+    sentTo Int    @default(0)
     time   Int    @default(0)
     news   String
     seen   Int    @default(0)
