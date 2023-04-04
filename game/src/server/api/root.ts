@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "@/server/api/trpc";
+
 import { exampleRouter } from "@/server/api/routers/example";
 import { paUsersRouter } from "@/server/api/routers/paUsers";
 import { paMailRouter } from "@/server/api/routers/paMail";

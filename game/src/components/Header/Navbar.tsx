@@ -103,7 +103,7 @@ const Navbar = () => (
                         Contnews
                       </Link>
                       <Link
-                        href="/communication"
+                        href="/mail"
                         aria-current="true"
                         className="block w-full px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-50 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
                       >

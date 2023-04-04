@@ -16,11 +16,10 @@ export const paMailRouter = createTRPCRouter({
     return ctx.prisma.paMail.findMany();
   }),
 
-  getMailByUserId: publicProcedure
+  getUnseenMailByUserId: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
       const { Userid } = input;
-      console.log("Input: ", Userid);
 
       const mails = await ctx.prisma.paMail.findMany({
         where: {
@@ -31,7 +30,20 @@ export const paMailRouter = createTRPCRouter({
         take: 10,
       });
 
-     
+      return { email: mails };
+    }),
+
+  getAllMailByUserId: publicProcedure
+    .input(z.object({ Userid: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const { Userid } = input;
+
+      const mails = await ctx.prisma.paMail.findMany({
+        where: {
+          sentTo: Userid,
+        },
+        orderBy: { time: "desc" },
+      });
 
       return { email: mails };
     }),
