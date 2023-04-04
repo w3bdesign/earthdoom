@@ -15,10 +15,6 @@ export const exampleRouter = createTRPCRouter({
       };
     }),
 
-  test: publicProcedure.query(() => {
-    return "test message!";
-  }),
-
   paUser: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.paUsers.findMany();
   }),
