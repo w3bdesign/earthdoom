@@ -2,25 +2,24 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 import { z } from "zod";
 
-const Mail = z.object({
-  id: z.number(),
-  sentTo: z.number(),
-  time: z.number(),
-  seen: z.number(),
-  header: z.string(),
-  news: z.string(),
-});
-
 export const paMailRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.paMail.findMany();
-  }),
+  markAsSeen: publicProcedure
+    .input(z.object({ Userid: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const { Userid } = input;
+      const seenMail = await ctx.prisma.paMail.update({
+        where: {
+          sentTo: Userid,
+        },
+        data: { seen: 1 },
+      });
 
+      return { email: seenMail };
+    }),
   getUnseenMailByUserId: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
       const { Userid } = input;
-
       const mails = await ctx.prisma.paMail.findMany({
         where: {
           sentTo: Userid,
@@ -32,7 +31,6 @@ export const paMailRouter = createTRPCRouter({
 
       return { email: mails };
     }),
-
   getAllMailByUserId: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
