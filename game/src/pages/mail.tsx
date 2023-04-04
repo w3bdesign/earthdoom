@@ -24,10 +24,10 @@ const Mail: NextPage = () => {
                             ID
                           </th>
                           <th scope="col" className="px-6 py-4">
-                            Header
+                            Title
                           </th>
                           <th scope="col" className="px-6 py-4">
-                            News
+                            Content
                           </th>
                           <th scope="col" className="px-6 py-4">
                             Delete
