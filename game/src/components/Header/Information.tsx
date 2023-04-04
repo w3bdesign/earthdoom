@@ -7,7 +7,7 @@ const Information = () => {
     Userid: 1,
   });
 
-  const { data: paMail } = api.paMail.getMailByUserId.useQuery({
+  const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
     Userid: 1,
   });
 
