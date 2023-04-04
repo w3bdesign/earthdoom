@@ -1,5 +1,6 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { z } from "zod";
+
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 export const paUsersRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -9,8 +10,6 @@ export const paUsersRouter = createTRPCRouter({
   getHostiles: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
-
-      
       const users = await ctx.prisma.paUsers.findMany({
         where: {
           war: input.Userid,
@@ -18,16 +17,16 @@ export const paUsersRouter = createTRPCRouter({
       });
 
       const krig = users
-        .map((user) => {
+        .map((defender) => {
           const ships =
-            user.astropods +
-            user.infinitys +
-            user.wraiths +
-            user.warfrigs +
-            user.destroyers +
-            user.scorpions;
-          const eta = user.wareta >= 5 ? user.wareta - 5 : 0;
-          return `Hostile incoming fleet of ${ships} units: ${user.nick} #${user.id} (ETA: ${eta})`;
+            defender.astropods +
+            defender.infinitys +
+            defender.wraiths +
+            defender.warfrigs +
+            defender.destroyers +
+            defender.scorpions;
+          const eta = defender.wareta >= 5 ? defender.wareta - 5 : 0;
+          return `Hostile incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta})`;
         })
         .join("");
 
@@ -39,8 +38,4 @@ export const paUsersRouter = createTRPCRouter({
         hostiles: krig,
       };
     }),
-
-  getSecretMessage: publicProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });
