@@ -1,5 +1,6 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { z } from "zod";
+
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 export const paUsersRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -9,8 +10,6 @@ export const paUsersRouter = createTRPCRouter({
   getHostiles: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
-
-      
       const users = await ctx.prisma.paUsers.findMany({
         where: {
           war: input.Userid,
