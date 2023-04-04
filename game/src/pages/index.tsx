@@ -1,13 +1,12 @@
 import { type NextPage } from "next";
 
 import { api } from "@/utils/api";
+
 import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 import Layout from "@/components/Layout/Layout";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
-  const secret = api.paUsers.getSecretMessage.useQuery();
 
   const { data: userData } = api.example.paUser.useQuery();
 
@@ -29,9 +28,6 @@ const Home: NextPage = () => {
           <div className="flex flex-col items-center gap-2 bg-neutral-900">
             <p className="p-4 text-center text-2xl">
               {hello.data ? hello.data.greeting : <LoadingSpinner />}
-            </p>
-            <p className="p-4 text-center text-2xl">
-              {secret.data ? secret.data : <LoadingSpinner />}
             </p>
           </div>
         </div>
