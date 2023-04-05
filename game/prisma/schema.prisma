@@ -160,6 +160,7 @@ model PaMail {
     seen   Int    @default(0)
     header String
 
+    @@unique([id])
     @@index([sentTo])
 }
 
