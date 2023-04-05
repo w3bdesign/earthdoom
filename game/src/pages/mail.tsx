@@ -10,6 +10,8 @@ import Layout from "@/components/Layout/Layout";
 const Mail: NextPage = () => {
   // https://github.com/pingdotgg/zapdos/blob/main/src/server/router/subroutes/question.ts
 
+  const ctx = api.useContext();
+
   const deleteEmailToast = () => toast("Email deleted");
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
@@ -25,6 +27,11 @@ const Mail: NextPage = () => {
   const { mutate } = api.paMail.deleteEmail.useMutation({
     onSuccess: () => {
       deleteEmailToast();
+      setTimeout(() => {
+        ctx.paMail.getAll.invalidate();
+        ctx.paMail.invalidate();
+        ctx.paMail.getAllMailByUserId.invalidate({ Userid: 1 });
+      }, 1000);
     },
     onError: () => {
       console.error("Failure deleting!");

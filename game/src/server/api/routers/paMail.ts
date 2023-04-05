@@ -3,6 +3,12 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { z } from "zod";
 
 export const paMailRouter = createTRPCRouter({
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const mails = await ctx.prisma.paMail.findMany();
+
+    return { email: mails };
+  }),
+
   getUnseenMailByUserId: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
@@ -54,7 +60,7 @@ export const paMailRouter = createTRPCRouter({
       const seenMail = await ctx.prisma.paMail.updateMany({
         where: {
           sentTo,
-          seen: 0
+          seen: 0,
         },
         data: { seen: 1 },
       });
