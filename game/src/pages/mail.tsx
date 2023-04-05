@@ -27,7 +27,7 @@ const Mail: NextPage = () => {
       deleteEmailToast();
     },
     onError: () => {
-      alert("Failure deleting!");
+      console.error("Failure deleting!");
     },
   });
 
