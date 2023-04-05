@@ -1,4 +1,5 @@
 import toast, { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
 
 import { type NextPage } from "next";
 
@@ -11,35 +12,16 @@ const Mail: NextPage = () => {
 
   const deleteEmailToast = () => toast("Email deleted");
 
-  /*const {mutate} = api.paMail.markAsSeen.useMutation({
-    sentTo: 1,
-    //Userid: 1,
+  const markAsSeenEmailToast = () => toast("Emails seen");
+
+  const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
     onSuccess: () => {
-      alert("Success!");    
+      markAsSeenEmailToast();
     },
-    onError: (e) => {
-      alert("Failure!");
-      console.log("E:" , e)
+    onError: () => {
+      alert("Failure marking as seen");
     },
-   
-  });*/
-
-  //const ctx = api.useContext();
-
-  /*const { mutate, data: email } = api.paMail.markAsSeen.useMutation({
-    Userid: 1,
-
-    onSuccess: () => {
-      alert("Success!");
-      //void ctx.posts.getAll.invalidate();
-     // void ctx.paMail.
-    },
-    onError: (e) => {
-      alert("Failure!");
-    },
-
-
-  });*/
+  });
 
   const { data: paMail } = api.paMail.getAllMailByUserId.useQuery({
     Userid: 1,
@@ -57,6 +39,10 @@ const Mail: NextPage = () => {
   const handleDelete = (id: number) => {
     mutate({ id });
   };
+
+  useEffect(() => {
+    markAsSeen({ sentTo: 1 });
+  }, []);
 
   return (
     <>
