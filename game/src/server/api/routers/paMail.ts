@@ -54,6 +54,7 @@ export const paMailRouter = createTRPCRouter({
       const seenMail = await ctx.prisma.paMail.updateMany({
         where: {
           sentTo,
+          seen: 0
         },
         data: { seen: 1 },
       });

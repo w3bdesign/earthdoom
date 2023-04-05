@@ -11,6 +11,8 @@ const Mail: NextPage = () => {
 
   const deleteEmailToast = () => toast("Email deleted");
 
+  const markAsSeenEmailToast = () => toast("Emails seen");
+
   /*const {mutate} = api.paMail.markAsSeen.useMutation({
     sentTo: 1,
     //Userid: 1,
@@ -43,7 +45,7 @@ const Mail: NextPage = () => {
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
     onSuccess: () => {
-      deleteEmailToast();
+      markAsSeenEmailToast();
     },
     onError: () => {
       alert("Failure marking as seen");
