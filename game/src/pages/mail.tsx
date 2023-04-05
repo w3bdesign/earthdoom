@@ -5,6 +5,9 @@ import { api } from "@/utils/api";
 import Layout from "@/components/Layout/Layout";
 
 const Mail: NextPage = () => {
+
+  // https://github.com/pingdotgg/zapdos/blob/main/src/server/router/subroutes/question.ts
+  
   /*const {mutate} = api.paMail.markAsSeen.useMutation({
     sentTo: 1,
     //Userid: 1,
