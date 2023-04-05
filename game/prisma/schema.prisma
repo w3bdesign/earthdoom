@@ -159,6 +159,8 @@ model PaMail {
     news   String
     seen   Int    @default(0)
     header String
+
+    @@index([sentTo])
 }
 
 model PaPolit {
