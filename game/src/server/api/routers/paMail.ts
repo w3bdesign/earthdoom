@@ -34,19 +34,37 @@ export const paMailRouter = createTRPCRouter({
       return { email: mails };
     }),
 
-  markAsSeen: publicProcedure
-    .input(z.object({ Userid: z.number() }))
+  deleteEmail: publicProcedure
+    .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const { Userid } = input;
+      const { id } = input;
 
-      const seenMail = await ctx.prisma.paMail.update({
+      const deleteEmail = await ctx.prisma.paMail.delete({
         where: {
-          //sentTo: Userid,
-          id: 1,
+          id,
+        },
+      });
+
+      return deleteEmail;
+    }),
+
+  /*
+  markAsSeen: publicProcedure
+    .input(z.object({ sentTo: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const { sentTo } = input;
+      console.log("Ctx er: ", ctx);
+
+      console.log("markAsSeen Input Userid er: ", sentTo);
+
+      await ctx.prisma.paMail.update({
+        where: {
+          //sentTo: ctx.userId,
+          //id: ctx.userId
+          //id: ctx.userId
+          sentTo,
         },
         data: { seen: 1 },
       });
-
-      return { email: seenMail };
-    }),
+    }),*/
 });

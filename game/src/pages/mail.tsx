@@ -5,9 +5,56 @@ import { api } from "@/utils/api";
 import Layout from "@/components/Layout/Layout";
 
 const Mail: NextPage = () => {
+
+  // https://github.com/pingdotgg/zapdos/blob/main/src/server/router/subroutes/question.ts
+  
+  /*const {mutate} = api.paMail.markAsSeen.useMutation({
+    sentTo: 1,
+    //Userid: 1,
+    onSuccess: () => {
+      alert("Success!");    
+    },
+    onError: (e) => {
+      alert("Failure!");
+      console.log("E:" , e)
+    },
+   
+  });*/
+
+  //const ctx = api.useContext();
+
+  /*const { mutate, data: email } = api.paMail.markAsSeen.useMutation({
+    Userid: 1,
+
+    onSuccess: () => {
+      alert("Success!");
+      //void ctx.posts.getAll.invalidate();
+     // void ctx.paMail.
+    },
+    onError: (e) => {
+      alert("Failure!");
+    },
+
+
+  });*/
+
   const { data: paMail } = api.paMail.getAllMailByUserId.useQuery({
     Userid: 1,
   });
+
+  const { mutate } = api.paMail.deleteEmail.useMutation({
+    onSuccess: () => {
+      alert("Deleted");
+    },
+    onError: () => {
+      alert("Failure deleting!");
+    },
+  });
+
+  const handleDelete = (id: number) => {
+    mutate({ id });
+  };
+
   return (
     <>
       <Layout>
@@ -53,6 +100,7 @@ const Mail: NextPage = () => {
                               <button
                                 type="button"
                                 className="inline-block rounded bg-danger px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+                                onClick={() => handleDelete(mail.id)}
                               >
                                 Delete
                               </button>
