@@ -1,4 +1,5 @@
 import toast, { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
 
 import { type NextPage } from "next";
 
@@ -12,36 +13,6 @@ const Mail: NextPage = () => {
   const deleteEmailToast = () => toast("Email deleted");
 
   const markAsSeenEmailToast = () => toast("Emails seen");
-
-  /*const {mutate} = api.paMail.markAsSeen.useMutation({
-    sentTo: 1,
-    //Userid: 1,
-    onSuccess: () => {
-      alert("Success!");    
-    },
-    onError: (e) => {
-      alert("Failure!");
-      console.log("E:" , e)
-    },
-   
-  });*/
-
-  //const ctx = api.useContext();
-
-  /*const { mutate, data: email } = api.paMail.markAsSeen.useMutation({
-    Userid: 1,
-
-    onSuccess: () => {
-      alert("Success!");
-      //void ctx.posts.getAll.invalidate();
-     // void ctx.paMail.
-    },
-    onError: (e) => {
-      alert("Failure!");
-    },
-
-
-  });*/
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
     onSuccess: () => {
@@ -69,9 +40,9 @@ const Mail: NextPage = () => {
     mutate({ id });
   };
 
-  const handleMarkAsSeen = (id: number) => {
-    markAsSeen({ sentTo: id });
-  };
+  useEffect(() => {
+    markAsSeen({ sentTo: 1 });
+  }, []);
 
   return (
     <>
@@ -82,13 +53,6 @@ const Mail: NextPage = () => {
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                   <div className="overflow-hidden">
-                    <button
-                      type="button"
-                      className="inline-block rounded bg-info px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
-                      onClick={() => handleMarkAsSeen(1)}
-                    >
-                      Mark as seen
-                    </button>
                     {paMail?.email?.length && paMail?.email?.length > 0 && (
                       <table className="min-w-full text-left text-sm font-light">
                         <thead className="border-b font-medium dark:border-neutral-500">
