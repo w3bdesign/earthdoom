@@ -39,14 +39,16 @@ export const paMailRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
 
-      await ctx.prisma.paMail.delete({
+      const deleteEmail = await ctx.prisma.paMail.delete({
         where: {
           id,
         },
       });
+
+      return deleteEmail;
     }),
 
-    /*
+  /*
   markAsSeen: publicProcedure
     .input(z.object({ sentTo: z.number() }))
     .mutation(async ({ ctx, input }) => {
