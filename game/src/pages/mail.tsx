@@ -1,3 +1,5 @@
+import toast, { Toaster } from 'react-hot-toast';
+
 import { type NextPage } from "next";
 
 import { api } from "@/utils/api";
@@ -7,7 +9,10 @@ import Layout from "@/components/Layout/Layout";
 const Mail: NextPage = () => {
 
   // https://github.com/pingdotgg/zapdos/blob/main/src/server/router/subroutes/question.ts
-  
+
+
+  const deleteEmailToast = () => toast('Email deleted');
+
   /*const {mutate} = api.paMail.markAsSeen.useMutation({
     sentTo: 1,
     //Userid: 1,
@@ -44,7 +49,7 @@ const Mail: NextPage = () => {
 
   const { mutate } = api.paMail.deleteEmail.useMutation({
     onSuccess: () => {
-      alert("Deleted");
+      deleteEmailToast();
     },
     onError: () => {
       alert("Failure deleting!");
@@ -104,6 +109,7 @@ const Mail: NextPage = () => {
                               >
                                 Delete
                               </button>
+                              <Toaster />
                             </td>
                           </tr>
                         ))}

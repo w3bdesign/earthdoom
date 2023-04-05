@@ -25,7 +25,7 @@ const Information = () => {
           ) : (
             <LoadingSpinner />
           )}
-          {paMail?.email ? (
+          {paMail?.email?.length && paMail?.email?.length > 0 ? (
             <div
               className="mb-4 min-w-[434px] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800"
               role="alert"
@@ -34,9 +34,7 @@ const Information = () => {
                 You have unread email
               </Link>
             </div>
-          ) : (
-            <LoadingSpinner />
-          )}
+          ) : null}
         </div>
       </div>
     </>
