@@ -25,9 +25,9 @@ const Mail: NextPage = () => {
   });
 
   const { mutate } = api.paMail.deleteEmail.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       deleteEmailToast();
-      ctx.paMail.getAllMailByUserId.invalidate({ Userid: 1 });
+      await ctx.paMail.getAllMailByUserId.invalidate({ Userid: 1 });
     },
     onError: () => {
       console.error("Failure deleting!");
