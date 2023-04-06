@@ -160,7 +160,10 @@ const Country: NextPage = () => {
                 </tr>
 
                 {mockData.map((row) => (
-                  <tr key={row.id} className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                  <tr
+                    key={row.id}
+                    className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none"
+                  >
                     <td
                       data-th="Name"
                       className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
