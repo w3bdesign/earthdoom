@@ -105,41 +105,81 @@ const Country: NextPage = () => {
           </div>
         </div>
 
-        <div className="my-6 flex justify-center">
-          <img src="https://via.placeholder.com/150" alt="" />
-          <p className="text-white">My Name (10) Score: 1000000</p>
-        </div>
+        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
+          <div className="relative sm:mx-auto">
+            <div className="relative mb-6 w-full break-words p-6 shadow-lg">
+              <img
+                src="https://via.placeholder.com/250"
+                alt=""
+                className="mx-auto max-w-[250px] text-center"
+              />
+            </div>
 
-        <div className="flex items-center justify-center">
-          <table className="table-auto border-collapse border border-gray-300 bg-white">
-            <thead>
-              <tr>
-                <th className="px-4 py-2">Location:</th>
-                <th className="px-4 py-2">ID :</th>
-                <th className="px-4 py-2">Tag:</th>
-                <th className="px-4 py-2">Nick:</th>
-                <th className="px-4 py-2">Score:</th>
-                <th className="px-4 py-2">Size:</th>
-                <th className="px-4 py-2">Spying:</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockData.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-gray-300 hover:bg-gray-100"
-                >
-                  <td className="px-4 py-2">
-                    <b>{row.y}</b>
-                  </td>
-                  <td className="px-4 py-2">
-                    <b>{row.id}</b>
-                  </td>
-                  <td className="px-4 py-2">
-                    <b>{row.tag}</b>
-                  </td>
-                  <td className="px-4 py-2">
-                    <b>
+            <table className="w-full text-left ring-1 ring-slate-400/10">
+              <caption className="mb-10 text-xl font-medium text-white ">
+                Continent name here | Score: 1000000
+              </caption>
+              <tbody>
+                <tr>
+                  <th
+                    scope="col"
+                    className="hidden h-12  bg-slate-200/90 px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Location
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12  bg-slate-200/90 px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Tag
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12  bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Nick
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Score
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Spying
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12 bg-slate-200/90  px-6  text-base font-bold  text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
+                  >
+                    Mail
+                  </th>
+                </tr>
+
+                {mockData.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none"
+                  >
+                    <td
+                      data-th="Name"
+                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {row.y}
+                    </td>
+                    <td
+                      data-th="Tag"
+                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {row.tag}
+                    </td>
+                    <td
+                      data-th="Name"
+                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
                       <a href={`/communication?til=${row.id}`}>
                         <span
                           className={`text-${
@@ -152,156 +192,32 @@ const Country: NextPage = () => {
                           <span className="text-green-500"> (ONLINE)</span>
                         )}
                       </a>
-                    </b>
-                  </td>
-                  <td className="px-4 py-2">
-                    <b>{row.score.toString()}</b>
-                  </td>
-                  <td className="px-4 py-2">
-                    <b>{row.size}</b>
-                  </td>
-                  <td className="px-4 py-2">
-                    <a href={`/spy?id=${row.id}`}>Spy</a>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </td>
 
-        <div className="mt-8 flex flex-col bg-white">
-          <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-              <div className="overflow-hidden">
-                <table className="min-w-full text-left text-sm font-light">
-                  <thead className="border-b font-medium dark:border-neutral-500">
-                    <tr>
-                      <th scope="col" className="px-6 py-4">
-                        #
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        First
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Last
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Handle
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b dark:border-neutral-500">
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
-                        1
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">Mark</td>
-                      <td className="whitespace-nowrap px-6 py-4">Otto</td>
-                      <td className="whitespace-nowrap px-6 py-4">@mdo</td>
-                    </tr>
-                    <tr className="border-b dark:border-neutral-500">
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
-                        2
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">Jacob</td>
-                      <td className="whitespace-nowrap px-6 py-4">Thornton</td>
-                      <td className="whitespace-nowrap px-6 py-4">@fat</td>
-                    </tr>
-                    <tr className="border-b dark:border-neutral-500">
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
-                        3
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">Larry</td>
-                      <td className="whitespace-nowrap px-6 py-4">Wild</td>
-                      <td className="whitespace-nowrap px-6 py-4">@twitter</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+                    <td
+                      data-th="Name"
+                      className="flex h-12 items-center  hover:bg-blue-100  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {row.score.toString()}
+                    </td>
 
-        <div className="mt-8 flex flex-col overflow-x-auto bg-white">
-          <div className="sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-              <div className="overflow-x-auto">
-                <table className="min-w-full text-left text-sm font-light">
-                  <thead className="border-b font-medium dark:border-neutral-500">
-                    <tr>
-                      <th scope="col" className="px-6 py-4">
-                        #
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Heading
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Heading
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Heading
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Heading
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Heading
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Heading
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Heading
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Heading
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b dark:border-neutral-500">
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
-                        1
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                    </tr>
-                    <tr className="border-b dark:border-neutral-500">
-                      <td className="whitespace-nowrap px-6 py-4 font-medium ">
-                        2
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4 ">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4 ">Cell</td>
-                    </tr>
-                    <tr className="border-b ">
-                      <td className="whitespace-nowrap px-6 py-4 font-medium ">
-                        3
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                      <td className="whitespace-nowrap px-6 py-4">Cell</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                    <td
+                      data-th="Name"
+                      className="flex h-12 items-center hover:bg-blue-100  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      <a href={`/spy?id=${row.id}`}>Spy</a>
+                    </td>
+
+                    <td
+                      data-th="Name"
+                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      <a href={`/spy?id=${row.id}`}>Mail</a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </main>
