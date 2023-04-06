@@ -158,13 +158,12 @@ const Game: NextPage = () => {
     <>
       <Layout>
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-center text-2xl text-white font-extrabold tracking-tight sm:text-[3rem]">
+          <h1 className="text-center text-2xl font-extrabold tracking-tight text-white sm:text-[3rem]">
             Construction
           </h1>
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
             <div className="relative sm:mx-auto">
               <table className="w-full text-left ring-1 ring-slate-400/10">
-               
                 <tbody>
                   <tr>
                     <th
@@ -206,31 +205,33 @@ const Game: NextPage = () => {
                     >
                       <td
                         data-th="Name"
-                        className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                        className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                       >
                         {building.buildingName}
                       </td>
                       <td
-                        data-th="Tag"
+                        data-th="Info"
                         className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                       >
-                        {building.buildingDescription}
+                        <span className="w-[12.5rem]">
+                          {building.buildingDescription}
+                        </span>
                       </td>
                       <td
-                        data-th="Name"
+                        data-th="ETA"
                         className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                       >
                         {building.buildingETA}
                       </td>
 
                       <td
-                        data-th="Name"
+                        data-th="Build"
                         className="flex h-12 items-center  px-6  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                       >
                         {building.buildingConstruct}
                       </td>
                       <td
-                        data-th="Name"
+                        data-th="Cost"
                         className="flex h-12 items-center  px-6  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                       >
                         {building.buildingCost}
