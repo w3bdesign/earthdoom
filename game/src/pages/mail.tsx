@@ -10,16 +10,13 @@ import Layout from "@/components/Layout/Layout";
 const Mail: NextPage = () => {
   // https://github.com/pingdotgg/zapdos/blob/main/src/server/router/subroutes/question.ts
 
+  const ctx = api.useContext();
+
   const deleteEmailToast = () => toast("Email deleted");
 
-  const markAsSeenEmailToast = () => toast("Emails seen");
-
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
-    onSuccess: () => {
-      markAsSeenEmailToast();
-    },
     onError: () => {
-      alert("Failure marking as seen");
+      console.error("Failure marking as seen");
     },
   });
 
@@ -28,11 +25,12 @@ const Mail: NextPage = () => {
   });
 
   const { mutate } = api.paMail.deleteEmail.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       deleteEmailToast();
+      await ctx.paMail.getAllMailByUserId.invalidate({ Userid: 1 });
     },
     onError: () => {
-      alert("Failure deleting!");
+      console.error("Failure deleting!");
     },
   });
 
