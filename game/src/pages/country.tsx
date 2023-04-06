@@ -176,18 +176,13 @@ const Country: NextPage = () => {
                 <table className="min-w-full text-left text-sm font-light">
                   <thead className="border-b font-medium dark:border-neutral-500">
                     <tr>
-                      <th scope="col" className="px-6 py-4">
-                        #
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        First
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Last
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Handle
-                      </th>
+                      <th className="px-4 py-2">Location:</th>
+                      <th className="px-4 py-2">ID :</th>
+                      <th className="px-4 py-2">Tag:</th>
+                      <th className="px-4 py-2">Nick:</th>
+                      <th className="px-4 py-2">Score:</th>
+                      <th className="px-4 py-2">Size:</th>
+                      <th className="px-4 py-2">Spying:</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -198,6 +193,9 @@ const Country: NextPage = () => {
                       <td className="whitespace-nowrap px-6 py-4">Mark</td>
                       <td className="whitespace-nowrap px-6 py-4">Otto</td>
                       <td className="whitespace-nowrap px-6 py-4">@mdo</td>
+                      <td className="whitespace-nowrap px-6 py-4">Mark</td>
+                      <td className="whitespace-nowrap px-6 py-4">Mark</td>
+                      <td className="whitespace-nowrap px-6 py-4">Mark</td>
                     </tr>
                     <tr className="border-b dark:border-neutral-500">
                       <td className="whitespace-nowrap px-6 py-4 font-medium">
@@ -302,6 +300,326 @@ const Country: NextPage = () => {
                 </table>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
+          <div className="relative sm:mx-auto">
+            <table className="w-full  text-left shadow-2xl shadow-cyan-600/20 ring-1 ring-slate-400/10">
+              <caption className="mb-10 text-xl font-medium text-white">
+                Responsive table
+              </caption>
+              <tbody>
+                <tr>
+                  <th
+                    scope="col"
+                    className="hidden h-12   bg-slate-200/90  px-6 text-sm font-medium text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12   bg-slate-200/90  px-6 text-sm font-medium text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Title
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12   bg-slate-200/90 px-6 text-sm font-medium text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Company
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12   bg-slate-200/90  px-6 text-sm font-medium text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Role
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12   bg-slate-200/90  px-6 text-sm font-medium text-black  first:border-l-0 sm:table-cell"
+                  >
+                    Username
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12   bg-slate-200/90  px-6 text-sm font-medium text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="hidden h-12 border-l  bg-slate-200/90  px-6 text-sm font-medium text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
+                  >
+                    Name
+                  </th>
+                </tr>
+                <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                  <td
+                    data-th="Title"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Designer
+                  </td>
+                  <td
+                    data-th="Company"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Carroll Group
+                  </td>
+                  <td
+                    data-th="Role"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Member
+                  </td>
+                  <td
+                    data-th="Username"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    salas_a
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                </tr>
+                <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Agnes Sherman
+                  </td>
+                  <td
+                    data-th="Title"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Developer
+                  </td>
+                  <td
+                    data-th="Company"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Apple
+                  </td>
+                  <td
+                    data-th="Role"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Admin
+                  </td>
+                  <td
+                    data-th="Username"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    shermanagnes
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                </tr>
+                <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Jemma Cummings
+                  </td>
+                  <td
+                    data-th="Title"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Senior Designer
+                  </td>
+                  <td
+                    data-th="Company"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    20goto10
+                  </td>
+                  <td
+                    data-th="Role"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Member
+                  </td>
+                  <td
+                    data-th="Username"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    jemmaC
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                </tr>
+                <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Jimi Cardenas
+                  </td>
+                  <td
+                    data-th="Title"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Copywriter
+                  </td>
+                  <td
+                    data-th="Company"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Wind-UI
+                  </td>
+                  <td
+                    data-th="Role"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Owner
+                  </td>
+                  <td
+                    data-th="Username"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    cardenasji
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                </tr>
+                <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Mateusz Tucker
+                  </td>
+                  <td
+                    data-th="Title"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Project Manager
+                  </td>
+                  <td
+                    data-th="Company"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Tailwindui
+                  </td>
+                  <td
+                    data-th="Role"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Member
+                  </td>
+                  <td
+                    data-th="Username"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    mt
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                </tr>
+                <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                  <td
+                    data-th="Title"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Designer
+                  </td>
+                  <td
+                    data-th="Company"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Carroll Group
+                  </td>
+                  <td
+                    data-th="Role"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Member
+                  </td>
+                  <td
+                    data-th="Username"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    salas_a
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                  <td
+                    data-th="Name"
+                    className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                  >
+                    Ayub Salas
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </main>
