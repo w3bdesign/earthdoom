@@ -3,7 +3,7 @@ import { type NextPage } from "next";
 import Layout from "@/components/Layout/Layout";
 
 const startConstruction = (buildingId: number) => {
-  alert("Building " + buildingId + " started construction.");
+  alert(`Started construction of ${buildingId}.`);
 };
 
 const buildings = [
