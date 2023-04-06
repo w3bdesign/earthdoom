@@ -123,37 +123,37 @@ const Country: NextPage = () => {
                 <tr>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6  text-sm font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12  bg-slate-200/90 px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Location
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6  text-sm font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12  bg-slate-200/90 px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Tag
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90  px-6 text-sm font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12  bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Nick
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6  text-sm font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Score
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6  text-sm font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Spying
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12 bg-slate-200/90  px-6  text-sm font-bold  text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90  px-6  text-base font-bold  text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
                   >
                     Mail
                   </th>
@@ -166,19 +166,19 @@ const Country: NextPage = () => {
                   >
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {row.y}
                     </td>
                     <td
                       data-th="Tag"
-                      className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {row.tag}
                     </td>
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       <a href={`/communication?til=${row.id}`}>
                         <span
@@ -196,21 +196,21 @@ const Country: NextPage = () => {
 
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center   px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {row.score.toString()}
                     </td>
 
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center   px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       <a href={`/spy?id=${row.id}`}>Spy</a>
                     </td>
 
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center   px-6 text-sm text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center   px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       <a href={`/spy?id=${row.id}`}>Mail</a>
                     </td>
