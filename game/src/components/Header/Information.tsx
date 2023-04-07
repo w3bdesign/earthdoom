@@ -24,7 +24,12 @@ const Information = () => {
               className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-black"
               role="alert"
             >
-              {hostilesData.hostiles}
+              {/* Split the hostiles string into an array of lines */}
+              {hostilesData.hostiles.split("\n").map((line, index) => (
+                <div className="text-left" key={index}>
+                  {line}
+                </div>
+              ))}
             </div>
           ) : (
             <LoadingSpinner />
@@ -35,7 +40,12 @@ const Information = () => {
               className="mb-4 rounded-lg bg-success-100 px-6 py-5 text-base text-black"
               role="alert"
             >
-              {friendliesData.defenders}
+              {/* Split the defenders string into an array of lines */}
+              {friendliesData.defenders.split("\n").map((line, index) => (
+                <div className="text-left" key={index}>
+                  {line}
+                </div>
+              ))}
             </div>
           ) : (
             <LoadingSpinner />
@@ -50,7 +60,9 @@ const Information = () => {
                 You have unread email
               </Link>
             </div>
-          ) : null}
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </>

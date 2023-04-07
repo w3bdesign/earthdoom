@@ -9,6 +9,7 @@ const Home: NextPage = () => {
   });
 
   let shipCount = 0;
+  let bduCount = 0;
 
   if (paPlayer) {
     shipCount =
