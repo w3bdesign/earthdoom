@@ -108,7 +108,6 @@ const Country: NextPage = () => {
             </button>
           </div>
         </div>
-
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
           <div className="relative sm:mx-auto">
             <div className="relative mb-6 w-full break-words p-6 shadow-lg">
@@ -118,7 +117,6 @@ const Country: NextPage = () => {
                 className="mx-auto max-w-[250px] text-center"
               />
             </div>
-
             <table className="w-full text-left ring-1 ring-slate-400/10">
               <caption className="mb-10 text-xl font-medium text-white ">
                 Continent name here <br />Score: 1000000
