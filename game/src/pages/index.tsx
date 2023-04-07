@@ -9,6 +9,7 @@ const Home: NextPage = () => {
   });
 
   let shipCount = 0;
+  let bduCount = 0;
 
   if (paPlayer) {
     shipCount =
@@ -18,6 +19,8 @@ const Home: NextPage = () => {
       paPlayer.warfrigs +
       paPlayer.destroyers +
       paPlayer.scorpions;
+
+    bduCount = paPlayer.rcannons + paPlayer.avengers + paPlayer.lstalkers;
   }
 
   return (
@@ -111,6 +114,55 @@ const Home: NextPage = () => {
                       className="flex h-12 items-center  px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {paPlayer?.scorpions}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table className="w-full text-left ring-1 ring-slate-400/10 mt-8">
+                <caption className="mb-10 text-xl font-medium text-white ">
+                  BDU ({bduCount} total)
+                </caption>
+                <tbody>
+                  <tr>
+                    <th
+                      scope="col"
+                      className="hidden h-12 text-center bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    >
+                      Reaper cannons
+                    </th>
+                    <th
+                      scope="col"
+                      className="hidden h-12 text-center bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    >
+                      Avengers
+                    </th>
+                    <th
+                      scope="col"
+                      className="hidden h-12 text-center bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    >
+                      Reaper cannons
+                    </th>
+                  </tr>
+
+                  <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                    <td
+                      data-th="Name"
+                      className="flex h-12 items-center  px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {paPlayer?.rcannons}
+                    </td>
+                    <td
+                      data-th="Tag"
+                      className="flex h-12 items-center  px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {paPlayer?.avengers}
+                    </td>
+                    <td
+                      data-th="Name"
+                      className="flex h-12 items-center  px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {paPlayer?.rcannons}
                     </td>
                   </tr>
                 </tbody>
