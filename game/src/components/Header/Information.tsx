@@ -7,6 +7,10 @@ const Information = () => {
     Userid: 1,
   });
 
+  const { data: friendliesData } = api.paUsers.getFriendlies.useQuery({
+    Userid: 1,
+  });
+
   const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
     Userid: 1,
   });
@@ -17,7 +21,7 @@ const Information = () => {
         <div className="flex flex-col items-center gap-2 text-center text-lg">
           {hostilesData?.hostiles ? (
             <div
-              className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-danger-700"
+              className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-black"
               role="alert"
             >
               {hostilesData.hostiles}
@@ -25,6 +29,18 @@ const Information = () => {
           ) : (
             <LoadingSpinner />
           )}
+
+          {friendliesData?.defenders ? (
+            <div
+              className="mb-4 rounded-lg bg-success-100 px-6 py-5 text-base text-black"
+              role="alert"
+            >
+              {friendliesData.defenders}
+            </div>
+          ) : (
+            <LoadingSpinner />
+          )}
+
           {paMail?.email?.length && paMail?.email?.length > 0 ? (
             <div
               className="mb-4 min-w-[434px] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800"

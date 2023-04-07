@@ -19,6 +19,41 @@ export const paUsersRouter = createTRPCRouter({
       return player;
     }),
 
+    getFriendlies: publicProcedure
+    .input(z.object({ Userid: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const users = await ctx.prisma.paUsers.findMany({
+        where: {
+          def: input.Userid,
+        },
+      });
+
+      const forsvar = users
+        .map((defender) => {
+          const ships =
+            defender.astropods +
+            defender.infinitys +
+            defender.wraiths +
+            defender.warfrigs +
+            defender.destroyers +
+            defender.scorpions;
+          const eta = defender.defeta >= 5 ? defender.defeta - 5 : 0;
+          return `Friendly incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta})`;
+        })
+        .join("");
+
+      if (users.length === 0) {
+        return { hostiles: "You have no incoming friendlies." };
+      }
+
+      return {
+        defenders: forsvar,
+      };
+    }),
+
+
+
+
   getHostiles: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
