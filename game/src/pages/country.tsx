@@ -7,6 +7,7 @@ import Head from "next/head";
 import Navbar from "@/components/Header/Navbar";
 
 import { api } from "@/utils/api";
+import Link from "next/link";
 
 const Country: NextPage = () => {
   // https://tailwind-elements.com/docs/standard/data/tables/
@@ -126,37 +127,37 @@ const Country: NextPage = () => {
                 <tr>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Location
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Tag
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90 px-6  text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Nick
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90 px-6 text-center  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Score
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12  bg-slate-200/90 px-6 text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Spying
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12 bg-slate-200/90  px-6  text-base font-bold  text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90  px-6 text-center text-base font-bold  text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
                   >
                     Mail
                   </th>
@@ -165,57 +166,74 @@ const Country: NextPage = () => {
                 {paPlayers?.map((player) => (
                   <tr
                     key={player.id}
-                    className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none"
+                    className="block border-b bg-white text-center last:border-b-0 sm:table-row sm:border-none"
                   >
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {player.y}
                     </td>
                     <td
                       data-th="Tag"
-                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {player.tag}
                     </td>
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      <a href={`/communication?til=${player.id}`}>
-                        <span
-                          className={`text-${
-                            player.commander === 1 ? "red" : "blue"
-                          }`}
-                        >
-                          {player.nick}
-                        </span>
-                        {Date.now() - player.timer < 600000 && (
-                          <span className="text-green-500"> (ONLINE)</span>
-                        )}
-                      </a>
+                      <span
+                        className={`text-${
+                          player.commander === 1 ? "red" : "blue"
+                        }`}
+                      >
+                        {player.nick}
+                      </span>
+                      {Date.now() - player.timer < 600000 && (
+                        <span className="text-green-500"> (ONLINE)</span>
+                      )}
                     </td>
 
                     <td
                       data-th="Score"
-                      className="flex h-12 items-center  px-6  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {player.score.toString()}
                     </td>
 
                     <td
                       data-th="Spying"
-                      className="flex h-12 items-center px-6  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6  text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      <a href={`/spy?id=${player.id}`}>Spy</a>
+                      <Link href={`/spy?id=${player.id}`}>
+                        <button
+                          type="button"
+                          className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white  transition duration-150 ease-in-out hover:bg-primary-600  focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+                          onClick={() => {
+                            alert(player.id);
+                          }}
+                        >
+                          Spying
+                        </button>
+                      </Link>
                     </td>
-
                     <td
                       data-th="Mail"
-                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6  text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      <a href={`/spy?id=${player.id}`}>Mail</a>
+                      <Link href={`/mail?id=${player.id}`}>
+                        <button
+                          type="button"
+                          className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white  transition duration-150 ease-in-out hover:bg-primary-600  focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+                          onClick={() => {
+                            alert(player.id);
+                          }}
+                        >
+                          Mail
+                        </button>
+                      </Link>
                     </td>
                   </tr>
                 ))}
