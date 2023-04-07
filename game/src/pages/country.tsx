@@ -38,7 +38,7 @@ const Country: NextPage = () => {
   const mockData = [
     {
       id: 1,
-      y: 10,
+      y: 1,
       tag: "Tag 1",
       nick: "Nick 1",
       commander: 1,
@@ -48,20 +48,20 @@ const Country: NextPage = () => {
     },
     {
       id: 2,
-      y: 20,
+      y: 2,
       tag: "Tag 2",
       nick: "Nick 2",
-      commander: 2,
-      score: 500000,
+      commander: 1,
+      score: 600000,
       size: "Medium",
       timer: Date.now() - 1000 * 60 * 10,
     },
     {
       id: 3,
-      y: 30,
+      y: 3,
       tag: "Tag 3",
       nick: "Nick 3",
-      commander: 3,
+      commander: 1,
       score: 250000,
       size: "Small",
       timer: Date.now() - 1000 * 60 * 20,
@@ -166,19 +166,19 @@ const Country: NextPage = () => {
                   >
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {row.y}
                     </td>
                     <td
                       data-th="Tag"
-                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {row.tag}
                     </td>
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       <a href={`/communication?til=${row.id}`}>
                         <span
@@ -196,21 +196,21 @@ const Country: NextPage = () => {
 
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center  hover:bg-blue-100  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center  px-6  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {row.score.toString()}
                     </td>
 
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center hover:bg-blue-100  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       <a href={`/spy?id=${row.id}`}>Spy</a>
                     </td>
 
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       <a href={`/spy?id=${row.id}`}>Mail</a>
                     </td>
