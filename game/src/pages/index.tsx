@@ -31,13 +31,10 @@ const Home: NextPage = () => {
     <>
       <Layout>
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
-          <h1 className="text-center text-2xl font-extrabold tracking-tight sm:text-[3rem]">
-            Main
-          </h1>
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
             <div className="relative sm:mx-auto">
               <table className="w-full text-left ring-1 ring-slate-400/10">
-                <caption className="mb-10 text-xl font-medium text-white ">
+                <caption className="py-6 text-center text-2xl font-bold text-white">
                   Units ({shipCount} total)
                 </caption>
                 <tbody>
@@ -122,9 +119,8 @@ const Home: NextPage = () => {
                   </tr>
                 </tbody>
               </table>
-
               <table className="mt-8 w-full text-left ring-1 ring-slate-400/10">
-                <caption className="mb-10 text-xl font-medium text-white ">
+                <caption className="py-6 text-center text-2xl font-bold text-white">
                   BDU ({bduCount} total)
                 </caption>
                 <tbody>
@@ -171,9 +167,8 @@ const Home: NextPage = () => {
                   </tr>
                 </tbody>
               </table>
-
               <table className="mt-8 w-full text-left ring-1 ring-slate-400/10">
-                <caption className="mb-10 text-xl font-medium text-white ">
+                <caption className="py-6 text-center text-2xl font-bold text-white">
                   Land ({roidCount} total)
                 </caption>
                 <tbody>
@@ -197,7 +192,6 @@ const Home: NextPage = () => {
                       Undeveloped
                     </th>
                   </tr>
-
                   <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
                     <td
                       data-th="Titanium"
@@ -220,6 +214,17 @@ const Home: NextPage = () => {
                   </tr>
                 </tbody>
               </table>
+              <div className="mt-4 flex h-full w-full flex-col items-center justify-center">
+                <h2 className="py-6 text-center text-2xl font-bold text-white">
+                  Fleet status
+                </h2>
+                <span className="mx-auto mb-10 text-lg text-white">
+                  {paPlayer && paPlayer.war === 0 && "All fleets at home"}
+                  {paPlayer &&
+                    paPlayer.war < 0 &&
+                    `Returning ... ETA ${paPlayer?.wareta}`}
+                </span>
+              </div>
             </div>
           </div>
         </div>
