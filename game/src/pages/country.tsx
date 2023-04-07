@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
 import { type NextPage } from "next";
@@ -7,8 +6,12 @@ import Head from "next/head";
 
 import Navbar from "@/components/Header/Navbar";
 
+import { api } from "@/utils/api";
+
 const Country: NextPage = () => {
   // https://tailwind-elements.com/docs/standard/data/tables/
+
+  const { data: paPlayers } = api.paUsers.getAll.useQuery();
 
   const [myx, setMyx] = useState<number>(1);
 
@@ -40,7 +43,7 @@ const Country: NextPage = () => {
       id: 1,
       y: 1,
       tag: "Tag 1",
-      nick: "Nick 1",
+      nick: "killaH",
       commander: 1,
       score: 1000000,
       size: "Large",
@@ -50,7 +53,7 @@ const Country: NextPage = () => {
       id: 2,
       y: 2,
       tag: "Tag 2",
-      nick: "Nick 2",
+      nick: "Venn",
       commander: 1,
       score: 600000,
       size: "Medium",
@@ -60,7 +63,7 @@ const Country: NextPage = () => {
       id: 3,
       y: 3,
       tag: "Tag 3",
-      nick: "Nick 3",
+      nick: "Fiende",
       commander: 1,
       score: 250000,
       size: "Small",
@@ -159,60 +162,60 @@ const Country: NextPage = () => {
                   </th>
                 </tr>
 
-                {mockData.map((row) => (
+                {paPlayers?.map((player) => (
                   <tr
-                    key={row.id}
+                    key={player.id}
                     className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none"
                   >
                     <td
                       data-th="Name"
                       className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      {row.y}
+                      {player.y}
                     </td>
                     <td
                       data-th="Tag"
                       className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      {row.tag}
+                      {player.tag}
                     </td>
                     <td
                       data-th="Name"
                       className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      <a href={`/communication?til=${row.id}`}>
+                      <a href={`/communication?til=${player.id}`}>
                         <span
                           className={`text-${
-                            row.commander === 1 ? "red" : "blue"
+                            player.commander === 1 ? "red" : "blue"
                           }`}
                         >
-                          {row.nick}
+                          {player.nick}
                         </span>
-                        {Date.now() - row.timer < 600000 && (
+                        {Date.now() - player.timer < 600000 && (
                           <span className="text-green-500"> (ONLINE)</span>
                         )}
                       </a>
                     </td>
 
                     <td
-                      data-th="Name"
+                      data-th="Score"
                       className="flex h-12 items-center  px-6  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      {row.score.toString()}
+                      {player.score.toString()}
                     </td>
 
                     <td
-                      data-th="Name"
+                      data-th="Spying"
                       className="flex h-12 items-center px-6  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      <a href={`/spy?id=${row.id}`}>Spy</a>
+                      <a href={`/spy?id=${player.id}`}>Spy</a>
                     </td>
 
                     <td
-                      data-th="Name"
+                      data-th="Mail"
                       className="flex h-12 items-center  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      <a href={`/spy?id=${row.id}`}>Mail</a>
+                      <a href={`/spy?id=${player.id}`}>Mail</a>
                     </td>
                   </tr>
                 ))}
