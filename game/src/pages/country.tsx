@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
 import { type NextPage } from "next";
@@ -7,8 +6,13 @@ import Head from "next/head";
 
 import Navbar from "@/components/Header/Navbar";
 
+import { api } from "@/utils/api";
+import Link from "next/link";
+
 const Country: NextPage = () => {
   // https://tailwind-elements.com/docs/standard/data/tables/
+
+  const { data: paPlayers } = api.paUsers.getAll.useQuery();
 
   const [myx, setMyx] = useState<number>(1);
 
@@ -38,9 +42,9 @@ const Country: NextPage = () => {
   const mockData = [
     {
       id: 1,
-      y: 10,
+      y: 1,
       tag: "Tag 1",
-      nick: "Nick 1",
+      nick: "killaH",
       commander: 1,
       score: 1000000,
       size: "Large",
@@ -48,20 +52,20 @@ const Country: NextPage = () => {
     },
     {
       id: 2,
-      y: 20,
+      y: 2,
       tag: "Tag 2",
-      nick: "Nick 2",
-      commander: 2,
-      score: 500000,
+      nick: "Venn",
+      commander: 1,
+      score: 600000,
       size: "Medium",
       timer: Date.now() - 1000 * 60 * 10,
     },
     {
       id: 3,
-      y: 30,
+      y: 3,
       tag: "Tag 3",
-      nick: "Nick 3",
-      commander: 3,
+      nick: "Fiende",
+      commander: 1,
       score: 250000,
       size: "Small",
       timer: Date.now() - 1000 * 60 * 20,
@@ -117,102 +121,119 @@ const Country: NextPage = () => {
 
             <table className="w-full text-left ring-1 ring-slate-400/10">
               <caption className="mb-10 text-xl font-medium text-white ">
-                Continent name here | Score: 1000000
+                Continent name here <br />Score: 1000000
               </caption>
               <tbody>
                 <tr>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Location
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Tag
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90 px-6  text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Nick
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90 px-6 text-center  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Score
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    className="hidden h-12  bg-slate-200/90 px-6 text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                   >
                     Spying
                   </th>
                   <th
                     scope="col"
-                    className="hidden h-12 bg-slate-200/90  px-6  text-base font-bold  text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
+                    className="hidden h-12 bg-slate-200/90  px-6 text-center text-base font-bold  text-black backdrop-blur-sm first:border-l-0 sm:table-cell"
                   >
                     Mail
                   </th>
                 </tr>
 
-                {mockData.map((row) => (
+                {paPlayers?.map((player) => (
                   <tr
-                    key={row.id}
-                    className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none"
+                    key={player.id}
+                    className="block border-b bg-white text-center last:border-b-0 sm:table-row sm:border-none"
                   >
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      {row.y}
+                      {player.y}
                     </td>
                     <td
                       data-th="Tag"
-                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      {row.tag}
+                      {player.tag}
                     </td>
                     <td
                       data-th="Name"
-                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      <a href={`/communication?til=${row.id}`}>
-                        <span
-                          className={`text-${
-                            row.commander === 1 ? "red" : "blue"
-                          }`}
+                      <span
+                        className={`text-${
+                          player.commander === 1 ? "red" : "blue"
+                        }`}
+                      >
+                        {player.nick}
+                      </span>
+                      {Date.now() - player.timer < 600000 && (
+                        <span className="text-green-500"> (ONLINE)</span>
+                      )}
+                    </td>
+
+                    <td
+                      data-th="Score"
+                      className="flex h-12 items-center px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {player.score.toString()}
+                    </td>
+
+                    <td
+                      data-th="Spying"
+                      className="flex h-12 items-center px-6  text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      <Link href={`/spy?id=${player.id}`}>
+                        <button
+                          type="button"
+                          className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white  transition duration-150 ease-in-out hover:bg-primary-600  focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+                          onClick={() => {
+                            alert(player.id);
+                          }}
                         >
-                          {row.nick}
-                        </span>
-                        {Date.now() - row.timer < 600000 && (
-                          <span className="text-green-500"> (ONLINE)</span>
-                        )}
-                      </a>
+                          Spying
+                        </button>
+                      </Link>
                     </td>
-
                     <td
-                      data-th="Name"
-                      className="flex h-12 items-center  hover:bg-blue-100  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                      data-th="Mail"
+                      className="flex h-12 items-center px-6  text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
-                      {row.score.toString()}
-                    </td>
-
-                    <td
-                      data-th="Name"
-                      className="flex h-12 items-center hover:bg-blue-100  px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
-                    >
-                      <a href={`/spy?id=${row.id}`}>Spy</a>
-                    </td>
-
-                    <td
-                      data-th="Name"
-                      className="flex h-12 items-center  hover:bg-blue-100 px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
-                    >
-                      <a href={`/spy?id=${row.id}`}>Mail</a>
+                      <Link href={`/mail?id=${player.id}`}>
+                        <button
+                          type="button"
+                          className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white  transition duration-150 ease-in-out hover:bg-primary-600  focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+                          onClick={() => {
+                            alert(player.id);
+                          }}
+                        >
+                          Mail
+                        </button>
+                      </Link>
                     </td>
                   </tr>
                 ))}
