@@ -121,7 +121,7 @@ const Country: NextPage = () => {
 
             <table className="w-full text-left ring-1 ring-slate-400/10">
               <caption className="mb-10 text-xl font-medium text-white ">
-                Continent name here | Score: 1000000
+                Continent name here <br />Score: 1000000
               </caption>
               <tbody>
                 <tr>
