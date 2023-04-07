@@ -7,6 +7,18 @@ export const paUsersRouter = createTRPCRouter({
     return ctx.prisma.paUsers.findMany();
   }),
 
+  getAttackedPlayer: publicProcedure
+  .input(z.object({ Userid: z.number() }))
+  .query(async ({ ctx, input }) => {
+    const player = await ctx.prisma.paUsers.findUnique({
+      where: {
+        id: input.Userid,
+      },
+    });
+
+    return player;
+  }),
+
   getPlayerById: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
