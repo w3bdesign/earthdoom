@@ -80,7 +80,7 @@ const Country: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="min-h-screen bg-neutral-900">
+      <main className="bg-neutral-900">
         <div className="flex justify-center">
           <div className="my-6 mt-16">
             <button
