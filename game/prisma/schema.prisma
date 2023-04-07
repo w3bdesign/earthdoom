@@ -25,8 +25,7 @@ model Example {
 // Game models
 
 model PaUsers {
-    id               Int    @id @default(autoincrement())
-    name             String
+    id               Int    @id @default(autoincrement()) 
     nick             String
     email            String
     city             String
