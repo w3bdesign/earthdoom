@@ -10,6 +10,7 @@ const Home: NextPage = () => {
 
   let shipCount = 0;
   let bduCount = 0;
+  let roidCount = 0;
 
   if (paPlayer) {
     shipCount =
@@ -21,6 +22,9 @@ const Home: NextPage = () => {
       paPlayer.scorpions;
 
     bduCount = paPlayer.rcannons + paPlayer.avengers + paPlayer.lstalkers;
+
+    roidCount =
+      paPlayer.asteroid_metal + paPlayer.asteroid_crystal + paPlayer.ui_roids;
   }
 
   return (
@@ -119,7 +123,7 @@ const Home: NextPage = () => {
                 </tbody>
               </table>
 
-              <table className="w-full text-left ring-1 ring-slate-400/10 mt-8">
+              <table className="mt-8 w-full text-left ring-1 ring-slate-400/10">
                 <caption className="mb-10 text-xl font-medium text-white ">
                   BDU ({bduCount} total)
                 </caption>
@@ -127,19 +131,19 @@ const Home: NextPage = () => {
                   <tr>
                     <th
                       scope="col"
-                      className="hidden h-12 text-center bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                      className="hidden h-12 bg-slate-200/90 px-6 text-center  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                     >
                       Reaper cannons
                     </th>
                     <th
                       scope="col"
-                      className="hidden h-12 text-center bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                      className="hidden h-12 bg-slate-200/90 px-6 text-center  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                     >
                       Avengers
                     </th>
                     <th
                       scope="col"
-                      className="hidden h-12 text-center bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                      className="hidden h-12 bg-slate-200/90 px-6  text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
                     >
                       Reaper cannons
                     </th>
@@ -163,6 +167,55 @@ const Home: NextPage = () => {
                       className="flex h-12 items-center  px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                     >
                       {paPlayer?.rcannons}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table className="mt-8 w-full text-left ring-1 ring-slate-400/10">
+                <caption className="mb-10 text-xl font-medium text-white ">
+                  Land ({roidCount} total)
+                </caption>
+                <tbody>
+                  <tr>
+                    <th
+                      scope="col"
+                      className="hidden h-12 bg-slate-200/90 px-6 text-center  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    >
+                      Titanium mines
+                    </th>
+                    <th
+                      scope="col"
+                      className="hidden h-12 bg-slate-200/90 px-6 text-center  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    >
+                      Houses
+                    </th>
+                    <th
+                      scope="col"
+                      className="hidden h-12 bg-slate-200/90 px-6  text-center text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+                    >
+                      Undeveloped
+                    </th>
+                  </tr>
+
+                  <tr className="block border-b  bg-white last:border-b-0 sm:table-row sm:border-none">
+                    <td
+                      data-th="Titanium"
+                      className="flex h-12 items-center  px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {paPlayer?.asteroid_metal}
+                    </td>
+                    <td
+                      data-th="Houses"
+                      className="flex h-12 items-center  px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {paPlayer?.asteroid_crystal}
+                    </td>
+                    <td
+                      data-th="Undeveloped"
+                      className="flex h-12 items-center  px-6 text-center  text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                    >
+                      {paPlayer?.ui_roids}
                     </td>
                   </tr>
                 </tbody>
