@@ -8,23 +8,10 @@ import UnitsTable from "@/components/Index/UnitsTable";
 
 import { api } from "@/utils/api";
 
-
 const Home: NextPage = () => {
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
     Userid: 1,
   });
-
-  let shipCount = 0;
-
-  if (paPlayer) {
-    shipCount =
-      paPlayer.astropods +
-      paPlayer.infinitys +
-      paPlayer.wraiths +
-      paPlayer.warfrigs +
-      paPlayer.destroyers +
-      paPlayer.scorpions;
-  }
 
   return (
     <>
