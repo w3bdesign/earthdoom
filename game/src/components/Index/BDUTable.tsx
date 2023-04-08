@@ -10,19 +10,21 @@ const BDUTable: React.FC<BDUTableProps> = ({ Userid }) => {
     Userid,
   });
 
-  if (!paPlayer) return null;
+  if (paPlayer) {
+    const bduCount = paPlayer.rcannons + paPlayer.avengers + paPlayer.lstalkers;
 
-  const bduCount = paPlayer.rcannons + paPlayer.avengers + paPlayer.lstalkers;
+    const columns = [
+      { label: "Reaper cannons", accessor: "rcannons" },
+      { label: "Avengers", accessor: "avengers" },
+      { label: "Lucius stalkers", accessor: "lstalkers" },
+    ];
 
-  const columns = [
-    { label: "Reaper cannons", accessor: "rcannons" },
-    { label: "Avengers", accessor: "avengers" },
-    { label: "Lucius stalkers", accessor: "lstalkers" },
-  ];
+    const caption = `BDU (${bduCount} total)`;
 
-  const caption = `BDU (${bduCount} total)`;
-
-  return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
+    return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
+  } else {
+    return <h1>No player found</h1>;
+  }
 };
 
 export default BDUTable;
