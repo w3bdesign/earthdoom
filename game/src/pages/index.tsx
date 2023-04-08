@@ -1,11 +1,13 @@
 import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
-import LandTable from "@/components/Index/LandTable";
 
-import { api } from "@/utils/api";
+import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
+
+import { api } from "@/utils/api";
+
 
 const Home: NextPage = () => {
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
