@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
 import { type NextPage } from "next";
@@ -16,14 +16,6 @@ const Country: NextPage = () => {
 
   const [myx, setMyx] = useState<number>(1);
 
-  useEffect(() => {
-    fetchData();
-  }, [myx]);
-
-  const fetchData = () => {
-    if (!myx) return;
-  };
-
   const handleChange = (event: { target: { value: string | number } }) => {
     const { value } = event.target;
     if (Number.isInteger(Number(value))) {
@@ -38,39 +30,6 @@ const Country: NextPage = () => {
   const handleNext = () => {
     setMyx(myx + 1);
   };
-
-  const mockData = [
-    {
-      id: 1,
-      y: 1,
-      tag: "Tag 1",
-      nick: "killaH",
-      commander: 1,
-      score: 1000000,
-      size: "Large",
-      timer: Date.now(),
-    },
-    {
-      id: 2,
-      y: 2,
-      tag: "Tag 2",
-      nick: "Venn",
-      commander: 1,
-      score: 600000,
-      size: "Medium",
-      timer: Date.now() - 1000 * 60 * 10,
-    },
-    {
-      id: 3,
-      y: 3,
-      tag: "Tag 3",
-      nick: "Fiende",
-      commander: 1,
-      score: 250000,
-      size: "Small",
-      timer: Date.now() - 1000 * 60 * 20,
-    },
-  ];
 
   return (
     <>
@@ -119,7 +78,8 @@ const Country: NextPage = () => {
             </div>
             <table className="w-full text-left ring-1 ring-slate-400/10">
               <caption className="mb-10 text-xl font-medium text-white ">
-                Continent name here <br />Score: 1000000
+                Continent name here <br />
+                Score: 1000000
               </caption>
               <tbody>
                 <tr>
