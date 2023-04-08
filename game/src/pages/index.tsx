@@ -2,6 +2,8 @@ import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
 
+import BDUTable from "@/components/Index/BDUTable";
+
 /*import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
@@ -14,6 +16,9 @@ const Home: NextPage = () => {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
             <div className="relative sm:mx-auto">
+
+            <BDUTable Userid={1} />
+
 
               {/*<UnitsTable Userid={1} />
               <BDUTable Userid={1} />
