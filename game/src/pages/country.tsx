@@ -44,7 +44,7 @@ const Country: NextPage = () => {
           <div className="my-6 mt-16">
             <button
               className="mr-2 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
-              onClick={handlePrev}
+              onClick={() => handlePrev}
             >
               <BsArrowLeft className="mr-2 inline-block" />
               Previous
@@ -56,11 +56,11 @@ const Country: NextPage = () => {
               size={5}
               maxLength={3}
               value={myx}
-              onChange={handleChange}
+              onChange={() => handleChange}
             />
             <button
               className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
-              onClick={handleNext}
+              onClick={() => handleNext}
             >
               Next
               <BsArrowRight className="ml-2 inline-block" />
