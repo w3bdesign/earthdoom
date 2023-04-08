@@ -56,7 +56,7 @@ export const paUsersRouter = createTRPCRouter({
             defender.destroyers +
             defender.scorpions;
           const eta = defender.defeta >= 5 ? defender.defeta - 5 : 0;
-          return `Friendly incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta})`;
+          return `Friendly incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta} ticks)`;
         })
         .join("\n \n");
 
@@ -87,7 +87,7 @@ export const paUsersRouter = createTRPCRouter({
             defender.destroyers +
             defender.scorpions;
           const eta = defender.wareta >= 5 ? defender.wareta - 5 : 0;
-          return `Hostile incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta})`;
+          return `Hostile incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta} ticks)`;
         })
         .join("");
 
