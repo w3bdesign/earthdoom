@@ -4,7 +4,7 @@ interface TableColumn {
 }
 
 interface TableData {
-  [key: string]: any;
+  [key: string]: any; // This should be improved in the future
 }
 
 interface DataTableProps {
