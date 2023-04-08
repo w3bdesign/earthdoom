@@ -11,7 +11,7 @@ interface ILayoutProps {
 }
 
 const Layout = ({ children }: ILayoutProps) => {
-  //const user = useUser(); // TODO Hook bug? Rendered more hooks than during the previous render.
+  const user = useUser();
   return (
     <>
       <Head>
@@ -22,12 +22,12 @@ const Layout = ({ children }: ILayoutProps) => {
       {
         // Only show navbar when logged in
       }
-      {/*user.isSignedIn && (
+      {user.isSignedIn && (
         <>
           <Navbar />
           <Information />
         </>
-      )*/}
+      )}
 
       {
         // Do this while developing
