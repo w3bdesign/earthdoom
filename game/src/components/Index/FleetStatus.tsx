@@ -26,7 +26,8 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ Userid }) => {
       </h2>
       <span className="mx-auto mb-10 text-lg text-white">
         {paPlayer.war === 0 && paPlayer.def === 0 && "All fleets at home"}
-        {paPlayer.war < 0 && `Returning ... ETA ${paPlayer?.wareta}`}
+        {paPlayer.war < 0 ||
+          (paPlayer.def < 0 && `Returning ... ETA ${paPlayer?.wareta}`)}
 
         {paAttackedName &&
           paPlayer.wareta >= 5 &&
