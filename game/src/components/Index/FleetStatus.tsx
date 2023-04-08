@@ -28,25 +28,25 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ Userid }) => {
         {paPlayer.war === 0 && paPlayer.def === 0 && "All fleets at home"}
         {paPlayer.war < 0 && `Returning ... ETA ${paPlayer?.wareta}`}
 
-        {paPlayer.war > 0 &&
+        {paAttackedName &&
           paPlayer.wareta >= 5 &&
           `Attacking ${paAttackedName?.nick} #${
             paAttackedName?.id
           } ${"  "}  (ETA:  ${paPlayer.wareta - 5} ticks)`}
 
-        {paPlayer.war > 0 &&
+        {paAttackedName &&
           paPlayer.wareta < 5 &&
           `Attacking ${paAttackedName?.nick} #${
             paAttackedName?.id
           } ${"  "}  (ETA: 0 ticks)`}
 
-        {paPlayer.def > 0 &&
+        {paDefendedName &&
           paPlayer.defeta >= 5 &&
           `Defending ${paDefendedName?.nick} #${
             paDefendedName?.id
           } ${"  "}  (ETA:  ${paPlayer.defeta - 5} ticks)`}
 
-        {paPlayer.def > 0 &&
+        {paDefendedName &&
           paPlayer.defeta < 5 &&
           `Defending ${paDefendedName?.nick} #${
             paDefendedName?.id
