@@ -6,19 +6,26 @@ export const paUsersRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.paUsers.findMany();
   }),
-
   getAttackedPlayer: publicProcedure
-  .input(z.object({ Userid: z.number() }))
-  .query(async ({ ctx, input }) => {
-    const player = await ctx.prisma.paUsers.findUnique({
-      where: {
-        id: input.Userid,
-      },
-    });
+    .input(z.object({ Warid: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const defender = await ctx.prisma.paUsers.findUnique({
+        where: { id: input.Warid },
+        select: { id: true, nick: true },
+      });
 
-    return player;
-  }),
+      return defender;
+    }),
+  getDefendedPlayer: publicProcedure
+    .input(z.object({ Defid: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const defender = await ctx.prisma.paUsers.findUnique({
+        where: { id: input.Defid },
+        select: { id: true, nick: true },
+      });
 
+      return defender;
+    }),
   getPlayerById: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
@@ -30,7 +37,6 @@ export const paUsersRouter = createTRPCRouter({
 
       return player;
     }),
-
   getFriendlies: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
@@ -62,7 +68,6 @@ export const paUsersRouter = createTRPCRouter({
         defenders: forsvar,
       };
     }),
-
   getHostiles: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
