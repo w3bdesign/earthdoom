@@ -18,8 +18,8 @@ const Home: NextPage = () => {
               This page is a work in progress. It is not a finished product.
             </p>
             <div className="relative sm:mx-auto">
-              <UnitsTable Userid={1} />
-              <BDUTable Userid={1} />
+              {/*<UnitsTable Userid={1} />
+              <BDUTable Userid={1} />*/}
               {/*<LandTable Userid={1} />*/}
               <FleetStatus Userid={1} />
             </div>
