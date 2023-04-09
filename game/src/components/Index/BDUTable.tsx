@@ -3,7 +3,11 @@ import DataTable from "@/components/common/DataTable";
 import { type FC } from "react";
 
 interface BDUTableProps {
-  paPlayer: any;
+  paPlayer: {
+    rcannons: number;
+    avengers: number;
+    lstalkers: number;
+  };
 }
 
 const BDUTable: FC<BDUTableProps> = ({ paPlayer }) => {

@@ -2,9 +2,9 @@ import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
 
-import LandTable from "@/components/Index/LandTable";
+//import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
-import UnitsTable from "@/components/Index/UnitsTable";
+//import UnitsTable from "@/components/Index/UnitsTable";
 import FleetStatus from "@/components/Index/FleetStatus";
 
 import { api } from "@/utils/api";
@@ -26,9 +26,9 @@ const Home: NextPage = () => {
             <div className="relative sm:mx-auto">
               {paPlayer && (
                 <>
-                  <UnitsTable paPlayer={paPlayer} />
+                  {/*<UnitsTable paPlayer={paPlayer} />*/}
                   <BDUTable paPlayer={paPlayer} />
-                  <LandTable paPlayer={paPlayer} />
+                  {/*<LandTable paPlayer={paPlayer} />*/}
                   <FleetStatus paPlayer={paPlayer} />
                 </>
               )}

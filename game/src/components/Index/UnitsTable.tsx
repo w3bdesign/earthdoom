@@ -3,7 +3,13 @@ import { type FC } from "react";
 import DataTable from "@/components/common/DataTable";
 
 interface LandTableProps {
-  paPlayer: any;
+  paPlayer: {
+    astropods: number;
+    infinitys: number;
+    warfrigs: number;
+    destroyers: number;
+    scorpions: number;
+  };
 }
 
 const UnitsTable: FC<LandTableProps> = ({ paPlayer }) => {
@@ -11,7 +17,6 @@ const UnitsTable: FC<LandTableProps> = ({ paPlayer }) => {
 
   shipCount =
     paPlayer.astropods +
-    paPlayer.infinitys +
     paPlayer.infinitys +
     paPlayer.warfrigs +
     paPlayer.destroyers +

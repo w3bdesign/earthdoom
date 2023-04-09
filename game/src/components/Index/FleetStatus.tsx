@@ -3,23 +3,21 @@ import { api } from "@/utils/api";
 import { type FC } from "react";
 
 interface FleetStatusProps {
-  paPlayer: any;
+  paPlayer: {
+    war: number;
+    def: number;
+    wareta: number;
+    defeta: number;
+  };
 }
 
 const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
-  const warid = paPlayer?.war;
-  const defid = paPlayer?.def;
-
-  if (warid === undefined || defid === undefined) {
-    return <h1>No player</h1>;
-  }
-
   const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery({
-    Warid: warid,
+    Warid: paPlayer.war,
   });
 
   const { data: paDefendedName } = api.paUsers.getDefendedPlayer.useQuery({
-    Defid: defid,
+    Defid: paPlayer.def,
   });
 
   return (

@@ -3,7 +3,11 @@ import { type FC } from "react";
 import DataTable from "@/components/common/DataTable";
 
 interface LandTableProps {
-  paPlayer: any;
+  paPlayer: {
+    asteroid_metal: number;
+    asteroid_crystal: number;
+    ui_roids: number;
+  };
 }
 
 const LandTable: FC<LandTableProps> = ({ paPlayer }) => {
