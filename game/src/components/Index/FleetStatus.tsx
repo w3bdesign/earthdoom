@@ -1,10 +1,12 @@
+import { type FC } from "react";
+
 import { api } from "@/utils/api";
 
 interface FleetStatusProps {
   Userid: number;
 }
 
-const FleetStatus: React.FC<FleetStatusProps> = ({ Userid }) => {
+const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
     Userid,
   });
