@@ -11,22 +11,20 @@ const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
     Userid,
   });
 
-  if (!paPlayer) return <h1>No player found</h1>;
-
-  const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery(
-    {
-      Warid: paPlayer.war,
-    },
-    { enabled: paPlayer !== undefined }
-  );
-
-  const { data: paDefendedName } = api.paUsers.getDefendedPlayer.useQuery(
-    {
-      Defid: paPlayer.def,
-    },
-    { enabled: paPlayer !== undefined }
-  );
+  const warid = paPlayer?.war;
+  const defid = paPlayer?.def;
   
+  if (warid === undefined || defid === undefined) {
+    return <h1>No player</h1>;
+  }
+
+  const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery({
+    Warid: warid,
+  });
+
+  const { data: paDefendedName } = api.paUsers.getDefendedPlayer.useQuery({
+    Defid: defid,
+  });
 
   return (
     <>
@@ -35,29 +33,38 @@ const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
           Fleet status
         </h2>
         <span className="mx-auto mb-10 text-lg text-white">
-          {paPlayer.war === 0 && paPlayer.def === 0 && "All fleets at home"}
-          {paPlayer.war < 0 ||
-            (paPlayer.def < 0 && `Returning ... ETA ${paPlayer?.wareta}`)}
+          {paPlayer &&
+            paPlayer.war === 0 &&
+            paPlayer.def === 0 &&
+            "All fleets at home"}
+          {(paPlayer && paPlayer.war < 0) ||
+            (paPlayer &&
+              paPlayer.def < 0 &&
+              `Returning ... ETA ${paPlayer?.wareta}`)}
 
-          {paAttackedName &&
+          {paPlayer &&
+            paAttackedName &&
             paPlayer.wareta >= 5 &&
             `Attacking ${paAttackedName?.nick} #${
               paAttackedName?.id
-            } ${"  "}  (ETA:  ${paPlayer.wareta - 5} ticks)`}
+            } ${"  "}  (ETA:  ${paPlayer?.wareta - 5} ticks)`}
 
-          {paAttackedName &&
-            paPlayer.wareta < 5 &&
+          {paPlayer &&
+            paAttackedName &&
+            paPlayer?.wareta < 5 &&
             `Attacking ${paAttackedName?.nick} #${
               paAttackedName?.id
             } ${"  "}  (ETA: 0 ticks)`}
 
-          {paDefendedName &&
+          {paPlayer &&
+            paDefendedName &&
             paPlayer.defeta >= 5 &&
             `Defending ${paDefendedName?.nick} #${
               paDefendedName?.id
             } ${"  "}  (ETA:  ${paPlayer.defeta - 5} ticks)`}
 
-          {paDefendedName &&
+          {paPlayer &&
+            paDefendedName &&
             paPlayer.defeta < 5 &&
             `Defending ${paDefendedName?.nick} #${
               paDefendedName?.id
