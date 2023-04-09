@@ -11,47 +11,21 @@ const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
     Userid,
   });
 
-  if (!paPlayer) {
-    return <h1>No player found</h1>;
-  }
+  if (!paPlayer) return <h1>No player found</h1>;
 
-  const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery({
-    Warid: paPlayer.war,
-  });
+  const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery(
+    {
+      Warid: paPlayer.war,
+    },
+    { enabled: paPlayer !== undefined }
+  );
 
-  const { data: paDefendedName } = api.paUsers.getDefendedPlayer.useQuery({
-    Defid: paPlayer.def,
-  });
-
-  const allFleetsAtHome =
-    paPlayer.war === 0 && paPlayer.def === 0 && "All fleets at home";
-  const returning =
-    paPlayer.war < 0 ||
-    (paPlayer.def < 0 && `Returning ... ETA ${paPlayer?.wareta}`);
-  const attacking =
-    paAttackedName &&
-    paPlayer.wareta >= 5 &&
-    `Attacking ${paAttackedName?.nick} #${paAttackedName?.id} ${"  "}  (ETA:  ${
-      paPlayer.wareta - 5
-    } ticks)`;
-  const attackingZero =
-    paAttackedName &&
-    paPlayer.wareta < 5 &&
-    `Attacking ${paAttackedName?.nick} #${
-      paAttackedName?.id
-    } ${"  "}  (ETA: 0 ticks)`;
-  const defending =
-    paDefendedName &&
-    paPlayer.defeta >= 5 &&
-    `Defending ${paDefendedName?.nick} #${paDefendedName?.id} ${"  "}  (ETA:  ${
-      paPlayer.defeta - 5
-    } ticks)`;
-  const defendingZero =
-    paDefendedName &&
-    paPlayer.defeta < 5 &&
-    `Defending ${paDefendedName?.nick} #${
-      paDefendedName?.id
-    } ${"  "}  (ETA: 0 ticks)`;
+  const { data: paDefendedName } = api.paUsers.getDefendedPlayer.useQuery(
+    {
+      Defid: paPlayer.def,
+    },
+    { enabled: paPlayer !== undefined }
+  );
 
   return (
     <>
@@ -60,9 +34,33 @@ const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
           Fleet status
         </h2>
         <span className="mx-auto mb-10 text-lg text-white">
-          {allFleetsAtHome || returning}
-          {attacking || attackingZero}
-          {defending || defendingZero}
+          {paPlayer.war === 0 && paPlayer.def === 0 && "All fleets at home"}
+          {paPlayer.war < 0 ||
+            (paPlayer.def < 0 && `Returning ... ETA ${paPlayer?.wareta}`)}
+
+          {paAttackedName &&
+            paPlayer.wareta >= 5 &&
+            `Attacking ${paAttackedName?.nick} #${
+              paAttackedName?.id
+            } ${"  "}  (ETA:  ${paPlayer.wareta - 5} ticks)`}
+
+          {paAttackedName &&
+            paPlayer.wareta < 5 &&
+            `Attacking ${paAttackedName?.nick} #${
+              paAttackedName?.id
+            } ${"  "}  (ETA: 0 ticks)`}
+
+          {paDefendedName &&
+            paPlayer.defeta >= 5 &&
+            `Defending ${paDefendedName?.nick} #${
+              paDefendedName?.id
+            } ${"  "}  (ETA:  ${paPlayer.defeta - 5} ticks)`}
+
+          {paDefendedName &&
+            paPlayer.defeta < 5 &&
+            `Defending ${paDefendedName?.nick} #${
+              paDefendedName?.id
+            } ${"  "}  (ETA: 0 ticks)`}
         </span>
       </div>
     </>
