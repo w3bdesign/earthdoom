@@ -12,20 +12,22 @@ const LandTable: React.FC<LandTableProps> = ({ Userid }) => {
 
   let roidCount = 0;
 
-  if (!paPlayer) return null;
+  if (paPlayer) {
+    roidCount =
+      paPlayer.asteroid_metal + paPlayer.asteroid_crystal + paPlayer.ui_roids;
 
-  roidCount =
-    paPlayer.asteroid_metal + paPlayer.asteroid_crystal + paPlayer.ui_roids;
+    const columns = [
+      { label: "Titanium mines", accessor: "asteroid_metal" },
+      { label: "Houses", accessor: "asteroid_crystal" },
+      { label: "Undeveloped", accessor: "ui_roids" },
+    ];
 
-  const columns = [
-    { label: "Titanium mines", accessor: "asteroid_metal" },
-    { label: "Houses", accessor: "asteroid_crystal" },
-    { label: "Undeveloped", accessor: "ui_roids" },
-  ];
+    const caption = `Land (${roidCount} total)`;
 
-  const caption = `Land (${roidCount} total)`;
-
-  return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
+    return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
+  } else {
+    return <h1>No player found</h1>;
+  }
 };
 
 export default LandTable;

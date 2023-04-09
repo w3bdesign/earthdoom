@@ -2,13 +2,10 @@ import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
 
-import BDUTable from "@/components/Index/BDUTable";
-import FleetStatus from "@/components/Index/FleetStatus";
-
-/*import LandTable from "@/components/Index/LandTable";
+import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
-import FleetStatus from "@/components/Index/FleetStatus";*/
+import FleetStatus from "@/components/Index/FleetStatus";
 
 const Home: NextPage = () => {
   return (
@@ -17,20 +14,10 @@ const Home: NextPage = () => {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
             <div className="relative sm:mx-auto">
-
-            <BDUTable Userid={1} />
-
-            <FleetStatus Userid={1} />
-
-
-              {/*
               <UnitsTable Userid={1} />
               <BDUTable Userid={1} />
               <LandTable Userid={1} />
               <FleetStatus Userid={1} />
-              */
-              }
-
             </div>
           </div>
         </div>
