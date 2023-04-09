@@ -26,9 +26,9 @@ const Home: NextPage = () => {
             <div className="relative sm:mx-auto">
               {paPlayer && (
                 <>
-                  <UnitsTable paPlayer={paPlayer} />
+                  {/*<UnitsTable paPlayer={paPlayer} />*/}
                   <BDUTable paPlayer={paPlayer} />
-                  <LandTable paPlayer={paPlayer} />
+                  {/*<LandTable paPlayer={paPlayer} />*/}
                   <FleetStatus paPlayer={paPlayer} />
                 </>
               )}
