@@ -29,9 +29,9 @@ const Home: NextPage = () => {
               Has rendered: {hasRendered ? "true" : "false"}
               {hasRendered && (
                 <>
-                  <UnitsTable Userid={1} />
+                  {/*<UnitsTable Userid={1} />
                   <BDUTable Userid={1} />
-                  <LandTable Userid={1} />
+              <LandTable Userid={1} />*/}
                   <FleetStatus Userid={1} />
                 </>
               )}
