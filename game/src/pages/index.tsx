@@ -12,7 +12,9 @@ const Home: NextPage = () => {
   const [hasRendered, setHasRendered] = useState(false);
 
   useEffect(() => {
-    setHasRendered(true);
+    setTimeout(() => {
+      setHasRendered(true);
+    }, 5000);
   }, []);
   return (
     <>
