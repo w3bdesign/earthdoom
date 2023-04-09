@@ -2,43 +2,33 @@ import { type FC } from "react";
 
 import DataTable from "@/components/common/DataTable";
 
-import { api } from "@/utils/api";
-
 interface LandTableProps {
-  Userid: number;
+  paPlayer: any;
 }
 
-const UnitsTable: FC<LandTableProps> = ({ Userid }) => {
-  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
-    Userid,
-  });
-
+const UnitsTable: FC<LandTableProps> = ({ paPlayer }) => {
   let shipCount = 0;
 
-  if (paPlayer) {
-    shipCount =
-      paPlayer.astropods +
-      paPlayer.infinitys +
-      paPlayer.infinitys +
-      paPlayer.warfrigs +
-      paPlayer.destroyers +
-      paPlayer.scorpions;
+  shipCount =
+    paPlayer.astropods +
+    paPlayer.infinitys +
+    paPlayer.infinitys +
+    paPlayer.warfrigs +
+    paPlayer.destroyers +
+    paPlayer.scorpions;
 
-    const columns = [
-      { label: "Astropods", accessor: "astropods" },
-      { label: "Infinitys", accessor: "infinitys" },
-      { label: "Wraiths", accessor: "wraiths" },
-      { label: "Warfrigs", accessor: "warfrigs" },
-      { label: "Destroyers", accessor: "destroyers" },
-      { label: "Scorpions", accessor: "scorpions" },
-    ];
+  const columns = [
+    { label: "Astropods", accessor: "astropods" },
+    { label: "Infinitys", accessor: "infinitys" },
+    { label: "Wraiths", accessor: "wraiths" },
+    { label: "Warfrigs", accessor: "warfrigs" },
+    { label: "Destroyers", accessor: "destroyers" },
+    { label: "Scorpions", accessor: "scorpions" },
+  ];
 
-    const caption = `Units (${shipCount} total)`;
+  const caption = `Units (${shipCount} total)`;
 
-    return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
-  } else {
-    return <h1>No player found</h1>;
-  }
+  return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
 };
 
 export default UnitsTable;
