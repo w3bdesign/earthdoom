@@ -11,8 +11,6 @@ const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
     Userid,
   });
 
-  if (!paPlayer) return <h1>No player found</h1>;
-
   const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery(
     {
       Warid: paPlayer.war,
@@ -26,6 +24,7 @@ const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
     },
     { enabled: paPlayer !== undefined }
   );
+  if (!paPlayer) return <h1>No player found</h1>;
 
   return (
     <>
