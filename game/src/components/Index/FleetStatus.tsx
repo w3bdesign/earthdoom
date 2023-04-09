@@ -1,19 +1,15 @@
-import { type FC } from "react";
-
 import { api } from "@/utils/api";
 
+import { type FC } from "react";
+
 interface FleetStatusProps {
-  Userid: number;
+  paPlayer: any;
 }
 
-const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
-  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
-    Userid,
-  });
-
+const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
   const warid = paPlayer?.war;
   const defid = paPlayer?.def;
-  
+
   if (warid === undefined || defid === undefined) {
     return <h1>No player</h1>;
   }

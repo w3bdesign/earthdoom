@@ -7,7 +7,13 @@ import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
 import FleetStatus from "@/components/Index/FleetStatus";
 
+import { api } from "@/utils/api";
+
 const Home: NextPage = () => {
+  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+    Userid: 1,
+  });
+
   return (
     <>
       <Layout>
@@ -15,13 +21,17 @@ const Home: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
             <h1 className="text-2xl ">Main</h1>
             <p className="text-base">
-              This page is a work in progress. It is soon a finished product.
+              This page is a work in progress. It is very soon a finished product.
             </p>
             <div className="relative sm:mx-auto">
-              {/*<UnitsTable Userid={1} />
-                  <BDUTable Userid={1} />
-              <LandTable Userid={1} />*/}
-              <FleetStatus Userid={1} />
+              {paPlayer && (
+                <>
+                  <UnitsTable paPlayer={paPlayer} />
+                  <BDUTable paPlayer={paPlayer} />
+                  <LandTable paPlayer={paPlayer} />
+                  <FleetStatus paPlayer={paPlayer} />
+                </>
+              )}
             </div>
           </div>
         </div>
