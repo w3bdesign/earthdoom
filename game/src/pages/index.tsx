@@ -6,8 +6,14 @@ import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
 import FleetStatus from "@/components/Index/FleetStatus";
+import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
+  const [hasRendered, setHasRendered] = useState(false);
+
+  useEffect(() => {
+    setHasRendered(true);
+  }, []);
   return (
     <>
       <Layout>
@@ -18,10 +24,15 @@ const Home: NextPage = () => {
               This page is a work in progress. It is not a finished product.
             </p>
             <div className="relative sm:mx-auto">
-              <UnitsTable Userid={1} />
-              <BDUTable Userid={1} />
-              <LandTable Userid={1} />
-              <FleetStatus Userid={1} />
+              Has rendered: {hasRendered ? "true" : "false"}
+              {hasRendered && (
+                <>
+                  <UnitsTable Userid={1} />
+                  <BDUTable Userid={1} />
+                  <LandTable Userid={1} />
+                  <FleetStatus Userid={1} />
+                </>
+              )}
             </div>
           </div>
         </div>
