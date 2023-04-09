@@ -26,6 +26,7 @@ const FleetStatus: FC<FleetStatusProps> = ({ Userid }) => {
     },
     { enabled: paPlayer !== undefined }
   );
+  
 
   return (
     <>
