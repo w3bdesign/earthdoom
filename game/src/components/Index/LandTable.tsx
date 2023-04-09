@@ -1,11 +1,14 @@
+import { type FC } from "react";
+
 import DataTable from "@/components/common/DataTable";
+
 import { api } from "@/utils/api";
 
 interface LandTableProps {
   Userid: number;
 }
 
-const LandTable: React.FC<LandTableProps> = ({ Userid }) => {
+const LandTable: FC<LandTableProps> = ({ Userid }) => {
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
     Userid,
   });

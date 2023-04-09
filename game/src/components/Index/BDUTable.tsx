@@ -1,11 +1,12 @@
 import DataTable from "@/components/common/DataTable";
 import { api } from "@/utils/api";
+import { type FC } from "react";
 
 interface BDUTableProps {
   Userid: number;
 }
 
-const BDUTable: React.FC<BDUTableProps> = ({ Userid }) => {
+const BDUTable: FC<BDUTableProps> = ({ Userid }) => {
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
     Userid,
   });
