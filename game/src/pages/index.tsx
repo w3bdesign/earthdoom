@@ -20,7 +20,7 @@ const Home: NextPage = () => {
             <div className="relative sm:mx-auto">
               <UnitsTable Userid={1} />
               <BDUTable Userid={1} />
-              <LandTable Userid={1} />
+              {/*<LandTable Userid={1} />*/}
               {/*<FleetStatus Userid={1} />*/}
             </div>
           </div>
