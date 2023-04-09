@@ -19,11 +19,7 @@ const Home: NextPage = () => {
       <Layout>
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
-            <h1 className="text-2xl ">Main</h1>
-            <p className="text-base">
-              This page is a work in progress. It is very soon a finished
-              product.
-            </p>
+            <h1 className="text-center text-2xl">Main</h1>
             <div className="relative sm:mx-auto">
               {paPlayer && (
                 <>
