@@ -3,6 +3,7 @@ import { type NextPage } from "next";
 import Layout from "@/components/Layout/Layout";
 
 import BDUTable from "@/components/Index/BDUTable";
+import FleetStatus from "@/components/Index/FleetStatus";
 
 /*import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
@@ -19,12 +20,16 @@ const Home: NextPage = () => {
 
             <BDUTable Userid={1} />
 
+            <FleetStatus Userid={1} />
 
-              {/*<UnitsTable Userid={1} />
+
+              {/*
+              <UnitsTable Userid={1} />
               <BDUTable Userid={1} />
               <LandTable Userid={1} />
               <FleetStatus Userid={1} />
-              */}
+              */
+              }
 
             </div>
           </div>
