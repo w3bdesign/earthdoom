@@ -99,4 +99,18 @@ export const paUsersRouter = createTRPCRouter({
         hostiles: krig,
       };
     }),
+
+  constructBuilding: publicProcedure
+    .input(z.object({ Userid: z.number() }))
+    //.input(z.object({ Building: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: input.Userid,
+        },
+        data: { "c_crystal": 10 },
+      });
+
+      return data;
+    }),
 });
