@@ -1,6 +1,6 @@
 import { type FC } from "react";
 
-import { BUILDINGS } from "./constants/BUILDINGS";
+import { BUILDINGS } from "./constants/RESEARCH";
 
 import { api } from "@/utils/api";
 
