@@ -1,0 +1,68 @@
+import { Building } from "../types/types";
+
+export const BUILDINGS: Building[] = [
+  {
+    buildingId: 1,
+    buildingName: "Tax collectors",
+    buildingDescription: "Automatically collects tax from civilians.",
+    buildingFieldName: "c_crystal",
+    buildingETA: 10,
+    buildingCost: "Free",
+  },
+  {
+    buildingId: 2,
+    buildingName: "Titanium extractor",
+    buildingDescription: "Enables titanium extractor.",
+    buildingFieldName: "c_metal",
+    buildingETA: 20,
+    buildingCost: "500c",
+  },
+  {
+    buildingId: 3,
+    buildingName: "Fusion power plant",
+    buildingDescription: "Enables construction of fusion power plants.",
+    buildingFieldName: "c_energy",
+    buildingETA: 50,
+    buildingCost: "5000c",
+  },
+  {
+    buildingId: 4,
+    buildingName: "Barracks",
+    buildingDescription: "Enables training of Light Infantry.",
+    buildingFieldName: "c_airport",
+    buildingETA: 20,
+    buildingCost: "2500c 1000t",
+  },
+  {
+    buildingId: 5,
+    buildingName: "Robot Factory",
+    buildingDescription: "Enables building of advanced robots.",
+    buildingFieldName: "c_abase",
+    buildingETA: 40,
+    buildingCost: "5000c 3000t",
+  },
+  {
+    buildingId: 6,
+    buildingName: "Hellspawn factory",
+    buildingDescription: "Enables building of Hellspawns.",
+    buildingFieldName: "c_destfact",
+    buildingETA: 120,
+    buildingCost: "10000c 10000t",
+  },
+  {
+    buildingId: 7,
+    buildingName: "Ares factory",
+    buildingDescription: "Enables building of Ares.",
+    buildingFieldName: "c_scorpfact",
+    buildingETA: 120,
+    buildingCost: "20000c 20000t",
+  },
+  {
+    buildingId: 8,
+    buildingName: "BDU factory",
+    buildingDescription: "Enables building of Ares.",
+    buildingFieldName: "c_odg",
+    buildingETA: 120,
+    buildingCost: "20000c 20000t",
+  },
+];
