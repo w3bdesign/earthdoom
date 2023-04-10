@@ -1,6 +1,6 @@
 import { type FC } from "react";
 
-import { BUILDINGS } from "./constants/BUILDINGS";
+import { BUILDINGS } from "./constants/RESEARCH";
 
 import { api } from "@/utils/api";
 
@@ -28,8 +28,8 @@ interface ConstructProps {
   paPlayer: PaPlayer;
 }
 
-const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
-  const { mutate } = api.paUsers.constructBuilding.useMutation({
+const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
+  const { mutate } = api.paUsers.researchBuilding.useMutation({
     //TODO: Add toast here
     onSuccess: () => {
       alert("Great success");
@@ -80,7 +80,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
               });
             }}
           >
-            Construct
+            Research
           </button>
         )}
 
@@ -98,7 +98,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   );
 };
 
-const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
+const ResearchTable: FC<ConstructProps> = ({ paPlayer }) => {
   return (
     <table className="w-full text-left ring-1 ring-slate-400/10">
       <tbody>
@@ -135,7 +135,7 @@ const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
           </th>
         </tr>
         {BUILDINGS.map((building) => (
-          <BuildingRow
+          <ResearchRow
             key={building.buildingId}
             paPlayer={paPlayer}
             building={building}
@@ -146,8 +146,8 @@ const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
   );
 };
 
-const Construct: FC<ConstructProps> = ({ paPlayer }) => (
-  <BuildingTable paPlayer={paPlayer} />
+const Research: FC<ConstructProps> = ({ paPlayer }) => (
+  <ResearchTable paPlayer={paPlayer} />
 );
 
-export default Construct;
+export default Research;
