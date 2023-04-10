@@ -1,22 +1,36 @@
 import { type FC } from "react";
 
-import { BUILDINGS } from "@/components/Construct/constants/buildings";
+import { BUILDINGS } from "./constants/BUILDINGS";
 
 import { api } from "@/utils/api";
 
 import { type Building } from "./types/types";
 
+interface PaPlayer {
+  id: number;
+  c_crystal: number;
+  c_metal: number;
+  c_energy: number;
+  c_airport: number;
+  c_abase: number;
+  c_destfact: number;
+  c_scorpfact: number;
+
+  [key: string]: any; // TODO Improve this later
+}
+
 interface BuildingRowProps {
-  paPlayer: { id: number };
+  paPlayer: PaPlayer;
   building: Building;
 }
 
 interface ConstructProps {
-  paPlayer: { id: number };
+  paPlayer: PaPlayer;
 }
 
 const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   const { mutate } = api.paUsers.constructBuilding.useMutation({
+    //TODO: Add toast here
     onSuccess: () => {
       alert("Great success");
     },
@@ -46,25 +60,33 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
         data-th="ETA"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {building.buildingETA}
+        {paPlayer[building.buildingFieldName] >= 2
+          ? paPlayer[building.buildingFieldName] - 1
+          : building.buildingETA}
       </td>
       <td
         data-th="Build"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        <button
-          type="button"
-          className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
-          onClick={() => {
-            mutate({
-              Userid: paPlayer.id,
-              buildingFieldName: building.buildingFieldName,
-              buildingETA: building.buildingETA,
-            });
-          }}
-        >
-          Construct
-        </button>
+        {paPlayer[building.buildingFieldName] === 0 && (
+          <button
+            type="button"
+            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+            onClick={() => {
+              mutate({
+                Userid: paPlayer.id,
+                buildingFieldName: building.buildingFieldName,
+                buildingETA: building.buildingETA,
+              });
+            }}
+          >
+            Construct
+          </button>
+        )}
+
+        {paPlayer[building.buildingFieldName] >= 2 && "Building..."}
+
+        {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
       <td
         data-th="Cost"
