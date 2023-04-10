@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { Prisma } from "@prisma/client";
 
 export const paUsersRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -102,13 +103,19 @@ export const paUsersRouter = createTRPCRouter({
 
   constructBuilding: publicProcedure
     .input(z.object({ Userid: z.number() }))
-    //.input(z.object({ Building: z.string() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingETA: z.number() }))
+
     .mutation(async ({ ctx, input }) => {
+      const { buildingFieldName, buildingETA } = input;
+
       const data = await ctx.prisma.paUsers.update({
         where: {
           id: input.Userid,
         },
-        data: { "c_crystal": 10 },
+        data: {
+          [buildingFieldName]: buildingETA,
+        },
       });
 
       return data;
