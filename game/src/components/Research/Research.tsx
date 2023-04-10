@@ -135,7 +135,11 @@ const ResearchTable: FC<ConstructProps> = ({ paPlayer }) => {
           </th>
         </tr>
         {BUILDINGS.map((building) => (
-          <ResearchRow paPlayer={paPlayer} building={building} />
+          <ResearchRow
+            key={building.buildingId}
+            paPlayer={paPlayer}
+            building={building}
+          />
         ))}
       </tbody>
     </table>

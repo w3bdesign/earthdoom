@@ -135,7 +135,11 @@ const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
           </th>
         </tr>
         {BUILDINGS.map((building) => (
-          <BuildingRow paPlayer={paPlayer} building={building} />
+          <BuildingRow
+            key={building.buildingId}
+            paPlayer={paPlayer}
+            building={building}
+          />
         ))}
       </tbody>
     </table>
