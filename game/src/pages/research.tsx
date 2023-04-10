@@ -1,14 +1,26 @@
 import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
+import Research from "@/components/Research/Research";
 
-const Game: NextPage = () => {
+import { api } from "@/utils/api";
+
+const ResearchPage: NextPage = () => {
+  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+    Userid: 1,
+  });
+
   return (
     <>
       <Layout>
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white"></p>
+          <h1 className="text-center text-2xl font-extrabold tracking-tight text-white sm:text-[3rem]">
+            Research
+          </h1>
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
+            <div className="relative sm:mx-auto">
+              {paPlayer && <Research paPlayer={paPlayer} />}
+            </div>
           </div>
         </div>
       </Layout>
@@ -16,4 +28,4 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default ResearchPage;
