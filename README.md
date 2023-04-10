@@ -1,3 +1,5 @@
+## This game is under active development. New features are added regularly. 
+
 # Earthdoom
 
 Monorepo for Earthdoom.com
