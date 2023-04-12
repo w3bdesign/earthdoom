@@ -41,7 +41,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
       constructionToast();
       await ctx.paUsers.getPlayerById.invalidate({ Userid: 1 });
     },
-    onError: (error) => {
+    onError: () => {
       errorToast();
     },
   });
