@@ -41,7 +41,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
       constructionToast();
       await ctx.paUsers.getPlayerById.invalidate({ Userid: 1 });
     },
-    onError: (error) => {
+    onError: () => {
       errorToast();
     },
   });
@@ -92,7 +92,6 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
         )}
 
         {paPlayer[building.buildingFieldName] >= 2 && "Building ..."}
-
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
       <td

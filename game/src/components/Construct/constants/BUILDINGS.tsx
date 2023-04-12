@@ -8,6 +8,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "c_crystal",
     buildingETA: 10,
     buildingCost: "Free",
+    buildingCostCrystal: 0,
+    buildingCostTitanium: 0,
   },
   {
     buildingId: 2,
@@ -16,6 +18,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "c_metal",
     buildingETA: 20,
     buildingCost: "500c",
+    buildingCostCrystal: 500,
+    buildingCostTitanium: 0,
   },
   {
     buildingId: 3,
@@ -24,6 +28,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "c_energy",
     buildingETA: 50,
     buildingCost: "5000c",
+    buildingCostCrystal: 5000,
+    buildingCostTitanium: 0,
   },
   {
     buildingId: 4,
@@ -32,6 +38,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "c_airport",
     buildingETA: 20,
     buildingCost: "2500c 1000t",
+    buildingCostCrystal: 2500,
+    buildingCostTitanium: 1000,
   },
   {
     buildingId: 5,
@@ -40,6 +48,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "c_abase",
     buildingETA: 40,
     buildingCost: "5000c 3000t",
+    buildingCostCrystal: 5000,
+    buildingCostTitanium: 3000,
   },
   {
     buildingId: 6,
@@ -48,6 +58,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "c_destfact",
     buildingETA: 120,
     buildingCost: "10000c 10000t",
+    buildingCostCrystal: 10000,
+    buildingCostTitanium: 10000,
   },
   {
     buildingId: 7,
@@ -56,6 +68,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "c_scorpfact",
     buildingETA: 120,
     buildingCost: "20000c 20000t",
+    buildingCostCrystal: 20000,
+    buildingCostTitanium: 20000,
   },
   {
     buildingId: 8,
@@ -64,5 +78,7 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "c_odg",
     buildingETA: 120,
     buildingCost: "20000c 20000t",
+    buildingCostCrystal: 20000,
+    buildingCostTitanium: 20000,
   },
 ];
