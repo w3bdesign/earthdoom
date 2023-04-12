@@ -92,7 +92,6 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
         )}
 
         {paPlayer[building.buildingFieldName] >= 2 && "Building ..."}
-
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
       <td
