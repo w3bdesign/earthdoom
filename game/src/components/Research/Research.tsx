@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 import { type FC } from "react";
 
 import { BUILDINGS } from "./constants/RESEARCH";
@@ -29,13 +31,19 @@ interface ConstructProps {
 }
 
 const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
+  const ctx = api.useContext();
+
+  const researchToast = () => toast("Research started");
+  const errorToast = () => toast("Database error");
+
   const { mutate } = api.paUsers.researchBuilding.useMutation({
     //TODO: Add toast here
-    onSuccess: () => {
-      alert("Great success");
+    onSuccess: async () => {
+      researchToast();
+      await ctx.paUsers.getPlayerById.invalidate({ Userid: 1 });
     },
     onError: (error) => {
-      alert(JSON.stringify(error));
+      errorToast();
     },
   });
 
@@ -84,7 +92,7 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
           </button>
         )}
 
-        {paPlayer[building.buildingFieldName] >= 2 && "Building..."}
+        {paPlayer[building.buildingFieldName] >= 2 && "Researching ..."}
 
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
