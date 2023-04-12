@@ -8,7 +8,9 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "format": "prettier --write \"**/*.{ts,tsx,json}\"",
+    "refresh": "rm -rf node_modules && rm package-lock.json && npm i && npm run format"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.16.1",
@@ -18,7 +20,7 @@
     "@trpc/client": "^10.19.1",
     "@trpc/next": "^10.19.1",
     "@trpc/react-query": "^10.19.1",
-    "@trpc/server": "^10.19.1",   
+    "@trpc/server": "^10.19.1",
     "next": "^13.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
