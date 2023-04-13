@@ -1,5 +1,6 @@
-import { type NextPage } from "next";
 import { SignIn } from "@clerk/nextjs";
+
+import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
 
