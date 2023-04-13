@@ -15,11 +15,21 @@ const Register: NextPage = () => {
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {!user.isSignedIn && (
-                <SignIn path="/login" routing="path" signUpUrl="/login" redirectUrl="/afterlogin" />
+                <SignIn
+                  path="/login"
+                  routing="path"
+                  signUpUrl="/login"
+                  redirectUrl="/afterlogin"
+                />
               )}
               {user.isSignedIn && <SignOutButton />}
               <br />
-              <SignUp path="/register" routing="path" signInUrl="/register" redirectUrl="/addUser" />
+              <SignUp
+                path="/register"
+                routing="path"
+                signInUrl="/register"
+                redirectUrl="/addUser"
+              />
             </p>
           </div>
         </div>

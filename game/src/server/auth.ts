@@ -47,7 +47,6 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
-   
     /**
      * ...add more providers here.
      *

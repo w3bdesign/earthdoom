@@ -1,7 +1,7 @@
 //import { prisma } from "@/server/db";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const addUser =  (req: NextApiRequest, res: NextApiResponse) => {
+const addUser = (req: NextApiRequest, res: NextApiResponse) => {
   res.json(req.body);
 
   /*const { firstName } = req.body;
@@ -11,7 +11,6 @@ const addUser =  (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
   res.json(user);*/
-  
 };
 
 export default addUser;
