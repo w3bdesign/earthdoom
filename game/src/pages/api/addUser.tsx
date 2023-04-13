@@ -11,6 +11,7 @@ const addUser = async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
   res.json(user);*/
+  
 };
 
 export default addUser;
