@@ -9,9 +9,9 @@ export const paUsersRouter = createTRPCRouter({
   createPlayer: publicProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.paUsers.create({ nick: input.nick });
+      return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
     }),
-  
+
   getAttackedPlayer: publicProcedure
     .input(z.object({ Warid: z.number() }))
     .query(async ({ ctx, input }) => {
