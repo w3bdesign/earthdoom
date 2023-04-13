@@ -37,7 +37,6 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   const errorToast = () => toast("Database error");
 
   const { mutate } = api.paUsers.researchBuilding.useMutation({
-   
     onSuccess: async () => {
       researchToast();
       await ctx.paUsers.getPlayerById.invalidate({ Userid: 1 });

@@ -2,11 +2,16 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
-
 export const paUsersRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.paUsers.findMany();
   }),
+  createPlayer: publicProcedure
+    .input(z.object({ nick: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
+    }),
+
   getAttackedPlayer: publicProcedure
     .input(z.object({ Warid: z.number() }))
     .query(async ({ ctx, input }) => {
