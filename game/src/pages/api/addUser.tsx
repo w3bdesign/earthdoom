@@ -1,14 +1,16 @@
-import { prisma } from "@/server/db";
+//import { prisma } from "@/server/db";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const addUser = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { firstName } = req.body;
+  res.json(req.body);
+
+  /*const { firstName } = req.body;
   const user = await prisma.paUsers.create({
     data: {
       nick: firstName,
     },
   });
-  res.json(user);
+  res.json(user);*/
 };
 
 export default addUser;
