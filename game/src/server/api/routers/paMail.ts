@@ -5,7 +5,6 @@ import { z } from "zod";
 export const paMailRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const mails = await ctx.prisma.paMail.findMany();
-
     return { email: mails };
   }),
 
