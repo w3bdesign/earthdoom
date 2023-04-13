@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const addUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const { firstName } = req.body;
-  const user = await prisma.user.create({
+  const user = await prisma.paUsers.create({
     data: {
       nick: firstName,
     },
