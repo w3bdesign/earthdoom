@@ -18,7 +18,7 @@ const Information = () => {
   });
 
   const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
-    Userid: 1,
+    nick: user.username,
   });
 
   return (

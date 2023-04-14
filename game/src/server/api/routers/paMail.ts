@@ -9,13 +9,16 @@ export const paMailRouter = createTRPCRouter({
   }),
 
   getUnseenMailByUserId: publicProcedure
-    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { Userid } = input;
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true },
+      });
 
       const mails = await ctx.prisma.paMail.findMany({
         where: {
-          sentTo: Userid,
+          sentTo: user?.id,
           seen: 0,
         },
         orderBy: { time: "desc" },
