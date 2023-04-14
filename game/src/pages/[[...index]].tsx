@@ -21,25 +21,23 @@ const Home: NextPage = () => {
   });
 
   return (
-    <>
-      <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
-            <h1 className="text-center text-2xl">Main</h1>
-            <div className="relative sm:mx-auto">
-              {paPlayer && (
-                <>
-                  <UnitsTable paPlayer={paPlayer} />
-                  <BDUTable paPlayer={paPlayer} />
-                  <LandTable paPlayer={paPlayer} />
-                  <FleetStatus paPlayer={paPlayer} />
-                </>
-              )}
-            </div>
+    <Layout>
+      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
+        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
+          <h1 className="text-center text-2xl">Main</h1>
+          <div className="relative sm:mx-auto">
+            {paPlayer && (
+              <>
+                <UnitsTable paPlayer={paPlayer} />
+                <BDUTable paPlayer={paPlayer} />
+                <LandTable paPlayer={paPlayer} />
+                <FleetStatus paPlayer={paPlayer} />
+              </>
+            )}
           </div>
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 
