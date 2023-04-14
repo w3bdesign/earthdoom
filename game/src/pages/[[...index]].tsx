@@ -12,12 +12,10 @@ import FleetStatus from "@/components/Index/FleetStatus";
 import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
-  const { user, isSignedIn } = useUser();
-
-  if (!isSignedIn || !user.username) return null;
-
+  const { user } = useUser();
+  const nick = user?.username || "killaH";
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
-    nick: user.username,
+    nick: nick,
   });
 
   return (
