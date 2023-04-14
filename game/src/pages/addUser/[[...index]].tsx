@@ -13,15 +13,13 @@ const AddUser: NextPage = () => {
   const router = useRouter();
 
   const { mutate } = api.paUsers.createPlayer.useMutation({
-    onSuccess() {
-      router.push("/");
+    onSuccess: async () => {
+      await router.push("/");
     },
     onError() {
       router.push("/error");
     },
   });
-
-  //if (!user) return null;
 
   useEffect(() => {
     if (user) {
