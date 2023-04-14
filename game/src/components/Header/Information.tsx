@@ -27,7 +27,7 @@ const Information = () => {
         <div className="flex flex-col items-center gap-2 text-center text-lg">
           {hostilesData?.hostiles && (
             <div
-              className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-black md:min-w-[480px]"
+              className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-black md:min-w-[486px]"
               role="alert"
             >
               {/* Split the hostiles string into an array of lines */}
@@ -47,7 +47,7 @@ const Information = () => {
 
           {friendliesData?.defenders && (
             <div
-              className="mb-4 rounded-lg bg-success-100 px-6 py-5 text-base text-black md:min-w-[480px]"
+              className="mb-4 rounded-lg bg-success-100 px-6 py-5 text-base text-black md:min-w-[486px]"
               role="alert"
             >
               {/* Split the defenders string into an array of lines */}
@@ -67,7 +67,7 @@ const Information = () => {
 
           {paMail?.email?.length && paMail?.email?.length > 0 ? (
             <div
-              className="mb-4 min-w-[434px] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800 md:min-w-[480px]"
+              className="mb-4 min-w-[434px] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800 md:min-w-[486px]"
               role="alert"
             >
               <Link href="/mail" className="font-bold text-info-800">
