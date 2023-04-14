@@ -1,4 +1,9 @@
-# This game is under active development. New features are added regularly. 
+![version](https://img.shields.io/badge/version-0.1.6-blue)
+![React](https://img.shields.io/badge/React-18.2.0-success)
+![Next.js](https://img.shields.io/badge/Next.js-13.3.0-success)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-success)
+
+# This game is under active development. New features are added regularly.
 
 ## Earthdoom
 
@@ -6,8 +11,73 @@ Monorepo for Earthdoom.com
 
 <img src="https://user-images.githubusercontent.com/45217974/226228415-b84cd98a-767d-4626-9e31-7b1f811a6f9b.png" alt="Screenshot" />
 
-## What is Earth Doom?
+Earthdoom is a web-based game built using Next.js, React, TypeScript, and Prisma. The application is designed to be fast and responsive with an intuitive user interface.
 
-Earth Doom is an epic war game that plunges you into a relentless fight for survival and dominance. As a leader of your own burgeoning nation, you must carefully build up your forces, gain critical resources, research powerful technologies, and conquer enemy lands - all while defending against those who would conquer you. The key to victory lies in properly balancing and adeptly managing the growth of your empire. Do you produce more scout units to search for additional resources and lands to conquer? Or do you focus on upgrading your resource production and building a stronger army?
+## Table of Contents
 
-Each decision you make can have significant consequences on your nation's future. One wrong move could leave your lands vulnerable or your armies outmatched. With every minute that passes, your empire gains resources that can be used to construct new buildings, train infantry units, and conduct valuable research to gain access to more advanced units and upgrades. But don't be lulled into a false sense of security - your enemies are also rapidly expanding their power. New threats could emerge at any time to challenge your supremacy.
+- [Installation](#installation)
+- [Usage](#usage)
+- [Scripts](#scripts)
+- [Dependencies](#dependencies)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Installation
+
+To install the required dependencies, simply run the following command in the project's root directory:
+
+```bash
+npm install
+```
+
+## Usage
+
+To start the development server, run the following command:
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000`.
+
+## Scripts
+
+This project includes the following npm scripts for development and building:
+
+- `build`: Builds the application for production.
+- `dev`: Starts the development server.
+- `postinstall`: Generates Prisma client after installing dependencies.
+- `lint`: Lints the codebase using ESLint.
+- `start`: Starts the production server.
+- `prisma:generate`: Generates the Prisma client.
+- `format`: Formats the codebase using Prettier.
+- `refresh`: Removes node_modules, package-lock.json, installs dependencies, and formats the codebase.
+
+## Dependencies
+
+This project uses the following key dependencies:
+
+- [Next.js](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Prisma](https://www.prisma.io/)
+- [react-query](https://react-query.tanstack.com/)
+- [tRPC](https://trpc.io/)
+- [Zod](https://github.com/colinhacks/zod)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Icons](https://react-icons.github.io/react-icons/)
+- [react-hot-toast](https://react-hot-toast.com/)
+
+## Contributing
+
+If you'd like to contribute to the development of Earthdoom Game, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch with a descriptive name.
+3. Make your changes and commit them with clear and concise commit messages.
+4. Push your changes to your forked repository.
+5. Open a pull request with a description of the changes you've made.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
