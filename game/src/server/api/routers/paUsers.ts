@@ -33,11 +33,16 @@ export const paUsersRouter = createTRPCRouter({
       return defender;
     }),
   getPlayerById: publicProcedure
-    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true },
+      });
+
       const player = await ctx.prisma.paUsers.findUnique({
         where: {
-          id: input.Userid,
+          id: user?.id,
         },
       });
 
