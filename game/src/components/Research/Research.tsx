@@ -1,4 +1,5 @@
 import toast from "react-hot-toast";
+import { useUser } from "@clerk/nextjs";
 
 import { type FC } from "react";
 
@@ -32,6 +33,9 @@ interface ConstructProps {
 
 const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   const ctx = api.useContext();
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
 
   const researchToast = () => toast("Research started");
   const errorToast = () => toast("Database error");
@@ -39,7 +43,9 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   const { mutate } = api.paUsers.researchBuilding.useMutation({
     onSuccess: async () => {
       researchToast();
-      await ctx.paUsers.getPlayerById.invalidate({ Userid: 1 });
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
     },
     onError: () => {
       errorToast();
