@@ -5,7 +5,9 @@ import { api } from "@/utils/api";
 import LoadingSpinner from "../Loader/LoadingSpinner";
 
 const Information = () => {
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
 
   const { data: hostilesData } = api.paUsers.getHostiles.useQuery({
     nick: user.username,

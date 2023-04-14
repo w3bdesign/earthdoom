@@ -53,7 +53,7 @@ export const paUsersRouter = createTRPCRouter({
 
       const users = await ctx.prisma.paUsers.findMany({
         where: {
-          def: user.id,
+          def: user?.id,
         },
       });
 
@@ -89,7 +89,7 @@ export const paUsersRouter = createTRPCRouter({
 
       const users = await ctx.prisma.paUsers.findMany({
         where: {
-          war: user.id,
+          war: user?.id,
         },
       });
 
