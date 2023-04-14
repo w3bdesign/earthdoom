@@ -124,7 +124,7 @@ model PaUsers {
     @@index([nick])
 }
 
-model PaNew {
+model PaNews {
     id     Int    @id @default(autoincrement())
     time   Int    @default(0)
     news   String
