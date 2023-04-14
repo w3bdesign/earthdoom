@@ -33,7 +33,7 @@ const Information = () => {
               {/* Split the hostiles string into an array of lines */}
               {hostilesData.hostiles &&
                 hostilesData.hostiles.split("\n").map((line, index) => (
-                  <div className="text-center" key={index}>
+                  <div className="text-left" key={index}>
                     {line}
                   </div>
                 ))}
@@ -53,7 +53,7 @@ const Information = () => {
               {/* Split the defenders string into an array of lines */}
               {friendliesData.defenders &&
                 friendliesData.defenders.split("\n").map((line, index) => (
-                  <div className="text-center" key={index}>
+                  <div className="text-left" key={index}>
                     {line}
                   </div>
                 ))}
