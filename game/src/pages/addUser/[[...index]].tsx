@@ -22,8 +22,8 @@ const AddUser: NextPage = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      mutate({ nick: user!.username! });
+    if (user && user.username) {
+      mutate({ nick: user.username });
     }
   }, [user?.username]);
 
