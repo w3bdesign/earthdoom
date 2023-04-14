@@ -110,7 +110,7 @@ export const paUsersRouter = createTRPCRouter({
           const eta = defender.wareta >= 5 ? defender.wareta - 5 : 0;
           return `Hostile incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta} ticks)`;
         })
-        .join("");
+        .join("\n \n");
 
       if (users.length === 0) {
         return { hostiles: "" };
