@@ -40,21 +40,26 @@ const Information = () => {
           ) : (
             <LoadingSpinner />
           )}
-          {friendliesData?.defenders ? (
+          {friendliesData?.defenders && (
             <div
               className="mb-4 rounded-lg bg-success-100 px-6 py-5 text-base text-black md:min-w-[470px]"
               role="alert"
             >
               {/* Split the defenders string into an array of lines */}
-              {friendliesData.defenders.split("\n").map((line, index) => (
-                <div className="text-center" key={index}>
-                  {line}
-                </div>
-              ))}
+              {friendliesData.defenders &&
+                friendliesData.defenders.split("\n").map((line, index) => (
+                  <div className="text-center" key={index}>
+                    {line}
+                  </div>
+                ))}
             </div>
-          ) : (
-            <LoadingSpinner />
           )}
+
+          {/* Show LoadingSpinner if defenders is empty or whitespace */}
+          {friendliesData?.defenders !== "" && !friendliesData?.defenders ? (
+            <LoadingSpinner />
+          ) : null}
+
           {paMail?.email?.length && paMail?.email?.length > 0 ? (
             <div
               className="mb-4 min-w-[434px] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800 md:min-w-[470px]"

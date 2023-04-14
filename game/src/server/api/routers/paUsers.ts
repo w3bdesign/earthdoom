@@ -77,7 +77,7 @@ export const paUsersRouter = createTRPCRouter({
         .join("\n \n");
 
       if (users.length === 0) {
-        return { defenders: "You have no incoming friendlies." };
+        return { defenders: "" };
       }
 
       return {
@@ -113,7 +113,7 @@ export const paUsersRouter = createTRPCRouter({
         .join("");
 
       if (users.length === 0) {
-        return { hostiles: "You have no incoming hostiles." };
+        return { hostiles: "" };
       }
 
       return {
