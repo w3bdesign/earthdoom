@@ -3,7 +3,8 @@
 ![Next.js](https://img.shields.io/badge/Next.js-13.3.0-success)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-success)
 
-# This game is under active development. New features are added regularly.
+# This game is under active development. 
+# New features are added regularly.
 
 ## Earthdoom
 
