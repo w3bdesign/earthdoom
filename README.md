@@ -31,6 +31,8 @@ To install the required dependencies, simply run the following command in the pr
 npm install
 ```
 
+You now need to retrieve the API keys for Clerk and Planetscale and enter them into .env (you can rename  env.example)
+
 ## Usage
 
 To start the development server, run the following command:
