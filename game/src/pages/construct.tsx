@@ -1,3 +1,5 @@
+import { useUser } from "@clerk/nextjs";
+
 import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
@@ -6,8 +8,12 @@ import Construct from "@/components/Construct/Construct";
 import { api } from "@/utils/api";
 
 const Game: NextPage = () => {
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
+
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
-    Userid: 1,
+    nick: user.username,
   });
 
   return (

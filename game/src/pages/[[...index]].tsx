@@ -1,3 +1,5 @@
+import { useUser } from "@clerk/nextjs";
+
 import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
@@ -10,30 +12,32 @@ import FleetStatus from "@/components/Index/FleetStatus";
 import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
+
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
-    Userid: 1,
+    nick: user.username,
   });
 
   return (
-    <>
-      <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
-            <h1 className="text-center text-2xl">Main</h1>
-            <div className="relative sm:mx-auto">
-              {paPlayer && (
-                <>
-                  <UnitsTable paPlayer={paPlayer} />
-                  <BDUTable paPlayer={paPlayer} />
-                  <LandTable paPlayer={paPlayer} />
-                  <FleetStatus paPlayer={paPlayer} />
-                </>
-              )}
-            </div>
+    <Layout>
+      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
+        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
+          <h1 className="text-center text-2xl">Main</h1>
+          <div className="relative sm:mx-auto">
+            {paPlayer && (
+              <>
+                <UnitsTable paPlayer={paPlayer} />
+                <BDUTable paPlayer={paPlayer} />
+                <LandTable paPlayer={paPlayer} />
+                <FleetStatus paPlayer={paPlayer} />
+              </>
+            )}
           </div>
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 

@@ -1,3 +1,5 @@
+import { useUser } from "@clerk/nextjs";
+
 import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
@@ -6,8 +8,12 @@ import Research from "@/components/Research/Research";
 import { api } from "@/utils/api";
 
 const ResearchPage: NextPage = () => {
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
+
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
-    Userid: 1,
+    nick: user.username,
   });
 
   return (
