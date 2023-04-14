@@ -6,6 +6,7 @@ module.exports = {
       backgroundImage: {
         "space-ship": "url('/images/spaceship.jpg')",
         "large-space-ship": "url('/images/spaceship.png')",
+        "cool-space-ship": "url('/images/new-spaceship.jpg')",
       },
     },
   },
