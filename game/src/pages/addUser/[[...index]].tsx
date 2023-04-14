@@ -16,16 +16,14 @@ const AddUser: NextPage = () => {
     onSuccess: async () => {
       await router.push("/");
     },
-    onError() {
-      router.push("/error");
+    onError: async () => {
+      await router.push("/error");
     },
   });
 
   useEffect(() => {
     if (user) {
       mutate({ nick: user!.username! });
-    } else {
-      alert("No user");
     }
   }, [user?.username]);
 
