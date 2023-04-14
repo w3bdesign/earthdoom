@@ -44,11 +44,16 @@ export const paUsersRouter = createTRPCRouter({
       return player;
     }),
   getFriendlies: publicProcedure
-    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true },
+      });
+
       const users = await ctx.prisma.paUsers.findMany({
         where: {
-          def: input.Userid,
+          def: user.id,
         },
       });
 
@@ -75,11 +80,16 @@ export const paUsersRouter = createTRPCRouter({
       };
     }),
   getHostiles: publicProcedure
-    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true },
+      });
+
       const users = await ctx.prisma.paUsers.findMany({
         where: {
-          war: input.Userid,
+          war: user.id,
         },
       });
 

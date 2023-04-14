@@ -25,8 +25,8 @@ model Example {
 // Game models
 
 model PaUsers {
-    id               Int    @id @default(autoincrement()) 
-    nick             String 
+    id               Int    @id @default(autoincrement())
+    nick             String
     crystal          BigInt @default(0)
     metal            BigInt @default(0)
     energy           BigInt @default(0)
@@ -118,7 +118,10 @@ model PaUsers {
     civilians        Int    @default(1000)
     tax              Int    @default(20)
     credits          Int    @default(5000)
-    newbie           Int    @default(100)   
+    newbie           Int    @default(100)
+
+    @@unique([nick])
+    @@index([nick])
 }
 
 model PaNew {
