@@ -33,9 +33,7 @@ interface ConstructProps {
 
 const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   const ctx = api.useContext();
-  const { user, isSignedIn } = useUser();
-
-  if (!isSignedIn || !user.username) return null;
+  const { user, isLoaded } = useUser();
 
   const researchToast = () => toast("Research started");
   const errorToast = () => toast("Database error");
@@ -51,6 +49,10 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
       errorToast();
     },
   });
+
+  if (!isLoaded) {
+    return <div>Loading user data...</div>;
+  }
 
   return (
     <tr
