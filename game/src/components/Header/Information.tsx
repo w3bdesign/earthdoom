@@ -5,21 +5,23 @@ import { api } from "@/utils/api";
 import LoadingSpinner from "../Loader/LoadingSpinner";
 
 const Information = () => {
-  const { user, isSignedIn } = useUser();
-
-  if (!isSignedIn || !user.username) return null;
+  const { user, isLoaded } = useUser();
 
   const { data: hostilesData } = api.paUsers.getHostiles.useQuery({
-    nick: user.username,
+    nick: isLoaded && user?.username ? user.username : "killaH",
   });
 
   const { data: friendliesData } = api.paUsers.getFriendlies.useQuery({
-    nick: user.username,
+    nick: isLoaded && user?.username ? user.username : "killaH",
   });
 
   const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
-    nick: user.username,
+    nick: isLoaded && user?.username ? user.username : "killaH",
   });
+
+  if (!isLoaded || !user?.username) {
+    return <div>Loading user data...</div>;
+  }
 
   return (
     <>
