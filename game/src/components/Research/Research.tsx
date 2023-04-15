@@ -40,7 +40,7 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   const researchToast = () => toast("Research started");
   const errorToast = () => toast("Database error");
 
-  const { mutate } = api.paUsers.researchBuilding.useMutation({
+  const { mutate, isLoading } = api.paUsers.researchBuilding.useMutation({
     onSuccess: async () => {
       researchToast();
       if (user && user.username) {
@@ -78,10 +78,11 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
           : building.buildingETA}
       </td>
       <td
-        data-th="Build"
+        data-th="Research"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {paPlayer[building.buildingFieldName] === 0 && (
+        {isLoading && "Starting research ..."}
+        {paPlayer[building.buildingFieldName] === 0 && !isLoading && (
           <button
             type="button"
             className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
@@ -98,7 +99,6 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
         )}
 
         {paPlayer[building.buildingFieldName] >= 2 && "Researching ..."}
-
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
       <td
