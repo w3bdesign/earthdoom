@@ -8,19 +8,9 @@ import { api } from "@/utils/api";
 import Layout from "@/components/Layout/Layout";
 
 const News: NextPage = () => {
-
-
- 
-
-
-
   const { data: paMail } = api.paMail.getAllMailByUserId.useQuery({
     Userid: 1,
   });
-
-  
-
-  
 
   return (
     <>
