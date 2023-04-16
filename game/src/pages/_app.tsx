@@ -26,7 +26,7 @@ import "@/styles/globals.css";
 
 //   "/foo/[...bar]"  for pages/foo/[...bar].js
 
-const publicPages = ["/login/[[...index]]", "/register/[[...index]]"];
+const publicPages = ["/login/[[...index]]", "/register/[[...index]]", "/login", "/register"];
 
 const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   const { pathname } = useRouter();
@@ -51,6 +51,7 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
           </SignedIn>
           <SignedOut>
             <RedirectToSignIn />
+            <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
           </SignedOut>
         </>
       )}
