@@ -26,7 +26,12 @@ import "@/styles/globals.css";
 
 //   "/foo/[...bar]"  for pages/foo/[...bar].js
 
-const publicPages = ["/login/[[...index]]", "/register/[[...index]]", "/login", "/register"];
+const publicPages = [
+  "/login/[[...index]]",
+  "/register/[[...index]]",
+  "/login",
+  "/register",
+];
 
 const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   const { pathname } = useRouter();
@@ -36,25 +41,9 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
 
   return (
     <ClerkProvider {...pageProps}>
-      <Toaster position="bottom-center" />
+      <Toaster position="bottom-center" />    
+      <Component {...pageProps} />
       <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
-      {isPublicPage ? (
-        <>
-          <Component {...pageProps} />
-          <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
-        </>
-      ) : (
-        <>
-          <SignedIn>
-            <Component {...pageProps} />
-            <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
-          </SignedIn>
-          <SignedOut>
-            <RedirectToSignIn />
-            <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
-          </SignedOut>
-        </>
-      )}
     </ClerkProvider>
   );
 };
