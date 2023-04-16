@@ -38,19 +38,22 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
     <ClerkProvider {...pageProps}>
       <Toaster position="bottom-center" />
       {isPublicPage ? (
-        <Component {...pageProps} />
+        <>
+          <Component {...pageProps} />
+          <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
+        </>
       ) : (
         <>
           <SignedIn>
             <Component {...pageProps} />
+            <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
           </SignedIn>
           <SignedOut>
             <RedirectToSignIn />
+            <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
           </SignedOut>
         </>
       )}
-
-      <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
     </ClerkProvider>
   );
 };
