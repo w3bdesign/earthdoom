@@ -42,7 +42,7 @@ const Navbar = () => (
             <li className="static" data-te-nav-item-ref data-te-dropdown-ref>
               <button
                 className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold  transition duration-150 ease-in-out hover:text-slate-300  dark:hover:text-white dark:focus:text-white lg:px-2"
-               // href="/"
+                // href="/"
                 type="button"
                 id="dropdownMenuButtonX"
                 data-te-dropdown-toggle-ref

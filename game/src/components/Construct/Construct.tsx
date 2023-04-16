@@ -8,7 +8,6 @@ import { BUILDINGS } from "./constants/BUILDINGS";
 import { api } from "@/utils/api";
 
 import { type Building } from "./types/types";
-import LoadingSpinner from "../Loader/LoadingSpinner";
 
 interface PaPlayer {
   id: number;
