@@ -20,7 +20,7 @@ const Information = () => {
   });
 
   if (!isLoaded || !user?.username) {
-    return <div>Loading user data...</div>;
+    return null;
   }
 
   return (
