@@ -41,11 +41,13 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
       {isPublicPage ? (
         <>
           <Component {...pageProps} />
+          <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
         </>
       ) : (
         <>
           <SignedIn>
             <Component {...pageProps} />
+            <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
           </SignedIn>
           <SignedOut>
             <RedirectToSignIn />
