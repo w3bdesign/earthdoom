@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 
 import { ReactNode } from "react";
 
@@ -19,14 +20,17 @@ const Layout = ({ children }: ILayoutProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {
-        // Do this while developing
-        // TODO:  use <SignedIn> and <SignedOut> instead
-      }
-      <Navbar />
-      <Information />
+      <SignedIn>
+        <Navbar />
+        <Information />
+      </SignedIn>
 
-      <main className="flex items-center justify-center">{children}</main>
+      <main className="flex items-center justify-center">
+        <SignedIn>{children}</SignedIn>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
+      </main>
       <Footer />
     </>
   );
