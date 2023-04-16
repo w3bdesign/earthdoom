@@ -1,30 +1,11 @@
-/*import { Toaster } from "react-hot-toast";
-
-import { ClerkProvider } from "@clerk/nextjs";
-
-import { type AppType } from "next/app";
-
-import { api } from "@/utils/api";
-
-import "@/styles/globals.css";
-
-const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
-  return (
-    <ClerkProvider {...pageProps}>
-      <Toaster position="bottom-center" />
-      <Component {...pageProps} />      
-    </ClerkProvider>
-  );
-};
-
-export default api.withTRPC(MyApp);*/
-
 import {
   ClerkProvider,
   SignedIn,
   SignedOut,
   RedirectToSignIn,
 } from "@clerk/nextjs";
+
+import { Toaster } from "react-hot-toast";
 
 import { api } from "@/utils/api";
 
@@ -57,6 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       ) : (
         <>
           <SignedIn>
+            <Toaster position="bottom-center" />
             <Component {...pageProps} />
           </SignedIn>
           <SignedOut>
@@ -69,5 +51,3 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export default api.withTRPC(MyApp);
-
-//export default MyApp;
