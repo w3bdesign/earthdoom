@@ -40,9 +40,9 @@ const Navbar = () => (
         >
           <ul className="mr-auto flex flex-row" data-te-navbar-nav-ref>
             <li className="static" data-te-nav-item-ref data-te-dropdown-ref>
-              <Link
+              <button
                 className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold  transition duration-150 ease-in-out hover:text-slate-300  dark:hover:text-white dark:focus:text-white lg:px-2"
-                href="/"
+               // href="/"
                 type="button"
                 id="dropdownMenuButtonX"
                 data-te-dropdown-toggle-ref
@@ -64,7 +64,7 @@ const Navbar = () => (
                     />
                   </svg>
                 </span>
-              </Link>
+              </button>
               <div
                 className="absolute left-0 right-0 top-full z-[1000] mt-0 hidden w-full border-none bg-white bg-clip-padding text-neutral-600  dark:bg-neutral-700 dark:text-neutral-200 [&[data-te-dropdown-show]]:block"
                 aria-labelledby="dropdownMenuButtonX"
