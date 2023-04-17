@@ -18,7 +18,7 @@ const Login: NextPage = () => {
                 <LoadingSpinner />
               </div>
             ) : (
-              <SignIn path="/login" routing="path" />
+              <SignIn path="/login" routing="path" afterSignInUrl="/" />
             )}
           </div>
         </div>
