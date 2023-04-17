@@ -2,10 +2,16 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 import { api } from "@/utils/api";
+
 import LoadingSpinner from "../Loader/LoadingSpinner";
+import OverviewTable from "./OverviewTable";
 
 const Information = () => {
   const { user, isLoaded } = useUser();
+
+  const { data: paPlayer } = api.paUsers.getResourceOverview.useQuery({
+    nick: isLoaded && user?.username ? user.username : "",
+  });
 
   const { data: hostilesData } = api.paUsers.getHostiles.useQuery({
     nick: isLoaded && user?.username ? user.username : "",
@@ -27,9 +33,9 @@ const Information = () => {
     <>
       <div className="mt-4 flex w-full flex-col items-center justify-center gap-12 px-4 py-4 text-white">
         <div className="flex flex-col items-center gap-2 text-center text-lg">
-          <h2 className="py-4 text-center text-xl text-white">
-            Logged in as: {user.username}
-          </h2>
+          <div className="mb-8 -mt-8">
+            {paPlayer && <OverviewTable paPlayer={paPlayer} />}
+          </div>
           {hostilesData?.hostiles && (
             <div
               className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-black md:min-w-[486px]"

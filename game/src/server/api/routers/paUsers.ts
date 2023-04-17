@@ -11,7 +11,25 @@ export const paUsersRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
     }),
+  getResourceOverview: publicProcedure
+    .input(z.object({ nick: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const player = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: {
+          id: true,
+          metal: true,
+          crystal: true,
+          energy: true,
+          civilians: true,
+          score: true,
+          rank: true,
+          nick: true,
+        },
+      });
 
+      return player;
+    }),
   getAttackedPlayer: publicProcedure
     .input(z.object({ Warid: z.number() }))
     .query(async ({ ctx, input }) => {
