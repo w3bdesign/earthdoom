@@ -33,7 +33,6 @@ const AddUser: NextPage = () => {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
             <h1 className="text-center text-2xl">Create player</h1>
-            <p className="text-center text-sm">User: {user?.username}</p>
             <div className="relative sm:mx-auto">Creating player ...</div>
           </div>
         </div>
