@@ -12,7 +12,6 @@ import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
 
-
 const Home: NextPage = () => {
   const { user, isLoaded } = useUser();
 
@@ -28,13 +27,15 @@ const Home: NextPage = () => {
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
           <h1 className="text-center text-2xl">Main</h1>
           <div className="relative sm:mx-auto">
-            {paPlayer && (
+            {isLoaded && paPlayer ? (
               <>
                 <UnitsTable paPlayer={paPlayer} />
                 <BDUTable paPlayer={paPlayer} />
                 <LandTable paPlayer={paPlayer} />
                 <FleetStatus paPlayer={paPlayer} />
               </>
+            ) : (
+              <LoadingSpinner />
             )}
           </div>
         </div>
