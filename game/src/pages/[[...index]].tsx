@@ -8,8 +8,10 @@ import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
 import FleetStatus from "@/components/Index/FleetStatus";
+import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
+
 
 const Home: NextPage = () => {
   const { user, isLoaded } = useUser();
@@ -18,7 +20,7 @@ const Home: NextPage = () => {
     nick: isLoaded && user?.username ? user.username : "",
   });
 
-  if (!user) return null;
+  if (!user) return <LoadingSpinner />;
 
   return (
     <Layout>
