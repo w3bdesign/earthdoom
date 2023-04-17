@@ -2,9 +2,8 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 import { api } from "@/utils/api";
+
 import LoadingSpinner from "../Loader/LoadingSpinner";
-import { Stringifier } from "@/utils/functions";
-import DataTable from "../common/DataTable";
 import OverviewTable from "./OverviewTable";
 
 const Information = () => {
