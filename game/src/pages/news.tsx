@@ -16,7 +16,7 @@ interface IRenderContentProps {
 const renderContent = (isLoading: boolean, paNews?: IRenderContentProps) => {
   if (isLoading) {
     return (
-      <div className="flex min-h-[150px] items-center justify-center">
+      <div className="flex items-center justify-center p-4">
         <LoadingSpinner />
       </div>
     );
