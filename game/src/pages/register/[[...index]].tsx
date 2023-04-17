@@ -13,7 +13,11 @@ const Register: NextPage = () => {
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               <SignedOut>
-                <SignUp path="/register" routing="path" afterSignUpUrl="/addUser" />
+                <SignUp
+                  path="/register"
+                  routing="path"
+                  afterSignUpUrl="/addUser"
+                />
               </SignedOut>
               <SignedIn>
                 <SignOutButton />

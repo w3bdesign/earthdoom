@@ -33,7 +33,7 @@ const Information = () => {
     <>
       <div className="mt-4 flex w-full flex-col items-center justify-center gap-12 px-4 py-4 text-white">
         <div className="flex flex-col items-center gap-2 text-center text-lg">
-          <div className="mb-8 -mt-8">
+          <div className="-mt-8 mb-8">
             {paPlayer && <OverviewTable paPlayer={paPlayer} />}
           </div>
           {hostilesData?.hostiles && (
@@ -51,11 +51,6 @@ const Information = () => {
             </div>
           )}
 
-          {/* Show LoadingSpinner if defenders is empty or whitespace */}
-          {hostilesData?.hostiles !== "" && !hostilesData?.hostiles ? (
-            <LoadingSpinner />
-          ) : null}
-
           {friendliesData?.defenders && (
             <div
               className="mb-4 rounded-lg bg-success-100 px-6 py-5 text-base text-black md:min-w-[486px]"
@@ -70,11 +65,6 @@ const Information = () => {
                 ))}
             </div>
           )}
-
-          {/* Show LoadingSpinner if defenders is empty or whitespace */}
-          {friendliesData?.defenders !== "" && !friendliesData?.defenders ? (
-            <LoadingSpinner />
-          ) : null}
 
           {paMail?.email?.length && paMail?.email?.length > 0 ? (
             <div
