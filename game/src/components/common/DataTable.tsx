@@ -5,10 +5,6 @@ export interface TableColumn {
   accessor: string;
 }
 
-/*export interface TableData {
-  [key: string]: any; // This should be improved in the future
-}*/
-
 interface TableData {
   [key: string]: string | number | bigint;
 }
@@ -20,8 +16,6 @@ export interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ columns, data, caption }) => {
-  console.log("Data: ", data);
-  console.log("Typeof Data: ", typeof data);
   return (
     <table className="mt-8 w-full text-left ring-1 ring-slate-400/10">
       <caption className="py-6 text-center text-2xl font-bold text-white">
