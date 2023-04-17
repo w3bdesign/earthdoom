@@ -35,7 +35,9 @@ const Home: NextPage = () => {
                 <FleetStatus paPlayer={paPlayer} />
               </>
             ) : (
-              <LoadingSpinner />
+              <div className="py-6">
+                <LoadingSpinner />
+              </div>
             )}
           </div>
         </div>
