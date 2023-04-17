@@ -1,13 +1,15 @@
-interface TableColumn {
+import { Stringifier } from "@/utils/functions";
+
+export interface TableColumn {
   label: string;
   accessor: string;
 }
 
-interface TableData {
+export interface TableData {
   [key: string]: any; // This should be improved in the future
 }
 
-interface DataTableProps {
+export interface DataTableProps {
   columns: TableColumn[];
   data: TableData[];
   caption: string;
@@ -44,7 +46,7 @@ const DataTable: React.FC<DataTableProps> = ({ columns, data, caption }) => {
                 data-th={col.label}
                 className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
               >
-                {row[col.accessor]}
+                <Stringifier value={row[col.accessor]} />
               </td>
             ))}
           </tr>
