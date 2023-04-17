@@ -27,6 +27,7 @@ const Information = () => {
     <>
       <div className="mt-4 flex w-full flex-col items-center justify-center gap-12 px-4 py-4 text-white">
         <div className="flex flex-col items-center gap-2 text-center text-lg">
+          <h2 className="text-center text-xl text-white py-4">Logged in as: {user.username}</h2>
           {hostilesData?.hostiles && (
             <div
               className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-black md:min-w-[486px]"

@@ -125,11 +125,12 @@ model PaUsers {
 }
 
 model PaNews {
-    id     Int    @id @default(autoincrement())
-    time   Int    @default(0)
-    news   String
-    seen   String @default("")
-    header String
+    id       Int    @id @default(autoincrement())
+    sentTo   Int    @default(0)
+    time     Int    @default(0)
+    news     String
+    seen     String @default("")
+    header   String
 }
 
 model PaLogging {

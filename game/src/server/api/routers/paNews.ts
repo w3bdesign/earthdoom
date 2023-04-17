@@ -18,7 +18,7 @@ export const paNewsRouter = createTRPCRouter({
 
       const news = await ctx.prisma.paNews.findMany({
         where: {
-          id: user?.id,
+          sentTo: user?.id,
         },
         orderBy: { time: "desc" },
       });

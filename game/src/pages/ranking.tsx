@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
 
-const Game: NextPage = () => {
+const Ranking: NextPage = () => {
   return (
     <>
       <Layout>
@@ -16,4 +16,4 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default Ranking;
