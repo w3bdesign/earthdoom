@@ -1,4 +1,4 @@
-import { Building } from "../types/types";
+import type { Building } from "../types/types";
 
 export const BUILDINGS: Building[] = [
   {
