@@ -4,7 +4,7 @@
  * @property {string | number | bigint} value - The value to stringify
  */
 interface IStringifierProps {
-  value: string | number | bigint;
+  value?: string | number | bigint;
 }
 
 /**
