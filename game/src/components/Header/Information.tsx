@@ -33,7 +33,7 @@ const Information = () => {
     <>
       <div className="mt-4 flex w-full flex-col items-center justify-center gap-12 px-4 py-4 text-white">
         <div className="flex flex-col items-center gap-2 text-center text-lg">
-          <div className="mb-8 -mt-8">
+          <div className="-mt-8 mb-8">
             {paPlayer && <OverviewTable paPlayer={paPlayer} />}
           </div>
           {hostilesData?.hostiles && (
