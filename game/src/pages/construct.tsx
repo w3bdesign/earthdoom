@@ -7,7 +7,7 @@ import Construct from "@/components/Construct/Construct";
 
 import { api } from "@/utils/api";
 
-const Game: NextPage = () => {
+const Construction: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
   if (!isSignedIn || !user.username) return null;
@@ -34,4 +34,4 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default Construction;
