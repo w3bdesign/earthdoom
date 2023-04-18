@@ -30,14 +30,14 @@ interface ConstructProps {
   paPlayer: PaPlayer;
 }
 
-const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
+const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
 
   const constructionToast = () => toast("Construction started");
   const errorToast = () => toast("Database error");
 
-  const { mutate, isLoading } = api.paUsers.constructBuilding.useMutation({
+  const { isLoading } = api.paUsers.constructBuilding.useMutation({
     onSuccess: async () => {
       constructionToast();
       if (user && user.username) {
@@ -108,7 +108,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   );
 };
 
-const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
+const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
   return (
     <table className="w-full text-left ring-1 ring-slate-400/10">
       <tbody>
@@ -145,7 +145,7 @@ const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
           </th>
         </tr>
         {PRODUCTION.map((production) => (
-          <BuildingRow
+          <ProductionRow
             key={production.buildingId}
             paPlayer={paPlayer}
             production={production}
@@ -157,7 +157,7 @@ const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
 };
 
 const Production: FC<ConstructProps> = ({ paPlayer }) => (
-  <BuildingTable paPlayer={paPlayer} />
+  <ProductionTable paPlayer={paPlayer} />
 );
 
 export default Production;
