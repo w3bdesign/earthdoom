@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
-import { type FC } from "react";
+import type { FC } from "react";
 
 import { BUILDINGS } from "./constants/BUILDINGS";
 
