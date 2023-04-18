@@ -9,6 +9,8 @@ import { api } from "@/utils/api";
 
 import { type Building } from "./types/types";
 
+
+// import paPlayer from Prisma?
 interface PaPlayer {
   id: number;
   c_crystal: number;
