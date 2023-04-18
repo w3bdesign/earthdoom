@@ -139,6 +139,44 @@ export const paUsersRouter = createTRPCRouter({
       };
     }),
 
+  getContinentIncoming: publicProcedure
+    .input(z.object({ nick: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true, x: true },
+      });
+
+      const hostiles = await ctx.prisma.paUsers.findMany({
+        where: {
+          motd: user?.x,
+          war: { gt: 0 },
+        },
+      });
+
+      const friendly = await ctx.prisma.paUsers.findMany({
+        where: {
+          motd: user?.x,
+          def: { gt: 0 },
+        },
+      });
+
+      const hostileFleets = hostiles.map((hostile) => {
+        const eta = hostile.wareta >= 5 ? hostile.wareta - 5 : 0;
+        return `Hostile incoming fleet: ${hostile.nick} #${hostile.id} (ETA: ${eta})`;
+      });
+
+      const friendlyFleets = friendly.map((friendly) => {
+        const eta = friendly.wareta >= 10 ? friendly.wareta - 10 : 0;
+        return `Friendly incoming fleet: ${friendly.nick} #${friendly.id} (ETA: ${eta})`;
+      });
+
+      return {
+        hostiles: hostileFleets.join("\n"),
+        friendly: friendlyFleets.join("\n"),
+      };
+    }),
+
   constructBuilding: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))

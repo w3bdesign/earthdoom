@@ -1,7 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
-import { type PaNews } from "@prisma/client";
 
 import { api } from "@/utils/api";
 
@@ -10,8 +9,22 @@ import ContNewsTable from "@/components/ContNews/ContNewsTable";
 import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
 interface IRenderContentProps {
-  news?: PaNews[];
+  hostiles?: string;
+  friendlies?: string;
 }
+
+interface IRenderContentProps {
+  hostiles?: string;
+  friendlies?: string;
+}
+
+const HostileNews = ({ content }: { content: string }) => {
+  return <div className="text-red-500">{content}</div>;
+};
+
+const FriendlyNews = ({ content }: { content: string }) => {
+  return <div className="text-green-500">{content}</div>;
+};
 
 const renderContent = (isLoading: boolean, paNews?: IRenderContentProps) => {
   if (isLoading) {
@@ -22,9 +35,14 @@ const renderContent = (isLoading: boolean, paNews?: IRenderContentProps) => {
     );
   }
 
-  const hasNews = paNews?.news?.length ?? 0 > 0;
+  const hasNews = paNews && (paNews.hostiles || paNews.friendlies);
   if (hasNews) {
-    return <ContNewsTable news={paNews?.news ?? []} />;
+    return (
+      <div className="p-4">
+        {paNews?.hostiles && <HostileNews content={paNews.hostiles} />}
+        {paNews?.friendlies && <FriendlyNews content={paNews.friendlies} />}
+      </div>
+    );
   }
 
   return (
@@ -39,9 +57,17 @@ const ContNews: NextPage = () => {
 
   if (!isSignedIn || !user.username) return null;
 
-  const { data: paNews, isLoading } = api.paNews.getAllContNewsByUserId.useQuery({
-    nick: user.username,
-  });
+  const { data: paNews, isLoading } = api.paUsers.getContinentIncoming.useQuery(
+    {
+      nick: user.username,
+    }
+  );
+
+  const input =
+    '{"hostiles":"Hostile incoming fleet: fiende #1 (ETA: 25)","friendly":"Friendly incoming fleet: venn #2 (ETA: 0)"}';
+  const parsedInput = JSON.parse(input);
+
+  //return renderContent(isLoading, parsedInput);
 
   return (
     <>
