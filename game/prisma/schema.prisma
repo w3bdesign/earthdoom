@@ -113,7 +113,7 @@ model PaUsers {
     commander        Int    @default(0)
     galname          String @default("No name")
     galpic           String @default("125x125earthdoom1.gif")
-    motd             String @default("No motd")
+    motd             Int    @default(0)
     vote             String @default("")
     civilians        Int    @default(1000)
     tax              Int    @default(20)

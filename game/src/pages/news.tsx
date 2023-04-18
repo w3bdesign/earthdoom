@@ -51,7 +51,7 @@ const News: NextPage = () => {
             <div className="mt-8 flex min-w-[520px] flex-col bg-white text-black">
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                  <div className="overflow-hidden flex justify-center items-center">
+                  <div className="flex items-center justify-center overflow-hidden">
                     {renderContent(isLoading, paNews)}
                   </div>
                 </div>

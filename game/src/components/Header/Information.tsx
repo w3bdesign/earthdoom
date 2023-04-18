@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import { api } from "@/utils/api";
 
-import LoadingSpinner from "../Loader/LoadingSpinner";
 import OverviewTable from "./OverviewTable";
 
 const Information = () => {

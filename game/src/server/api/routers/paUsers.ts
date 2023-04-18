@@ -139,6 +139,46 @@ export const paUsersRouter = createTRPCRouter({
       };
     }),
 
+  getContinentIncoming: publicProcedure
+    .input(z.object({ nick: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true, x: true },
+      });
+
+      const hostiles = await ctx.prisma.paUsers.findMany({
+        where: {
+          motd: user?.x,
+          war: { gt: 0 },
+        },
+        select: { war: true, wareta: true, nick: true, id: true },
+      });
+
+      const friendly = await ctx.prisma.paUsers.findMany({
+        where: {
+          motd: user?.x,
+          def: { gt: 0 },
+        },
+        select: { def: true, defeta: true, nick: true, id: true },
+      });
+
+      const hostileFleets = hostiles.map((hostile) => {
+        const eta = hostile.wareta >= 5 ? hostile.wareta - 5 : 0;
+        return `Continent incoming fleet: ${hostile.nick} is attacking #${hostile.war} (ETA: ${eta})`;
+      });
+
+      const friendlyFleets = friendly.map((friendly) => {
+        const eta = friendly.defeta >= 10 ? friendly.defeta - 10 : 0;
+        return `Continent incoming fleet: ${friendly.nick} #${friendly.def} (ETA: ${eta})`;
+      });
+
+      return {
+        hostiles: hostileFleets.join("\n"),
+        friendly: friendlyFleets.join("\n"),
+      };
+    }),
+
   constructBuilding: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
