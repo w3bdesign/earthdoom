@@ -152,6 +152,7 @@ export const paUsersRouter = createTRPCRouter({
           motd: user?.x,
           war: { gt: 0 },
         },
+        select: { war: true, wareta: true, nick: true, id: true },
       });
 
       const friendly = await ctx.prisma.paUsers.findMany({
@@ -159,16 +160,17 @@ export const paUsersRouter = createTRPCRouter({
           motd: user?.x,
           def: { gt: 0 },
         },
+        select: { def: true, defeta: true, nick: true, id: true },
       });
 
       const hostileFleets = hostiles.map((hostile) => {
         const eta = hostile.wareta >= 5 ? hostile.wareta - 5 : 0;
-        return `Hostile incoming fleet: ${hostile.nick} #${hostile.id} (ETA: ${eta})`;
+        return `Continent incoming fleet: ${hostile.nick} is attacking #${hostile.war} (ETA: ${eta})`;
       });
 
       const friendlyFleets = friendly.map((friendly) => {
-        const eta = friendly.wareta >= 10 ? friendly.wareta - 10 : 0;
-        return `Friendly incoming fleet: ${friendly.nick} #${friendly.id} (ETA: ${eta})`;
+        const eta = friendly.defeta >= 10 ? friendly.defeta - 10 : 0;
+        return `Continent incoming fleet: ${friendly.nick} #${friendly.def} (ETA: ${eta})`;
       });
 
       return {

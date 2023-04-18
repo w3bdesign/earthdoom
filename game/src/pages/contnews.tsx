@@ -5,7 +5,7 @@ import { type NextPage } from "next";
 import { api } from "@/utils/api";
 
 import Layout from "@/components/Layout/Layout";
-import ContNewsTable from "@/components/ContNews/ContNewsTable";
+
 import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
 interface IRenderContentProps {
@@ -19,11 +19,11 @@ interface IRenderContentProps {
 }
 
 const HostileNews = ({ content }: { content: string }) => {
-  return <div className="text-red-500">{content}</div>;
+  return <div className="text-lg text-red-500">{content}</div>;
 };
 
 const FriendlyNews = ({ content }: { content: string }) => {
-  return <div className="text-green-500">{content}</div>;
+  return <div className="text-lg text-green-500">{content}</div>;
 };
 
 const renderContent = (isLoading: boolean, paNews?: IRenderContentProps) => {
@@ -62,12 +62,6 @@ const ContNews: NextPage = () => {
       nick: user.username,
     }
   );
-
-  const input =
-    '{"hostiles":"Hostile incoming fleet: fiende #1 (ETA: 25)","friendly":"Friendly incoming fleet: venn #2 (ETA: 0)"}';
-  const parsedInput = JSON.parse(input);
-
-  //return renderContent(isLoading, parsedInput);
 
   return (
     <>
