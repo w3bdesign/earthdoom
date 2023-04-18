@@ -7,8 +7,6 @@ import { PRODUCTION } from "./constants/PRODUCTION";
 
 import { api } from "@/utils/api";
 
-
-
 interface PaPlayer {
   id: number;
   c_crystal: number;
@@ -80,27 +78,24 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
           : building.buildingETA}
       </td>
       <td
-        data-th="Build"
+        data-th="Production"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 hover:bg-blue-100 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
         {isLoading && "Starting construction ..."}
         {paPlayer[building.buildingFieldName] === 0 && !isLoading && (
-          <button
-            type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
-            onClick={() => {
-              mutate({
-                Userid: paPlayer.id,
-                buildingFieldName: building.buildingFieldName,
-                buildingETA: building.buildingETA,
-              });
-            }}
-          >
-            Construct
-          </button>
+          <>
+            <input
+              type="text"
+              aria-label="Amount"
+              className="peer block min-h-[auto] w-32 relative rounded border-1 bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+              id="exampleFormControlInput1"
+              placeholder="Amount"
+            />
+           
+          </>
         )}
 
-        {paPlayer[building.buildingFieldName] >= 2 && "Building ..."}
+        {paPlayer[building.buildingFieldName] >= 2 && "Producing ..."}
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
       <td
@@ -109,7 +104,9 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
       >
         {building.buildingCost}
       </td>
+      
     </tr>
+    
   );
 };
 
@@ -140,7 +137,7 @@ const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
             scope="col"
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
           >
-            Build
+            Amount
           </th>
           <th
             scope="col"
@@ -158,11 +155,13 @@ const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
         ))}
       </tbody>
     </table>
+    
   );
 };
 
-const Construct: FC<ConstructProps> = ({ paPlayer }) => (
+const Production: FC<ConstructProps> = ({ paPlayer }) => (
   <BuildingTable paPlayer={paPlayer} />
+
 );
 
-export default Construct;
+export default Production;

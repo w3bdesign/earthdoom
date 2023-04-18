@@ -6,6 +6,7 @@ import Layout from "@/components/Layout/Layout";
 import Production from "@/components/Production/Production";
 
 import { api } from "@/utils/api";
+import Script from "next/script";
 
 const ProductionPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
@@ -29,6 +30,7 @@ const ProductionPage: NextPage = () => {
             </div>
           </div>
         </div>
+        <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
       </Layout>
     </>
   );
