@@ -21,14 +21,16 @@
     "@trpc/next": "^10.20.0",
     "@trpc/react-query": "^10.20.0",
     "@trpc/server": "^10.20.0",
+    "chart.js": "^4.2.1",
     "next": "^13.3.0",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.0",
     "react-icons": "^4.8.0",
     "superjson": "1.12.2",
     "tw-elements": "^1.0.0-beta2",
-    "zod": "^3.21.4",
-    "react-hot-toast": "^2.4.0"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/eslint": "^8.37.0",
