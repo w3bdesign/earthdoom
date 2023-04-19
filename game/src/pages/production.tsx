@@ -22,7 +22,7 @@ const ProductionPage: NextPage = () => {
     <>
       <Layout>
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-center text-xl font-extrabold tracking-tight text-white sm:text-[3rem]">
+          <h1 className="text-center text-lg font-extrabold tracking-tight text-white sm:text-[3rem]">
             Production
           </h1>
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">

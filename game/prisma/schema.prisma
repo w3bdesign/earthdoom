@@ -16,12 +16,6 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Game models
 
 model PaUsers {
@@ -163,7 +157,7 @@ model PaMail {
     @@index([sentTo])
 }
 
-model PaPolit {
+model PaPolitics {
     id       Int    @id @default(autoincrement())
     time     Int    @default(0)
     tekst    String
