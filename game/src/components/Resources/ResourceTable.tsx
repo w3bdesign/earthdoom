@@ -10,7 +10,6 @@ import type { IResource } from "./types/types";
 import { PaUsers } from "@prisma/client";
 
 interface PaPlayer extends PaUsers {
-  // [key: string]: any; // TODO Improve this later
   [key: string]: number | string | bigint;
 }
 
@@ -63,12 +62,7 @@ const ResourceRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
       >
         <span className="w-[12.5rem]">{resource.buildingDescription}</span>
       </td>
-      <td
-        data-th="ETA"
-        className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
-      >
-        ETA???
-      </td>
+
       <td
         data-th="Production"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
@@ -85,12 +79,6 @@ const ResourceRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
             />
           </>
         )}
-      </td>
-      <td
-        data-th="Cost"
-        className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
-      >
-        {resource.buildingCost}
       </td>
     </tr>
   );
@@ -115,21 +103,9 @@ const ResourceTable: FC<ResourceProps> = ({ paPlayer }) => {
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
-          >
-            ETA
-          </th>
-          <th
-            scope="col"
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
           >
             Amount
-          </th>
-          <th
-            scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
-          >
-            Cost
           </th>
         </tr>
         {RESOURCE.map((resource) => (
