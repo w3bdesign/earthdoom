@@ -102,7 +102,7 @@ const Navbar = () => (
                           aria-current="true"
                           className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
                         >
-                          Continent News
+                          Contnews
                         </Link>
                         <Link
                           href="/mail"
@@ -112,7 +112,14 @@ const Navbar = () => (
                           Mail
                         </Link>
                       </div>
-                      <div>                       
+                      <div>
+                        <Link
+                          href="/politics"
+                          aria-current="true"
+                          className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                        >
+                          Politics
+                        </Link>
                         <Link
                           href="/production"
                           aria-current="true"
@@ -135,11 +142,11 @@ const Navbar = () => (
                           Research
                         </Link>
                         <Link
-                          href="/energy"
+                          href="/sats"
                           aria-current="true"
                           className="block w-full px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-50 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
                         >
-                          Energy
+                          Sats
                         </Link>
                       </div>
                       <div>
@@ -157,7 +164,13 @@ const Navbar = () => (
                         >
                           Military
                         </Link>
-                       
+                        <Link
+                          href="/spying"
+                          aria-current="true"
+                          className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                        >
+                          Spying
+                        </Link>
                         <Link
                           href="/ranking"
                           aria-current="true"
@@ -165,9 +178,22 @@ const Navbar = () => (
                         >
                           Ranking
                         </Link>
-                       
+                        <Link
+                          href="/alliance"
+                          aria-current="true"
+                          className="block w-full px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-50 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
+                        >
+                          Alliance
+                        </Link>
                       </div>
-                      <div>                        
+                      <div>
+                        <Link
+                          href="/senate"
+                          aria-current="true"
+                          className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                        >
+                          Senate
+                        </Link>
                         <Link
                           href="/country"
                           aria-current="true"
@@ -175,7 +201,13 @@ const Navbar = () => (
                         >
                           Country
                         </Link>
-                        
+                        <Link
+                          href="/endre"
+                          aria-current="true"
+                          className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                        >
+                          Preferences
+                        </Link>
                         <Link
                           href="/logout"
                           aria-current="true"
