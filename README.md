@@ -10,7 +10,7 @@
 
 Monorepo for Earthdoom.com
 
-<img src="https://user-images.githubusercontent.com/45217974/226228415-b84cd98a-767d-4626-9e31-7b1f811a6f9b.png" alt="Screenshot" />
+<img src="https://user-images.githubusercontent.com/45217974/232975051-79875585-ba7b-4742-a328-0556d9eca77e.png" alt="Screenshot" />
 
 Earthdoom is a web-based game built using Next.js, React, TypeScript, and Prisma. The application is designed to be fast and responsive with an intuitive user interface.
 
