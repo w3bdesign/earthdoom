@@ -1,4 +1,5 @@
 import { useUser } from "@clerk/nextjs";
+import Script from "next/script";
 
 import { type NextPage } from "next";
 
@@ -6,7 +7,7 @@ import Layout from "@/components/Layout/Layout";
 import Production from "@/components/Production/Production";
 
 import { api } from "@/utils/api";
-import Script from "next/script";
+
 
 const ProductionPage: NextPage = () => {
   const { user, isSignedIn } = useUser();

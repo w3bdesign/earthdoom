@@ -2,27 +2,28 @@ import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import { type FC } from "react";
-import type { PaUsers } from "@prisma/client";
 
-import { PRODUCTION } from "./constants/PRODUCTION";
+import { RESOURCE } from "./constants/RESOURCE";
 
 import { api } from "@/utils/api";
-import { IProduction } from "./types/types";
+import type { IResource } from "./types/types";
+import { PaUsers } from "@prisma/client";
 
 interface PaPlayer extends PaUsers {
-  [key: string]: any; // TODO Improve this later
+  // [key: string]: any; // TODO Improve this later
+  [key: string]: number | string | bigint;
 }
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
-  production: IProduction;
+  resource: IResource;
 }
 
-interface ConstructProps {
+interface ResourceProps {
   paPlayer: PaPlayer;
 }
 
-const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
+const ResourceRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
 
@@ -47,58 +48,55 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
 
   return (
     <tr
-      key={production.buildingName}
+      key={resource.buildingName}
       className="block border-b bg-white last:border-b-0 sm:table-row sm:border-none"
     >
       <td
         data-th="Name"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {production.buildingName}
+        {resource.buildingName}
       </td>
       <td
         data-th="Info"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        <span className="w-[12.5rem]">{production.buildingDescription}</span>
+        <span className="w-[12.5rem]">{resource.buildingDescription}</span>
       </td>
       <td
         data-th="ETA"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {paPlayer[production.buildingFieldName] >= 2
-          ? paPlayer[production.buildingFieldName] - 1
-          : production.buildingETA}
+        ETA???
       </td>
       <td
         data-th="Production"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {isLoading && "Starting production ..."}
-        {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
-          <input
-            type="text"
-            aria-label="Amount"
-            className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-            id="exampleFormControlInput1"
-            placeholder="Amount"
-          />
+        {isLoading && "Starting construction ..."}
+        {!isLoading && (
+          <>
+            <input
+              type="text"
+              aria-label="Amount"
+              className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+              id="exampleFormControlInput1"
+              placeholder="Amount"
+            />
+          </>
         )}
-
-        {paPlayer[production.buildingFieldName] >= 2 && "Producing ..."}
-        {paPlayer[production.buildingFieldName] === 1 && "Done"}
       </td>
       <td
         data-th="Cost"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {production.buildingCost}
+        {resource.buildingCost}
       </td>
     </tr>
   );
 };
 
-const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
+const ResourceTable: FC<ResourceProps> = ({ paPlayer }) => {
   return (
     <table className="w-full text-left ring-1 ring-slate-400/10">
       <tbody>
@@ -134,11 +132,11 @@ const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
             Cost
           </th>
         </tr>
-        {PRODUCTION.map((production) => (
-          <ProductionRow
-            key={production.buildingId}
+        {RESOURCE.map((resource) => (
+          <ResourceRow
+            key={resource.buildingId}
             paPlayer={paPlayer}
-            production={production}
+            resource={resource}
           />
         ))}
       </tbody>
@@ -146,8 +144,8 @@ const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
   );
 };
 
-const Production: FC<ConstructProps> = ({ paPlayer }) => (
-  <ProductionTable paPlayer={paPlayer} />
+const Production: FC<ResourceProps> = ({ paPlayer }) => (
+  <ResourceTable paPlayer={paPlayer} />
 );
 
 export default Production;
