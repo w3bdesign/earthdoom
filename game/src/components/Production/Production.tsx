@@ -2,22 +2,14 @@ import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import { type FC } from "react";
+import type { PaUsers } from "@prisma/client";
 
 import { PRODUCTION } from "./constants/PRODUCTION";
 
 import { api } from "@/utils/api";
 import { IProduction } from "./types/types";
 
-interface PaPlayer {
-  id: number;
-  c_crystal: number;
-  c_metal: number;
-  c_energy: number;
-  c_airport: number;
-  c_abase: number;
-  c_destfact: number;
-  c_scorpfact: number;
-
+interface PaPlayer extends PaUsers {
   [key: string]: any; // TODO Improve this later
 }
 
@@ -82,17 +74,15 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         data-th="Production"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {isLoading && "Starting construction ..."}
+        {isLoading && "Starting production ..."}
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
-          <>
-            <input
-              type="text"
-              aria-label="Amount"
-              className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-              id="exampleFormControlInput1"
-              placeholder="Amount"
-            />
-          </>
+          <input
+            type="text"
+            aria-label="Amount"
+            className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+            id="exampleFormControlInput1"
+            placeholder="Amount"
+          />
         )}
 
         {paPlayer[production.buildingFieldName] >= 2 && "Producing ..."}
