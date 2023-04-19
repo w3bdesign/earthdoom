@@ -6,17 +6,17 @@ import { type FC } from "react";
 import { RESOURCE } from "./constants/RESOURCE";
 
 import { api } from "@/utils/api";
-//import { IProduction } from "./types/types";
+import type { IResource } from "./types/types";
 import { PaUsers } from "@prisma/client";
 
 interface PaPlayer extends PaUsers {
-  [key: string]: any; // TODO Improve this later
+  // [key: string]: any; // TODO Improve this later
+  [key: string]: number | string | bigint;
 }
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
-  resource: any;
-  //production: IProduction;
+  resource: IResource;
 }
 
 interface ResourceProps {
@@ -67,9 +67,7 @@ const ResourceRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
         data-th="ETA"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {paPlayer[resource.buildingFieldName] >= 2
-          ? paPlayer[resource.buildingFieldName] - 1
-          : resource.buildingETA}
+        ETA???
       </td>
       <td
         data-th="Production"
