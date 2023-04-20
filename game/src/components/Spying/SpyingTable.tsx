@@ -29,6 +29,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const constructionToast = () => toast("Construction started");
   const errorToast = () => toast("Database error");
 
+  //TODO: Make sure we can scan for land
   const { isLoading } = api.paUsers.constructBuilding.useMutation({
     onSuccess: async () => {
       constructionToast();
