@@ -4,8 +4,8 @@ import {
   SignedOut,
   RedirectToSignIn,
 } from "@clerk/nextjs";
-
 import { Toaster } from "react-hot-toast";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { api } from "@/utils/api";
 
@@ -46,6 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </SignedOut>
         </>
       )}
+      <ReactQueryDevtools initialIsOpen={false} />
     </ClerkProvider>
   );
 }
