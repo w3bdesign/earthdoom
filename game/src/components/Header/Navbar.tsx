@@ -112,7 +112,7 @@ const Navbar = () => (
                           Mail
                         </Link>
                       </div>
-                      <div>                       
+                      <div>
                         <Link
                           href="/production"
                           aria-current="true"
@@ -157,7 +157,14 @@ const Navbar = () => (
                         >
                           Military
                         </Link>
-                       
+                        <Link
+                          href="/spying"
+                          aria-current="true"
+                          className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                        >
+                          Spying
+                        </Link>
+
                         <Link
                           href="/ranking"
                           aria-current="true"
@@ -165,9 +172,8 @@ const Navbar = () => (
                         >
                           Ranking
                         </Link>
-                       
                       </div>
-                      <div>                        
+                      <div>
                         <Link
                           href="/country"
                           aria-current="true"
@@ -175,7 +181,7 @@ const Navbar = () => (
                         >
                           Country
                         </Link>
-                        
+
                         <Link
                           href="/logout"
                           aria-current="true"

@@ -2,12 +2,12 @@ import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import { type FC } from "react";
+import type { ISpying } from "./types/types";
+import type { PaUsers } from "@prisma/client";
 
-import { RESOURCE } from "./constants/RESOURCE";
+import { SPYING } from "./constants/SPYING";
 
 import { api } from "@/utils/api";
-import type { IResource } from "./types/types";
-import { PaUsers } from "@prisma/client";
 
 interface PaPlayer extends PaUsers {
   [key: string]: number | string | bigint;
@@ -15,14 +15,14 @@ interface PaPlayer extends PaUsers {
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
-  resource: IResource;
+  resource: ISpying;
 }
 
-interface ResourceProps {
+interface SpyingProps {
   paPlayer: PaPlayer;
 }
 
-const ResourceRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
+const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
 
@@ -44,6 +44,10 @@ const ResourceRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   if (!isLoaded) {
     return <div>Loading user data...</div>;
   }
+
+  const numberCrystal = Number(paPlayer.crystal);
+
+  const maximumToSearch = Math.floor(numberCrystal / 500);
 
   return (
     <tr
@@ -75,6 +79,7 @@ const ResourceRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
               className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
               id="exampleFormControlInput1"
               placeholder="Amount"
+              value={maximumToSearch}
             />
           </>
         )}
@@ -83,7 +88,7 @@ const ResourceRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   );
 };
 
-const ResourceTable: FC<ResourceProps> = ({ paPlayer }) => {
+const SpyingTable: FC<SpyingProps> = ({ paPlayer }) => {
   return (
     <table className="w-full text-left ring-1 ring-slate-400/10">
       <tbody>
@@ -107,8 +112,8 @@ const ResourceTable: FC<ResourceProps> = ({ paPlayer }) => {
             Amount
           </th>
         </tr>
-        {RESOURCE.map((resource) => (
-          <ResourceRow
+        {SPYING.map((resource) => (
+          <SpyingRow
             key={resource.buildingId}
             paPlayer={paPlayer}
             resource={resource}
@@ -119,8 +124,8 @@ const ResourceTable: FC<ResourceProps> = ({ paPlayer }) => {
   );
 };
 
-const Production: FC<ResourceProps> = ({ paPlayer }) => (
-  <ResourceTable paPlayer={paPlayer} />
+const Production: FC<SpyingProps> = ({ paPlayer }) => (
+  <SpyingTable paPlayer={paPlayer} />
 );
 
 export default Production;

@@ -1,14 +1,28 @@
+import { useUser } from "@clerk/nextjs";
+
 import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
+import SpyingTable from "@/components/Spying/SpyingTable";
+import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
-const Game: NextPage = () => {
+import { api } from "@/utils/api";
+
+const Energy: NextPage = () => {
+  const { user, isSignedIn, isLoaded } = useUser();
+
+  if (!isSignedIn || !user.username) return <LoadingSpinner />;
+
+  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+    nick: user.username,
+  });
   return (
     <>
       <Layout>
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white"></p>
+            {!isLoaded && <LoadingSpinner />}
+            {paPlayer && <SpyingTable paPlayer={paPlayer} />}
           </div>
         </div>
       </Layout>
@@ -16,4 +30,4 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default Energy;
