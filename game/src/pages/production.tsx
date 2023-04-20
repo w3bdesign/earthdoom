@@ -8,7 +8,6 @@ import Production from "@/components/Production/Production";
 
 import { api } from "@/utils/api";
 
-
 const ProductionPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 

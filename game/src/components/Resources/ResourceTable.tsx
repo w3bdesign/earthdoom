@@ -105,7 +105,7 @@ const ResourceTable: FC<ResourceProps> = ({ paPlayer }) => {
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
           >
             Amount
-          </th>          
+          </th>
         </tr>
         {RESOURCE.map((resource) => (
           <ResourceRow
