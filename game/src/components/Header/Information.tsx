@@ -4,6 +4,7 @@ import Link from "next/link";
 import { api } from "@/utils/api";
 
 import OverviewTable from "./OverviewTable";
+import LoadingSpinner from "../Loader/LoadingSpinner";
 
 const Information = () => {
   const { user, isLoaded } = useUser();
@@ -12,7 +13,7 @@ const Information = () => {
     nick: isLoaded && user?.username ? user.username : "",
   });
 
-  const { data: hostilesData } = api.paUsers.getHostiles.useQuery({
+  const { data: hostilesData, isLoading } = api.paUsers.getHostiles.useQuery({
     nick: isLoaded && user?.username ? user.username : "",
   });
 
@@ -24,9 +25,9 @@ const Information = () => {
     nick: isLoaded && user?.username ? user.username : "",
   });
 
-  if (!isLoaded || !user?.username) {
+  /*if (!isLoaded || !user?.username || isLoading) {
     return null;
-  }
+  }*/
 
   return (
     <>
@@ -35,13 +36,15 @@ const Information = () => {
           <div className="-mt-8 mb-8">
             {paPlayer && <OverviewTable paPlayer={paPlayer} />}
           </div>
-          {hostilesData?.hostiles && (
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
             <div
               className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-black md:min-w-[486px]"
               role="alert"
             >
               {/* Split the hostiles string into an array of lines */}
-              {hostilesData.hostiles &&
+              {hostilesData?.hostiles &&
                 hostilesData.hostiles.split("\n").map((line, index) => (
                   <div className="text-left" key={index}>
                     {line}
