@@ -1,9 +1,8 @@
-import { useUser } from "@clerk/nextjs";
+import { getAuth, buildClerkProps, clerkClient } from "@clerk/nextjs/server";
 
-import { type NextPage } from "next";
+import { GetServerSideProps } from "next";
 
 import Layout from "@/components/Layout/Layout";
-
 import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
@@ -12,14 +11,18 @@ import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
 
-const Home: NextPage = () => {
-  const { user, isLoaded } = useUser();
+import { generateSSGHelper } from "@/server/helpers/ssgHelper";
 
+interface IHomeProps {
+  username: string;
+}
+
+const Home = ({ username }: IHomeProps) => {
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
-    nick: isLoaded && user?.username ? user.username : "",
+    nick: username,
   });
 
-  if (!user) return <LoadingSpinner />;
+  if (!username) return <LoadingSpinner />;
 
   return (
     <Layout>
@@ -27,7 +30,7 @@ const Home: NextPage = () => {
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
           <h1 className="text-center text-2xl">Main</h1>
           <div className="relative sm:mx-auto">
-            {isLoaded && paPlayer ? (
+            {paPlayer ? (
               <>
                 <UnitsTable paPlayer={paPlayer} />
                 <BDUTable paPlayer={paPlayer} />
@@ -47,3 +50,25 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const ssg = generateSSGHelper();
+
+  const { userId } = getAuth(req);
+
+  const userid = clerkClient.users.getUser(userId!);
+
+  const username = (await userid).username || "killah";
+
+  await ssg.paUsers.getPlayerById.prefetch({
+    nick: username,
+  });
+
+  return {
+    props: {
+      ...buildClerkProps(req),
+      trpcState: ssg.dehydrate(),
+      username,
+    },
+  };
+};

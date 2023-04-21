@@ -41,10 +41,12 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const sesh = getAuth(req);
 
   const userId = sesh.userId;
+  const username = sesh.user?.username;
 
   return {
     prisma,
     userId,
+    username,
   };
 };
 

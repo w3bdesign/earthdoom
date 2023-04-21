@@ -19,10 +19,6 @@ const Layout = ({ children }: ILayoutProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {
-        // Do this while developing
-        // TODO:  use <SignedIn> and <SignedOut> instead
-      }
       <Navbar />
       <Information />
 
