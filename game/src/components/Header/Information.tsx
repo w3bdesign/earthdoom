@@ -7,7 +7,6 @@ import OverviewTable from "./OverviewTable";
 import LoadingSpinner from "../Loader/LoadingSpinner";
 
 const Information = () => {
-  
   // TODO See if we can get the user from the session instead of making a request
   // TODO Maybe we can use the user from the session to get the paPlayer data
   // TODO Right now these queries take too long
