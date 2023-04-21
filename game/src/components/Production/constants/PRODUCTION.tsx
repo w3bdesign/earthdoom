@@ -6,8 +6,8 @@ export const PRODUCTION = [
       "Light infantry is a quick unit that is good for hit and run techniques. What it lacks in firepower, it makes up with it with his speed and agility.",
     buildingFieldName: "c_crystal",
     buildingETA: 10,
-    buildingCost: "Free",
-    buildingCostCrystal: 0,
+    buildingCost: "300c",
+    buildingCostCrystal: 300,
     buildingCostTitanium: 0,
   },
   {
@@ -34,9 +34,9 @@ export const PRODUCTION = [
   },
   {
     buildingId: 4,
-    buildingName: "Warfrigs",
+    buildingName: "Goliaths",
     buildingDescription:
-      "Warfrigs are heavily armored vehicles that are good for attacking enemy fortifications.",
+      "Using the latest in fusion powered propulsion systems and plasma cannons, the Goliath Tank provides the backbone of many armies.",
     buildingFieldName: "p_warfrigs",
     buildingETA: 20,
     buildingCost: "1000c",
@@ -45,9 +45,9 @@ export const PRODUCTION = [
   },
   {
     buildingId: 5,
-    buildingName: "Astropods",
+    buildingName: "Grabber",
     buildingDescription:
-      "Astropods are alien creatures that can be used to infiltrate enemy bases and sabotage their operations.",
+      "The grabber is the only unit that can claim land in combat. Be sure to build many of those before attacking",
     buildingFieldName: "p_astropods",
     buildingETA: 30,
     buildingCost: "1500c",
@@ -56,9 +56,9 @@ export const PRODUCTION = [
   },
   {
     buildingId: 6,
-    buildingName: "Destroyers",
+    buildingName: "Hellspawns",
     buildingDescription:
-      "Destroyers are alien creatures that can be used to infiltrate enemy bases and sabotage their operations.",
+      "The hellspawn class robot is a special type designed for combat. It is effective against Light Infantry and Goliath.",
     buildingFieldName: "p_destroyers",
     buildingETA: 30,
     buildingCost: "1500c",
@@ -67,9 +67,9 @@ export const PRODUCTION = [
   },
   {
     buildingId: 7,
-    buildingName: "Reaper cannons",
+    buildingName: "Reaper",
     buildingDescription:
-      "Reaper cannons are alien creatures that can be used to infiltrate enemy bases and sabotage their operations.",
+      "The reaper cannon is a general purpose cannon which is extremely effective against grabbers and light units.",
     buildingFieldName: "p_rcannons",
     buildingETA: 30,
     buildingCost: "1500c",
@@ -77,22 +77,22 @@ export const PRODUCTION = [
     buildingCostTitanium: 0,
   },
   {
-    buildingId: 7,
+    buildingId: 8,
     buildingName: "Avengers",
     buildingDescription:
-      "Reaper cannons are alien creatures that can be used to infiltrate enemy bases and sabotage their operations.",
-    buildingFieldName: "p_rcannons",
+      "Using a mounted Tachyon Particle Disrupter, the avenger is effective against medium-sized units like the Goliath.",
+    buildingFieldName: "p_avengers",
     buildingETA: 30,
     buildingCost: "1500c",
     buildingCostCrystal: 1500,
     buildingCostTitanium: 0,
   },
   {
-    buildingId: 7,
-    buildingName: "Lucius stalkers",
+    buildingId: 9,
+    buildingName: "Lucius",
     buildingDescription:
-      "Lucius stalkers are alien creatures that can be used to infiltrate enemy bases and sabotage their operations.",
-    buildingFieldName: "p_rcannons",
+      "The Lucius are large slow firing cannons that use physical rounds instead of energy weapons.It is effective against the larger robots.",
+    buildingFieldName: "p_lstalkers",
     buildingETA: 30,
     buildingCost: "1500c",
     buildingCostCrystal: 1500,

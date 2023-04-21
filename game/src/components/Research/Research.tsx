@@ -2,23 +2,14 @@ import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import { type FC } from "react";
+import type { PaUsers } from "@prisma/client";
+import { type Building } from "./types/types";
 
 import { BUILDINGS } from "./constants/RESEARCH";
 
 import { api } from "@/utils/api";
 
-import { type Building } from "./types/types";
-
-interface PaPlayer {
-  id: number;
-  c_crystal: number;
-  c_metal: number;
-  c_energy: number;
-  c_airport: number;
-  c_abase: number;
-  c_destfact: number;
-  c_scorpfact: number;
-
+interface PaPlayer extends PaUsers {
   [key: string]: any; // TODO Improve this later
 }
 
@@ -80,6 +71,12 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
           : building.buildingETA}
       </td>
       <td
+        data-th="Cost"
+        className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+      >
+        {building.buildingCost}
+      </td>
+      <td
         data-th="Research"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
@@ -102,12 +99,6 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
 
         {paPlayer[building.buildingFieldName] >= 2 && "Researching ..."}
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
-      </td>
-      <td
-        data-th="Cost"
-        className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
-      >
-        {building.buildingCost}
       </td>
     </tr>
   );
