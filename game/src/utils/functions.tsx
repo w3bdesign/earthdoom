@@ -1,10 +1,8 @@
-/**
- * Props for the Stringifier component
- * @typedef {Object} IStringifierProps
- * @property {string | number | bigint} value - The value to stringify
- */
+import type { IProduction } from "@/components/Production/types/types";
+import type { PaPlayer } from "@/components/Production/Production";
+
 interface IStringifierProps {
-  value?: string | number | bigint;
+  value?: unknown;
 }
 
 /**
@@ -25,3 +23,41 @@ export function Stringifier({ value }: IStringifierProps) {
   }
   return <span>{stringifiedValue}</span>;
 }
+
+/**
+ * Calculates the maximum number of units that can be trained based on the player's resources and the production cost of the unit.
+ * @param {PaUsers} paPlayer - The player.
+ * @param {IProduction} production - The production cost of the unit.
+ * @returns {number} - The maximum number of units that can be trained.
+ */
+export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
+  return Math.floor(
+    Math.min(
+      (paPlayer.crystal || 1) / (production.buildingCostCrystal || 1),
+      (paPlayer.metal || 1) / (production.buildingCostTitanium || 1)
+    )
+  );
+};
+
+/**
+ * Determines if the player can afford to train a certain quantity of units based on the player's resources and the production cost of the units.
+ * @param {PaUsers} paPlayer - The player.
+ * @param {number} quantity - The quantity of units to be trained.
+ * @param {number} costCrystal - The production cost of the unit in crystals.
+ * @param {number} costTitanium - The production cost of the unit in titanium.
+ * @returns {boolean} - True if the player can afford to train the units, false otherwise.
+ */
+export const canAffordToTrain = (
+  paPlayer: PaPlayer,
+  quantity: number,
+  costCrystal: number,
+  costTitanium: number
+): boolean => {
+  const crystalCost = quantity * costCrystal;
+  const titaniumCost = quantity * costTitanium;
+
+  return (
+    (costCrystal === 0 || crystalCost <= paPlayer.crystal) &&
+    (costTitanium === 0 || titaniumCost <= paPlayer.metal)
+  );
+};

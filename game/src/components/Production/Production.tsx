@@ -8,8 +8,9 @@ import { PRODUCTION } from "./constants/PRODUCTION";
 
 import { api } from "@/utils/api";
 import { IProduction } from "./types/types";
+import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
-interface PaPlayer extends PaUsers {
+export interface PaPlayer extends PaUsers {
   [key: string]: any; // TODO Improve this later
 }
 
@@ -18,7 +19,7 @@ interface BuildingRowProps {
   production: IProduction;
 }
 
-interface ConstructProps {
+export interface ConstructProps {
   paPlayer: PaPlayer;
 }
 
@@ -44,27 +45,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
       errorToast();
     },
   });
-
-  const maximumToTrain = Math.floor(
-    Math.min(
-      (paPlayer.crystal || 1) / (production.buildingCostCrystal || 1),
-      (paPlayer.titanium || 1) / (production.buildingCostTitanium || 1)
-    )
-  );
-
-  const canAffordToTrain = (
-    quantity: number,
-    costCrystal: number,
-    costTitanium: number
-  ): boolean => {
-    const crystalCost = quantity * costCrystal;
-    const titaniumCost = quantity * costTitanium;
-
-    return (
-      (costCrystal === 0 || crystalCost <= paPlayer.crystal) &&
-      (costTitanium === 0 || titaniumCost <= paPlayer.titanium)
-    );
-  };
 
   if (!isLoaded) {
     return <div>Loading user data...</div>;
@@ -109,7 +89,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             id="exampleFormControlInput1"
             placeholder="Amount"
             ref={unitAmountRef}
-            defaultValue={maximumToTrain}
+            defaultValue={maximumToTrain(paPlayer, production)}
             min="0"
           />
         )}
@@ -138,6 +118,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
               }
               if (
                 !canAffordToTrain(
+                  paPlayer,
                   Number(unitAmountRef?.current?.value),
                   production.buildingCostCrystal,
                   production.buildingCostTitanium
