@@ -6,17 +6,16 @@ import FleetStatus from "@/components/Index/FleetStatus";
 import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
+import { useUser } from "@clerk/nextjs";
 
-interface IHomeProps {
-  username: string;
-}
+const Home = () => {
+  const { user, isSignedIn } = useUser();
 
-const Home = ({ username }: IHomeProps) => {
+  if (!isSignedIn || !user.username) return <LoadingSpinner />;
+
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
-    nick: username,
+    nick: user.username,
   });
-
-  if (!username) return <LoadingSpinner />;
 
   return (
     <Layout>
