@@ -4,7 +4,8 @@ export const PRODUCTION = [
     buildingName: "Light infantry",
     buildingDescription:
       "Light infantry is a quick unit that is good for hit and run techniques. What it lacks in firepower, it makes up with it with his speed and agility.",
-    buildingFieldName: "c_crystal",
+    buildingFieldName: "p_infinitys",
+    buildingFieldNameETA: "p_infinitys_eta",
     buildingETA: 10,
     buildingCost: "300c",
     buildingCostCrystal: 300,
@@ -16,6 +17,7 @@ export const PRODUCTION = [
     buildingDescription:
       "Shadows are heavier versions of Light Infantry. Very good against Ares and Hellspawns..",
     buildingFieldName: "p_wraiths",
+    buildingFieldNameETA: "p_wraiths_eta",
     buildingETA: 10,
     buildingCost: "300c",
     buildingCostCrystal: 300,
@@ -27,6 +29,7 @@ export const PRODUCTION = [
     buildingDescription:
       "Heavy Infantry is a slow but powerful unit that is good for frontal assaults.",
     buildingFieldName: "p_cobras",
+    buildingFieldNameETA: "p_cobras_eta",
     buildingETA: 15,
     buildingCost: "500c",
     buildingCostCrystal: 500,
@@ -38,6 +41,7 @@ export const PRODUCTION = [
     buildingDescription:
       "Using the latest in fusion powered propulsion systems and plasma cannons, the Goliath Tank provides the backbone of many armies.",
     buildingFieldName: "p_warfrigs",
+    buildingFieldNameETA: "p_warfrigs_eta",
     buildingETA: 20,
     buildingCost: "1000c",
     buildingCostCrystal: 1000,
@@ -49,6 +53,7 @@ export const PRODUCTION = [
     buildingDescription:
       "The grabber is the only unit that can claim land in combat. Be sure to build many of those before attacking",
     buildingFieldName: "p_astropods",
+    buildingFieldNameETA: "p_astropods_eta",
     buildingETA: 30,
     buildingCost: "1500c",
     buildingCostCrystal: 1500,
@@ -60,6 +65,7 @@ export const PRODUCTION = [
     buildingDescription:
       "The hellspawn class robot is a special type designed for combat. It is effective against Light Infantry and Goliath.",
     buildingFieldName: "p_destroyers",
+    buildingFieldNameETA: "p_destroyers_eta",
     buildingETA: 30,
     buildingCost: "1500c",
     buildingCostCrystal: 1500,
@@ -71,6 +77,7 @@ export const PRODUCTION = [
     buildingDescription:
       "The reaper cannon is a general purpose cannon which is extremely effective against grabbers and light units.",
     buildingFieldName: "p_rcannons",
+    buildingFieldNameETA: "p_rcannons_eta",
     buildingETA: 30,
     buildingCost: "1500c",
     buildingCostCrystal: 1500,
@@ -82,6 +89,7 @@ export const PRODUCTION = [
     buildingDescription:
       "Using a mounted Tachyon Particle Disrupter, the avenger is effective against medium-sized units like the Goliath.",
     buildingFieldName: "p_avengers",
+    buildingFieldNameETA: "p_avengers_eta",
     buildingETA: 30,
     buildingCost: "1500c",
     buildingCostCrystal: 1500,
@@ -93,6 +101,7 @@ export const PRODUCTION = [
     buildingDescription:
       "The Lucius are large slow firing cannons that use physical rounds instead of energy weapons.It is effective against the larger robots.",
     buildingFieldName: "p_lstalkers",
+    buildingFieldNameETA: "p_lstalkers_eta",
     buildingETA: 30,
     buildingCost: "1500c",
     buildingCostCrystal: 1500,

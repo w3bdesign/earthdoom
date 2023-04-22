@@ -228,10 +228,16 @@ export const paUsersRouter = createTRPCRouter({
   produceUnit: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingFieldNameETA: z.string() }))
     .input(z.object({ unitAmount: z.number() }))
-
+    .input(z.object({ buildingETA: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const { buildingFieldName, unitAmount } = input;
+      const {
+        buildingFieldName,
+        buildingFieldNameETA,
+        unitAmount,
+        buildingETA,
+      } = input;
 
       // TODO Deduct cost from player
 
@@ -241,6 +247,7 @@ export const paUsersRouter = createTRPCRouter({
         },
         data: {
           [buildingFieldName]: unitAmount,
+          [buildingFieldNameETA]: buildingETA,
         },
       });
 

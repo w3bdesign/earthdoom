@@ -8,8 +8,9 @@ import { PRODUCTION } from "./constants/PRODUCTION";
 
 import { api } from "@/utils/api";
 import { IProduction } from "./types/types";
+import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
-interface PaPlayer extends PaUsers {
+export interface PaPlayer extends PaUsers {
   [key: string]: any; // TODO Improve this later
 }
 
@@ -18,7 +19,7 @@ interface BuildingRowProps {
   production: IProduction;
 }
 
-interface ConstructProps {
+export interface ConstructProps {
   paPlayer: PaPlayer;
 }
 
@@ -29,6 +30,9 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
 
   const productionToast = () => toast("Training started");
   const errorToast = () => toast("Database error");
+  const canNotAffordToast = () => toast("You can not afford this");
+  const needsToBeMoreNullToast = () =>
+    toast("You need to enter a quantity greater than 0");
 
   const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
@@ -68,7 +72,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
         {paPlayer[production.buildingFieldName] >= 2
-          ? paPlayer[production.buildingFieldName] - 1
+          ? paPlayer[production.buildingFieldNameETA]
           : production.buildingETA}
       </td>
       <td
@@ -78,16 +82,16 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         {isLoading && "Starting ..."}
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
           <input
-            type="text"
+            type="number"
             aria-label="Amount"
             className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
             id="exampleFormControlInput1"
             placeholder="Amount"
             ref={unitAmountRef}
+            defaultValue={maximumToTrain(paPlayer, production)}
+            min="0"
           />
         )}
-
-        {paPlayer[production.buildingFieldName] >= 2 && "Training ..."}
         {paPlayer[production.buildingFieldName] === 1 && "Done"}
       </td>
       <td
@@ -106,10 +110,28 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             type="button"
             className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
             onClick={() => {
+              if (Number(unitAmountRef?.current?.value) === 0) {
+                needsToBeMoreNullToast();
+                return;
+              }
+              if (
+                !canAffordToTrain(
+                  paPlayer,
+                  Number(unitAmountRef?.current?.value),
+                  production.buildingCostCrystal,
+                  production.buildingCostTitanium
+                )
+              ) {
+                canNotAffordToast();
+                return;
+              }
+
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: production.buildingFieldName,
+                buildingFieldNameETA: production.buildingFieldNameETA,
                 unitAmount: Number(unitAmountRef?.current?.value),
+                buildingETA: production.buildingETA,
               });
             }}
           >
