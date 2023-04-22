@@ -30,6 +30,8 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const productionToast = () => toast("Training started");
   const errorToast = () => toast("Database error");
   const canNotAffordToast = () => toast("You can not afford this");
+  const needsToBeMoreNullToast = () =>
+    toast("You need to enter a quantity greater than 0");
 
   const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
@@ -44,7 +46,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   });
 
   const maximumToTrain = Math.floor(
-    paPlayer.crystal / production.buildingCostCrystal
+    Math.min(
+      (paPlayer.crystal || 1) / (production.buildingCostCrystal || 1),
+      (paPlayer.titanium || 1) / (production.buildingCostTitanium || 1)
+    )
   );
 
   const canAffordToTrain = (
@@ -95,6 +100,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
         {isLoading && "Starting ..."}
+
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
           <input
             type="number"
@@ -108,7 +114,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
           />
         )}
 
-        {paPlayer[production.buildingFieldName] >= 2 && "Training ..."}
         {paPlayer[production.buildingFieldName] === 1 && "Done"}
       </td>
       <td
@@ -127,6 +132,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             type="button"
             className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
             onClick={() => {
+              if (Number(unitAmountRef?.current?.value) === 0) {
+                needsToBeMoreNullToast();
+                return;
+              }
               if (
                 !canAffordToTrain(
                   Number(unitAmountRef?.current?.value),

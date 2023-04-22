@@ -28,9 +28,9 @@ export const PRODUCTION = [
       "Heavy Infantry is a slow but powerful unit that is good for frontal assaults.",
     buildingFieldName: "p_cobras",
     buildingETA: 15,
-    buildingCost: "500t",
-    buildingCostCrystal: 0,
-    buildingCostTitanium: 500,
+    buildingCost: "500c",
+    buildingCostCrystal: 500,
+    buildingCostTitanium: 0,
   },
   {
     buildingId: 4,
