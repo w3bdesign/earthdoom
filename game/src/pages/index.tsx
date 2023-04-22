@@ -1,7 +1,3 @@
-import { getAuth, buildClerkProps, clerkClient } from "@clerk/nextjs/server";
-
-import { GetServerSideProps } from "next";
-
 import Layout from "@/components/Layout/Layout";
 import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
@@ -10,8 +6,6 @@ import FleetStatus from "@/components/Index/FleetStatus";
 import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
-
-import { generateSSGHelper } from "@/server/helpers/ssgHelper";
 
 interface IHomeProps {
   username: string;
@@ -50,25 +44,3 @@ const Home = ({ username }: IHomeProps) => {
 };
 
 export default Home;
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const ssg = generateSSGHelper();
-
-  const { userId } = getAuth(req);
-
-  const userid = clerkClient.users.getUser(userId!);
-
-  const username = (await userid).username || "killah";
-
-  await ssg.paUsers.getPlayerById.prefetch({
-    nick: username,
-  });
-
-  return {
-    props: {
-      ...buildClerkProps(req),
-      trpcState: ssg.dehydrate(),
-      username,
-    },
-  };
-};
