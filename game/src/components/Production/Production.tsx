@@ -92,7 +92,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             min="0"
           />
         )}
-        {paPlayer[production.buildingFieldName] === 1 && "Done"}
       </td>
       <td
         data-th="Cost"
@@ -125,7 +124,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                 canNotAffordToast();
                 return;
               }
-
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: production.buildingFieldName,
@@ -138,9 +136,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             Train
           </button>
         )}
-
         {paPlayer[production.buildingFieldName] >= 2 && "Training ..."}
-        {paPlayer[production.buildingFieldName] === 1 && "Done"}
       </td>
     </tr>
   );
