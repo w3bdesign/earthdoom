@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { SignedIn } from "@clerk/nextjs";
 
 import { ReactNode } from "react";
 
@@ -19,7 +20,9 @@ const Layout = ({ children }: ILayoutProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <Information />
+      <SignedIn>
+        <Information />
+      </SignedIn>
       <main className="flex items-center justify-center">{children}</main>
       <Footer />
     </>
