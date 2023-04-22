@@ -222,4 +222,28 @@ export const paUsersRouter = createTRPCRouter({
 
       return data;
     }),
+
+  // TODO Combine constructBuilding, produceUnit and researchBuilding into one?
+
+  produceUnit: publicProcedure
+    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ unitAmount: z.number() }))
+
+    .mutation(async ({ ctx, input }) => {
+      const { buildingFieldName, unitAmount } = input;
+
+      // TODO Deduct cost from player
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: input.Userid,
+        },
+        data: {
+          [buildingFieldName]: unitAmount,
+        },
+      });
+
+      return data;
+    }),
 });

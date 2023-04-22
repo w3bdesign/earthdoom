@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
-import { type FC } from "react";
+import { useRef, type FC } from "react";
 import type { PaUsers } from "@prisma/client";
 
 import { PRODUCTION } from "./constants/PRODUCTION";
@@ -25,13 +25,14 @@ interface ConstructProps {
 const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
+  const unitAmountRef = useRef<HTMLInputElement>(null);
 
-  const constructionToast = () => toast("Construction started");
+  const productionToast = () => toast("Training started");
   const errorToast = () => toast("Database error");
 
-  const { isLoading } = api.paUsers.constructBuilding.useMutation({
+  const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
-      constructionToast();
+      productionToast();
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
@@ -82,10 +83,11 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
             id="exampleFormControlInput1"
             placeholder="Amount"
+            ref={unitAmountRef}
           />
         )}
 
-        {paPlayer[production.buildingFieldName] >= 2 && "Producing ..."}
+        {paPlayer[production.buildingFieldName] >= 2 && "Training ..."}
         {paPlayer[production.buildingFieldName] === 1 && "Done"}
       </td>
       <td
@@ -93,6 +95,30 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
         {production.buildingCost}
+      </td>
+      <td
+        data-th="Build"
+        className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+      >
+        {isLoading && "Starting ..."}
+        {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
+          <button
+            type="button"
+            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+            onClick={() => {
+              mutate({
+                Userid: paPlayer.id,
+                buildingFieldName: production.buildingFieldName,
+                unitAmount: Number(unitAmountRef?.current?.value),
+              });
+            }}
+          >
+            Train
+          </button>
+        )}
+
+        {paPlayer[production.buildingFieldName] >= 2 && "Training ..."}
+        {paPlayer[production.buildingFieldName] === 1 && "Done"}
       </td>
     </tr>
   );
@@ -132,6 +158,13 @@ const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
           >
             Cost
+          </th>
+
+          <th
+            scope="col"
+            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+          >
+            Train
           </th>
         </tr>
         {PRODUCTION.map((production) => (
