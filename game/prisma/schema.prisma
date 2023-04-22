@@ -21,9 +21,9 @@ datasource db {
 model PaUsers {
     id               Int    @id @default(autoincrement())
     nick             String
-    crystal          BigInt @default(0)
-    metal            BigInt @default(0)
-    energy           BigInt @default(0)
+    crystal          Int    @default(0)
+    metal            Int    @default(0)
+    energy           Int    @default(0)
     r_energy         Int    @default(0)
     c_energy         Int    @default(0)
     sats             Int    @default(0)
@@ -46,7 +46,7 @@ model PaUsers {
     p_cobras         Int    @default(0)
     p_cobrast        Int    @default(0)
     missiles         Int    @default(0)
-    score            BigInt @default(0)
+    score            Int    @default(0)
     asteroids        Int    @default(0)
     asteroid_crystal Int    @default(0)
     asteroid_metal   Int    @default(0)
@@ -119,12 +119,12 @@ model PaUsers {
 }
 
 model PaNews {
-    id       Int    @id @default(autoincrement())
-    sentTo   Int    @default(0)
-    time     Int    @default(0)
-    news     String
-    seen     String @default("")
-    header   String
+    id     Int    @id @default(autoincrement())
+    sentTo Int    @default(0)
+    time   Int    @default(0)
+    news   String
+    seen   String @default("")
+    header String
 }
 
 model PaLogging {
