@@ -8,7 +8,11 @@ import { PRODUCTION } from "./constants/PRODUCTION";
 
 import { api } from "@/utils/api";
 import { IProduction } from "./types/types";
-import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
+import {
+  canAffordToTrain,
+  maximumToTrain,
+  calculateETA,
+} from "@/utils/functions";
 
 export interface PaPlayer extends PaUsers {
   [key: string]: any; // TODO Improve this later
@@ -72,7 +76,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
         {paPlayer[production.buildingFieldName] >= 2
-          ? paPlayer[production.buildingFieldName] - 1
+          ? paPlayer[production.buildingFieldNameETA]
           : production.buildingETA}
       </td>
       <td
@@ -80,7 +84,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
         {isLoading && "Starting ..."}
-
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
           <input
             type="number"
@@ -93,7 +96,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             min="0"
           />
         )}
-
         {paPlayer[production.buildingFieldName] === 1 && "Done"}
       </td>
       <td
@@ -131,7 +133,9 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: production.buildingFieldName,
+                buildingFieldNameETA: production.buildingFieldNameETA,
                 unitAmount: Number(unitAmountRef?.current?.value),
+                buildingETA: production.buildingETA,
               });
             }}
           >
