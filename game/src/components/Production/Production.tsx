@@ -8,11 +8,7 @@ import { PRODUCTION } from "./constants/PRODUCTION";
 
 import { api } from "@/utils/api";
 import { IProduction } from "./types/types";
-import {
-  canAffordToTrain,
-  maximumToTrain,
-  calculateETA,
-} from "@/utils/functions";
+import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
 export interface PaPlayer extends PaUsers {
   [key: string]: any; // TODO Improve this later
