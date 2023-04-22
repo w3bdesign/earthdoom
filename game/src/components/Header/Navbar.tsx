@@ -1,10 +1,20 @@
-import { SignedIn } from "@clerk/nextjs";
+import { SignedIn, useUser } from "@clerk/nextjs";
+
+
+
+
 import Link from "next/link";
 import Script from "next/script";
 
-const Navbar = () => (
+const Navbar = () => {
+  const { user, isLoaded } = useUser();
+
+  return (
   <div className="flex min-h-[110px] justify-center bg-gray-800 p-6">
     <SignedIn>
+      
+      User: {user?.username}
+
       <nav
         className="relative flex w-full items-center justify-between bg-gray-800 py-2 text-white  dark:bg-neutral-700 dark:text-neutral-300 lg:flex-wrap lg:justify-center"
         data-te-navbar-ref
@@ -201,6 +211,6 @@ const Navbar = () => (
     </SignedIn>
     <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
   </div>
-);
+)}
 
 export default Navbar;
