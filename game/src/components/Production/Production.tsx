@@ -29,6 +29,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
 
   const productionToast = () => toast("Training started");
   const errorToast = () => toast("Database error");
+  const canNotAffordToast = () => toast("You can not afford this");
 
   const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
@@ -41,6 +42,24 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
       errorToast();
     },
   });
+
+  const maximumToTrain = Math.floor(
+    paPlayer.crystal / production.buildingCostCrystal
+  );
+
+  const canAffordToTrain = (
+    quantity: number,
+    costCrystal: number,
+    costTitanium: number
+  ): boolean => {
+    const crystalCost = quantity * costCrystal;
+    const titaniumCost = quantity * costTitanium;
+
+    return (
+      (costCrystal === 0 || crystalCost <= paPlayer.crystal) &&
+      (costTitanium === 0 || titaniumCost <= paPlayer.titanium)
+    );
+  };
 
   if (!isLoaded) {
     return <div>Loading user data...</div>;
@@ -78,12 +97,14 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         {isLoading && "Starting ..."}
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
           <input
-            type="text"
+            type="number"
             aria-label="Amount"
             className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
             id="exampleFormControlInput1"
             placeholder="Amount"
             ref={unitAmountRef}
+            defaultValue={maximumToTrain}
+            min="0"
           />
         )}
 
@@ -106,6 +127,17 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             type="button"
             className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
             onClick={() => {
+              if (
+                !canAffordToTrain(
+                  Number(unitAmountRef?.current?.value),
+                  production.buildingCostCrystal,
+                  production.buildingCostTitanium
+                )
+              ) {
+                canNotAffordToast();
+                return;
+              }
+
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: production.buildingFieldName,
