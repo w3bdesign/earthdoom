@@ -247,8 +247,6 @@ export const paUsersRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
-      // TODO Deduct cost from player
-
       const data = await ctx.prisma.paUsers.update({
         where: {
           id: input.Userid,
@@ -258,8 +256,8 @@ export const paUsersRouter = createTRPCRouter({
             increment: unitAmount,
           },
           [buildingFieldNameETA]: buildingETA,
-          crystal: { decrement: buildingCostCrystal },
-          metal: { decrement: buildingCostTitanium },
+          crystal: { decrement: buildingCostCrystal * unitAmount },
+          metal: { decrement: buildingCostTitanium * unitAmount },
         },
       });
 
