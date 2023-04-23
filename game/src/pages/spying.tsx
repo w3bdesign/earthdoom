@@ -19,8 +19,8 @@ const Energy: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
+      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 ">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
             {paPlayer && <SpyingTable paPlayer={paPlayer} />}
           </div>

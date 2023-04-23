@@ -46,8 +46,8 @@ const News: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
+      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 ">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="mt-8 flex min-w-[520px] flex-col bg-white text-black">
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
