@@ -37,7 +37,11 @@ const BarChart: React.FC<Props> = ({ chartData }) => {
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return (
+    <div className="flex h-[400px] w-full justify-center px-4 py-4">
+      <Bar data={data} options={options} />
+    </div>
+  );
 };
 
 export default BarChart;

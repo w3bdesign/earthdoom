@@ -39,9 +39,7 @@ const Resources: NextPage = () => {
         <div className="container flex flex-col items-center justify-center px-2 py-2 ">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-
             <BarGraph chartData={sampleData} />
-
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <h1 className="py-4 text-center text-2xl text-white">
                 Undeveloped land: {paPlayer?.ui_roids}
