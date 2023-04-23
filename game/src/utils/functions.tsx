@@ -43,7 +43,7 @@ export function Stringifier({ value }: IStringifierProps) {
  * @returns {number} - The maximum number of units that can be trained.
  */
 export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
-  let maxValues = [];
+  const maxValues = [];
   maxValues.push(Math.floor(paPlayer.crystal / production.buildingCostCrystal));
   if (production.buildingCostTitanium !== 0) {
     maxValues.push(
