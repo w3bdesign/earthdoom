@@ -21,7 +21,7 @@ const Construction: NextPage = () => {
       <Layout>
         <div className="container flex flex-col items-center justify-center px-2 py-2 ">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <div className="relative sm:mx-auto py-4">
+            <div className="relative py-4 sm:mx-auto">
               {paPlayer && <Construct paPlayer={paPlayer} />}
             </div>
           </div>

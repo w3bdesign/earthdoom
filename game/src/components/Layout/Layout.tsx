@@ -9,7 +9,6 @@ import Information from "@/components/Header/Information";
 
 interface ILayoutProps {
   children: ReactNode;
-  
 }
 
 const Layout = ({ children }: ILayoutProps) => {
@@ -24,7 +23,7 @@ const Layout = ({ children }: ILayoutProps) => {
       <SignedIn>
         <Information />
       </SignedIn>
-     
+
       <main className="flex items-center justify-center">{children}</main>
       <Footer />
     </>
