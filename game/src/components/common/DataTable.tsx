@@ -6,7 +6,7 @@ export interface TableColumn {
 }
 
 interface TableData {
-  [key: string]: string | number | bigint;
+  [key: string]: string | number;
 }
 
 export interface DataTableProps {

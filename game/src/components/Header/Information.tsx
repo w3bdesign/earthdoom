@@ -52,7 +52,6 @@ const Information = () => {
                 ))}
             </div>
           )}
-
           {friendliesData?.defenders && (
             <div
               className="mb-4 rounded-lg bg-success-100 px-6 py-5 text-base text-black md:min-w-[486px]"
@@ -67,7 +66,6 @@ const Information = () => {
                 ))}
             </div>
           )}
-
           {paMail?.email?.length && paMail?.email?.length > 0 ? (
             <div
               className="mb-4 min-w-[434px] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800 md:min-w-[486px]"
