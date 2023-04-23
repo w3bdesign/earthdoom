@@ -32,7 +32,7 @@ const BarChart: React.FC<Props> = ({ chartData }) => {
       },
       title: {
         display: true,
-        text: "Chart.js Bar Chart",
+        text: "Income",
       },
     },
   };

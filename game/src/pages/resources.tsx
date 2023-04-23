@@ -19,11 +19,11 @@ const Resources: NextPage = () => {
   });
 
   const sampleData = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: ["Crystal", "Titanium"],
     datasets: [
       {
-        label: "Sales",
-        data: [65, 59, 80, 81, 56, 55, 40],
+        label: "Income",
+        data: [paPlayer?.asteroid_crystal, paPlayer?.asteroid_metal],
         backgroundColor: ["rgba(75,192,192,0.4)"],
         borderColor: ["rgba(75,192,192,1)"],
         borderWidth: 1,
