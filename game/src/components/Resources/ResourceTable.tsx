@@ -11,19 +11,19 @@ import { PaUsers } from "@prisma/client";
 import { maximumToTrain, canAffordToTrain } from "@/utils/functions";
 
 interface PaPlayer extends PaUsers {
-  [key: string]: number | string | bigint;
+  [key: string]: number | string;
 }
 
-interface IResourceProps {
+interface IResourceRowProps {
   paPlayer: PaPlayer;
   resource: IResource;
 }
 
-export interface IResourceRowProps {
+export interface IResourceProps {
   paPlayer: PaPlayer;
 }
 
-const ResourceRow: FC<IResourceProps> = ({ paPlayer, resource }) => {
+const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
@@ -133,7 +133,7 @@ const ResourceRow: FC<IResourceProps> = ({ paPlayer, resource }) => {
   );
 };
 
-const ResourceTable: FC<IResourceRowProps> = ({ paPlayer }) => {
+const ResourceTable: FC<IResourceProps> = ({ paPlayer }) => {
   return (
     <table className="w-full text-left ring-1 ring-slate-400/10">
       <tbody>
