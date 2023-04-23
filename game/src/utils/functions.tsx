@@ -43,12 +43,16 @@ export function Stringifier({ value }: IStringifierProps) {
  * @returns {number} - The maximum number of units that can be trained.
  */
 export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
-  return Math.floor(
-    Math.min(
-      (paPlayer.crystal || 1) / (production.buildingCostCrystal || 1),
-      (paPlayer.metal || 1) / (production.buildingCostTitanium || 1)
-    )
-  );
+  let maxValues = [];
+  maxValues.push(Math.floor(paPlayer.crystal / production.buildingCostCrystal));
+  if (production.buildingCostTitanium !== 0) {
+    maxValues.push(
+      Math.floor(paPlayer.metal / production.buildingCostTitanium)
+    );
+  }
+  const filteredMaxValues = maxValues.filter((value) => !isNaN(value));
+  const maximumAmount = Math.min(...filteredMaxValues);
+  return maximumAmount;
 };
 
 /**
