@@ -21,7 +21,7 @@ const Home = () => {
     <Layout>
        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 ">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-          <div className="relative sm:mx-auto">
+          <div className="relative sm:mx-auto py-4">
             {paPlayer ? (
               <>
                 <UnitsTable paPlayer={paPlayer} />
