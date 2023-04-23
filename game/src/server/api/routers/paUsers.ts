@@ -22,6 +22,8 @@ export const paUsersRouter = createTRPCRouter({
           crystal: true,
           energy: true,
           civilians: true,
+          asteroid_crystal: true,
+          asteroid_metal: true,
           score: true,
           rank: true,
           nick: true,
@@ -223,18 +225,25 @@ export const paUsersRouter = createTRPCRouter({
       return data;
     }),
 
-  // TODO Combine constructBuilding, produceUnit and researchBuilding into one?
+  // TODO Combine constructBuilding, produceUnit, spyingInitiate and researchBuilding into one?
 
   produceUnit: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingFieldNameETA: z.string() }))
+
+    .input(z.object({ buildingCostCrystal: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
+
+
     .input(z.object({ unitAmount: z.number() }))
     .input(z.object({ buildingETA: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const {
         buildingFieldName,
         buildingFieldNameETA,
+        buildingCostCrystal,
+        buildingCostTitanium,
         unitAmount,
         buildingETA,
       } = input;
@@ -246,8 +255,37 @@ export const paUsersRouter = createTRPCRouter({
           id: input.Userid,
         },
         data: {
-          [buildingFieldName]: unitAmount,
+          [buildingFieldName]: {
+            increment: unitAmount,
+          },
           [buildingFieldNameETA]: buildingETA,
+          crystal: {decrement: buildingCostCrystal},
+          metal: {decrement: buildingCostTitanium},
+        },
+      });
+
+      return data;
+    }),
+
+  spyingInitiate: publicProcedure
+    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingETA: z.number() }))
+    .input(z.object({ unitAmount: z.number() }))
+
+    .mutation(async ({ ctx, input }) => {
+      const { buildingFieldName, unitAmount } = input;
+
+      // TODO Deduct cost from player
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: input.Userid,
+        },
+        data: {
+          [buildingFieldName]: {
+            increment: unitAmount,
+          },
         },
       });
 

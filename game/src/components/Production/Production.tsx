@@ -71,7 +71,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         data-th="ETA"
         className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {paPlayer[production.buildingFieldName] >= 2
+        {paPlayer[production.buildingFieldName] >= 1
           ? paPlayer[production.buildingFieldNameETA]
           : production.buildingETA}
       </td>
@@ -128,6 +128,8 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                 Userid: paPlayer.id,
                 buildingFieldName: production.buildingFieldName,
                 buildingFieldNameETA: production.buildingFieldNameETA,
+                buildingCostCrystal: production.buildingCostCrystal,
+                buildingCostTitanium: production.buildingCostTitanium,
                 unitAmount: Number(unitAmountRef?.current?.value),
                 buildingETA: production.buildingETA,
               });
@@ -136,7 +138,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             Train
           </button>
         )}
-        {paPlayer[production.buildingFieldName] >= 2 && "Training ..."}
+        {paPlayer[production.buildingFieldName] >= 1 && "Training ..."}
       </td>
     </tr>
   );

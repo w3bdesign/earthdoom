@@ -8,7 +8,7 @@ const Game: NextPage = () => {
       <Layout>
       <div className="container flex flex-col items-center justify-center text-white">
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-          <div className="relative sm:mx-auto"></div>
+          <div className="relative sm:mx-auto py-4"></div>
             <p className="text-2xl text-white"></p>
           </div>
         </div>

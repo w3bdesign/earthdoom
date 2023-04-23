@@ -30,10 +30,10 @@ const AddUser: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 text-white">
+        <div className="container flex flex-col items-center justify-center px-2 py-2 text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
             <h1 className="text-center text-2xl">Create player</h1>
-            <div className="relative sm:mx-auto">Creating player ...</div>
+            <div className="relative sm:mx-auto py-4">Creating player ...</div>
           </div>
         </div>
       </Layout>

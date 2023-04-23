@@ -19,9 +19,9 @@ const Construction: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 ">
+        <div className="container flex flex-col items-center justify-center px-2 py-2 ">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <div className="relative sm:mx-auto">
+            <div className="relative sm:mx-auto py-4">
               {paPlayer && <Construct paPlayer={paPlayer} />}
             </div>
           </div>

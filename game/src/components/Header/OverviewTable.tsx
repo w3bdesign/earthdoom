@@ -1,26 +1,36 @@
 import { type FC } from "react";
 
-import DataTable, { TableColumn } from "@/components/common/DataTable";
+import DataTable from "@/components/common/DataTable";
+
+interface PaPlayer {
+  id: number;
+  metal: number;
+  crystal: number;
+  energy: number;
+  civilians: number;
+  asteroid_crystal: number;
+  asteroid_metal: number;
+  score: number;
+  rank: number;
+  nick: string;
+  [key: string]: string | number;
+}
 
 interface OverviewTableProps {
-  paPlayer: {
-    crystal: bigint | number;
-    metal: bigint | number;
-    energy: bigint | number;
-    rank: number;
-    nick: string;
-  };
+  paPlayer: PaPlayer;
 }
 
 const OverviewTable: FC<OverviewTableProps> = ({ paPlayer }) => {
-  const columns: TableColumn[] = [
+  const columns = [
     { label: "Crystal", accessor: "crystal" },
     { label: "Titanium", accessor: "metal" },
     { label: "Energy", accessor: "energy" },
+    { label: "Houses", accessor: "asteroid_crystal" },
+    { label: "Titanium Mine", accessor: "asteroid_metal" },
     { label: "Rank", accessor: "rank" },
   ];
 
-  const caption = `Overview for ${paPlayer.nick}`;
+  const caption = `Overview for ${paPlayer?.nick}`;
 
   return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
 };

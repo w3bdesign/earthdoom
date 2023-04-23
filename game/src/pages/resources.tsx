@@ -19,20 +19,17 @@ const Resources: NextPage = () => {
   return (
     <>
       <Layout>
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-4 ">
+      <div className="container flex flex-col items-center justify-center px-2 py-2 ">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-
             {paPlayer && paPlayer?.ui_roids > 0 && (
-              <h1 className="text-center text-2xl text-white">
+              <h1 className="text-center text-2xl text-white py-4">
                 Undeveloped land: {paPlayer?.ui_roids}
               </h1>
             )}
-
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <ResourceTable paPlayer={paPlayer} />
             )}
-
             {paPlayer?.ui_roids === 0 && (
               <h1 className="text-center text-2xl text-white">
                 You have no land

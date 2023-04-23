@@ -62,7 +62,7 @@ const Country: NextPage = () => {
             </div>
           </div>
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
-            <div className="relative sm:mx-auto">
+            <div className="relative sm:mx-auto py-4">
               <div className="relative mb-6 w-full break-words p-6 shadow-lg">
                 <img
                   src="https://via.placeholder.com/250"
