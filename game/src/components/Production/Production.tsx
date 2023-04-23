@@ -128,6 +128,8 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                 Userid: paPlayer.id,
                 buildingFieldName: production.buildingFieldName,
                 buildingFieldNameETA: production.buildingFieldNameETA,
+                buildingCostCrystal: production.buildingCostCrystal,
+                buildingCostTitanium: production.buildingCostTitanium,
                 unitAmount: Number(unitAmountRef?.current?.value),
                 buildingETA: production.buildingETA,
               });
