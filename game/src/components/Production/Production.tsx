@@ -50,6 +50,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     return <div>Loading user data...</div>;
   }
 
+  // TODO Do not render table headers?
+
+  if (paPlayer[production.buildingRequirement] === 0) return null;
+
   return (
     <tr
       key={production.buildingName}

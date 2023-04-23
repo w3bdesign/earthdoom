@@ -4,6 +4,7 @@ export interface IProduction {
   buildingDescription: string;
   buildingFieldName: string;
   buildingFieldNameETA: string;
+  buildingRequirement: string;
   buildingETA: number;
   buildingConstruct?: JSX.Element;
   buildingCost: string;
