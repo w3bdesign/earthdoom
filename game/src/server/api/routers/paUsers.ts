@@ -272,7 +272,9 @@ export const paUsersRouter = createTRPCRouter({
           id: input.Userid,
         },
         data: {
-          [buildingFieldName]: unitAmount,
+          [buildingFieldName]: {
+            increment: unitAmount,
+          },
         },
       });
 
