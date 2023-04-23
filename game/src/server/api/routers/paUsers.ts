@@ -235,7 +235,6 @@ export const paUsersRouter = createTRPCRouter({
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
 
-
     .input(z.object({ unitAmount: z.number() }))
     .input(z.object({ buildingETA: z.number() }))
     .mutation(async ({ ctx, input }) => {
@@ -259,8 +258,8 @@ export const paUsersRouter = createTRPCRouter({
             increment: unitAmount,
           },
           [buildingFieldNameETA]: buildingETA,
-          crystal: {decrement: buildingCostCrystal},
-          metal: {decrement: buildingCostTitanium},
+          crystal: { decrement: buildingCostCrystal },
+          metal: { decrement: buildingCostTitanium },
         },
       });
 
@@ -286,6 +285,7 @@ export const paUsersRouter = createTRPCRouter({
           [buildingFieldName]: {
             increment: unitAmount,
           },
+          ui_roids: { decrement: unitAmount },
         },
       });
 

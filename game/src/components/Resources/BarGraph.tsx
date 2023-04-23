@@ -1,51 +1,47 @@
+import React from "react";
 import { Bar } from "react-chartjs-2";
 
-interface BarGraphProps {
-  title: string;
-  width: number;
-  data: string;
+export interface ChartData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string[];
+    borderColor: string[];
+    borderWidth: number;
+  }[];
 }
 
-function BarGraph({ title, width, data }: BarGraphProps) {
-  const items = data.split("^^");
+interface Props {
+  chartData: ChartData;
+}
 
-  const values: number[] = [];
-  const labels: string[] = [];
+const BarChart: React.FC<Props> = ({ chartData }) => {
+  const { labels, datasets } = chartData;
 
-  let total = 0;
-  let max = 0;
-
-  items.forEach((item) => {
-    const [itemTitle, value] = item.split("^");
-    if (itemTitle) {
-      labels.push(itemTitle);
-    }
-
-    if (value) {
-      values.push(parseInt(value, 10));
-      total += parseInt(value, 10);
-      max = Math.max(max, parseInt(value, 10));
-    }
-  });
-
-  const chartData = {
+  const data = {
     labels,
-    datasets: [
-      {
-        label: "Value",
-        data: values,
-        backgroundColor: "rgba(64,100,168,0.8)",
+    datasets,
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
       },
-    ],
+      title: {
+        display: true,
+        text: "Income",
+      },
+    },
   };
 
   return (
-    <div>
-      <h2>{title}</h2>
-      <Bar data={chartData} width={width} height={300} />
-      <p>Total: {total}</p>
+    <div className="flex h-[400px] w-full justify-center px-4 py-4">
+      <Bar data={data} options={options} />
     </div>
   );
-}
+};
 
-export default BarGraph;
+export default BarChart;
