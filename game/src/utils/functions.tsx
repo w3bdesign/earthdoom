@@ -1,8 +1,21 @@
-import type { IProduction } from "@/components/Production/types/types";
+
 import type { PaPlayer } from "@/components/Production/Production";
 
 interface IStringifierProps {
   value?: unknown;
+}
+
+interface IProduction {
+  buildingId: number;
+  buildingName: string;
+  buildingDescription: string;
+  buildingFieldName: string;
+  buildingFieldNameETA?: string;
+  buildingETA: number;
+  buildingConstruct?: JSX.Element;
+  buildingCost: string;
+  buildingCostCrystal: number;
+  buildingCostTitanium: number;
 }
 
 /**
