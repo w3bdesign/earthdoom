@@ -22,6 +22,8 @@ export const paUsersRouter = createTRPCRouter({
           crystal: true,
           energy: true,
           civilians: true,
+          asteroid_crystal: true,
+          asteroid_metal: true,
           score: true,
           rank: true,
           nick: true,
