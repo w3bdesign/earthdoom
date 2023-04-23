@@ -18,15 +18,17 @@ const Resources: NextPage = () => {
     nick: user.username,
   });
 
+  if (!paPlayer) return null;
+
   const sampleData = {
     labels: ["Crystal", "Titanium"],
     datasets: [
       {
         label: "Income",
-        data: [paPlayer?.asteroid_crystal, paPlayer?.asteroid_metal],
-        backgroundColor: ["rgba(75,192,192,0.4)"],
-        borderColor: ["rgba(75,192,192,1)"],
-        borderWidth: 1,
+        data: [paPlayer.asteroid_crystal, paPlayer.asteroid_metal],
+        backgroundColor: ["rgba(59, 113, 202, 1)"],
+        borderColor: ["rgba(255,255,255,1)"],
+        borderWidth: 2,
       },
     ],
   };
