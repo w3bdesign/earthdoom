@@ -25,7 +25,10 @@ const Resources: NextPage = () => {
     datasets: [
       {
         label: "Income",
-        data: [paPlayer.asteroid_crystal, paPlayer.asteroid_metal],
+        //data: [paPlayer.asteroid_crystal, paPlayer.asteroid_metal],
+        // TODO Replace with real data
+        data: [100, 200],
+
         backgroundColor: ["rgba(59, 113, 202, 1)"],
         borderColor: ["rgba(255,255,255,1)"],
         borderWidth: 2,
@@ -39,17 +42,21 @@ const Resources: NextPage = () => {
         <div className="container flex flex-col items-center justify-center px-2 py-2 ">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            <BarGraph chartData={sampleData} />
+            <div className=" border-1 border-indigo-900 bg-white py-4 ">
+              <BarGraph chartData={sampleData} />
+            </div>
             {paPlayer && paPlayer?.ui_roids > 0 && (
-              <h1 className="py-4 text-center text-2xl text-white">
+              <h1 className="mt-6 py-4 text-center text-2xl text-white">
                 Undeveloped land: {paPlayer?.ui_roids}
               </h1>
             )}
             {paPlayer && paPlayer?.ui_roids > 0 && (
-              <ResourceTable paPlayer={paPlayer} />
+              <div className="py-4">
+                <ResourceTable paPlayer={paPlayer} />
+              </div>
             )}
             {paPlayer?.ui_roids === 0 && (
-              <h1 className="text-center text-2xl text-white">
+              <h1 className="mt-6 py-4 text-center text-2xl text-white">
                 You have no land
               </h1>
             )}
