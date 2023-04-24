@@ -3,7 +3,7 @@ export interface IEnergy {
   buildingName: string;
   buildingDescription: string;
   buildingFieldName: string;
-  buildingFieldNameETA?: string; 
+  buildingFieldNameETA?: string;
   buildingETA: number;
   buildingConstruct?: JSX.Element;
   buildingCost: string;

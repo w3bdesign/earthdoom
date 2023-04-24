@@ -1,21 +1,24 @@
 {
-	"name": "blog",
-	"type": "module",
-	"version": "0.0.7",
-	"scripts": {
-		"dev": "astro dev",
-		"start": "astro dev",
-		"build": "astro build",
-		"preview": "astro preview",
-		"astro": "astro",
-		"check": "astro check"
-	},
-	"dependencies": {
-		"@astrojs/mdx": "^0.19.0",
-		"@astrojs/rss": "^2.3.2",
-		"@astrojs/sitemap": "^1.2.2",
-		"@astrojs/tailwind": "^3.1.1",
-		"astro": "^2.3.0",
-		"tailwindcss": "^3.3.1"
-	}
+  "name": "blog",
+  "type": "module",
+  "version": "0.0.7",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "format": "prettier --write \"**/*.{js,astro,json}\"",
+    "refresh": "rm -rf node_modules && rm package-lock.json && npm i && npm run format"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^0.19.0",
+    "@astrojs/rss": "^2.3.2",
+    "@astrojs/sitemap": "^1.2.2",
+    "@astrojs/tailwind": "^3.1.1",
+    "astro": "^2.3.0",
+    "prettier": "^2.8.8",
+    "tailwindcss": "^3.3.1"
+  }
 }
