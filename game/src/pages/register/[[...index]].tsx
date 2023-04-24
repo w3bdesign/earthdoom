@@ -13,7 +13,7 @@ const Register: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <p className="text-2xl text-white">
               <SignedOut>
-                <div className="flex h-[55vh] items-center justify-center">
+                <div className="flex h-[55vh] mt-6 items-center justify-center">
                   <SignUp
                     path="/register"
                     routing="path"
