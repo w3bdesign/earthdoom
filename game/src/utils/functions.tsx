@@ -34,7 +34,7 @@ export function Stringifier({ value }: IStringifierProps) {
   } else {
     stringifiedValue = "";
   }
-  return stringifiedValue;
+  return <span>stringifiedValue</span>;
 }
 
 /**
