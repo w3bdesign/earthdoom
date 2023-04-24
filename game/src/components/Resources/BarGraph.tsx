@@ -1,5 +1,6 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
+import { Chart, registerables } from "chart.js";
 
 export interface ChartData {
   labels: string[];
@@ -15,6 +16,8 @@ export interface ChartData {
 interface Props {
   chartData: ChartData;
 }
+
+Chart.register(...registerables);
 
 const BarChart: React.FC<Props> = ({ chartData }) => {
   const { labels, datasets } = chartData;
