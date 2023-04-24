@@ -25,7 +25,7 @@ const AddUser: NextPage = () => {
     if (user && user.username) {
       mutate({ nick: user.username });
     }
-  }, [user?.username]);
+  }, [mutate, user]);
 
   return (
     <>
