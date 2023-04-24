@@ -110,8 +110,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: energy.buildingFieldName,
-                buildingCostCrystal: energy.buildingCostCrystal,
-                buildingCostTitanium: energy.buildingCostTitanium,
+                buildingCostCrystal: energy.buildingCostCrystal,                
                 unitAmount: Number(unitAmountRef?.current?.value),
                 buildingETA: energy.buildingETA,
               });
