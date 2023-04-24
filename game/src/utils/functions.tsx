@@ -24,6 +24,7 @@ interface IProduction {
  */
 export function Stringifier({ value }: IStringifierProps) {
   let stringifiedValue: string;
+  // We check if the value is a string, number or bigint. If it is, we convert it to a string. Otherwise, we set it to an empty string.
   if (
     typeof value === "string" ||
     typeof value === "number" ||
@@ -33,7 +34,7 @@ export function Stringifier({ value }: IStringifierProps) {
   } else {
     stringifiedValue = "";
   }
-  return <span>{stringifiedValue}</span>;
+  return <span>stringifiedValue</span>;
 }
 
 /**
@@ -50,7 +51,9 @@ export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
       Math.floor(paPlayer.metal / production.buildingCostTitanium)
     );
   }
+  // We filter out NaN values because if the player has no resources, the division will result in NaN.
   const filteredMaxValues = maxValues.filter((value) => !isNaN(value));
+  // We use Math.min to determine the maximum number of units that can be trained.
   const maximumAmount = Math.min(...filteredMaxValues);
   return maximumAmount;
 };
