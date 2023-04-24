@@ -121,6 +121,7 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: resource.buildingFieldName,
+                buildingCostCrystal: resource.buildingCostCrystal,
                 unitAmount: Number(unitAmountRef?.current?.value),
                 buildingETA: resource.buildingETA,
               });

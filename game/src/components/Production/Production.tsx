@@ -1,13 +1,15 @@
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
+import { useRef } from "react";
 
-import { useRef, type FC } from "react";
+import type { FC } from "react";
+import type { IProduction } from "./types/types";
 import type { PaUsers } from "@prisma/client";
 
 import { PRODUCTION } from "./constants/PRODUCTION";
 
 import { api } from "@/utils/api";
-import { IProduction } from "./types/types";
+
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
 export interface PaPlayer extends PaUsers {
