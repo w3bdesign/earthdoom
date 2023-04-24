@@ -40,7 +40,7 @@ const Mail: NextPage = () => {
 
   useEffect(() => {
     markAsSeen({ sentTo: 1 });
-  }, []);
+  }, [markAsSeen]);
 
   return (
     <>

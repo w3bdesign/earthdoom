@@ -1,7 +1,7 @@
-import { PaNews } from "@prisma/client";
 import { Toaster } from "react-hot-toast";
 
-import { FC } from "react";
+import type { FC } from "react";
+import type { PaNews } from "@prisma/client";
 
 interface INewsTableProps {
   news: PaNews[];

@@ -1,11 +1,11 @@
 import Head from "next/head";
 import { SignedIn } from "@clerk/nextjs";
 
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import Navbar from "@/components/Header/Navbar";
-import Footer from "./Footer";
 import Information from "@/components/Header/Information";
+import Footer from "./Footer";
 
 interface ILayoutProps {
   children: ReactNode;

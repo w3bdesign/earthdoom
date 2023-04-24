@@ -267,13 +267,12 @@ export const paUsersRouter = createTRPCRouter({
   spyingInitiate: publicProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingETA: z.number() }))
     .input(z.object({ unitAmount: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
-      const { buildingFieldName, unitAmount } = input;
-
-      // TODO Deduct cost from player
+      const { buildingFieldName, buildingCostCrystal, unitAmount } = input;
 
       const data = await ctx.prisma.paUsers.update({
         where: {
@@ -283,6 +282,9 @@ export const paUsersRouter = createTRPCRouter({
           [buildingFieldName]: {
             increment: unitAmount,
           },
+
+          crystal: { decrement: buildingCostCrystal * unitAmount },
+
           ui_roids: { decrement: unitAmount },
         },
       });

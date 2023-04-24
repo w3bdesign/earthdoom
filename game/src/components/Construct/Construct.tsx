@@ -10,7 +10,7 @@ import { BUILDINGS } from "./constants/BUILDINGS";
 import { api } from "@/utils/api";
 
 interface PaPlayer extends PaUsers {
-  [key: string]: any; // TODO Improve this later
+  [key: string]: string | number;
 }
 
 interface BuildingRowProps {
@@ -66,8 +66,8 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
         data-th="ETA"
         className="flex h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
-        {paPlayer[building.buildingFieldName] >= 2
-          ? paPlayer[building.buildingFieldName] - 1
+        {Number(paPlayer[building.buildingFieldName]) >= 2
+          ? Number(paPlayer[building.buildingFieldName]) - 1
           : building.buildingETA}
       </td>
 
@@ -99,7 +99,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
           </button>
         )}
 
-        {paPlayer[building.buildingFieldName] >= 2 && "Building ..."}
+        {Number(paPlayer[building.buildingFieldName]) >= 2 && "Building ..."}
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
     </tr>

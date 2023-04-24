@@ -6,11 +6,11 @@ import {
 } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useRouter } from "next/router";
+
+import type { AppProps } from "next/app";
 
 import { api } from "@/utils/api";
-
-import { AppProps } from "next/app";
-import { useRouter } from "next/router";
 
 import "@/styles/globals.css";
 

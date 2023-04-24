@@ -1,12 +1,12 @@
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
-
-import { useRef, type FC } from "react";
+import { useRef } from "react";
 
 import { RESOURCE } from "./constants/RESOURCE";
 
 import type { IResource } from "./types/types";
-import { PaUsers } from "@prisma/client";
+import type { PaUsers } from "@prisma/client";
+import type { FC } from "react";
 
 import { maximumToTrain, canAffordToTrain } from "@/utils/functions";
 import { api } from "@/utils/api";
@@ -121,6 +121,7 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: resource.buildingFieldName,
+                buildingCostCrystal: resource.buildingCostCrystal,
                 unitAmount: Number(unitAmountRef?.current?.value),
                 buildingETA: resource.buildingETA,
               });
