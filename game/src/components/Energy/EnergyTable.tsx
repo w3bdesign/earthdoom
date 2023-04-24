@@ -1,18 +1,15 @@
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
-import type { FC } from "react";
-import type { PaUsers } from "@prisma/client";
+import { FC, useRef } from "react";
+
 import type { IEnergy } from "./types/types";
 
 import { ENERGY } from "./constants/ENERGY";
 
 import { api } from "@/utils/api";
-import { maximumToTrain } from "@/utils/functions";
-
-interface PaPlayer extends PaUsers {
-  [key: string]: any; // TODO Improve this later
-}
+import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
+import { PaPlayer } from "../Production/Production";
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
@@ -26,11 +23,13 @@ interface IEnergyProps {
 const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
+  const unitAmountRef = useRef<HTMLInputElement>(null);
 
   const constructionToast = () => toast("Construction started");
   const errorToast = () => toast("Database error");
 
-  const { isLoading } = api.paUsers.constructBuilding.useMutation({
+  // TODO Look into this mutation, does not deduct resources
+  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
       constructionToast();
       if (user && user.username) {
@@ -78,6 +77,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
               id="exampleFormControlInput1"
               placeholder="Amount"
               defaultValue={maximumToTrain(paPlayer, energy)}
+              ref={unitAmountRef}
             />
           </>
         )}
@@ -87,6 +87,41 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
         className="flex h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
       >
         {energy.buildingCost}
+      </td>
+
+      <td
+        data-th="Build"
+        className="flex h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+      >
+        {isLoading && "Starting ..."}
+
+        {!isLoading && (
+          <button
+            type="button"
+            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] disabled:opacity-50"
+            disabled={
+              !canAffordToTrain(
+                paPlayer,
+                energy.buildingCostCrystal,
+                energy.buildingCostTitanium
+              )
+            }
+            onClick={() => {
+              mutate({
+                Userid: paPlayer.id,
+                buildingFieldName: energy.buildingFieldName,
+                buildingCostCrystal: energy.buildingCostCrystal,
+                buildingCostTitanium: energy.buildingCostTitanium,
+                unitAmount: Number(unitAmountRef?.current?.value),
+                buildingETA: energy.buildingETA,
+              });
+            }}
+          >
+            Construct
+          </button>
+        )}
+
+        {Number(paPlayer[energy.buildingFieldName]) >= 2 && "Building ..."}
       </td>
     </tr>
   );
@@ -120,6 +155,12 @@ const EnergyTable: FC<IEnergyProps> = ({ paPlayer }) => {
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
           >
             Cost
+          </th>
+          <th
+            scope="col"
+            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+          >
+            Build
           </th>
         </tr>
         {ENERGY.map((energy) => (
