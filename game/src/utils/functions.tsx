@@ -68,15 +68,18 @@ export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
  */
 export const canAffordToTrain = (
   paPlayer: PaPlayer,
-  quantity: number,
   costCrystal: number,
-  costTitanium: number
+  costTitanium: number,
+  quantity?: number
 ): boolean => {
-  const crystalCost = quantity * costCrystal;
-  const titaniumCost = quantity * costTitanium;
+  const trainQuantity = quantity || 1;
+  const crystalCost = trainQuantity * costCrystal;
+  const titaniumCost = trainQuantity * costTitanium;
 
   return (
     (costCrystal === 0 || crystalCost <= paPlayer.crystal) &&
     (costTitanium === 0 || titaniumCost <= paPlayer.metal)
   );
 };
+
+

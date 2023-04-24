@@ -9,9 +9,10 @@ import { BUILDINGS } from "./constants/BUILDINGS";
 
 import { api } from "@/utils/api";
 import { canAffordToTrain } from "@/utils/functions";
+import { PaPlayer } from "../Production/Production";
 
 interface BuildingRowProps {
-  paPlayer: PaUsers;
+  paPlayer: PaPlayer;
   building: Building;
 }
 
