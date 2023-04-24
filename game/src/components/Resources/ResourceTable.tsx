@@ -5,10 +5,11 @@ import { useRef, type FC } from "react";
 
 import { RESOURCE } from "./constants/RESOURCE";
 
-import { api } from "@/utils/api";
 import type { IResource } from "./types/types";
 import { PaUsers } from "@prisma/client";
+
 import { maximumToTrain, canAffordToTrain } from "@/utils/functions";
+import { api } from "@/utils/api";
 
 interface PaPlayer extends PaUsers {
   [key: string]: number | string;
