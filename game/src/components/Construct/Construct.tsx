@@ -96,6 +96,8 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
                 Userid: paPlayer.id,
                 buildingFieldName: building.buildingFieldName,
                 buildingETA: building.buildingETA,
+                buildingCostCrystal: building.buildingCostCrystal,
+                buildingCostTitanium: building.buildingCostTitanium,
               });
             }}
           >
