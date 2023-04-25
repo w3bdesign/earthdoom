@@ -23,8 +23,7 @@ const Layout = ({ children }: ILayoutProps) => {
       <SignedIn>
         <Information />
       </SignedIn>
-
-      <main className="flex items-center justify-center">{children}</main>
+      <main className="flex items-center justify-center  lg:px-[5rem] 2xl:px-0">{children}</main>
       <Footer />
     </>
   );
