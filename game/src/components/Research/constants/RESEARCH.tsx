@@ -1,6 +1,4 @@
-import type { Building } from "../types/types";
-
-export const BUILDINGS: Building[] = [
+export const BUILDINGS = [
   {
     buildingId: 1,
     buildingName: "Improved tax revenue",
@@ -8,6 +6,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "r_imcrystal",
     buildingETA: 25,
     buildingCost: "1000c",
+    buildingCostCrystal: 1000,
+    buildingCostTitanium: 0,
   },
   {
     buildingId: 2,
@@ -17,6 +17,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "r_immetal",
     buildingETA: 25,
     buildingCost: "1000t",
+    buildingcostCrystal: 0,
+    buildingCostTitanium: 1000,
   },
   {
     buildingId: 3,
@@ -26,6 +28,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "r_energy",
     buildingETA: 50,
     buildingCost: "5000t",
+    buildingCostCrystal: 0,
+    buildingCostTitanium: 5000,
   },
   {
     buildingId: 4,
@@ -34,6 +38,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "r_aaircraft",
     buildingETA: 60,
     buildingCost: "5000t 5000c",
+    buildingcostCrystal: 5000,
+    buildingCostTitanium: 5000,
   },
   {
     buildingId: 5,
@@ -42,6 +48,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "r_tbeam",
     buildingETA: 40,
     buildingCost: "5000c 3000t",
+    buildingcostCrystal: 5000,
+    buildingCostTitanium: 3000,
   },
   {
     buildingId: 6,
@@ -50,6 +58,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "r_uscan",
     buildingETA: 60,
     buildingCost: "10000c 10000t",
+    buildingcostCrystal: 10000,
+    buildingCostTitanium: 10000,
   },
   {
     buildingId: 7,
@@ -58,6 +68,8 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "r_odg",
     buildingETA: 60,
     buildingCost: "10000t 10000c",
+    buildingcostCrystal: 10000,
+    buildingCostTitanium: 10000,
   },
   {
     buildingId: 8,
@@ -66,5 +78,7 @@ export const BUILDINGS: Building[] = [
     buildingFieldName: "r_oscan",
     buildingETA: 120,
     buildingCost: "20000c 20000t",
+    buildingcostCrystal: 20000,
+    buildingCostTitanium: 20000,
   },
 ];
