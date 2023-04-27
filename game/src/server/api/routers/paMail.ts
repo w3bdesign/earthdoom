@@ -1,14 +1,14 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 
 import { z } from "zod";
 
 export const paMailRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: privateProcedure.query(async ({ ctx }) => {
     const mails = await ctx.prisma.paMail.findMany();
     return { email: mails };
   }),
 
-  getUnseenMailByUserId: publicProcedure
+  getUnseenMailByUserId: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
@@ -27,7 +27,7 @@ export const paMailRouter = createTRPCRouter({
 
       return { email: mails };
     }),
-  getAllMailByUserId: publicProcedure
+  getAllMailByUserId: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .query(async ({ ctx, input }) => {
       const { Userid } = input;
@@ -41,7 +41,7 @@ export const paMailRouter = createTRPCRouter({
 
       return { email: mails };
     }),
-  deleteEmail: publicProcedure
+  deleteEmail: privateProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
@@ -54,7 +54,7 @@ export const paMailRouter = createTRPCRouter({
 
       return deleteEmail;
     }),
-  markAsSeen: publicProcedure
+  markAsSeen: privateProcedure
     .input(z.object({ sentTo: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const { sentTo } = input;
