@@ -77,10 +77,18 @@ export const canAffordToTrain = (
   const crystalCost = trainQuantity * costCrystal;
   const titaniumCost = trainQuantity * costTitanium;
 
-  return (
+  // Check if player can afford to produce the requested quantity
+  if (
     (costCrystal === 0 || crystalCost <= paPlayer.crystal) &&
     (costTitanium === 0 || titaniumCost <= paPlayer.metal)
-  );
+  ) {
+    // Check if player has enough resources to produce the requested quantity
+    return (
+      paPlayer.crystal - crystalCost >= 0 && paPlayer.metal - titaniumCost >= 0
+    );
+  }
+
+  return false;
 };
 
 /**
