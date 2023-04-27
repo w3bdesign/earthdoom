@@ -97,6 +97,8 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: building.buildingFieldName,
+                buildingCostCrystal: building.buildingCostCrystal,
+                buildingCostTitanium: building.buildingCostTitanium,
                 buildingETA: building.buildingETA,
               });
             }}
