@@ -217,12 +217,18 @@ export const paUsersRouter = createTRPCRouter({
   researchBuilding: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingETA: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
-      const { buildingFieldName, buildingETA } = input;
-
-      // TODO Deduct cost from player
+      const {
+        buildingFieldName,
+        buildingCostCrystal,
+        buildingCostTitanium,
+        buildingETA,
+      } = input;
 
       const data = await ctx.prisma.paUsers.update({
         where: {
@@ -230,6 +236,8 @@ export const paUsersRouter = createTRPCRouter({
         },
         data: {
           [buildingFieldName]: buildingETA,
+          crystal: { decrement: buildingCostCrystal },
+          metal: { decrement: buildingCostTitanium },
         },
       });
 
