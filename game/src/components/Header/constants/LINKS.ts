@@ -73,11 +73,16 @@ export const LINKS: ILinks[] = [
   },
   {
     id: 13,
+    href: "/alliance",
+    text: "Alliance",
+  },
+  {
+    id: 14,
     href: "/country",
     text: "Country",
   },
   {
-    id: 14,
+    id: 15,
     href: "/logout",
     text: "Logout",
   },
