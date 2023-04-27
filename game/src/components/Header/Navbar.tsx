@@ -1,7 +1,8 @@
 import { SignedIn } from "@clerk/nextjs";
-
 import Link from "next/link";
 import Script from "next/script";
+
+import { LINKS } from "./constants/LINKS";
 
 const Navbar = () => {
   return (
@@ -79,123 +80,17 @@ const Navbar = () => {
                     data-te-dropdown-menu-ref
                   >
                     <div className="px-6 py-5 lg:px-8">
-                      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                        <div>
+                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        {LINKS.map(({ id, href, text, target }) => (
                           <Link
-                            href="/"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
+                            key={id}
+                            href={href}
+                            target={target || "_self"}
+                            className="block border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
                           >
-                            Main
+                            {text}
                           </Link>
-                          <Link
-                            href="https://earthdoom.com/manual"
-                            target="new"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Manual
-                          </Link>
-                          <Link
-                            href="/news"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            News
-                          </Link>
-                          <Link
-                            href="/contnews"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Continent News
-                          </Link>
-                          <Link
-                            href="/mail"
-                            aria-current="true"
-                            className="block w-full px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-50 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Mail
-                          </Link>
-                        </div>
-                        <div>
-                          <Link
-                            href="/production"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Production
-                          </Link>
-                          <Link
-                            href="/construct"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Construct
-                          </Link>
-                          <Link
-                            href="/research"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Research
-                          </Link>
-                          <Link
-                            href="/energy"
-                            aria-current="true"
-                            className="block w-full px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-50 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Energy
-                          </Link>
-                        </div>
-                        <div>
-                          <Link
-                            href="/resources"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Resources
-                          </Link>
-                          <Link
-                            href="/military"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Military
-                          </Link>
-                          <Link
-                            href="/spying"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Spying
-                          </Link>
-
-                          <Link
-                            href="/ranking"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Ranking
-                          </Link>
-                        </div>
-                        <div>
-                          <Link
-                            href="/country"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Country
-                          </Link>
-
-                          <Link
-                            href="/logout"
-                            aria-current="true"
-                            className="block w-full border-b border-neutral-200 px-6 py-2 transition duration-150 ease-in-out hover:bg-neutral-100 hover:text-neutral-800 dark:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-white"
-                          >
-                            Logout
-                          </Link>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>
