@@ -13,7 +13,7 @@ import { api } from "@/utils/api";
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
 export interface PaPlayer extends PaUsers {
-  [key: string]: any; // TODO Improve this later
+  [key: string]: number | string;
 }
 
 interface BuildingRowProps {
@@ -77,7 +77,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         data-th="ETA"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        {paPlayer[production.buildingFieldName] >= 1
+        {Number(paPlayer[production.buildingFieldName]) >= 1
           ? paPlayer[production.buildingFieldNameETA]
           : production.buildingETA}
       </td>
@@ -130,7 +130,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                 canNotAffordToast();
                 return;
               }
-
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: production.buildingFieldName,
@@ -145,7 +144,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             Train
           </button>
         )}
-        {paPlayer[production.buildingFieldName] >= 1 && "Training ..."}
+        {Number(paPlayer[production.buildingFieldName]) >= 1 && "Training ..."}
       </td>
     </tr>
   );
