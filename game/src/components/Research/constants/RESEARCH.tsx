@@ -17,7 +17,7 @@ export const BUILDINGS = [
     buildingFieldName: "r_immetal",
     buildingETA: 25,
     buildingCost: "1000t",
-    buildingcostCrystal: 0,
+    buildingCostCrystal: 0,
     buildingCostTitanium: 1000,
   },
   {
@@ -38,7 +38,7 @@ export const BUILDINGS = [
     buildingFieldName: "r_aaircraft",
     buildingETA: 60,
     buildingCost: "5000t 5000c",
-    buildingcostCrystal: 5000,
+    buildingCostCrystal: 5000,
     buildingCostTitanium: 5000,
   },
   {
@@ -48,7 +48,7 @@ export const BUILDINGS = [
     buildingFieldName: "r_tbeam",
     buildingETA: 40,
     buildingCost: "5000c 3000t",
-    buildingcostCrystal: 5000,
+    buildingCostCrystal: 5000,
     buildingCostTitanium: 3000,
   },
   {
@@ -58,7 +58,7 @@ export const BUILDINGS = [
     buildingFieldName: "r_uscan",
     buildingETA: 60,
     buildingCost: "10000c 10000t",
-    buildingcostCrystal: 10000,
+    buildingCostCrystal: 10000,
     buildingCostTitanium: 10000,
   },
   {
@@ -68,7 +68,7 @@ export const BUILDINGS = [
     buildingFieldName: "r_odg",
     buildingETA: 60,
     buildingCost: "10000t 10000c",
-    buildingcostCrystal: 10000,
+    buildingCostCrystal: 10000,
     buildingCostTitanium: 10000,
   },
   {
@@ -78,7 +78,7 @@ export const BUILDINGS = [
     buildingFieldName: "r_oscan",
     buildingETA: 120,
     buildingCost: "20000c 20000t",
-    buildingcostCrystal: 20000,
+    buildingCostCrystal: 20000,
     buildingCostTitanium: 20000,
   },
 ];

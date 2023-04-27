@@ -3,7 +3,7 @@ import { useUser } from "@clerk/nextjs";
 
 import { type FC } from "react";
 import type { PaUsers } from "@prisma/client";
-import { type Building } from "./types/types";
+import type { Building } from "./types/types";
 
 import { BUILDINGS } from "./constants/RESEARCH";
 
