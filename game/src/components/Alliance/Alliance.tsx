@@ -1,4 +1,11 @@
-const Alliance = () => {
+import type { PaUsers } from "@prisma/client";
+import type { FC } from "react";
+
+interface IAllianceProps {
+  paPlayer: PaUsers;
+}
+
+const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
   return (
     <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
       <div className="relative py-4 sm:mx-auto">
