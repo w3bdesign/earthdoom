@@ -12,7 +12,7 @@ import { api } from "@/utils/api";
 
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
-interface PaPlayer extends PaUsers {
+export interface PaPlayer extends PaUsers {
   [key: string]: number | string;
 }
 
