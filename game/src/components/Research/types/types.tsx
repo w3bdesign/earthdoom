@@ -6,4 +6,6 @@ export interface Building {
   buildingETA: number;
   buildingConstruct?: JSX.Element;
   buildingCost: string;
+  buildingCostCrystal: number;
+  buildingCostTitanium: number;
 }
