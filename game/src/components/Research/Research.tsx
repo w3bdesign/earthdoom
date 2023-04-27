@@ -11,7 +11,7 @@ import { api } from "@/utils/api";
 import { canAffordToTrain } from "@/utils/functions";
 
 interface PaPlayer extends PaUsers {
-  [key: string]: any; // TODO Improve this later
+  [key: string]: number | string;
 }
 
 interface BuildingRowProps {
@@ -67,8 +67,8 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
         data-th="ETA"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        {paPlayer[building.buildingFieldName] >= 2
-          ? paPlayer[building.buildingFieldName] - 1
+        {Number(paPlayer[building.buildingFieldName]) >= 2
+          ? Number(paPlayer[building.buildingFieldName]) - 1
           : building.buildingETA}
       </td>
       <td
@@ -105,7 +105,7 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
           </button>
         )}
 
-        {paPlayer[building.buildingFieldName] >= 2 && "Researching ..."}
+        {Number(paPlayer[building.buildingFieldName]) >= 2 && "Researching ..."}
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
     </tr>
