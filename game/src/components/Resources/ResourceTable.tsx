@@ -109,10 +109,10 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
               }
               if (
                 !canAffordToTrain(
-                  paPlayer,
-                  Number(unitAmountRef?.current?.value),
+                  paPlayer,                  
                   resource.buildingCostCrystal,
-                  resource.buildingCostTitanium
+                  resource.buildingCostTitanium,
+                  Number(unitAmountRef?.current?.value),
                 )
               ) {
                 canNotAffordToast();
