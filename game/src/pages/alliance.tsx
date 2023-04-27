@@ -10,7 +10,7 @@ const AlliancePage: NextPage = () => {
         <div className="container flex flex-col items-center justify-center text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative py-4 sm:mx-auto"></div>
-           <Alliance />
+            <Alliance />
           </div>
         </div>
       </Layout>
