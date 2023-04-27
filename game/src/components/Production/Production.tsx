@@ -122,14 +122,15 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
               if (
                 !canAffordToTrain(
                   paPlayer,
-                  Number(unitAmountRef?.current?.value),
                   production.buildingCostCrystal,
-                  production.buildingCostTitanium
+                  production.buildingCostTitanium,
+                  Number(unitAmountRef?.current?.value)
                 )
               ) {
                 canNotAffordToast();
                 return;
               }
+
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: production.buildingFieldName,
