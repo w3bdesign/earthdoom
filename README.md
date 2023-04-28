@@ -4,7 +4,8 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-success)
 
 > This game is under active development and has bugs. 
->  Check back regularly to see the progress.
+
+> Check back regularly to see the progress.
 
 * * *
 
