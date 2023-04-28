@@ -4,7 +4,7 @@ import type { PaUsers } from "@prisma/client";
 import DataTable from "@/components/common/DataTable";
 
 interface IRankingProps {
-  paPlayer: PaUsers;
+  paPlayer: PaUsers[];
 }
 
 const Ranking: FC<IRankingProps> = ({ paPlayer }) => {

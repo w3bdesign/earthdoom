@@ -11,7 +11,7 @@ import Button from "../common/Button";
 
 interface IAllianceProps {
   paPlayer: PaUsers;
-  paTag: PaTag;
+  paTag: PaTag[];
 }
 
 const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
@@ -23,8 +23,6 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const allianceCreatedToast = () => toast("Alliance created");
   const allianceJoinedToast = () => toast("Alliance joined");
   const errorToast = () => toast("Database error");
-
-  //const isLeader = paTag.leader === paPlayer.nick;
 
   const isLeader =
     paTag.find((tag: PaTag) => tag.leader === paPlayer.nick) !== undefined;

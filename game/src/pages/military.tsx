@@ -21,7 +21,7 @@ const MilitaryPage: NextPage = () => {
       <Layout>
         <div className="container flex flex-col items-center justify-center px-2 py-2 ">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <Military paPlayer={paPlayer} />
+            {paPlayer && <Military paPlayer={paPlayer} />}
           </div>
         </div>
       </Layout>
