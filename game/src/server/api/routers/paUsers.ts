@@ -61,7 +61,7 @@ export const paUsersRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
         where: { nick: input.nick },
-        select: { id: true },
+        select: { id: true, tag: true },
       });
 
       const player = await ctx.prisma.paUsers.findUnique({

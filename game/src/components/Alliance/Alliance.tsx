@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 
-import type { PaUsers } from "@prisma/client";
+import type { PaUsers, PaTag } from "@prisma/client";
 import type { FC } from "react";
 
 import { api } from "@/utils/api";
@@ -11,9 +11,10 @@ import Button from "../common/Button";
 
 interface IAllianceProps {
   paPlayer: PaUsers;
+  paTag: PaTag;
 }
 
-const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
+const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const ctx = api.useContext();
   const { user } = useUser();
   const createAllianceRef = useRef<HTMLInputElement>(null);
@@ -22,6 +23,11 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
   const allianceCreatedToast = () => toast("Alliance created");
   const allianceJoinedToast = () => toast("Alliance joined");
   const errorToast = () => toast("Database error");
+
+  //const isLeader = paTag.leader === paPlayer.nick;
+
+  const isLeader =
+    paTag.find((tag: PaTag) => tag.leader === paPlayer.nick) !== undefined;
 
   const { mutate: createAlliance } = api.paTag.createAlliance.useMutation({
     onSuccess: async () => {
@@ -55,9 +61,14 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
             <div className="flex items-center justify-center rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 lg:w-[500px]">
               <form>
                 <h2 className="mb-4 text-center text-2xl font-bold text-black">
-                  Alliance
+                  Alliance{" "}
+                  {paPlayer.tag && (
+                    <>
+                      - {isLeader ? "leader" : "member"} of {paPlayer.tag}
+                    </>
+                  )}
                 </h2>
-                <div className="relative w-64 mt-2">
+                <div className="relative mt-2 w-64">
                   <input
                     type="text"
                     className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
@@ -88,7 +99,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                     Create
                   </Button>
                 </div>
-                <div className="relative w-64 mt-2">
+                <div className="relative mt-2 w-64">
                   <input
                     type="text"
                     className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
