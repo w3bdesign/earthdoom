@@ -1,11 +1,38 @@
+import toast from "react-hot-toast";
+import { useRef } from "react";
+import { useUser } from "@clerk/nextjs";
+
 import type { PaUsers } from "@prisma/client";
 import type { FC } from "react";
+
+import { api } from "@/utils/api";
 
 interface IAllianceProps {
   paPlayer: PaUsers;
 }
 
 const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
+  const ctx = api.useContext();
+  const { user, isLoaded } = useUser();
+  const createAllianceRef = useRef<HTMLInputElement>(null);
+  const joinAllianceRef = useRef<HTMLInputElement>(null);
+
+  const allianceCreatedToast = () => toast("Alliance created");
+  const allianceJoinedToast = () => toast("Alliance joined");
+  const errorToast = () => toast("Database error");
+
+  const { mutate, isLoading } = api.paUsers.constructBuilding.useMutation({
+    onSuccess: async () => {
+      allianceCreatedToast();
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      errorToast();
+    },
+  });
+
   return (
     <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
       <div className="relative py-4 sm:mx-auto">
@@ -24,6 +51,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                     aria-describedby="emailHelp"
                     pattern="[A-Za-z]+"
                     title="Please enter letters only"
+                    ref={createAllianceRef}
                   />
                   <label
                     htmlFor="exampleInputEmail1"
@@ -31,6 +59,20 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                   >
                     Create alliance
                   </label>
+                </div>
+                <div className="flex items-center justify-center">
+                  <button
+                    type="submit"
+                    className="inline-block w-32 rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    onClick={() => {
+                      mutate({
+                        Userid: paPlayer.id,
+                        allianceCreate: createAllianceRef?.current?.value,
+                      });
+                    }}
+                  >
+                    Create
+                  </button>
                 </div>
                 <div className="relative mb-12 w-64" data-te-input-wrapper-init>
                   <input
@@ -40,6 +82,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                     aria-describedby="emailHelp"
                     pattern="[A-Za-z]+"
                     title="Please enter letters only"
+                    ref={joinAllianceRef}
                   />
                   <label
                     htmlFor="exampleInputEmail1"
@@ -51,9 +94,15 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                 <div className="flex items-center justify-center">
                   <button
                     type="submit"
-                    className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    className="inline-block w-32 rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    onClick={() => {
+                      mutate({
+                        Userid: paPlayer.id,
+                        allianceCreate: joinAllianceRef?.current?.value,
+                      });
+                    }}
                   >
-                    Submit
+                    Join
                   </button>
                 </div>
               </form>
