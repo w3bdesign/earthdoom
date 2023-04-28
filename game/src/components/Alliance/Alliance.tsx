@@ -1,11 +1,52 @@
+import toast from "react-hot-toast";
+import { useRef } from "react";
+import { useUser } from "@clerk/nextjs";
+
 import type { PaUsers } from "@prisma/client";
 import type { FC } from "react";
+
+import { api } from "@/utils/api";
+
+import Button from "../common/Button";
 
 interface IAllianceProps {
   paPlayer: PaUsers;
 }
 
 const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
+  const ctx = api.useContext();
+  const { user } = useUser();
+  const createAllianceRef = useRef<HTMLInputElement>(null);
+  const joinAllianceRef = useRef<HTMLInputElement>(null);
+
+  const allianceCreatedToast = () => toast("Alliance created");
+  const allianceJoinedToast = () => toast("Alliance joined");
+  const errorToast = () => toast("Database error");
+
+  const { mutate: createAlliance } = api.paTag.createAlliance.useMutation({
+    onSuccess: async () => {
+      allianceCreatedToast();
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      errorToast();
+    },
+  });
+
+  const { mutate: joinAlliance } = api.paTag.joinAlliance.useMutation({
+    onSuccess: async () => {
+      allianceJoinedToast();
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      errorToast();
+    },
+  });
+
   return (
     <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
       <div className="relative py-4 sm:mx-auto">
@@ -16,45 +57,67 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                 <h2 className="mb-4 text-center text-2xl font-bold text-black">
                   Alliance
                 </h2>
-                <div className="relative mb-12 w-64" data-te-input-wrapper-init>
+                <div className="relative w-64 mt-2">
                   <input
                     type="text"
-                    className="peer block min-h-[auto]  rounded border-0 px-3  py-[0.32rem] leading-[1.6] text-neutral-600 outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                     id="exampleInputEmail1"
                     aria-describedby="emailHelp"
                     pattern="[A-Za-z]+"
                     title="Please enter letters only"
+                    ref={createAllianceRef}
                   />
                   <label
                     htmlFor="exampleInputEmail1"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-700 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                    className="mb-2 block py-2 text-sm font-bold text-gray-500"
                   >
                     Create alliance
                   </label>
                 </div>
-                <div className="relative mb-12 w-64" data-te-input-wrapper-init>
+                <div className="flex items-center justify-center">
+                  <Button
+                    onClick={(event) => {
+                      event.preventDefault();
+                      if (!createAllianceRef?.current?.value) return;
+                      createAlliance({
+                        Userid: paPlayer.id,
+                        tagName: createAllianceRef.current.value,
+                      });
+                    }}
+                  >
+                    Create
+                  </Button>
+                </div>
+                <div className="relative w-64 mt-2">
                   <input
                     type="text"
-                    className="peer block min-h-[auto]  rounded border-0 px-3  py-[0.32rem] leading-[1.6] text-neutral-600 outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                     id="exampleInputEmail1"
                     aria-describedby="emailHelp"
                     pattern="[A-Za-z]+"
                     title="Please enter letters only"
+                    ref={joinAllianceRef}
                   />
                   <label
                     htmlFor="exampleInputEmail1"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-700 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                    className="mb-2 block py-2 text-sm font-bold text-gray-500"
                   >
                     Join alliance
                   </label>
                 </div>
                 <div className="flex items-center justify-center">
-                  <button
-                    type="submit"
-                    className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                  <Button
+                    onClick={(event) => {
+                      event.preventDefault();
+                      if (!joinAllianceRef?.current?.value) return;
+                      joinAlliance({
+                        Userid: paPlayer.id,
+                        tagPassword: joinAllianceRef.current.value,
+                      });
+                    }}
                   >
-                    Submit
-                  </button>
+                    Join
+                  </Button>
                 </div>
               </form>
             </div>
