@@ -143,6 +143,9 @@ model PaTag {
     tag      String
     leader   String
     password String
+
+    @@unique([tag, password])
+    @@index([tag, password])
 }
 
 model PaMail {
@@ -153,7 +156,6 @@ model PaMail {
     seen   Int    @default(0)
     header String
 
-    @@unique([id])
     @@index([sentTo])
 }
 

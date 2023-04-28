@@ -15,7 +15,7 @@ interface IAllianceProps {
 
 const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
   const ctx = api.useContext();
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
   const createAllianceRef = useRef<HTMLInputElement>(null);
   const joinAllianceRef = useRef<HTMLInputElement>(null);
 
@@ -23,9 +23,21 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
   const allianceJoinedToast = () => toast("Alliance joined");
   const errorToast = () => toast("Database error");
 
-  const { mutate, isLoading } = api.paUsers.constructBuilding.useMutation({
+  const { mutate: createAlliance } = api.paTag.createAlliance.useMutation({
     onSuccess: async () => {
       allianceCreatedToast();
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      errorToast();
+    },
+  });
+
+  const { mutate: joinAlliance } = api.paTag.joinAlliance.useMutation({
+    onSuccess: async () => {
+      allianceJoinedToast();
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
@@ -45,7 +57,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                 <h2 className="mb-4 text-center text-2xl font-bold text-black">
                   Alliance
                 </h2>
-                <div className="relative mb-4 w-64">
+                <div className="relative w-64 mt-2">
                   <input
                     type="text"
                     className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
@@ -57,24 +69,26 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                   />
                   <label
                     htmlFor="exampleInputEmail1"
-                    className="mb-2 py-2 block text-sm font-bold text-gray-500"
+                    className="mb-2 block py-2 text-sm font-bold text-gray-500"
                   >
                     Create alliance
                   </label>
                 </div>
                 <div className="flex items-center justify-center">
                   <Button
-                    onClick={() => {
-                      mutate({
+                    onClick={(event) => {
+                      event.preventDefault();
+                      if (!createAllianceRef?.current?.value) return;
+                      createAlliance({
                         Userid: paPlayer.id,
-                        allianceCreate: joinAllianceRef?.current?.value,
+                        tagName: createAllianceRef.current.value,
                       });
                     }}
                   >
                     Create
                   </Button>
                 </div>
-                <div className="relative mb-4 w-64">
+                <div className="relative w-64 mt-2">
                   <input
                     type="text"
                     className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
@@ -86,17 +100,19 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer }) => {
                   />
                   <label
                     htmlFor="exampleInputEmail1"
-                    className="py-2 mb-2 block text-sm font-bold text-gray-500"
+                    className="mb-2 block py-2 text-sm font-bold text-gray-500"
                   >
                     Join alliance
                   </label>
                 </div>
                 <div className="flex items-center justify-center">
                   <Button
-                    onClick={() => {
-                      mutate({
+                    onClick={(event) => {
+                      event.preventDefault();
+                      if (!joinAllianceRef?.current?.value) return;
+                      joinAlliance({
                         Userid: paPlayer.id,
-                        allianceCreate: joinAllianceRef?.current?.value,
+                        tagPassword: joinAllianceRef.current.value,
                       });
                     }}
                   >
