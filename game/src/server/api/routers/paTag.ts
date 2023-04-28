@@ -3,6 +3,10 @@ import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 
 export const paTagRouter = createTRPCRouter({
+  getAll: privateProcedure.query(({ ctx }) => {
+    return ctx.prisma.paTag.findMany();
+  }),
+
   createAlliance: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ tagName: z.string() }))
@@ -10,11 +14,13 @@ export const paTagRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { tagName } = input;
 
+      //const player = ctx.prisma.paUsers.getPlayerById(input.Userid);
+
       const tagExists = await ctx.prisma.paTag.findUnique({
         where: {
           id: 1,
         },
-        // select: { id: true, x: true },
+        //select: { id: true, x: true },
       });
 
       if (!tagExists) {
@@ -24,7 +30,6 @@ export const paTagRouter = createTRPCRouter({
           data: {
             tag: tagName,
             password: garbage,
-            //leader: nick,
             leader: "killah",
           },
         });

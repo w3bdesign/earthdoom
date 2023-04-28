@@ -13,13 +13,16 @@ const AlliancePage: NextPage = () => {
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
     nick: user.username,
   });
+
+  const { data: paTag } = api.paTag.getAll.useQuery();
+
   return (
     <>
       <Layout>
         <div className="container flex flex-col items-center justify-center text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative py-4 sm:mx-auto"></div>
-            {paPlayer && <Alliance paPlayer={paPlayer} />}
+            {paPlayer && paTag && <Alliance paPlayer={paPlayer} paTag={paTag} />}
           </div>
         </div>
       </Layout>
