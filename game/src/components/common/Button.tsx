@@ -2,11 +2,13 @@ import { ButtonHTMLAttributes } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "danger";
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
   variant = "primary",
+  disabled,
   ...rest
 }) => {
   let bgColor: string;
@@ -20,10 +22,10 @@ const Button: React.FC<ButtonProps> = ({
     hoverBgColor = "bg-danger-600";
   }
 
-  const classNames = `inline-block rounded p-8 mb-4 w-32 pb-2 pt-2.5 text-sm leading-normal text-white transition duration-150 ease-in-out ${bgColor} hover:${hoverBgColor} focus:${hoverBgColor}}}`;
+  const classNames = `disabled:opacity-50 inline-block rounded p-8 mb-4 w-32 pb-2 pt-2.5 text-sm leading-normal text-white transition duration-150 ease-in-out ${bgColor} hover:${hoverBgColor} focus:${hoverBgColor}}}`;
 
   return (
-    <button className={classNames} {...rest}>
+    <button disabled={disabled} className={classNames} {...rest}>
       {children}
     </button>
   );
