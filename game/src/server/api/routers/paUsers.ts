@@ -286,7 +286,8 @@ export const paUsersRouter = createTRPCRouter({
   spyingInitiate: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
-    .input(z.object({ buildingCostCrystal: z.number() }))    
+    .input(z.object({ buildingCostCrystal: z.number() }))  
+    .input(z.object({ buildingETA: z.number().optional() }))    
     .input(z.object({ unitAmount: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
