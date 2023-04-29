@@ -176,7 +176,7 @@ export const paUsersRouter = createTRPCRouter({
 
       const friendlyFleets = friendly.map((friendly) => {
         const eta = friendly.defeta >= 10 ? friendly.defeta - 10 : 0;
-        return `Continent incoming fleet: ${friendly.nick} #${friendly.def} (ETA: ${eta})`;
+        return `Continent incoming fleet: ${friendly.nick} is defending #${friendly.def} (ETA: ${eta})`;
       });
 
       return {
