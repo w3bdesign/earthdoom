@@ -1,16 +1,16 @@
 import type { ButtonHTMLAttributes } from "react";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "danger";
   disabled?: boolean;
 }
 
 /**
  * Button component
- * @param {ButtonProps} props - The props for the Button component
+ * @param {IButtonProps} props - The props for the Button component
  * @returns {JSX.Element} - The Button component
  */
-const Button: React.FC<ButtonProps> = ({
+const Button: React.FC<IButtonProps> = ({
   children,
   variant = "primary",
   disabled,
