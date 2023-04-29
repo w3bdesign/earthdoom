@@ -28,7 +28,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
   const constructionToast = () => toast("Construction started");
   const errorToast = () => toast("Database error");
 
-  // TODO Look into this mutation, does not deduct resources
+  // TODO Construct power plant
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
       constructionToast();
@@ -111,7 +111,6 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
                 buildingFieldName: energy.buildingFieldName,
                 buildingCostCrystal: energy.buildingCostCrystal,
                 unitAmount: Number(unitAmountRef?.current?.value),
-                buildingETA: energy.buildingETA,
               });
             }}
           >

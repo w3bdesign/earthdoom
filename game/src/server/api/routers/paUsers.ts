@@ -7,14 +7,14 @@ import {
 } from "@/server/api/trpc";
 
 export const paUsersRouter = createTRPCRouter({
-  getAll: privateProcedure.query(({ ctx }) => {
-    return ctx.prisma.paUsers.findMany();
-  }),
   createPlayer: publicProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(({ ctx, input }) => {
       return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
     }),
+  getAll: privateProcedure.query(({ ctx }) => {
+    return ctx.prisma.paUsers.findMany();
+  }),
   getResourceOverview: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -286,8 +286,8 @@ export const paUsersRouter = createTRPCRouter({
   spyingInitiate: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
-    .input(z.object({ buildingCostCrystal: z.number() }))
-    .input(z.object({ buildingETA: z.number() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))  
+    .input(z.object({ buildingETA: z.number().optional() }))    
     .input(z.object({ unitAmount: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
@@ -304,10 +304,12 @@ export const paUsersRouter = createTRPCRouter({
 
           crystal: { decrement: buildingCostCrystal * unitAmount },
 
-          ui_roids: { decrement: unitAmount },
+          ui_roids: { increment: unitAmount },
         },
       });
 
       return data;
     }),
+
+    // TODO Add support for more spying options
 });
