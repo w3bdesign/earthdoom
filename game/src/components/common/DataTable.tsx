@@ -15,6 +15,11 @@ export interface DataTableProps {
   caption: string;
 }
 
+/**
+ * DataTable component for displaying data in a table
+ * @param {DataTableProps} props - The props for the DataTable component
+ * @returns {JSX.Element} - The DataTable component
+ */
 const DataTable: React.FC<DataTableProps> = ({ columns, data, caption }) => {
   return (
     <table className="mt-8 w-full text-left ring-1 ring-slate-400/10">

@@ -1,12 +1,21 @@
-import { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes } from "react";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "danger";
+  disabled?: boolean;
+  extraClasses?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({
+/**
+ * Button component
+ * @param {IButtonProps} props - The props for the Button component
+ * @returns {JSX.Element} - The Button component
+ */
+const Button: React.FC<IButtonProps> = ({
   children,
   variant = "primary",
+  disabled,
+  extraClasses = "",
   ...rest
 }) => {
   let bgColor: string;
@@ -20,10 +29,10 @@ const Button: React.FC<ButtonProps> = ({
     hoverBgColor = "bg-danger-600";
   }
 
-  const classNames = `inline-block rounded p-8 mb-4 w-32 pb-2 pt-2.5 text-sm leading-normal text-white transition duration-150 ease-in-out ${bgColor} hover:${hoverBgColor} focus:${hoverBgColor}}}`;
+  const classNames = `disabled:opacity-50 inline-block rounded p-8 w-32 pb-2 pt-2.5 text-sm leading-normal text-white transition duration-150 ease-in-out ${extraClasses} ${bgColor} hover:${hoverBgColor} focus:${hoverBgColor}}}`;
 
   return (
-    <button className={classNames} {...rest}>
+    <button disabled={disabled} className={classNames} {...rest}>
       {children}
     </button>
   );

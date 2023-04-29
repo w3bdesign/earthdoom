@@ -85,6 +85,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                 </div>
                 <div className="flex items-center justify-center">
                   <Button
+                  extraClasses="mb-4"
                     onClick={(event) => {
                       event.preventDefault();
                       if (!createAllianceRef?.current?.value) return;
