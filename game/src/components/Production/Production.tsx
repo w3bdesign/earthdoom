@@ -185,7 +185,6 @@ const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
           >
             Cost
           </th>
-
           <th
             scope="col"
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
