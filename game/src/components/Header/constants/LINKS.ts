@@ -21,11 +21,11 @@ export const LINKS: ILinks[] = [
     href: "/news",
     text: "News",
   },
-  {
+  /*{
     id: 3,
     href: "/contnews",
     text: "Continent News",
-  },
+  },*/
   {
     id: 4,
     href: "/mail",
@@ -76,11 +76,11 @@ export const LINKS: ILinks[] = [
     href: "/alliance",
     text: "Alliance",
   },
-  {
+  /*{
     id: 14,
     href: "/country",
     text: "Country",
-  },
+  },*/
   {
     id: 15,
     href: "/logout",
