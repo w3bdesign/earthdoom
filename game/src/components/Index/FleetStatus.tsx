@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 
-import { type FC } from "react";
+import type { FC } from "react";
 
 interface FleetStatusProps {
   paPlayer: {
