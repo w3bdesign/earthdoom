@@ -40,7 +40,7 @@ const Information = () => {
             <LoadingSpinner />
           ) : (
             <div
-              className="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-black md:min-w-[486px]"
+              className="mb-4 rounded-lg bg-red-300 px-6 py-5 text-base text-black md:min-w-[490px]"
               role="alert"
             >
               {/* Split the hostiles string into an array of lines */}
@@ -54,7 +54,7 @@ const Information = () => {
           )}
           {friendliesData?.defenders && (
             <div
-              className="mb-4 rounded-lg bg-success-100 px-6 py-5 text-base text-black md:min-w-[486px]"
+              className="mb-4 rounded-lg bg-green-300 px-6 py-5 text-base text-black md:min-w-[490px]"
               role="alert"
             >
               {/* Split the defenders string into an array of lines */}
