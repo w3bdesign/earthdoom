@@ -23,8 +23,10 @@ const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
   return (
     <>
       <div className="mt-6 flex h-full w-full flex-col items-center justify-center">
-        <h2 className="py-6 text-center text-2xl font-bold text-white">Fleet status</h2>
-        <span className="mx-auto mb-10 min-h-[100px] text-lg bg-white w-full text-center rounded py-2 shadow flex flex-col items-center justify-center">
+        <h2 className="py-6 text-center text-2xl font-bold text-white">
+          Fleet status
+        </h2>
+        <span className="mx-auto mb-10 flex min-h-[100px] w-full flex-col items-center justify-center rounded bg-white py-2 text-center text-lg shadow">
           {paPlayer &&
             paPlayer.war === 0 &&
             paPlayer.def === 0 &&
