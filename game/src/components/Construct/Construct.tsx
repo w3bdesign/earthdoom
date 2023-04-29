@@ -5,6 +5,8 @@ import type { FC } from "react";
 import type { PaUsers } from "@prisma/client";
 import { type Building } from "./types/types";
 
+import Button from "../common/Button";
+
 import { BUILDINGS } from "./constants/BUILDINGS";
 
 import { api } from "@/utils/api";
@@ -84,9 +86,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
         {isLoading && "Starting ..."}
 
         {paPlayer[building.buildingFieldName] === 0 && !isLoading && (
-          <button
-            type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] disabled:opacity-50"
+          <Button
             disabled={
               !canAffordToTrain(
                 paPlayer,
@@ -105,7 +105,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
             }}
           >
             Construct
-          </button>
+          </Button>
         )}
 
         {Number(paPlayer[building.buildingFieldName]) >= 2 && "Building ..."}
