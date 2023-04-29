@@ -7,14 +7,14 @@ import {
 } from "@/server/api/trpc";
 
 export const paUsersRouter = createTRPCRouter({
-  getAll: privateProcedure.query(({ ctx }) => {
-    return ctx.prisma.paUsers.findMany();
-  }),
   createPlayer: publicProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(({ ctx, input }) => {
       return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
     }),
+  getAll: privateProcedure.query(({ ctx }) => {
+    return ctx.prisma.paUsers.findMany();
+  }),
   getResourceOverview: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
