@@ -4,12 +4,14 @@ import { useUser } from "@clerk/nextjs";
 import { FC, useRef } from "react";
 
 import type { IEnergy } from "./types/types";
+import type { PaPlayer } from "../Production/Production";
 
 import { ENERGY } from "./constants/ENERGY";
 
 import { api } from "@/utils/api";
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
-import { PaPlayer } from "../Production/Production";
+
+import Button from "../common/Button";
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
@@ -95,9 +97,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
       >
         {isLoading && "Starting ..."}
         {!isLoading && (
-          <button
-            type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] disabled:opacity-50"
+          <Button
             disabled={
               !canAffordToTrain(
                 paPlayer,
@@ -115,7 +115,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
             }}
           >
             Construct
-          </button>
+          </Button>
         )}
       </td>
     </tr>
