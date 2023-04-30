@@ -1,5 +1,7 @@
 import { api } from "@/utils/api";
 
+import LoadingSpinner from "../Loader/LoadingSpinner";
+
 interface FleetStatusProps {
   paPlayer: {
     war: number;
@@ -10,12 +12,14 @@ interface FleetStatusProps {
 }
 
 const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
+  if (!paPlayer) return <LoadingSpinner />;
+
   const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery({
-    Warid: paPlayer?.war,
+    Warid: paPlayer.war,
   });
 
   const { data: paDefendedName } = api.paUsers.getDefendedPlayer.useQuery({
-    Defid: paPlayer?.def,
+    Defid: paPlayer.def,
   });
 
   const allFleetsAtHome =
@@ -26,27 +30,27 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
 
   const returning =
     (paPlayer && paPlayer.war < 0) ||
-    (paPlayer && paPlayer.def < 0 && `Returning ... ETA ${paPlayer?.wareta}`);
+    (paPlayer && paPlayer.def < 0 && `Returning ... ETA ${paPlayer.wareta}`);
 
   const attacking =
     paPlayer &&
     paAttackedName &&
     paPlayer.wareta >= 5 &&
-    `Attacking ${paAttackedName?.nick} #${paAttackedName?.id}   (ETA: ${
-      paPlayer?.wareta - 5
+    `Attacking ${paAttackedName.nick} #${paAttackedName.id}   (ETA: ${
+      paPlayer.wareta - 5
     } ticks)`;
 
   const attackingWithZeroEta =
     paPlayer &&
     paAttackedName &&
-    paPlayer?.wareta < 5 &&
-    `Attacking ${paAttackedName?.nick} #${paAttackedName?.id}   (ETA: 0 ticks)`;
+    paPlayer.wareta < 5 &&
+    `Attacking ${paAttackedName.nick} #${paAttackedName.id}   (ETA: 0 ticks)`;
 
   const defending =
     paPlayer &&
     paDefendedName &&
     paPlayer.defeta >= 5 &&
-    `Defending ${paDefendedName?.nick} #${paDefendedName?.id}   (ETA: ${
+    `Defending ${paDefendedName.nick} #${paDefendedName.id}   (ETA: ${
       paPlayer.defeta - 5
     } ticks)`;
 
@@ -54,7 +58,7 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
     paPlayer &&
     paDefendedName &&
     paPlayer.defeta < 5 &&
-    `Defending ${paDefendedName?.nick} #${paDefendedName?.id}   (ETA: 0 ticks)`;
+    `Defending ${paDefendedName.nick} #${paDefendedName.id}   (ETA: 0 ticks)`;
 
   return (
     <>
