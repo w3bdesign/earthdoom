@@ -5,9 +5,10 @@ import type { PaNews } from "@prisma/client";
 
 import { api } from "@/utils/api";
 
-import Layout from "@/components/Layout/Layout";
-import NewsTable from "@/components/News/NewsTable";
-import LoadingSpinner from "@/components/Loader/LoadingSpinner";
+import Layout from "@/components/common/Layout/Layout";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import NewsTable from "@/components/features/ContNews/ContNewsTable";
+
 
 interface IRenderContentProps {
   news?: PaNews[];

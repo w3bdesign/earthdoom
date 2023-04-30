@@ -7,7 +7,8 @@ import {
 
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/common/Layout/Layout";
+import Button from "@/components/ui/common/Button";
 
 const Logout: NextPage = () => {
   return (
@@ -18,22 +19,22 @@ const Logout: NextPage = () => {
             <p className="text-2xl text-white">
               <SignedIn>
                 <SignOutButton>
-                  <button
+                  <Button
                     type="button"
                     className="inline-block rounded bg-primary p-8 pb-2 pt-2.5 text-xl font-medium leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600"
                   >
                     Sign out
-                  </button>
+                  </Button>
                 </SignOutButton>
               </SignedIn>
               <SignedOut>
                 <SignInButton redirectUrl="/">
-                  <button
+                  <Button
                     type="button"
                     className="inline-block rounded bg-primary p-8 pb-2 pt-2.5 text-xl font-medium leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600"
                   >
                     Sign in
-                  </button>
+                  </Button>
                 </SignInButton>
               </SignedOut>
             </p>

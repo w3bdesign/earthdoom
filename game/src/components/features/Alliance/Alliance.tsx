@@ -2,12 +2,12 @@ import toast from "react-hot-toast";
 import { useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 
+import Button from "@/components/ui/common/Button";
+
 import type { PaUsers, PaTag } from "@prisma/client";
 import type { FC } from "react";
 
 import { api } from "@/utils/api";
-
-import Button from "../common/Button";
 
 interface IAllianceProps {
   paPlayer: PaUsers;

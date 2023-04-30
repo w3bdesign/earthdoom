@@ -2,41 +2,42 @@ import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 import { useRef } from "react";
 
-import type { FC } from "react";
-import type { IProduction } from "./types/types";
+import Button from "@/components/ui/common/Button";
+
+import { RESOURCE } from "./constants/RESOURCE";
+
+import type { IResource } from "./types/types";
 import type { PaUsers } from "@prisma/client";
+import type { FC } from "react";
 
-import { PRODUCTION } from "./constants/PRODUCTION";
-
+import { maximumToTrain, canAffordToTrain } from "@/utils/functions";
 import { api } from "@/utils/api";
 
-import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
-
-export interface PaPlayer extends PaUsers {
+interface PaPlayer extends PaUsers {
   [key: string]: number | string;
 }
 
-interface BuildingRowProps {
+interface IResourceRowProps {
   paPlayer: PaPlayer;
-  production: IProduction;
+  resource: IResource;
 }
 
-export interface ConstructProps {
+export interface IResourceProps {
   paPlayer: PaPlayer;
 }
 
-const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
+const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
 
-  const productionToast = () => toast("Training started");
+  const productionToast = () => toast("Building started");
   const errorToast = () => toast("Database error");
   const canNotAffordToast = () => toast("You can not afford this");
   const needsToBeMoreNullToast = () =>
     toast("You need to enter a quantity greater than 0");
 
-  const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
+  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
       productionToast();
       if (user && user.username) {
@@ -52,41 +53,29 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     return <div>Loading user data...</div>;
   }
 
-  // TODO Do not render table headers?
-
-  //if (paPlayer[production.buildingRequirement] === 0) return null;
-
   return (
     <tr
-      key={production.buildingName}
+      key={resource.buildingName}
       className="block border-b bg-white last:border-b-0 sm:table-row sm:border-none"
     >
       <td
         data-th="Name"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        {production.buildingName}
+        {resource.buildingName}
       </td>
       <td
         data-th="Info"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        <span className="w-[12.5rem]">{production.buildingDescription}</span>
-      </td>
-      <td
-        data-th="ETA"
-        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
-      >
-        {Number(paPlayer[production.buildingFieldName]) >= 1
-          ? paPlayer[production.buildingFieldNameETA]
-          : production.buildingETA}
+        <span className="w-[12.5rem]">{resource.buildingDescription}</span>
       </td>
       <td
         data-th="Production"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {isLoading && "Starting ..."}
-        {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
+        {!isLoading && (
           <input
             type="number"
             aria-label="Amount"
@@ -94,7 +83,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
             id="exampleFormControlInput1"
             placeholder="Amount"
             ref={unitAmountRef}
-            defaultValue={maximumToTrain(paPlayer, production)}
+            defaultValue={maximumToTrain(paPlayer, resource)}
             min="0"
           />
         )}
@@ -103,17 +92,15 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         data-th="Cost"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        {production.buildingCost}
+        {resource.buildingCost}
       </td>
       <td
         data-th="Build"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {isLoading && "Starting ..."}
-        {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
-          <button
-            type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+        {!isLoading && (
+          <Button
             onClick={() => {
               if (Number(unitAmountRef?.current?.value) === 0) {
                 needsToBeMoreNullToast();
@@ -122,8 +109,8 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
               if (
                 !canAffordToTrain(
                   paPlayer,
-                  production.buildingCostCrystal,
-                  production.buildingCostTitanium,
+                  resource.buildingCostCrystal,
+                  resource.buildingCostTitanium,
                   Number(unitAmountRef?.current?.value)
                 )
               ) {
@@ -132,25 +119,22 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
               }
               mutate({
                 Userid: paPlayer.id,
-                buildingFieldName: production.buildingFieldName,
-                buildingFieldNameETA: production.buildingFieldNameETA,
-                buildingCostCrystal: production.buildingCostCrystal,
-                buildingCostTitanium: production.buildingCostTitanium,
+                buildingFieldName: resource.buildingFieldName,
+                buildingCostCrystal: resource.buildingCostCrystal,
                 unitAmount: Number(unitAmountRef?.current?.value),
-                buildingETA: production.buildingETA,
+                buildingETA: resource.buildingETA,
               });
             }}
           >
-            Train
-          </button>
+            Build
+          </Button>
         )}
-        {Number(paPlayer[production.buildingFieldName]) >= 1 && "Training ..."}
       </td>
     </tr>
   );
 };
 
-const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
+const ResourceTable: FC<IResourceProps> = ({ paPlayer }) => {
   return (
     <table className="w-full text-left ring-1 ring-slate-400/10">
       <tbody>
@@ -167,12 +151,7 @@ const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
           >
             Description
           </th>
-          <th
-            scope="col"
-            className="hidden h-12  bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
-          >
-            ETA
-          </th>
+
           <th
             scope="col"
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
@@ -185,18 +164,19 @@ const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
           >
             Cost
           </th>
+
           <th
             scope="col"
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
           >
-            Train
+            Build
           </th>
         </tr>
-        {PRODUCTION.map((production) => (
-          <ProductionRow
-            key={production.buildingId}
+        {RESOURCE.map((resource) => (
+          <ResourceRow
+            key={resource.buildingId}
             paPlayer={paPlayer}
-            production={production}
+            resource={resource}
           />
         ))}
       </tbody>
@@ -204,8 +184,8 @@ const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
   );
 };
 
-const Production: FC<ConstructProps> = ({ paPlayer }) => (
-  <ProductionTable paPlayer={paPlayer} />
+const Resource: FC<IResourceProps> = ({ paPlayer }) => (
+  <ResourceTable paPlayer={paPlayer} />
 );
 
-export default Production;
+export default Resource;
