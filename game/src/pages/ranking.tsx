@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 import Ranking from "@/components/features/Ranking/Ranking";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";

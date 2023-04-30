@@ -2,7 +2,7 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 import Military from "@/components/features/Military/Military";
 
 import { api } from "@/utils/api";

@@ -5,7 +5,7 @@ import type { PaNews } from "@prisma/client";
 
 import { api } from "@/utils/api";
 
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import NewsTable from "@/components/features/ContNews/ContNewsTable";
 

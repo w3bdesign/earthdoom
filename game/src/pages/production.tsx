@@ -3,7 +3,7 @@ import Script from "next/script";
 
 import { type NextPage } from "next";
 
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 import Production from "@/components/features/Production/Production";
 
 import { api } from "@/utils/api";

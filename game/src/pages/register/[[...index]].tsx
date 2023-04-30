@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 
 import { SignOutButton, SignUp, SignedIn, SignedOut } from "@clerk/nextjs";
 
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 
 const Register: NextPage = () => {
   return (

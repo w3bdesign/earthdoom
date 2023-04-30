@@ -1,4 +1,4 @@
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
