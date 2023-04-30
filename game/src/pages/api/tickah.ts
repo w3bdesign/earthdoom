@@ -94,12 +94,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       id,
       civilians,
       tax,
-      crystalroid,
+      asteroid_crystal,
       c_crystal,
       r_imcrystal,
       c_energy,
       sats,
-      metalroid,
+      asteroid_metal,
       c_metal,
       r_immetal,
       p_infinitys_eta,
@@ -126,9 +126,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const sivile = Math.floor((civilians / 12) * 1.1);
     const inntekt = Math.floor((civilians * tax) / 100);
-    const maksbeboere = crystalroid * 300;
+    const maksbeboere = asteroid_crystal * 300;
     const ekstra = Math.floor(inntekt * 0.1);
-    const ekstra2 = Math.floor(metalroid * 0.1);
+    const ekstra2 = Math.floor(asteroid_metal * 0.1);
 
     if (civilians < maksbeboere) {
       await prisma.paUsers.update({
@@ -152,7 +152,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
   }
 
-  res.status(200).json({ message: "Database updated" });
+  return res.status(200).json({ message: "Database updated" });
 }
 
-export default apiKeyAuth(handler);
+//export default apiKeyAuth(handler);
+
+export default handler;
