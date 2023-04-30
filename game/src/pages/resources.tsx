@@ -7,10 +7,8 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import BarGraph from "@/components/features/Resources/BarGraph";
 import ResourceTable from "@/components/features/Resources/ResourceTable";
 
-
 import { api } from "@/utils/api";
 import { renderIncomeData } from "@/utils/functions";
-
 
 const Resources: NextPage = () => {
   const { user, isSignedIn, isLoaded } = useUser();
