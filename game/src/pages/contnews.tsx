@@ -4,9 +4,8 @@ import { type NextPage } from "next";
 
 import { api } from "@/utils/api";
 
-import Layout from "@/components/Layout/Layout";
-
-import RenderNews from "@/components/common/RenderNews";
+import Layout from "@/components/common/Layout/Layout";
+import RenderNews from "@/components/ui/common/RenderNews";
 
 const ContNews: NextPage = () => {
   const { user, isSignedIn } = useUser();

@@ -2,8 +2,8 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
-import Research from "@/components/Research/Research";
+import Layout from "@/components/common/Layout/Layout";
+import Research from "@/components/features/Research/Research";
 
 import { api } from "@/utils/api";
 

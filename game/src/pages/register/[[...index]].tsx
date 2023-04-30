@@ -3,7 +3,7 @@ import { type NextPage } from "next";
 import { SignUp, SignedIn, SignedOut } from "@clerk/nextjs";
 
 import SignOutButton from "@/components/Auth/SignOut";
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/common/Layout/Layout";
 
 const Register: NextPage = () => {
   return (

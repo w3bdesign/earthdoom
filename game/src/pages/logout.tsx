@@ -7,7 +7,7 @@ import {
 
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/common/Layout/Layout";
 
 const Logout: NextPage = () => {
   return (

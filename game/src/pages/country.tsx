@@ -6,7 +6,7 @@ import { type NextPage } from "next";
 
 import { api } from "@/utils/api";
 
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/common/Layout/Layout";
 
 const Country: NextPage = () => {
   // https://tailwind-elements.com/docs/standard/data/tables/

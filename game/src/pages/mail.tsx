@@ -5,7 +5,7 @@ import { type NextPage } from "next";
 
 import { api } from "@/utils/api";
 
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/common/Layout/Layout";
 
 const Mail: NextPage = () => {
   // https://github.com/pingdotgg/zapdos/blob/main/src/server/router/subroutes/question.ts
