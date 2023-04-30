@@ -1,43 +1,39 @@
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
-import { useRef } from "react";
 
-import { RESOURCE } from "./constants/RESOURCE";
+import { FC, useRef } from "react";
 
-import type { IResource } from "./types/types";
-import type { PaUsers } from "@prisma/client";
-import type { FC } from "react";
+import type { IEnergy } from "./types/types";
+import type { PaPlayer } from "../Production/Production";
 
-import { maximumToTrain, canAffordToTrain } from "@/utils/functions";
+import { ENERGY } from "./constants/ENERGY";
+
 import { api } from "@/utils/api";
+import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
-interface PaPlayer extends PaUsers {
-  [key: string]: number | string;
-}
+import Button from "@/components/ui/common/Button";
 
-interface IResourceRowProps {
+interface BuildingRowProps {
   paPlayer: PaPlayer;
-  resource: IResource;
+  energy: IEnergy;
 }
 
-export interface IResourceProps {
+interface IEnergyProps {
   paPlayer: PaPlayer;
 }
 
-const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
+const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
 
-  const productionToast = () => toast("Building started");
+  const constructionToast = () => toast("Construction started");
   const errorToast = () => toast("Database error");
-  const canNotAffordToast = () => toast("You can not afford this");
-  const needsToBeMoreNullToast = () =>
-    toast("You need to enter a quantity greater than 0");
 
+  // TODO Construct power plant
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
-      productionToast();
+      constructionToast();
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
@@ -53,88 +49,80 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
 
   return (
     <tr
-      key={resource.buildingName}
+      key={energy.buildingName}
       className="block border-b bg-white last:border-b-0 sm:table-row sm:border-none"
     >
       <td
         data-th="Name"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        {resource.buildingName}
+        {energy.buildingName}
       </td>
       <td
         data-th="Info"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        <span className="w-[12.5rem]">{resource.buildingDescription}</span>
+        <span className="w-[12.5rem]">{energy.buildingDescription}</span>
       </td>
+
       <td
         data-th="Production"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {isLoading && "Starting ..."}
         {!isLoading && (
-          <input
-            type="number"
-            aria-label="Amount"
-            className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-            id="exampleFormControlInput1"
-            placeholder="Amount"
-            ref={unitAmountRef}
-            defaultValue={maximumToTrain(paPlayer, resource)}
-            min="0"
-          />
+          <>
+            <input
+              type="text"
+              aria-label="Amount"
+              className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+              id="exampleFormControlInput1"
+              placeholder="Amount"
+              defaultValue={maximumToTrain(paPlayer, energy)}
+              ref={unitAmountRef}
+            />
+          </>
         )}
       </td>
       <td
         data-th="Cost"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        {resource.buildingCost}
+        {energy.buildingCost}
       </td>
+
       <td
         data-th="Build"
         className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {isLoading && "Starting ..."}
         {!isLoading && (
-          <button
-            type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+          <Button
+            disabled={
+              !canAffordToTrain(
+                paPlayer,
+                energy.buildingCostCrystal,
+                energy.buildingCostTitanium
+              )
+            }
             onClick={() => {
-              if (Number(unitAmountRef?.current?.value) === 0) {
-                needsToBeMoreNullToast();
-                return;
-              }
-              if (
-                !canAffordToTrain(
-                  paPlayer,
-                  resource.buildingCostCrystal,
-                  resource.buildingCostTitanium,
-                  Number(unitAmountRef?.current?.value)
-                )
-              ) {
-                canNotAffordToast();
-                return;
-              }
               mutate({
                 Userid: paPlayer.id,
-                buildingFieldName: resource.buildingFieldName,
-                buildingCostCrystal: resource.buildingCostCrystal,
+                buildingFieldName: energy.buildingFieldName,
+                buildingCostCrystal: energy.buildingCostCrystal,
                 unitAmount: Number(unitAmountRef?.current?.value),
-                buildingETA: resource.buildingETA,
               });
             }}
           >
-            Build
-          </button>
+            Construct
+          </Button>
         )}
       </td>
     </tr>
   );
 };
 
-const ResourceTable: FC<IResourceProps> = ({ paPlayer }) => {
+const EnergyTable: FC<IEnergyProps> = ({ paPlayer }) => {
   return (
     <table className="w-full text-left ring-1 ring-slate-400/10">
       <tbody>
@@ -151,7 +139,6 @@ const ResourceTable: FC<IResourceProps> = ({ paPlayer }) => {
           >
             Description
           </th>
-
           <th
             scope="col"
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
@@ -164,7 +151,6 @@ const ResourceTable: FC<IResourceProps> = ({ paPlayer }) => {
           >
             Cost
           </th>
-
           <th
             scope="col"
             className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
@@ -172,11 +158,11 @@ const ResourceTable: FC<IResourceProps> = ({ paPlayer }) => {
             Build
           </th>
         </tr>
-        {RESOURCE.map((resource) => (
-          <ResourceRow
-            key={resource.buildingId}
+        {ENERGY.map((energy) => (
+          <EnergyRow
+            key={energy.buildingId}
             paPlayer={paPlayer}
-            resource={resource}
+            energy={energy}
           />
         ))}
       </tbody>
@@ -184,8 +170,8 @@ const ResourceTable: FC<IResourceProps> = ({ paPlayer }) => {
   );
 };
 
-const Resource: FC<IResourceProps> = ({ paPlayer }) => (
-  <ResourceTable paPlayer={paPlayer} />
+const Energy: FC<IEnergyProps> = ({ paPlayer }) => (
+  <EnergyTable paPlayer={paPlayer} />
 );
 
-export default Resource;
+export default Energy;

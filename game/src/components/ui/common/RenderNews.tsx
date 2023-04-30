@@ -1,4 +1,4 @@
-import LoadingSpinner from "../Loader/LoadingSpinner";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 interface INewsProps {
   isLoading: boolean;

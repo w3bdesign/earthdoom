@@ -1,4 +1,4 @@
-import DataTable from "@/components/common/DataTable";
+import DataTable from "@/components/ui/common/DataTable";
 
 import { type FC } from "react";
 

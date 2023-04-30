@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
-import Ranking from "@/components/Ranking/Ranking";
+import Layout from "@/components/common/Layout/Layout";
+import Ranking from "@/components/features/Ranking/Ranking";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 

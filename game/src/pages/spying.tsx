@@ -2,9 +2,9 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
-import SpyingTable from "@/components/Spying/SpyingTable";
-import LoadingSpinner from "@/components/Loader/LoadingSpinner";
+import Layout from "@/components/common/Layout/Layout";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import SpyingTable from "@/components/features/Spying/SpyingTable";
 
 import { api } from "@/utils/api";
 

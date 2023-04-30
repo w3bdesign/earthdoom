@@ -1,4 +1,5 @@
-import type { PaPlayer } from "@/components/Production/Production";
+
+import { PaPlayer } from "@/components/features/Production/Production";
 import { PaUsers } from "@prisma/client";
 
 interface IStringifierProps {

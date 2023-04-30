@@ -3,7 +3,7 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/common/Layout/Layout";
 
 import { api } from "@/utils/api";
 import { useEffect } from "react";

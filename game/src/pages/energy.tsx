@@ -2,9 +2,9 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
-import EnergyTable from "@/components/Energy/EnergyTable";
-import LoadingSpinner from "@/components/Loader/LoadingSpinner";
+import Layout from "@/components/common/Layout/Layout";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import EnergyTable from "@/components/features/Energy/EnergyTable";
 
 import { api } from "@/utils/api";
 
