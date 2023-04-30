@@ -19,16 +19,16 @@ export default async function handler(
     "lastsleep",
     "sleep",
     "newbie",
-    "p_infinityst",
-    "p_warfrigst",
-    "p_wraithst",
-    "p_astropodst",
-    "p_destroyerst",
-    "p_cobrast",
-    "p_scorpionst",
-    "p_rcannonst",
-    "p_avengerst",
-    "p_lstalkerst",
+    "p_infinitys_eta",
+    "p_warfrigs_eta",
+    "p_wraiths_eta",
+    "p_astropods_eta",
+    "p_destroyers_eta",
+    "p_cobras_eta",
+    "p_scorpions_eta",
+    "p_rcannons_eta",
+    "p_avengers_eta",
+    "p_lstalkers_eta",
     "r_imcrystal",
     "r_immetal",
     "r_aaircraft",
@@ -76,9 +76,9 @@ export default async function handler(
     data: { wareta: { decrement: 1 } },
   });
 
-  const result = await prisma.paUsers.findMany({
+  await prisma.paUsers.findMany({
     orderBy: { score: "desc" },
   });
 
-  res.status(200).json({ message: "Database updated", result });
+  res.status(200).json({ message: "Database updated" });
 }
