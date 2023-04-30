@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
-import { type PaNews } from "@prisma/client";
+import type { NextPage } from "next";
+import type { PaNews } from "@prisma/client";
 
 import { api } from "@/utils/api";
 
