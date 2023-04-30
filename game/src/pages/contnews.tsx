@@ -4,7 +4,7 @@ import { type NextPage } from "next";
 
 import { api } from "@/utils/api";
 
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 import RenderNews from "@/components/ui/common/RenderNews";
 
 const ContNews: NextPage = () => {
