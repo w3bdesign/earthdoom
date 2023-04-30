@@ -3,8 +3,8 @@ import { SignedIn } from "@clerk/nextjs";
 
 import type { ReactNode } from "react";
 
-import Navbar from "@/components/Header/Navbar";
-import Information from "@/components/Header/Information";
+import Navbar from "@/components/common/Header/Navbar";
+import Information from "@/components/common/Header/Information";
 import Footer from "./Footer";
 
 interface ILayoutProps {

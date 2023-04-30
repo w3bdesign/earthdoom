@@ -1,9 +1,9 @@
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/common/Layout/Layout";
 import LandTable from "@/components/Index/LandTable";
 import BDUTable from "@/components/Index/BDUTable";
 import UnitsTable from "@/components/Index/UnitsTable";
 import FleetStatus from "@/components/Index/FleetStatus";
-import LoadingSpinner from "@/components/Loader/LoadingSpinner";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
