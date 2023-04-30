@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 
-import { type FC } from "react";
+import LoadingSpinner from "../Loader/LoadingSpinner";
 
 interface FleetStatusProps {
   paPlayer: {
@@ -8,10 +8,12 @@ interface FleetStatusProps {
     def: number;
     wareta: number;
     defeta: number;
-  };
+  } | null;
 }
 
-const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
+const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
+  if (!paPlayer) return <LoadingSpinner />;
+
   const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery({
     Warid: paPlayer.war,
   });
@@ -20,6 +22,44 @@ const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
     Defid: paPlayer.def,
   });
 
+  const allFleetsAtHome =
+    paPlayer &&
+    paPlayer.war === 0 &&
+    paPlayer.def === 0 &&
+    "All fleets at home";
+
+  const returning =
+    (paPlayer && paPlayer.war < 0) ||
+    (paPlayer && paPlayer.def < 0 && `Returning ... ETA ${paPlayer.wareta}`);
+
+  const attacking =
+    paPlayer &&
+    paAttackedName &&
+    paPlayer.wareta >= 5 &&
+    `Attacking ${paAttackedName.nick} #${paAttackedName.id}   (ETA: ${
+      paPlayer.wareta - 5
+    } ticks)`;
+
+  const attackingWithZeroEta =
+    paPlayer &&
+    paAttackedName &&
+    paPlayer.wareta < 5 &&
+    `Attacking ${paAttackedName.nick} #${paAttackedName.id}   (ETA: 0 ticks)`;
+
+  const defending =
+    paPlayer &&
+    paDefendedName &&
+    paPlayer.defeta >= 5 &&
+    `Defending ${paDefendedName.nick} #${paDefendedName.id}   (ETA: ${
+      paPlayer.defeta - 5
+    } ticks)`;
+
+  const defendingWithZeroEta =
+    paPlayer &&
+    paDefendedName &&
+    paPlayer.defeta < 5 &&
+    `Defending ${paDefendedName.nick} #${paDefendedName.id}   (ETA: 0 ticks)`;
+
   return (
     <>
       <div className="mt-6 flex h-full w-full flex-col items-center justify-center">
@@ -27,42 +67,12 @@ const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
           Fleet status
         </h2>
         <span className="mx-auto mb-10 flex min-h-[100px] w-full flex-col items-center justify-center rounded bg-white py-2 text-center text-lg shadow">
-          {paPlayer &&
-            paPlayer.war === 0 &&
-            paPlayer.def === 0 &&
-            "All fleets at home"}
-          {(paPlayer && paPlayer.war < 0) ||
-            (paPlayer &&
-              paPlayer.def < 0 &&
-              `Returning ... ETA ${paPlayer?.wareta}`)}
-
-          {paPlayer &&
-            paAttackedName &&
-            paPlayer.wareta >= 5 &&
-            `Attacking ${paAttackedName?.nick} #${
-              paAttackedName?.id
-            } ${"  "}  (ETA:  ${paPlayer?.wareta - 5} ticks)`}
-
-          {paPlayer &&
-            paAttackedName &&
-            paPlayer?.wareta < 5 &&
-            `Attacking ${paAttackedName?.nick} #${
-              paAttackedName?.id
-            } ${"  "}  (ETA: 0 ticks)`}
-
-          {paPlayer &&
-            paDefendedName &&
-            paPlayer.defeta >= 5 &&
-            `Defending ${paDefendedName?.nick} #${
-              paDefendedName?.id
-            } ${"  "}  (ETA:  ${paPlayer.defeta - 5} ticks)`}
-
-          {paPlayer &&
-            paDefendedName &&
-            paPlayer.defeta < 5 &&
-            `Defending ${paDefendedName?.nick} #${
-              paDefendedName?.id
-            } ${"  "}  (ETA: 0 ticks)`}
+          {allFleetsAtHome}
+          {returning}
+          {attacking}
+          {attackingWithZeroEta}
+          {defending}
+          {defendingWithZeroEta}
         </span>
       </div>
     </>
