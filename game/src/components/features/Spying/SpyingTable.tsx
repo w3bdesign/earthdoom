@@ -2,6 +2,8 @@ import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 import { useRef } from "react";
 
+import Button from "@/components/ui/common/Button";
+
 import type { FC } from "react";
 import type { ISpying } from "./types/types";
 import type { PaUsers } from "@prisma/client";
@@ -9,7 +11,7 @@ import type { PaUsers } from "@prisma/client";
 import { SPYING } from "./constants/SPYING";
 
 import { api } from "@/utils/api";
-import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
+import { canAffordToTrain } from "@/utils/functions";
 
 interface PaPlayer extends PaUsers {
   [key: string]: number | string;
@@ -87,7 +89,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
               id="exampleFormControlInput1"
               placeholder="Amount"
               ref={spyingAmountRef}
-              defaultValue={maximumToTrain(paPlayer, resource)}
+              defaultValue={maximumToSearch}
               min="0"
             />
           </>
@@ -99,9 +101,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
       >
         {isLoading && "Starting ..."}
         {!isLoading && (
-          <button
-            type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+          <Button
             onClick={() => {
               if (Number(spyingAmountRef?.current?.value) === 0) {
                 needsToBeMoreNullToast();
@@ -127,7 +127,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
             }}
           >
             Spy
-          </button>
+          </Button>
         )}
       </td>
     </tr>

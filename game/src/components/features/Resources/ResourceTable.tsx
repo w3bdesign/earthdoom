@@ -2,6 +2,8 @@ import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 import { useRef } from "react";
 
+import Button from "@/components/ui/common/Button";
+
 import { RESOURCE } from "./constants/RESOURCE";
 
 import type { IResource } from "./types/types";
@@ -98,9 +100,7 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
       >
         {isLoading && "Starting ..."}
         {!isLoading && (
-          <button
-            type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+          <Button
             onClick={() => {
               if (Number(unitAmountRef?.current?.value) === 0) {
                 needsToBeMoreNullToast();
@@ -127,7 +127,7 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
             }}
           >
             Build
-          </button>
+          </Button>
         )}
       </td>
     </tr>

@@ -5,7 +5,7 @@ import type { FC } from "react";
 import type { PaUsers } from "@prisma/client";
 import { type Building } from "./types/types";
 
-import Button from "../common/Button";
+import Button from "@/components/ui/common/Button";
 
 import { BUILDINGS } from "./constants/BUILDINGS";
 

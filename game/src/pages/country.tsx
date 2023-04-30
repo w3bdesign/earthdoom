@@ -7,6 +7,7 @@ import { type NextPage } from "next";
 import { api } from "@/utils/api";
 
 import Layout from "@/components/common/Layout/Layout";
+import Button from "@/components/ui/common/Button";
 
 const Country: NextPage = () => {
   // https://tailwind-elements.com/docs/standard/data/tables/
@@ -36,13 +37,10 @@ const Country: NextPage = () => {
         <main className="bg-neutral-900">
           <div className="flex justify-center">
             <div className="my-6 mt-16">
-              <button
-                className="mr-2 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
-                onClick={() => handlePrev}
-              >
+              <Button onClick={() => handlePrev}>
                 <BsArrowLeft className="mr-2 inline-block" />
                 Previous
-              </button>
+              </Button>
               <input
                 className="mr-2 rounded-lg border px-4 py-2"
                 type="text"
@@ -52,13 +50,10 @@ const Country: NextPage = () => {
                 value={myx}
                 onChange={() => handleChange}
               />
-              <button
-                className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
-                onClick={() => handleNext}
-              >
+              <Button onClick={() => handleNext}>
                 Next
                 <BsArrowRight className="ml-2 inline-block" />
-              </button>
+              </Button>
             </div>
           </div>
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
@@ -114,7 +109,6 @@ const Country: NextPage = () => {
                       Mail
                     </th>
                   </tr>
-
                   {paPlayers?.map((player) => (
                     <tr
                       key={player.id}
@@ -160,15 +154,13 @@ const Country: NextPage = () => {
                         className="flex h-12 items-center px-6  text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                       >
                         <Link href={`/spy?id=${player.id}`}>
-                          <button
-                            type="button"
-                            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-sm font-medium uppercase leading-normal text-white  transition duration-150 ease-in-out hover:bg-primary-600  focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+                          <Button
                             onClick={() => {
                               alert(player.id);
                             }}
                           >
                             Spying
-                          </button>
+                          </Button>
                         </Link>
                       </td>
                       <td
@@ -176,7 +168,7 @@ const Country: NextPage = () => {
                         className="flex h-12 items-center px-6  text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
                       >
                         <Link href={`/mail?id=${player.id}`}>
-                          <button
+                          <Button
                             type="button"
                             className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-sm font-medium uppercase leading-normal text-white  transition duration-150 ease-in-out hover:bg-primary-600  focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
                             onClick={() => {
@@ -184,7 +176,7 @@ const Country: NextPage = () => {
                             }}
                           >
                             Mail
-                          </button>
+                          </Button>
                         </Link>
                       </td>
                     </tr>

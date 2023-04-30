@@ -11,7 +11,7 @@ import { ENERGY } from "./constants/ENERGY";
 import { api } from "@/utils/api";
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
-import Button from "../common/Button";
+import Button from "@/components/ui/common/Button";
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
