@@ -4,6 +4,8 @@
  */
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env.mjs"));
 
+import('dotenv');
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,

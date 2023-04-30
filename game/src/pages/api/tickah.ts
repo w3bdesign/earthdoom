@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
+
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { apiKeyAuth } from "../../middlewares/apiKeyAuth";
 
 const prisma = new PrismaClient();
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const fieldsToUpdate = [
     "c_crystal",
     "c_metal",
@@ -44,7 +44,12 @@ export default async function handler(
     await prisma.paUsers.updateMany({
       where: {
         [field]: {
-          gt: field.startsWith("p_") || field.startsWith("r_") ? 1 : 0,
+          gt:
+            field.startsWith("c_") ||
+            field.startsWith("p_") ||
+            field.startsWith("r_")
+              ? 1
+              : 0,
         },
       },
       data: {
@@ -80,5 +85,74 @@ export default async function handler(
     orderBy: { score: "desc" },
   });
 
+  // Add income
+
+  const users = await prisma.paUsers.findMany();
+
+  for (const user of users) {
+    const {
+      id,
+      civilians,
+      tax,
+      crystalroid,
+      c_crystal,
+      r_imcrystal,
+      c_energy,
+      sats,
+      metalroid,
+      c_metal,
+      r_immetal,
+      p_infinitys_eta,
+      p_infinitys,
+      p_warfrigs_eta,
+      p_warfrigs,
+      p_wraiths_eta,
+      p_wraiths,
+      p_astropods_eta,
+      p_astropods,
+      p_destroyers_eta,
+      p_destroyers,
+      p_cobras_eta,
+      p_cobras,
+      p_scorpions_eta,
+      p_scorpions,
+      p_rcannons_eta,
+      p_rcannons,
+      p_avengers_eta,
+      p_avengers,
+      p_lstalkers_eta,
+      p_lstalkers,
+    } = user;
+
+    const sivile = Math.floor((civilians / 12) * 1.1);
+    const inntekt = Math.floor((civilians * tax) / 100);
+    const maksbeboere = crystalroid * 300;
+    const ekstra = Math.floor(inntekt * 0.1);
+    const ekstra2 = Math.floor(metalroid * 0.1);
+
+    if (civilians < maksbeboere) {
+      await prisma.paUsers.update({
+        where: { id },
+        data: { civilians: { increment: sivile } },
+      });
+    }
+
+    if (c_crystal === 1 && r_imcrystal !== 1) {
+      await prisma.paUsers.update({
+        where: { id },
+        data: { crystal: { increment: inntekt } },
+      });
+    }
+
+    if (c_crystal === 1 && r_imcrystal === 1) {
+      await prisma.paUsers.update({
+        where: { id },
+        data: { crystal: { increment: inntekt + ekstra } },
+      });
+    }
+  }
+
   res.status(200).json({ message: "Database updated" });
 }
+
+export default apiKeyAuth(handler);
