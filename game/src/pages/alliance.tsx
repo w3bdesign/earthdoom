@@ -1,15 +1,30 @@
 import { type NextPage } from "next";
 
 import Layout from "@/components/Layout/Layout";
+import Alliance from "@/components/Alliance/Alliance";
+import { api } from "@/utils/api";
+import { useUser } from "@clerk/nextjs";
 
-const Game: NextPage = () => {
+const AlliancePage: NextPage = () => {
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
+
+  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+    nick: user.username,
+  });
+
+  const { data: paTag } = api.paTag.getAll.useQuery();
+
   return (
     <>
       <Layout>
         <div className="container flex flex-col items-center justify-center text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative py-4 sm:mx-auto"></div>
-            <p className="text-2xl text-white"></p>
+            {paPlayer && paTag && (
+              <Alliance paPlayer={paPlayer} paTag={paTag} />
+            )}
           </div>
         </div>
       </Layout>
@@ -17,4 +32,4 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default AlliancePage;

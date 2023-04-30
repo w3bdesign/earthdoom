@@ -3,14 +3,15 @@ import { useUser } from "@clerk/nextjs";
 
 import { type FC } from "react";
 import type { PaUsers } from "@prisma/client";
-import { type Building } from "./types/types";
+import type { Building } from "./types/types";
 
 import { BUILDINGS } from "./constants/RESEARCH";
 
 import { api } from "@/utils/api";
+import { canAffordToTrain } from "@/utils/functions";
 
 interface PaPlayer extends PaUsers {
-  [key: string]: any; // TODO Improve this later
+  [key: string]: number | string;
 }
 
 interface BuildingRowProps {
@@ -52,43 +53,52 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
     >
       <td
         data-th="Name"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {building.buildingName}
       </td>
       <td
         data-th="Info"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         <span className="w-[12.5rem]">{building.buildingDescription}</span>
       </td>
       <td
         data-th="ETA"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        {paPlayer[building.buildingFieldName] >= 2
-          ? paPlayer[building.buildingFieldName] - 1
+        {Number(paPlayer[building.buildingFieldName]) >= 2
+          ? Number(paPlayer[building.buildingFieldName]) - 1
           : building.buildingETA}
       </td>
       <td
         data-th="Cost"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {building.buildingCost}
       </td>
       <td
         data-th="Research"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {isLoading && "Starting ..."}
         {paPlayer[building.buildingFieldName] === 0 && !isLoading && (
           <button
             type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] disabled:opacity-50"
+            disabled={
+              !canAffordToTrain(
+                paPlayer,
+                building.buildingCostCrystal,
+                building.buildingCostTitanium
+              )
+            }
             onClick={() => {
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: building.buildingFieldName,
+                buildingCostCrystal: building.buildingCostCrystal,
+                buildingCostTitanium: building.buildingCostTitanium,
                 buildingETA: building.buildingETA,
               });
             }}
@@ -97,7 +107,7 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
           </button>
         )}
 
-        {paPlayer[building.buildingFieldName] >= 2 && "Researching ..."}
+        {Number(paPlayer[building.buildingFieldName]) >= 2 && "Researching ..."}
         {paPlayer[building.buildingFieldName] === 1 && "Done"}
       </td>
     </tr>

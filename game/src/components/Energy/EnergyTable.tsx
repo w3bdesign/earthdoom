@@ -4,12 +4,14 @@ import { useUser } from "@clerk/nextjs";
 import { FC, useRef } from "react";
 
 import type { IEnergy } from "./types/types";
+import type { PaPlayer } from "../Production/Production";
 
 import { ENERGY } from "./constants/ENERGY";
 
 import { api } from "@/utils/api";
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
-import { PaPlayer } from "../Production/Production";
+
+import Button from "../common/Button";
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
@@ -28,7 +30,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
   const constructionToast = () => toast("Construction started");
   const errorToast = () => toast("Database error");
 
-  // TODO Look into this mutation, does not deduct resources
+  // TODO Construct power plant
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
       constructionToast();
@@ -52,22 +54,22 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
     >
       <td
         data-th="Name"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {energy.buildingName}
       </td>
       <td
         data-th="Info"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         <span className="w-[12.5rem]">{energy.buildingDescription}</span>
       </td>
 
       <td
         data-th="Production"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
-        {isLoading && "Starting construction ..."}
+        {isLoading && "Starting ..."}
         {!isLoading && (
           <>
             <input
@@ -84,20 +86,18 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
       </td>
       <td
         data-th="Cost"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {energy.buildingCost}
       </td>
 
       <td
         data-th="Build"
-        className="flex md:h-12 items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {isLoading && "Starting ..."}
         {!isLoading && (
-          <button
-            type="button"
-            className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] disabled:opacity-50"
+          <Button
             disabled={
               !canAffordToTrain(
                 paPlayer,
@@ -111,15 +111,12 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
                 buildingFieldName: energy.buildingFieldName,
                 buildingCostCrystal: energy.buildingCostCrystal,
                 unitAmount: Number(unitAmountRef?.current?.value),
-                buildingETA: energy.buildingETA,
               });
             }}
           >
             Construct
-          </button>
+          </Button>
         )}
-
-      
       </td>
     </tr>
   );

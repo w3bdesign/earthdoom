@@ -1,17 +1,21 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 
 export const paUsersRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.paUsers.findMany();
-  }),
   createPlayer: publicProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(({ ctx, input }) => {
       return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
     }),
-  getResourceOverview: publicProcedure
+  getAll: privateProcedure.query(({ ctx }) => {
+    return ctx.prisma.paUsers.findMany();
+  }),
+  getResourceOverview: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       const player = await ctx.prisma.paUsers.findUnique({
@@ -32,7 +36,7 @@ export const paUsersRouter = createTRPCRouter({
 
       return player;
     }),
-  getAttackedPlayer: publicProcedure
+  getAttackedPlayer: privateProcedure
     .input(z.object({ Warid: z.number() }))
     .query(async ({ ctx, input }) => {
       const defender = await ctx.prisma.paUsers.findUnique({
@@ -42,7 +46,7 @@ export const paUsersRouter = createTRPCRouter({
 
       return defender;
     }),
-  getDefendedPlayer: publicProcedure
+  getDefendedPlayer: privateProcedure
     .input(z.object({ Defid: z.number() }))
     .query(async ({ ctx, input }) => {
       const defender = await ctx.prisma.paUsers.findUnique({
@@ -52,12 +56,12 @@ export const paUsersRouter = createTRPCRouter({
 
       return defender;
     }),
-  getPlayerById: publicProcedure
+  getPlayerById: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
         where: { nick: input.nick },
-        select: { id: true },
+        select: { id: true, tag: true },
       });
 
       const player = await ctx.prisma.paUsers.findUnique({
@@ -68,7 +72,7 @@ export const paUsersRouter = createTRPCRouter({
 
       return player;
     }),
-  getFriendlies: publicProcedure
+  getFriendlies: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
@@ -104,7 +108,7 @@ export const paUsersRouter = createTRPCRouter({
         defenders: forsvar,
       };
     }),
-  getHostiles: publicProcedure
+  getHostiles: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
@@ -141,7 +145,7 @@ export const paUsersRouter = createTRPCRouter({
       };
     }),
 
-  getContinentIncoming: publicProcedure
+  getContinentIncoming: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
@@ -172,7 +176,7 @@ export const paUsersRouter = createTRPCRouter({
 
       const friendlyFleets = friendly.map((friendly) => {
         const eta = friendly.defeta >= 10 ? friendly.defeta - 10 : 0;
-        return `Continent incoming fleet: ${friendly.nick} #${friendly.def} (ETA: ${eta})`;
+        return `Continent incoming fleet: ${friendly.nick} is defending #${friendly.def} (ETA: ${eta})`;
       });
 
       return {
@@ -181,15 +185,20 @@ export const paUsersRouter = createTRPCRouter({
       };
     }),
 
-  constructBuilding: publicProcedure
+  constructBuilding: privateProcedure
     .input(z.object({ Userid: z.number() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingETA: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
-      const { buildingFieldName, buildingETA } = input;
-
-      // TODO Deduct cost from player
+      const {
+        buildingFieldName,
+        buildingCostCrystal,
+        buildingCostTitanium,
+        buildingETA,
+      } = input;
 
       const data = await ctx.prisma.paUsers.update({
         where: {
@@ -197,21 +206,29 @@ export const paUsersRouter = createTRPCRouter({
         },
         data: {
           [buildingFieldName]: buildingETA,
+          crystal: { decrement: buildingCostCrystal },
+          metal: { decrement: buildingCostTitanium },
         },
       });
 
       return data;
     }),
 
-  researchBuilding: publicProcedure
+  researchBuilding: privateProcedure
     .input(z.object({ Userid: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingETA: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
-      const { buildingFieldName, buildingETA } = input;
-
-      // TODO Deduct cost from player
+      const {
+        buildingFieldName,
+        buildingCostCrystal,
+        buildingCostTitanium,
+        buildingETA,
+      } = input;
 
       const data = await ctx.prisma.paUsers.update({
         where: {
@@ -219,6 +236,8 @@ export const paUsersRouter = createTRPCRouter({
         },
         data: {
           [buildingFieldName]: buildingETA,
+          crystal: { decrement: buildingCostCrystal },
+          metal: { decrement: buildingCostTitanium },
         },
       });
 
@@ -227,7 +246,7 @@ export const paUsersRouter = createTRPCRouter({
 
   // TODO Combine constructBuilding, produceUnit, spyingInitiate and researchBuilding into one?
 
-  produceUnit: publicProcedure
+  produceUnit: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingFieldNameETA: z.string() }))
@@ -264,11 +283,11 @@ export const paUsersRouter = createTRPCRouter({
       return data;
     }),
 
-  spyingInitiate: publicProcedure
+  spyingInitiate: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingCostCrystal: z.number() }))
-    .input(z.object({ buildingETA: z.number() }))
+    .input(z.object({ buildingETA: z.number().optional() }))
     .input(z.object({ unitAmount: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
@@ -285,10 +304,12 @@ export const paUsersRouter = createTRPCRouter({
 
           crystal: { decrement: buildingCostCrystal * unitAmount },
 
-          ui_roids: { decrement: unitAmount },
+          ui_roids: { increment: unitAmount },
         },
       });
 
       return data;
     }),
+
+  // TODO Add support for more spying options
 });
