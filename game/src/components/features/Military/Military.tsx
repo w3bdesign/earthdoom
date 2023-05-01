@@ -24,13 +24,13 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   };
 
   return (
-    <div className="mt-4 flex flex-col items-center justify-center py-4">
+    <div className="mt-6 flex flex-col items-center justify-center py-4">
       <div className="w-full max-w-lg">
         <div className="mb-4 rounded-lg bg-white px-8 py-6 shadow-md">
           <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
           <form
             onSubmit={handleSubmit}
-            className="mt-4 flex flex-col items-center justify-center py-2"
+            className="mt-4 flex flex-col items-center justify-center"
           >
             <span className="text-md mb-2">Country ID #:</span>
             <input
@@ -45,7 +45,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
           <h2 className="py-4 text-center text-xl font-bold">Defend:</h2>
           <form
             onSubmit={handleSubmit}
-            className="mt-4 flex flex-col items-center justify-center py-2"
+            className="mt-4 flex flex-col items-center justify-center"
           >
             <span className="text-md mb-2">Country ID #:</span>
             <input
