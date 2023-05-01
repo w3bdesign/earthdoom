@@ -32,7 +32,6 @@ const MilitaryPage: NextPage = () => {
                 <LoadingSpinner />
               </div>
             )}
-
             {paPlayer && <Military paPlayer={paPlayer} />}
           </div>
         </div>
