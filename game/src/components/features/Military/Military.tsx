@@ -1,9 +1,10 @@
-import { FC, SetStateAction, useRef, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import { api } from "@/utils/api";
 
+import type { FC, ChangeEvent } from "react";
 import type { PaUsers } from "@prisma/client";
 
 import Button from "@/components/ui/common/Button";
@@ -16,6 +17,10 @@ interface IMilitaryProps {
   paPlayer: PaPlayer;
 }
 
+interface IHandleInputChange {
+  (event: ChangeEvent<HTMLInputElement>): void;
+}
+
 const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const ctx = api.useContext();
   const { user } = useUser();
@@ -23,40 +28,35 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const [attackValue, setAttackValue] = useState<string>("");
   const [defValue, setDefValue] = useState<string>("");
 
-  const militaryToast = () => toast("Troops are on their way");
-  const errorToast = () => toast("Database error");
+  const toastHandler = (input: string) => toast(input);
 
   const areTroopsAvailable =
     Number(paPlayer.war) === 0 && Number(paPlayer.def) === 0;
 
   const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
     onSuccess: async () => {
-      militaryToast();
+      toastHandler("Action successful!");
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      toastHandler("Error ...");
     },
   });
 
-  function handleInputAttackChange(event: {
-    target: { value: SetStateAction<string> };
-  }) {
+  const handleInputAttackChange: IHandleInputChange = (event) => {
     setAttackValue(event.target.value);
-  }
+  };
 
-  function handleInputDefChange(event: {
-    target: { value: SetStateAction<string> };
-  }) {
+  const handleInputDefChange: IHandleInputChange = (event) => {
     setDefValue(event.target.value);
-  }
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center py-6">
+    <div className="flex flex-col items-center justify-center py-5">
       <div className="w-full max-w-lg">
-        <div className="mb-4 rounded-lg bg-white px-8 py-6 shadow-md">
+        <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
           <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
           <div className="mt-4 flex flex-col items-center justify-center">
             <span className="text-md mb-2">Country nick:</span>
@@ -67,11 +67,17 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
               className="w-64 rounded-md border border-gray-300 px-3 py-2"
             />
             <Button
-              disabled={
-                isLoading || !areTroopsAvailable || attackValue.length === 0
-              }
+              disabled={isLoading}
               onClick={(event) => {
                 event.preventDefault();
+                if (!areTroopsAvailable) {
+                  toastHandler("Troops are not available");
+                  return;
+                }
+                if (!attackValue.trim().length) {
+                  toastHandler("You need to enter a target");
+                  return;
+                }
                 mutate({
                   Userid: paPlayer.id,
                   target: attackValue,
@@ -93,12 +99,18 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
               className="w-64 rounded-md border border-gray-300 px-3 py-2"
             />
             <Button
-              disabled={
-                isLoading || !areTroopsAvailable || defValue.length === 0
-              }
+              disabled={isLoading}
               extraClasses="w-32 mt-4"
               onClick={(event) => {
                 event.preventDefault();
+                if (!areTroopsAvailable) {
+                  toastHandler("Troops are not available");
+                  return;
+                }
+                if (!defValue.trim().length) {
+                  toastHandler("You need to enter a target");
+                  return;
+                }
                 mutate({
                   Userid: paPlayer.id,
                   target: defValue,
