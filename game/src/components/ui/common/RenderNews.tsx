@@ -62,5 +62,3 @@ export const RenderNews = ({ isLoading, hostiles, friendlies }: INewsProps) => {
     </div>
   );
 };
-
-
