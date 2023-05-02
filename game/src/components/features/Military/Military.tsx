@@ -1,9 +1,10 @@
-import { FC, useRef } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import { api } from "@/utils/api";
 
+import type { FC, ChangeEvent } from "react";
 import type { PaUsers } from "@prisma/client";
 
 import Button from "@/components/ui/common/Button";
@@ -16,47 +17,71 @@ interface IMilitaryProps {
   paPlayer: PaPlayer;
 }
 
+interface IHandleInputChange {
+  (event: ChangeEvent<HTMLInputElement>): void;
+}
+
 const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const ctx = api.useContext();
   const { user } = useUser();
 
-  const attackRef = useRef<HTMLInputElement>(null);
-  const defendRef = useRef<HTMLInputElement>(null);
+  const [attackValue, setAttackValue] = useState<string>("");
+  const [defValue, setDefValue] = useState<string>("");
 
-  const attackToast = () => toast("Attacking player");
-  const defendToast = () => toast("Defending player");
-  const errorToast = () => toast("Database error");
+  const toastHandler = (input: string) => toast(input);
 
-  const { mutate, isLoading } = api.paUsers.attackPlayer.useMutation({
+  const areTroopsAvailable =
+    Number(paPlayer.war) === 0 && Number(paPlayer.def) === 0;
+
+  const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
     onSuccess: async () => {
-      attackToast();
+      toastHandler("Action successful!");
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      toastHandler("Error ...");
     },
   });
 
+  const handleInputAttackChange: IHandleInputChange = (event) => {
+    setAttackValue(event.target.value);
+  };
+
+  const handleInputDefChange: IHandleInputChange = (event) => {
+    setDefValue(event.target.value);
+  };
+
   return (
-    <div className="mt-6 flex flex-col items-center justify-center py-8">
+    <div className="flex flex-col items-center justify-center py-5">
       <div className="w-full max-w-lg">
-        <div className="mb-4 rounded-lg bg-white px-8 py-6 shadow-md">
+        <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
           <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
           <div className="mt-4 flex flex-col items-center justify-center">
             <span className="text-md mb-2">Country nick:</span>
             <input
               type="text"
               name="attack"
-              ref={attackRef}
+              onChange={handleInputAttackChange}
               className="w-64 rounded-md border border-gray-300 px-3 py-2"
             />
             <Button
-              onClick={() => {
+              disabled={isLoading}
+              onClick={(event) => {
+                event.preventDefault();
+                if (!areTroopsAvailable) {
+                  toastHandler("Troops are not available");
+                  return;
+                }
+                if (!attackValue.trim().length) {
+                  toastHandler("You need to enter a target");
+                  return;
+                }
                 mutate({
                   Userid: paPlayer.id,
-                  attackedTarget: String(attackRef.current?.value),
+                  target: attackValue,
+                  mode: "attack",
                 });
               }}
               extraClasses="w-32 mt-4"
@@ -70,10 +95,31 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
             <input
               type="text"
               name="defend"
-              ref={defendRef}
+              onChange={handleInputDefChange}
               className="w-64 rounded-md border border-gray-300 px-3 py-2"
             />
-            <Button extraClasses="w-32 mt-4">Defend</Button>
+            <Button
+              disabled={isLoading}
+              extraClasses="w-32 mt-4"
+              onClick={(event) => {
+                event.preventDefault();
+                if (!areTroopsAvailable) {
+                  toastHandler("Troops are not available");
+                  return;
+                }
+                if (!defValue.trim().length) {
+                  toastHandler("You need to enter a target");
+                  return;
+                }
+                mutate({
+                  Userid: paPlayer.id,
+                  target: defValue,
+                  mode: "defend",
+                });
+              }}
+            >
+              Defend
+            </Button>
           </form>
         </div>
       </div>

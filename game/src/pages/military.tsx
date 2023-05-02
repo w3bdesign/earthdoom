@@ -8,6 +8,7 @@ import Military from "@/components/features/Military/Military";
 import { api } from "@/utils/api";
 import UnitsTable from "@/components/Index/UnitsTable";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import FleetStatus from "@/components/Index/FleetStatus";
 
 const MilitaryPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
@@ -32,6 +33,7 @@ const MilitaryPage: NextPage = () => {
                 <LoadingSpinner />
               </div>
             )}
+            {paPlayer && <FleetStatus paPlayer={paPlayer} />}
             {paPlayer && <Military paPlayer={paPlayer} />}
           </div>
         </div>
