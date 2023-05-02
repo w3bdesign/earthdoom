@@ -1,8 +1,7 @@
-import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 import { useRef } from "react";
 
-import Button from "@/components/ui/common/Button";
+import { Button, ToastComponent } from "@/components/ui/common";
 
 import { RESOURCE } from "./constants/RESOURCE";
 
@@ -31,21 +30,21 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
   const { user, isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
 
-  const productionToast = () => toast("Building started");
-  const errorToast = () => toast("Database error");
-  const canNotAffordToast = () => toast("You can not afford this");
-  const needsToBeMoreNullToast = () =>
-    toast("You need to enter a quantity greater than 0");
-
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
-      productionToast();
+      ToastComponent({
+        message: "Production started",
+        type: "success",
+      });
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      ToastComponent({
+        message: "Database error",
+        type: "error",
+      });
     },
   });
 
@@ -103,7 +102,10 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
           <Button
             onClick={() => {
               if (Number(unitAmountRef?.current?.value) === 0) {
-                needsToBeMoreNullToast();
+                ToastComponent({
+                  message: "You need to enter a quantity more than 0",
+                  type: "error",
+                });
                 return;
               }
               if (
@@ -114,7 +116,10 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
                   Number(unitAmountRef?.current?.value)
                 )
               ) {
-                canNotAffordToast();
+                ToastComponent({
+                  message: "You can not afford this",
+                  type: "error",
+                });
                 return;
               }
               mutate({
