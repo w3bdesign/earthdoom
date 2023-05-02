@@ -6,7 +6,7 @@ import { type NextPage } from "next";
 
 import { api } from "@/utils/api";
 
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 import Button from "@/components/ui/common/Button";
 
 const Country: NextPage = () => {

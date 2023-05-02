@@ -291,11 +291,12 @@ export const paUsersRouter = createTRPCRouter({
     .input(z.object({ unitAmount: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
-      const { buildingFieldName, buildingCostCrystal, unitAmount } = input;
+      const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
+        input;
 
       const data = await ctx.prisma.paUsers.update({
         where: {
-          id: input.Userid,
+          id: Userid,
         },
         data: {
           [buildingFieldName]: {
@@ -312,4 +313,29 @@ export const paUsersRouter = createTRPCRouter({
     }),
 
   // TODO Add support for more spying options
+
+  attackPlayer: privateProcedure
+    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ attackedTarget: z.string() }))
+
+    .mutation(async ({ ctx, input }) => {
+      const { Userid, attackedTarget } = input;
+
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: attackedTarget },
+        select: { id: true, tag: true },
+      });
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: Userid,
+        },
+        data: {
+          war: user?.id,
+          wareta: 30,
+        },
+      });
+
+      return data;
+    }),
 });

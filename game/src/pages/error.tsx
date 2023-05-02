@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 
-import Layout from "@/components/common/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 
 const Error: NextPage = () => {
   return (
