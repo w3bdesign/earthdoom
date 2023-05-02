@@ -11,22 +11,22 @@ const Information = () => {
   // TODO Maybe we can use the user from the session to get the paPlayer data
   // TODO Right now these queries take too long
 
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
 
   const { data: paPlayer } = api.paUsers.getResourceOverview.useQuery({
-    nick: isLoaded && user?.username ? user.username : "",
+    nick: user?.username,
   });
 
   const { data: hostilesData, isLoading } = api.paUsers.getHostiles.useQuery({
-    nick: isLoaded && user?.username ? user.username : "",
+    nick: user?.username,
   });
 
   const { data: friendliesData } = api.paUsers.getFriendlies.useQuery({
-    nick: isLoaded && user?.username ? user.username : "",
+    nick: user?.username,
   });
 
   const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
-    nick: isLoaded && user?.username ? user.username : "",
+    nick: user?.username,
   });
 
   return (
