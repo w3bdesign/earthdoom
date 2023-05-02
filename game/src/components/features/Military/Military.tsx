@@ -40,7 +40,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   });
 
   return (
-    <div className="mt-6 flex flex-col items-center justify-center py-4">
+    <div className="mt-6 flex flex-col items-center justify-center py-8">
       <div className="w-full max-w-lg">
         <div className="mb-4 rounded-lg bg-white px-8 py-6 shadow-md">
           <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
