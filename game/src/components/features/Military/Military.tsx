@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, SetStateAction, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
@@ -20,38 +20,38 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const ctx = api.useContext();
   const { user } = useUser();
 
-  const attackRef = useRef<HTMLInputElement>(null);
-  const defendRef = useRef<HTMLInputElement>(null);
+  const [attackValue, setAttackValue] = useState<string>("");
+  const [defValue, setDefValue] = useState<string>("");
 
-  const attackToast = () => toast("Attacking player");
-  const defendToast = () => toast("Defending player");
+  const militaryToast = () => toast("Troops are on their way");
   const errorToast = () => toast("Database error");
 
-  const { mutate: attackPlayer, isLoading: loadingAttack } =
-    api.paUsers.attackPlayer.useMutation({
-      onSuccess: async () => {
-        attackToast();
-        if (user && user.username) {
-          await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
-        }
-      },
-      onError: () => {
-        errorToast();
-      },
-    });
+  const areTroopsAvailable =
+    Number(paPlayer.war) === 0 && Number(paPlayer.def) === 0;
 
-  const { mutate: defendPlayer, isLoading: loadingDefend } =
-    api.paUsers.defendPlayer.useMutation({
-      onSuccess: async () => {
-        attackToast();
-        if (user && user.username) {
-          await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
-        }
-      },
-      onError: () => {
-        errorToast();
-      },
-    });
+  const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
+    onSuccess: async () => {
+      militaryToast();
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      errorToast();
+    },
+  });
+
+  function handleInputAttackChange(event: {
+    target: { value: SetStateAction<string> };
+  }) {
+    setAttackValue(event.target.value);
+  }
+
+  function handleInputDefChange(event: {
+    target: { value: SetStateAction<string> };
+  }) {
+    setDefValue(event.target.value);
+  }
 
   return (
     <div className="mt-6 flex flex-col items-center justify-center py-8">
@@ -63,15 +63,19 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
             <input
               type="text"
               name="attack"
-              ref={attackRef}
+              onChange={handleInputAttackChange}
               className="w-64 rounded-md border border-gray-300 px-3 py-2"
             />
             <Button
-              disabled={loadingAttack}
-              onClick={() => {
-                attackPlayer({
+              disabled={
+                isLoading || !areTroopsAvailable || attackValue.length === 0
+              }
+              onClick={(event) => {
+                event.preventDefault();
+                mutate({
                   Userid: paPlayer.id,
-                  attackedTarget: String(attackRef.current?.value),
+                  target: attackValue,
+                  mode: "attack",
                 });
               }}
               extraClasses="w-32 mt-4"
@@ -85,10 +89,23 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
             <input
               type="text"
               name="defend"
-              ref={defendRef}
+              onChange={handleInputDefChange}
               className="w-64 rounded-md border border-gray-300 px-3 py-2"
             />
-            <Button disabled={loadingDefend} extraClasses="w-32 mt-4">
+            <Button
+              disabled={
+                isLoading || !areTroopsAvailable || defValue.length === 0
+              }
+              extraClasses="w-32 mt-4"
+              onClick={(event) => {
+                event.preventDefault();
+                mutate({
+                  Userid: paPlayer.id,
+                  target: defValue,
+                  mode: "defend",
+                });
+              }}
+            >
               Defend
             </Button>
           </form>
