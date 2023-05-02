@@ -338,4 +338,29 @@ export const paUsersRouter = createTRPCRouter({
 
       return data;
     }),
+
+  defendPlayer: privateProcedure
+    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ attackedTarget: z.string() }))
+
+    .mutation(async ({ ctx, input }) => {
+      const { Userid, attackedTarget } = input;
+
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: attackedTarget },
+        select: { id: true, tag: true },
+      });
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: Userid,
+        },
+        data: {
+          def: user?.id,
+          defeta: 30,
+        },
+      });
+
+      return data;
+    }),
 });

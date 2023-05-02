@@ -27,17 +27,31 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const defendToast = () => toast("Defending player");
   const errorToast = () => toast("Database error");
 
-  const { mutate, isLoading } = api.paUsers.attackPlayer.useMutation({
-    onSuccess: async () => {
-      attackToast();
-      if (user && user.username) {
-        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
-      }
-    },
-    onError: () => {
-      errorToast();
-    },
-  });
+  const { mutate: attackPlayer, isLoading: loadingAttack } =
+    api.paUsers.attackPlayer.useMutation({
+      onSuccess: async () => {
+        attackToast();
+        if (user && user.username) {
+          await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+        }
+      },
+      onError: () => {
+        errorToast();
+      },
+    });
+
+  const { mutate: defendPlayer, isLoading: loadingDefend } =
+    api.paUsers.defendPlayer.useMutation({
+      onSuccess: async () => {
+        attackToast();
+        if (user && user.username) {
+          await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+        }
+      },
+      onError: () => {
+        errorToast();
+      },
+    });
 
   return (
     <div className="mt-6 flex flex-col items-center justify-center py-8">
@@ -53,8 +67,9 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
               className="w-64 rounded-md border border-gray-300 px-3 py-2"
             />
             <Button
+              disabled={loadingAttack}
               onClick={() => {
-                mutate({
+                attackPlayer({
                   Userid: paPlayer.id,
                   attackedTarget: String(attackRef.current?.value),
                 });
@@ -73,7 +88,9 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
               ref={defendRef}
               className="w-64 rounded-md border border-gray-300 px-3 py-2"
             />
-            <Button extraClasses="w-32 mt-4">Defend</Button>
+            <Button disabled={loadingDefend} extraClasses="w-32 mt-4">
+              Defend
+            </Button>
           </form>
         </div>
       </div>
