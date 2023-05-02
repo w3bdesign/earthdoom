@@ -304,7 +304,6 @@ export const paUsersRouter = createTRPCRouter({
           },
 
           crystal: { decrement: buildingCostCrystal * unitAmount },
-
           ui_roids: { increment: unitAmount },
         },
       });
@@ -314,16 +313,20 @@ export const paUsersRouter = createTRPCRouter({
 
   // TODO Add support for more spying options
 
-  attackPlayer: privateProcedure
-    .input(z.object({ Userid: z.number() }))
-    .input(z.object({ attackedTarget: z.string() }))
-
+  militaryAction: privateProcedure
+    .input(
+      z.object({
+        Userid: z.number(),
+        target: z.string(),
+        mode: z.enum(["attack", "defend"]),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
-      const { Userid, attackedTarget } = input;
+      const { Userid, target, mode } = input;
 
       const user = await ctx.prisma.paUsers.findUnique({
-        where: { nick: attackedTarget },
-        select: { id: true, tag: true },
+        where: { nick: target },
+        select: { id: true },
       });
 
       const data = await ctx.prisma.paUsers.update({
@@ -331,8 +334,8 @@ export const paUsersRouter = createTRPCRouter({
           id: Userid,
         },
         data: {
-          war: user?.id,
-          wareta: 30,
+          [mode === "attack" ? "war" : "def"]: user?.id,
+          [mode === "attack" ? "wareta" : "defeta"]: 30,
         },
       });
 
