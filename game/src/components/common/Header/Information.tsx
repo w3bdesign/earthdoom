@@ -13,20 +13,22 @@ const Information = () => {
 
   const { user } = useUser();
 
+  if (!user || !user.username) return null;
+
   const { data: paPlayer } = api.paUsers.getResourceOverview.useQuery({
-    nick: user?.username,
+    nick: user.username,
   });
 
   const { data: hostilesData, isLoading } = api.paUsers.getHostiles.useQuery({
-    nick: user?.username,
+    nick: user.username,
   });
 
   const { data: friendliesData } = api.paUsers.getFriendlies.useQuery({
-    nick: user?.username,
+    nick: user.username,
   });
 
   const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
-    nick: user?.username,
+    nick: user.username,
   });
 
   return (
