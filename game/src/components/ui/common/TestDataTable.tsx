@@ -7,6 +7,18 @@ import type { UseMutateFunction } from "@tanstack/react-query";
 import Button from "./Button";
 import ToastComponent from "./ToastComponent";
 
+type TMutateType = UseMutateFunction<
+  MutationData,
+  unknown,
+  {
+    Userid: number;
+    buildingFieldName: string;
+    buildingETA: number;
+    buildingCostCrystal: number;
+    buildingCostTitanium: number;
+  },
+  unknown
+>;
 
 export interface TestTableColumn {
   label: string;
@@ -18,18 +30,7 @@ export interface TestDataTableProps {
   data: PaPlayer[];
   caption: string;
   renderData: Building[];
-  action?: UseMutateFunction<
-    MutationData,
-    unknown,
-    {
-      Userid: number;
-      buildingFieldName: string;
-      buildingETA: number;
-      buildingCostCrystal: number;
-      buildingCostTitanium: number;
-    },
-    unknown
-  >;
+  action?: TMutateType;
   actionText?: string;
 }
 
@@ -39,18 +40,7 @@ interface IActionButtonProps {
   paPlayer: PaPlayer[];
   building: Building;
   canAffordToTrain: typeof canAffordToTrain;
-  mutate: UseMutateFunction<
-    MutationData,
-    unknown,
-    {
-      Userid: number;
-      buildingFieldName: string;
-      buildingETA: number;
-      buildingCostCrystal: number;
-      buildingCostTitanium: number;
-    },
-    unknown
-  >;
+  mutate: TMutateType;
   actionText: string;
 }
 
