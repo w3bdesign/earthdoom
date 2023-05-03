@@ -27,7 +27,7 @@ class MyDocument extends Document {
           <meta property="og:url" content="https://www.earthdoom.com" />
           <meta property="og:site_name" content="earthdoom.com" />
         </Head>
-        <body className="bg-neutral-900 font-body">
+        <body className="bg-neutral-900 font-body md:mb-[5rem]">
           <Main />
           <NextScript />
         </body>
