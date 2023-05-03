@@ -2,10 +2,11 @@ import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
 import type { PaPlayer } from "@/components/features/Production/Production";
 import type { Building } from "@/components/features/Construct/types/types";
+import type { UseMutateFunction } from "@tanstack/react-query";
 
 import Button from "./Button";
 import ToastComponent from "./ToastComponent";
-import { UseMutateFunction } from "@tanstack/react-query";
+
 
 export interface TestTableColumn {
   label: string;
@@ -137,7 +138,6 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
                 {typeof col.accessor === "string" && (
                   <Stringifier value={row[col.accessor]} />
                 )}
-
                 {action && actionText ? (
                   <>
                     <ActionButton
