@@ -1,6 +1,6 @@
 import { type FC } from "react";
 
-import DataTable from "@/components/ui/common/DataTable";
+import { DataTable } from "@/components/ui/common";
 
 interface PaPlayer {
   id: number;

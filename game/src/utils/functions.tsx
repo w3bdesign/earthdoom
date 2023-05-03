@@ -35,7 +35,7 @@ export const Stringifier = ({ value }: IStringifierProps) => {
   } else {
     stringifiedValue = "";
   }
-  return <span>{stringifiedValue}</span>;
+  return <span className="pl-8 md:pl-0">{stringifiedValue}</span>;
 };
 
 /**

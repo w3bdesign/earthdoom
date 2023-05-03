@@ -8,7 +8,7 @@ import {
 import { type NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
-import Button from "@/components/ui/common/Button";
+import { Button } from "@/components/ui/common";
 
 const Logout: NextPage = () => {
   return (

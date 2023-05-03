@@ -1,11 +1,10 @@
-import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import type { FC } from "react";
 import type { PaUsers } from "@prisma/client";
-import { type Building } from "./types/types";
+import type { Building } from "./types/types";
 
-import Button from "@/components/ui/common/Button";
+import { Button, ToastComponent } from "@/components/ui/common";
 
 import { BUILDINGS } from "./constants/BUILDINGS";
 
@@ -29,18 +28,15 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
 
-  const constructionToast = () => toast("Construction started");
-  const errorToast = () => toast("Database error");
-
   const { mutate, isLoading } = api.paUsers.constructBuilding.useMutation({
     onSuccess: async () => {
-      constructionToast();
+      ToastComponent({ message: "Building started", type: "success" });
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      ToastComponent({ message: "Database error", type: "error" });
     },
   });
 
@@ -87,14 +83,20 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
 
         {paPlayer[building.buildingFieldName] === 0 && !isLoading && (
           <Button
-            disabled={
-              !canAffordToTrain(
-                paPlayer,
-                building.buildingCostCrystal,
-                building.buildingCostTitanium
-              )
-            }
             onClick={() => {
+              if (
+                !canAffordToTrain(
+                  paPlayer,
+                  building.buildingCostCrystal,
+                  building.buildingCostTitanium
+                )
+              ) {
+                ToastComponent({
+                  message: "You can not afford this",
+                  type: "error",
+                });
+                return;
+              }
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: building.buildingFieldName,
@@ -117,7 +119,7 @@ const BuildingRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
 
 const BuildingTable: FC<ConstructProps> = ({ paPlayer }) => {
   return (
-    <table className="w-full text-left ring-1 ring-slate-400/10">
+    <table className="w-full text-left ring-1 ring-slate-400/10 mt-2">
       <tbody>
         <tr>
           <th

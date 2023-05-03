@@ -2,9 +2,10 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
+import { api } from "@/utils/api";
+
 import { Layout } from "@/components/common/Layout";
 import Alliance from "@/components/features/Alliance";
-import { api } from "@/utils/api";
 
 const AlliancePage: NextPage = () => {
   const { user, isSignedIn } = useUser();

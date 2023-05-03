@@ -1,7 +1,7 @@
 import React from "react";
 import { Toaster } from "react-hot-toast";
 
-import Button from "@/components/ui/common/Button";
+import { Button } from "@/components/ui/common";
 
 import type { FC } from "react";
 import type { PaNews } from "@prisma/client";

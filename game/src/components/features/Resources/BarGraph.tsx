@@ -41,7 +41,7 @@ const BarChart: React.FC<Props> = ({ chartData }) => {
   };
 
   return (
-    <div className="flex h-[400px] w-full justify-center px-4 py-4">
+    <div className="flex h-[25rem] w-full justify-center px-4 py-4">
       <Bar data={data} options={options} />
     </div>
   );

@@ -1,8 +1,7 @@
-import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 import { useRef } from "react";
 
-import Button from "@/components/ui/common/Button";
+import { Button, ToastComponent } from "@/components/ui/common";
 
 import type { FC } from "react";
 import type { IProduction } from "./types/types";
@@ -32,21 +31,15 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const { user, isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
 
-  const productionToast = () => toast("Training started");
-  const errorToast = () => toast("Database error");
-  const canNotAffordToast = () => toast("You can not afford this");
-  const needsToBeMoreNullToast = () =>
-    toast("You need to enter a quantity greater than 0");
-
   const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
-      productionToast();
+      ToastComponent({ message: "Training started", type: "success" });
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      ToastComponent({ message: "Database error", type: "error" });
     },
   });
 
@@ -54,7 +47,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     return <div>Loading user data...</div>;
   }
 
-  // TODO Do not render table headers?
+  // TODO Do not render table headers when we have done no construction/research?
 
   //if (paPlayer[production.buildingRequirement] === 0) return null;
 
@@ -116,7 +109,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
           <Button
             onClick={() => {
               if (Number(unitAmountRef?.current?.value) === 0) {
-                needsToBeMoreNullToast();
+                ToastComponent({
+                  message: "Needs to be more than 0",
+                  type: "error",
+                });
                 return;
               }
               if (
@@ -127,7 +123,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                   Number(unitAmountRef?.current?.value)
                 )
               ) {
-                canNotAffordToast();
+                ToastComponent({
+                  message: "You can not afford this",
+                  type: "error",
+                });
                 return;
               }
               mutate({
@@ -152,7 +151,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
 
 const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
   return (
-    <table className="w-full text-left ring-1 ring-slate-400/10">
+    <table className="w-full text-left ring-1 ring-slate-400/10 mt-2">
       <tbody>
         <tr>
           <th
