@@ -51,17 +51,7 @@ const Energy: NextPage = () => {
             {!isLoaded && <LoadingSpinner />}
             {paPlayer && <EnergyTable paPlayer={paPlayer} />}
 
-            {paPlayer && (
-              <TestDataTable
-                columns={columns}
-                data={[paPlayer]}
-                caption={caption}
-                renderData={ENERGY}
-                action={mutate}
-                actionText="Construct"
-                actionInProgress="Constructing ..."
-              />
-            )}
+           
           </div>
         </div>
       </Layout>
