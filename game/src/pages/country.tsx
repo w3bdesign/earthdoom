@@ -65,7 +65,7 @@ const Country: NextPage = () => {
                   className="mx-auto max-w-[15.625rem] text-center"
                 />
               </div>
-              <table className="w-full text-left ring-1 ring-slate-400/10 mt-2">
+              <table className="mt-2 w-full text-left ring-1 ring-slate-400/10">
                 <caption className="mb-10 text-xl font-medium text-white ">
                   Continent name here <br />
                   Score: 1000000
