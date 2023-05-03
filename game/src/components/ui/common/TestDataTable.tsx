@@ -52,7 +52,7 @@ const ActionButton: React.FC<IActionButtonProps> = ({
   canAffordToTrain,
   mutate,
   actionText,
-  actionInProgress,
+  actionInProgress = "Constructing ...",
 }) => {
   return (
     <>
