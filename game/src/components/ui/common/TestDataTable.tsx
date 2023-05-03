@@ -32,6 +32,7 @@ export interface TestDataTableProps {
   renderData: Building[];
   action?: TMutateType;
   actionText?: string;
+  actionInProgress?: string;
 }
 
 type MutationData = unknown;
@@ -41,7 +42,8 @@ interface IActionButtonProps {
   building: Building;
   canAffordToTrain: typeof canAffordToTrain;
   mutate: TMutateType;
-  actionText: string;
+  actionText?: string;
+  actionInProgress?: string;
 }
 
 const ActionButton: React.FC<IActionButtonProps> = ({
@@ -50,6 +52,7 @@ const ActionButton: React.FC<IActionButtonProps> = ({
   canAffordToTrain,
   mutate,
   actionText,
+  actionInProgress,
 }) => {
   return (
     <>
@@ -84,7 +87,7 @@ const ActionButton: React.FC<IActionButtonProps> = ({
       )}
       {paPlayer[0] &&
         Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
-        "Building ..."}
+        `${actionInProgress}`}
       {paPlayer[0] && paPlayer[0][building.buildingFieldName] === 1 && "Done"}
     </>
   );
@@ -102,6 +105,7 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
   renderData,
   action,
   actionText,
+  actionInProgress,
 }) => {
   return (
     <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-full">
@@ -131,7 +135,7 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
               <td
                 key={colIndex}
                 data-th={col.label}
-                className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+                className="flex h-12 items-center px-6 md:text-left text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
               >
                 {typeof col.accessor === "string" && (
                   <Stringifier value={row[col.accessor]} />
@@ -144,6 +148,7 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
                       canAffordToTrain={canAffordToTrain}
                       mutate={action}
                       actionText={actionText}
+                      actionInProgress={actionInProgress}
                     />
                   </>
                 ) : null}
