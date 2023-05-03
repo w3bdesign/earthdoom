@@ -32,6 +32,7 @@ const Energy: NextPage = () => {
     },
   });
 
+  /*
   const columns = [
     { label: "Name", accessor: "buildingName" },
     { label: "Description", accessor: "buildingDescription" },
@@ -42,6 +43,7 @@ const Energy: NextPage = () => {
   ];
 
   const caption = "Energy";
+  */
 
   return (
     <>
@@ -50,8 +52,6 @@ const Energy: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
             {paPlayer && <EnergyTable paPlayer={paPlayer} />}
-
-           
           </div>
         </div>
       </Layout>
