@@ -68,7 +68,7 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
         <h2 className="py-6 text-center text-2xl font-bold text-white">
           Fleet status
         </h2>
-        <span className="mx-auto mb-10 flex min-h-[100px] w-full flex-col items-center justify-center rounded bg-white py-2 text-center text-md md:text-lg shadow px-6 md:px-0">
+        <span className="mx-auto mb-10 flex min-h-[6.25rem] w-full flex-col items-center justify-center rounded bg-white py-2 text-center text-md md:text-lg shadow px-6 md:px-0">
           {isLoadingAttacked || (isLoadingDefended && <LoadingSpinner />)}
           {allFleetsAtHome}
           {returning}

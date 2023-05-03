@@ -62,7 +62,7 @@ const Country: NextPage = () => {
                 <img
                   src="https://via.placeholder.com/250"
                   alt=""
-                  className="mx-auto max-w-[250px] text-center"
+                  className="mx-auto max-w-[15.625rem] text-center"
                 />
               </div>
               <table className="w-full text-left ring-1 ring-slate-400/10">

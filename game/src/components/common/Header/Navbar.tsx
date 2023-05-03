@@ -6,7 +6,7 @@ import { LINKS } from "./constants/LINKS";
 
 const Navbar = () => {
   return (
-    <div className="flex min-h-[110px] justify-center bg-gray-800 p-6">
+    <div className="flex min-h-[6.875rem] justify-center bg-gray-800 p-6">
       <SignedIn>
         <nav
           className="relative flex w-full items-center justify-between bg-gray-800 py-2 text-white  dark:bg-neutral-700 dark:text-neutral-300 lg:flex-wrap lg:justify-center"
