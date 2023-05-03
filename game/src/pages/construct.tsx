@@ -6,6 +6,8 @@ import { Layout } from "@/components/common/Layout";
 import Construct from "@/components/features/Construct";
 
 import { api } from "@/utils/api";
+import { TestDataTable } from "@/components/ui/common";
+import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
 
 const Construction: NextPage = () => {
   const { user, isSignedIn } = useUser();
@@ -16,6 +18,16 @@ const Construction: NextPage = () => {
     nick: user.username,
   });
 
+  const columns = [
+    { label: "Name", accessor: "buildingName" },
+    { label: "Description", accessor: "buildingDescription" },
+    { label: "ETA", accessor: "buildingETA" },
+    { label: "Cost", accessor: "buildingCost" },
+    { label: "Action", accessor: "" },
+  ];
+
+  const caption = "Test data table";
+
   return (
     <>
       <Layout>
@@ -23,6 +35,15 @@ const Construction: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative py-4 sm:mx-auto">
               {paPlayer && <Construct paPlayer={paPlayer} />}
+
+              {paPlayer && (
+                <TestDataTable
+                  columns={columns}
+                  data={[paPlayer]}
+                  caption={caption}
+                  renderData={BUILDINGS}
+                />
+              )}
             </div>
           </div>
         </div>
