@@ -29,7 +29,7 @@ export interface TestDataTableProps {
   columns: TestTableColumn[];
   data: PaPlayer[];
   caption: string;
-  renderData: Building[];
+  renderData?: Building[];
   action?: TMutateType;
   actionText?: string;
   actionInProgress?: string;
@@ -39,7 +39,7 @@ type MutationData = unknown;
 
 interface IActionButtonProps {
   paPlayer: PaPlayer[];
-  building: Building;
+  building?: Building;
   canAffordToTrain: typeof canAffordToTrain;
   mutate: TMutateType;
   actionText?: string;
@@ -56,7 +56,7 @@ const ActionButton: React.FC<IActionButtonProps> = ({
 }) => {
   return (
     <>
-      {paPlayer[0] && paPlayer[0][building.buildingFieldName] === 0 && (
+      {paPlayer[0] && building && paPlayer[0][building.buildingFieldName] === 0 && (
         <Button
           onClick={() => {
             if (!paPlayer[0]) return;
@@ -85,10 +85,10 @@ const ActionButton: React.FC<IActionButtonProps> = ({
           {actionText}
         </Button>
       )}
-      {paPlayer[0] &&
+      {paPlayer[0] && building && 
         Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
         `${actionInProgress}`}
-      {paPlayer[0] && paPlayer[0][building.buildingFieldName] === 1 && "Done"}
+      {paPlayer[0] && building && paPlayer[0][building.buildingFieldName] === 1 && "Done"}
     </>
   );
 };
@@ -126,7 +126,38 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
         </tr>
       </thead>
       <tbody>
-        {renderData.map((row, rowIndex) => (
+        {!renderData && data && data.map((row, rowIndex) => (
+          <tr
+            key={rowIndex}
+            className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
+          >
+            {columns.map((col, colIndex) => (
+              <td
+                key={colIndex}
+                data-th={col.label}
+                className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:text-left"
+              >
+                {typeof col.accessor === "string" && (
+                  <Stringifier value={row[col.accessor]} />
+                )}
+                {typeof col.accessor !== "string" && action && actionText ? (
+                  <>
+                    <ActionButton
+                      paPlayer={data}
+                     
+                      canAffordToTrain={canAffordToTrain}
+                      mutate={action}
+                      actionText={actionText}
+                      actionInProgress={actionInProgress}
+                    />
+                  </>
+                ) : null}
+              </td>
+            ))}
+          </tr>
+        ))}
+
+{renderData && renderData.map((row, rowIndex) => (
           <tr
             key={rowIndex}
             className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
@@ -156,6 +187,24 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
             ))}
           </tr>
         ))}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </tbody>
     </table>
   );
