@@ -141,7 +141,7 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
 
 const ResourceTable: FC<IResourceProps> = ({ paPlayer }) => {
   return (
-    <table className="w-full text-left ring-1 ring-slate-400/10 mt-2">
+    <table className="mt-2 w-full text-left ring-1 ring-slate-400/10">
       <tbody>
         <tr>
           <th
