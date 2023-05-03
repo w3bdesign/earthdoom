@@ -7,7 +7,6 @@ import { api } from "@/utils/api";
 import { Layout } from "@/components/common/Layout";
 import Alliance from "@/components/features/Alliance";
 
-
 const AlliancePage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
