@@ -9,8 +9,6 @@ import { Layout } from "@/components/common/Layout";
 import { Button } from "@/components/ui/common";
 
 const Mail: NextPage = () => {
-  // https://github.com/pingdotgg/zapdos/blob/main/src/server/router/subroutes/question.ts
-
   const ctx = api.useContext();
 
   const deleteEmailToast = () => toast("Email deleted");
@@ -46,7 +44,7 @@ const Mail: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center px-2 py-2 ">
+        <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="mt-8 flex flex-col bg-white text-black">
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
