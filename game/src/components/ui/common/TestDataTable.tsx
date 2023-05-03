@@ -1,14 +1,11 @@
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
-import Button from "./Button";
-import ToastComponent from "./ToastComponent";
-
 import type { PaPlayer } from "@/components/features/Production/Production";
 import type { Building } from "@/components/features/Construct/types/types";
-import { PaUsers } from "@prisma/client";
-import { UseMutateFunction, UseMutationResult } from "@tanstack/react-query";
-import { TRPCClientErrorLike } from "@trpc/client";
-import { BuildProcedure } from "@trpc/server";
+
+import Button from "./Button";
+import ToastComponent from "./ToastComponent";
+import { UseMutateFunction } from "@tanstack/react-query";
 
 export interface TestTableColumn {
   label: string;
@@ -18,26 +15,41 @@ export interface TestTableColumn {
 export interface TestDataTableProps {
   columns: TestTableColumn[];
   data: PaPlayer[];
-
   caption: string;
   renderData: Building[];
-  action?: any;
+  action: UseMutateFunction<
+    MutationData,
+    unknown,
+    {
+      Userid: number;
+      buildingFieldName: string;
+      buildingETA: number;
+      buildingCostCrystal: number;
+      buildingCostTitanium: number;
+    },
+    unknown
+  >;
   actionText: string;
 }
 
-/*interface IActionButtonProps {
-  paPlayer: PaPlayer[];
-  building: Building;
-  canAffordToTrain: typeof canAffordToTrain;
-  mutate: UseMutateFunction;
-  actionText: string;
-}*/
+type MutationData = unknown;
 
 interface IActionButtonProps {
   paPlayer: PaPlayer[];
   building: Building;
   canAffordToTrain: typeof canAffordToTrain;
-  mutate: UseMutationResult<PaUsers, void, { input: { Userid: number; buildingFieldName: string; buildingETA: number; buildingCostCrystal: number; buildingCostTitanium: number; } }>;
+  mutate: UseMutateFunction<
+    MutationData,
+    unknown,
+    {
+      Userid: number;
+      buildingFieldName: string;
+      buildingETA: number;
+      buildingCostCrystal: number;
+      buildingCostTitanium: number;
+    },
+    unknown
+  >;
   actionText: string;
 }
 
