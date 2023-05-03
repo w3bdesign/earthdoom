@@ -46,7 +46,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           </SignedOut>
         </>
       )}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {process.env.NODE_ENV !== "production" && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
     </ClerkProvider>
   );
 }

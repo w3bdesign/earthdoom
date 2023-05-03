@@ -11,7 +11,7 @@ interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * @param {IButtonProps} props - The props for the Button component
  * @returns {JSX.Element} - The Button component
  */
-const Button: React.FC<IButtonProps> = ({
+export const Button: React.FC<IButtonProps> = ({
   children,
   variant = "primary",
   disabled,

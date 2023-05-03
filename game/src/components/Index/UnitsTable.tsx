@@ -2,7 +2,7 @@ import { type FC } from "react";
 
 import type { PaUsers } from "@prisma/client";
 
-import DataTable from "@/components/ui/common/DataTable";
+import { DataTable } from "@/components/ui/common";
 
 interface LandTableProps {
   paPlayer: PaUsers;

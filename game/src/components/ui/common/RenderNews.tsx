@@ -22,7 +22,7 @@ const FriendlyNews = ({ content }: { content: string }) => {
   );
 };
 
-const NewsRender = ({ isLoading, hostiles, friendlies }: INewsProps) => {
+export const RenderNews = ({ isLoading, hostiles, friendlies }: INewsProps) => {
   const hasNews = hostiles || friendlies;
 
   if (isLoading) {
@@ -35,7 +35,7 @@ const NewsRender = ({ isLoading, hostiles, friendlies }: INewsProps) => {
 
   if (hasNews) {
     return (
-      <div className="mt-8 flex min-w-[520px] flex-col bg-white text-black">
+      <div className="mt-8 flex min-w-[32.5rem] flex-col bg-white text-black">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
             <div className="overflow-hidden">
@@ -49,7 +49,7 @@ const NewsRender = ({ isLoading, hostiles, friendlies }: INewsProps) => {
   }
 
   return (
-    <div className="mt-4 flex min-w-[520px] flex-col bg-white text-black">
+    <div className="mt-4 flex min-w-[32.5rem] flex-col bg-white text-black">
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center overflow-hidden">
@@ -62,5 +62,3 @@ const NewsRender = ({ isLoading, hostiles, friendlies }: INewsProps) => {
     </div>
   );
 };
-
-export default NewsRender;

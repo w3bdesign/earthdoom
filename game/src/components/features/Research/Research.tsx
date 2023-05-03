@@ -1,7 +1,6 @@
-import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
-import Button from "@/components/ui/common/Button";
+import { Button, ToastComponent } from "@/components/ui/common";
 
 import { type FC } from "react";
 import type { PaUsers } from "@prisma/client";
@@ -29,18 +28,21 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
   const ctx = api.useContext();
   const { user, isLoaded } = useUser();
 
-  const researchToast = () => toast("Research started");
-  const errorToast = () => toast("Database error");
-
   const { mutate, isLoading } = api.paUsers.researchBuilding.useMutation({
     onSuccess: async () => {
-      researchToast();
+      ToastComponent({
+        message: "Research started",
+        type: "success",
+      });
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      ToastComponent({
+        message: "Database error",
+        type: "error",
+      });
     },
   });
 
@@ -86,14 +88,20 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
         {isLoading && "Starting ..."}
         {paPlayer[building.buildingFieldName] === 0 && !isLoading && (
           <Button
-            disabled={
-              !canAffordToTrain(
-                paPlayer,
-                building.buildingCostCrystal,
-                building.buildingCostTitanium
-              )
-            }
             onClick={() => {
+              if (
+                !canAffordToTrain(
+                  paPlayer,
+                  building.buildingCostCrystal,
+                  building.buildingCostTitanium
+                )
+              ) {
+                ToastComponent({
+                  message: "You can not afford this",
+                  type: "error",
+                });
+                return;
+              }
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: building.buildingFieldName,
@@ -116,7 +124,7 @@ const ResearchRow: FC<BuildingRowProps> = ({ paPlayer, building }) => {
 
 const ResearchTable: FC<ConstructProps> = ({ paPlayer }) => {
   return (
-    <table className="w-full text-left ring-1 ring-slate-400/10">
+    <table className="w-full text-left ring-1 ring-slate-400/10 mt-2">
       <tbody>
         <tr>
           <th

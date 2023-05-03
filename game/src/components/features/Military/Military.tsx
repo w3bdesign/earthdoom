@@ -1,5 +1,4 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import { api } from "@/utils/api";
@@ -7,7 +6,7 @@ import { api } from "@/utils/api";
 import type { FC, ChangeEvent } from "react";
 import type { PaUsers } from "@prisma/client";
 
-import Button from "@/components/ui/common/Button";
+import { Button, ToastComponent } from "@/components/ui/common";
 
 export interface PaPlayer extends PaUsers {
   [key: string]: number | string;
@@ -28,20 +27,18 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const [attackValue, setAttackValue] = useState<string>("");
   const [defValue, setDefValue] = useState<string>("");
 
-  const toastHandler = (input: string) => toast(input);
-
   const areTroopsAvailable =
     Number(paPlayer.war) === 0 && Number(paPlayer.def) === 0;
 
   const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
     onSuccess: async () => {
-      toastHandler("Action successful!");
+      ToastComponent({ message: "Action successful!", type: "success" });
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      toastHandler("Error ...");
+      ToastComponent({ message: "Error ...", type: "error" });
     },
   });
 
@@ -71,11 +68,17 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
               onClick={(event) => {
                 event.preventDefault();
                 if (!areTroopsAvailable) {
-                  toastHandler("Troops are not available");
+                  ToastComponent({
+                    message: "Troops are not available",
+                    type: "error",
+                  });
                   return;
                 }
                 if (!attackValue.trim().length) {
-                  toastHandler("You need to enter a target");
+                  ToastComponent({
+                    message: "You need to enter a target",
+                    type: "error",
+                  });
                   return;
                 }
                 mutate({
@@ -104,11 +107,17 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
               onClick={(event) => {
                 event.preventDefault();
                 if (!areTroopsAvailable) {
-                  toastHandler("Troops are not available");
+                  ToastComponent({
+                    message: "Troops are not available",
+                    type: "error",
+                  });
                   return;
                 }
                 if (!defValue.trim().length) {
-                  toastHandler("You need to enter a target");
+                  ToastComponent({
+                    message: "You need to enter a target",
+                    type: "error",
+                  });
                   return;
                 }
                 mutate({

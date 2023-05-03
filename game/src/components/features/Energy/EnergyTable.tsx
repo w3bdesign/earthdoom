@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 
 import { FC, useRef } from "react";
@@ -11,7 +10,7 @@ import { ENERGY } from "./constants/ENERGY";
 import { api } from "@/utils/api";
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
-import Button from "@/components/ui/common/Button";
+import { Button, ToastComponent } from "@/components/ui/common";
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
@@ -27,19 +26,16 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
   const { user, isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
 
-  const constructionToast = () => toast("Construction started");
-  const errorToast = () => toast("Database error");
-
   // TODO Construct power plant
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
-      constructionToast();
+      ToastComponent({ message: "Construction started", type: "success" });
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      ToastComponent({ message: "Database error", type: "error" });
     },
   });
 
@@ -98,14 +94,21 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
         {isLoading && "Starting ..."}
         {!isLoading && (
           <Button
-            disabled={
-              !canAffordToTrain(
-                paPlayer,
-                energy.buildingCostCrystal,
-                energy.buildingCostTitanium
-              )
-            }
             onClick={() => {
+              if (
+                !canAffordToTrain(
+                  paPlayer,
+                  energy.buildingCostCrystal,
+                  energy.buildingCostTitanium
+                )
+              ) {
+                ToastComponent({
+                  message: "You can not afford this",
+                  type: "error",
+                });
+                return;
+              }
+
               mutate({
                 Userid: paPlayer.id,
                 buildingFieldName: energy.buildingFieldName,
@@ -124,7 +127,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
 
 const EnergyTable: FC<IEnergyProps> = ({ paPlayer }) => {
   return (
-    <table className="w-full text-left ring-1 ring-slate-400/10">
+    <table className="w-full text-left ring-1 ring-slate-400/10 mt-2">
       <tbody>
         <tr>
           <th

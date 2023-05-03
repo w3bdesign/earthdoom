@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast";
 import type { FC } from "react";
 import type { PaNews } from "@prisma/client";
 
-import Button from "@/components/ui/common/Button";
+import { Button } from "@/components/ui/common";
 
 interface INewsTableProps {
   news: PaNews[];
