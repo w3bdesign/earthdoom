@@ -52,33 +52,41 @@ const ActionButton: React.FC<IActionButtonProps> = ({
   actionText,
 }) => {
   return (
-    <Button
-      onClick={() => {
-        if (!paPlayer[0]) return;
-        if (
-          !canAffordToTrain(
-            paPlayer[0],
-            building.buildingCostCrystal,
-            building.buildingCostTitanium
-          )
-        ) {
-          ToastComponent({
-            message: "You can not afford this",
-            type: "error",
-          });
-          return;
-        }
-        mutate({
-          Userid: paPlayer[0].id,
-          buildingFieldName: building.buildingFieldName,
-          buildingETA: building.buildingETA,
-          buildingCostCrystal: building.buildingCostCrystal,
-          buildingCostTitanium: building.buildingCostTitanium,
-        });
-      }}
-    >
-      {actionText}
-    </Button>
+    <>
+      {paPlayer[0] && paPlayer[0][building.buildingFieldName] === 0 && (
+        <Button
+          onClick={() => {
+            if (!paPlayer[0]) return;
+            if (
+              !canAffordToTrain(
+                paPlayer[0],
+                building.buildingCostCrystal,
+                building.buildingCostTitanium
+              )
+            ) {
+              ToastComponent({
+                message: "You can not afford this",
+                type: "error",
+              });
+              return;
+            }
+            mutate({
+              Userid: paPlayer[0].id,
+              buildingFieldName: building.buildingFieldName,
+              buildingETA: building.buildingETA,
+              buildingCostCrystal: building.buildingCostCrystal,
+              buildingCostTitanium: building.buildingCostTitanium,
+            });
+          }}
+        >
+          {actionText}
+        </Button>
+      )}
+      {paPlayer[0] &&
+        Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
+        "Building ..."}
+      {paPlayer[0] && paPlayer[0][building.buildingFieldName] === 1 && "Done"}
+    </>
   );
 };
 
@@ -128,7 +136,7 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
                 {typeof col.accessor === "string" && (
                   <Stringifier value={row[col.accessor]} />
                 )}
-                {action && actionText ? (
+                {typeof col.accessor !== "string" && action && actionText ? (
                   <>
                     <ActionButton
                       paPlayer={data}
