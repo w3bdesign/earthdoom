@@ -1,7 +1,10 @@
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
+
 import Button from "./Button";
 import ToastComponent from "./ToastComponent";
-import { api } from "@/utils/api";
+
+import type { PaPlayer } from "@/components/features/Production/Production";
+import type { Building } from "@/components/features/Construct/types/types";
 
 export interface TestTableColumn {
   label: string;
@@ -14,23 +17,33 @@ interface TableData {
 
 export interface TestDataTableProps {
   columns: TestTableColumn[];
-  data: TableData[];
+  data: PaPlayer[];
+  //data: TableData[];
   caption: string;
-  renderData: any;
+  renderData: Building[];
   action?: any;
   actionText: string;
 }
 
-function ActionButton({
+interface IActionButtonProps {
+  paPlayer: PaPlayer[];
+  building: Building;
+  canAffordToTrain: typeof canAffordToTrain;
+  mutate: any;
+  actionText: string;
+}
+
+const ActionButton: React.FC<IActionButtonProps> = ({
   paPlayer,
   building,
   canAffordToTrain,
   mutate,
   actionText,
-}: any) {
+}) => {
   return (
     <Button
       onClick={() => {
+        if (!paPlayer[0]) return;
         if (
           !canAffordToTrain(
             paPlayer[0],
@@ -56,7 +69,7 @@ function ActionButton({
       {actionText}
     </Button>
   );
-}
+};
 
 /**
  * DataTable component for displaying data in a table
@@ -71,6 +84,8 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
   action,
   actionText,
 }) => {
+  console.log("renderData: ", renderData);
+
   return (
     <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-full">
       <caption className="py-6 text-center text-2xl font-bold text-white">
