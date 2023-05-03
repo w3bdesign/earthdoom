@@ -1,13 +1,13 @@
-import toast from "react-hot-toast";
 import { useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 
-import Button from "@/components/ui/common/Button";
+import { Button } from "@/components/ui/common";
 
 import type { PaUsers, PaTag } from "@prisma/client";
 import type { FC } from "react";
 
 import { api } from "@/utils/api";
+import ToastComponent from "@/components/ui/common/ToastComponent";
 
 interface IAllianceProps {
   paPlayer: PaUsers;
@@ -20,34 +20,30 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const createAllianceRef = useRef<HTMLInputElement>(null);
   const joinAllianceRef = useRef<HTMLInputElement>(null);
 
-  const allianceCreatedToast = () => toast("Alliance created");
-  const allianceJoinedToast = () => toast("Alliance joined");
-  const errorToast = () => toast("Database error");
-
   const isLeader =
     paTag.find((tag: PaTag) => tag.leader === paPlayer.nick) !== undefined;
 
   const { mutate: createAlliance } = api.paTag.createAlliance.useMutation({
     onSuccess: async () => {
-      allianceCreatedToast();
+      ToastComponent({ message: "Alliance created", type: "success" });
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      ToastComponent({ message: "Database error", type: "error" });
     },
   });
 
   const { mutate: joinAlliance } = api.paTag.joinAlliance.useMutation({
     onSuccess: async () => {
-      allianceJoinedToast();
+      ToastComponent({ message: "Alliance joined", type: "success" });
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
     },
     onError: () => {
-      errorToast();
+      ToastComponent({ message: "Database error", type: "error" });
     },
   });
 

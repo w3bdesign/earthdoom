@@ -14,13 +14,15 @@ interface FleetStatusProps {
 const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
   if (!paPlayer) return <LoadingSpinner />;
 
-  const { data: paAttackedName } = api.paUsers.getAttackedPlayer.useQuery({
-    Warid: paPlayer.war,
-  });
+  const { data: paAttackedName, isLoading: isLoadingAttacked } =
+    api.paUsers.getAttackedPlayer.useQuery({
+      Warid: paPlayer.war,
+    });
 
-  const { data: paDefendedName } = api.paUsers.getDefendedPlayer.useQuery({
-    Defid: paPlayer.def,
-  });
+  const { data: paDefendedName, isLoading: isLoadingDefended } =
+    api.paUsers.getDefendedPlayer.useQuery({
+      Defid: paPlayer.def,
+    });
 
   const allFleetsAtHome =
     paPlayer &&
@@ -67,6 +69,7 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
           Fleet status
         </h2>
         <span className="mx-auto mb-10 flex min-h-[100px] w-full flex-col items-center justify-center rounded bg-white py-2 text-center text-lg shadow">
+          {isLoadingAttacked || (isLoadingDefended && <LoadingSpinner />)}
           {allFleetsAtHome}
           {returning}
           {attacking}

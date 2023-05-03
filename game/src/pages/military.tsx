@@ -2,10 +2,11 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
+import { api } from "@/utils/api";
+
 import { Layout } from "@/components/common/Layout";
 import Military from "@/components/features/Military/Military";
 
-import { api } from "@/utils/api";
 import UnitsTable from "@/components/Index/UnitsTable";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import FleetStatus from "@/components/Index/FleetStatus";

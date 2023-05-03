@@ -22,7 +22,7 @@ const FriendlyNews = ({ content }: { content: string }) => {
   );
 };
 
-const NewsRender = ({ isLoading, hostiles, friendlies }: INewsProps) => {
+export const RenderNews = ({ isLoading, hostiles, friendlies }: INewsProps) => {
   const hasNews = hostiles || friendlies;
 
   if (isLoading) {
@@ -62,5 +62,3 @@ const NewsRender = ({ isLoading, hostiles, friendlies }: INewsProps) => {
     </div>
   );
 };
-
-export default NewsRender;
