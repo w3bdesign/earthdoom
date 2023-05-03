@@ -1,4 +1,7 @@
-import { Stringifier } from "@/utils/functions";
+import { Stringifier, canAffordToTrain } from "@/utils/functions";
+import Button from "./Button";
+import ToastComponent from "./ToastComponent";
+import { api } from "@/utils/api";
 
 export interface TestTableColumn {
   label: string;
@@ -14,6 +17,39 @@ export interface TestDataTableProps {
   data: TableData[];
   caption: string;
   renderData: any;
+  action?: any;
+}
+
+function ActionButton({ paPlayer, building, canAffordToTrain, mutate }: any) {
+  return (
+    <Button
+      onClick={() => {
+        if (
+          !canAffordToTrain(
+            paPlayer[0],
+            building.buildingCostCrystal,
+            building.buildingCostTitanium
+          )
+        ) {
+          ToastComponent({
+            message: "You can not afford this",
+            type: "error",
+          });
+          return;
+        }
+
+        mutate({
+          Userid: paPlayer[0].id,
+          buildingFieldName: building.buildingFieldName,
+          buildingETA: building.buildingETA,
+          buildingCostCrystal: building.buildingCostCrystal,
+          buildingCostTitanium: building.buildingCostTitanium,
+        });
+      }}
+    >
+      Construct
+    </Button>
+  );
 }
 
 /**
@@ -26,6 +62,7 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
   data,
   caption,
   renderData,
+  action,
 }) => {
   return (
     <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-full">
@@ -60,7 +97,14 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
                 {typeof col.accessor === "string" ? (
                   <Stringifier value={row[col.accessor]} />
                 ) : (
-                  <>{col.accessor}</>
+                  <>
+                    <ActionButton
+                      paPlayer={data}
+                      building={row}
+                      canAffordToTrain={canAffordToTrain}
+                      mutate={action}
+                    />
+                  </>
                 )}
               </td>
             ))}

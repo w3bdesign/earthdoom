@@ -8,15 +8,27 @@ import Construct from "@/components/features/Construct";
 import { api } from "@/utils/api";
 import { Button, TestDataTable, ToastComponent } from "@/components/ui/common";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
-import { canAffordToTrain } from "@/utils/functions";
 
 const Construction: NextPage = () => {
+  const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
 
   if (!isSignedIn || !user.username) return null;
 
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
     nick: user.username,
+  });
+
+  const { mutate } = api.paUsers.constructBuilding.useMutation({
+    onSuccess: async () => {
+      ToastComponent({ message: "Building started", type: "success" });
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      ToastComponent({ message: "Database error", type: "error" });
+    },
   });
 
   if (!paPlayer) return null;
@@ -45,6 +57,7 @@ const Construction: NextPage = () => {
                   data={[paPlayer]}
                   caption={caption}
                   renderData={BUILDINGS}
+                  action={mutate}
                 />
               )}
             </div>
