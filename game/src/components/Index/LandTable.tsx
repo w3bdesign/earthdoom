@@ -17,7 +17,7 @@ const LandTable: FC<LandTableProps> = ({ paPlayer }) => {
     paPlayer.asteroid_metal + paPlayer.asteroid_crystal + paPlayer.ui_roids;
 
   const columns = [
-    { label: "Titanium mines", accessor: "asteroid_metal" },
+    { label: "Mines", accessor: "asteroid_metal" },
     { label: "Houses", accessor: "asteroid_crystal" },
     { label: "Undeveloped", accessor: "ui_roids" },
   ];

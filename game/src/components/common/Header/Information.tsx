@@ -77,9 +77,9 @@ const Information = () => {
           ) : (
             ""
           )}
-          <div className="md:min-w-[714px]">
+        
             {paPlayer && <OverviewTable paPlayer={paPlayer} />}
-          </div>
+        
         </div>
       </div>
     </>
