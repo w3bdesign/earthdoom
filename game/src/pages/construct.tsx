@@ -2,10 +2,9 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
-import { Layout } from "@/components/common/Layout";
-import Construct from "@/components/features/Construct";
-
 import { api } from "@/utils/api";
+
+import { Layout } from "@/components/common/Layout";
 import { Button, TestDataTable, ToastComponent } from "@/components/ui/common";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
 
@@ -41,7 +40,7 @@ const Construction: NextPage = () => {
     { label: "Action", accessor: <Button>Construct</Button> },
   ];
 
-  const caption = "Test data table";
+  const caption = "Construction";
 
   return (
     <>
@@ -49,8 +48,6 @@ const Construction: NextPage = () => {
         <div className="container flex flex-col items-center justify-center px-2 py-2 ">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative py-4 sm:mx-auto">
-              {paPlayer && <Construct paPlayer={paPlayer} />}
-
               {paPlayer && (
                 <TestDataTable
                   columns={columns}
