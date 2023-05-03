@@ -5,7 +5,6 @@ import { type NextPage } from "next";
 import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
-import Research from "@/components/features/Research/Research";
 import { BUILDINGS } from "@/components/features/Research/constants/RESEARCH";
 import { Button, TestDataTable, ToastComponent } from "@/components/ui/common";
 
@@ -19,7 +18,7 @@ const ResearchPage: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate, isLoading } = api.paUsers.researchBuilding.useMutation({
+  const { mutate } = api.paUsers.researchBuilding.useMutation({
     onSuccess: async () => {
       ToastComponent({
         message: "Research started",

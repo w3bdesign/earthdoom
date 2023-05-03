@@ -56,6 +56,7 @@ const Construction: NextPage = () => {
                   renderData={BUILDINGS}
                   action={mutate}
                   actionText="Construct"
+                  actionInProgress="Constructing ..."
                 />
               )}
             </div>
