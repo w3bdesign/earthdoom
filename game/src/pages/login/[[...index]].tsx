@@ -8,7 +8,7 @@ const Login: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center px-2 py-2 ">
+        <div className="container flex flex-col items-center justify-center mb-6">
           <SignedOut>
             <div className="mt-6 flex h-[55vh] items-center justify-center">
               <SignIn path="/login" routing="path" afterSignInUrl="/" />
