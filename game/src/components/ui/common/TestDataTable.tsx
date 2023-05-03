@@ -5,31 +5,39 @@ import ToastComponent from "./ToastComponent";
 
 import type { PaPlayer } from "@/components/features/Production/Production";
 import type { Building } from "@/components/features/Construct/types/types";
+import { PaUsers } from "@prisma/client";
+import { UseMutateFunction, UseMutationResult } from "@tanstack/react-query";
+import { TRPCClientErrorLike } from "@trpc/client";
+import { BuildProcedure } from "@trpc/server";
 
 export interface TestTableColumn {
   label: string;
   accessor: string | JSX.Element;
 }
 
-interface TableData {
-  [key: string]: string | number;
-}
-
 export interface TestDataTableProps {
   columns: TestTableColumn[];
   data: PaPlayer[];
-  //data: TableData[];
+
   caption: string;
   renderData: Building[];
   action?: any;
   actionText: string;
 }
 
+/*interface IActionButtonProps {
+  paPlayer: PaPlayer[];
+  building: Building;
+  canAffordToTrain: typeof canAffordToTrain;
+  mutate: UseMutateFunction;
+  actionText: string;
+}*/
+
 interface IActionButtonProps {
   paPlayer: PaPlayer[];
   building: Building;
   canAffordToTrain: typeof canAffordToTrain;
-  mutate: any;
+  mutate: UseMutationResult<PaUsers, void, { input: { Userid: number; buildingFieldName: string; buildingETA: number; buildingCostCrystal: number; buildingCostTitanium: number; } }>;
   actionText: string;
 }
 
@@ -84,8 +92,6 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
   action,
   actionText,
 }) => {
-  console.log("renderData: ", renderData);
-
   return (
     <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-full">
       <caption className="py-6 text-center text-2xl font-bold text-white">
