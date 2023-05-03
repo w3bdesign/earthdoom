@@ -18,9 +18,16 @@ export interface TestDataTableProps {
   caption: string;
   renderData: any;
   action?: any;
+  actionText: string;
 }
 
-function ActionButton({ paPlayer, building, canAffordToTrain, mutate }: any) {
+function ActionButton({
+  paPlayer,
+  building,
+  canAffordToTrain,
+  mutate,
+  actionText,
+}: any) {
   return (
     <Button
       onClick={() => {
@@ -37,7 +44,6 @@ function ActionButton({ paPlayer, building, canAffordToTrain, mutate }: any) {
           });
           return;
         }
-
         mutate({
           Userid: paPlayer[0].id,
           buildingFieldName: building.buildingFieldName,
@@ -47,7 +53,7 @@ function ActionButton({ paPlayer, building, canAffordToTrain, mutate }: any) {
         });
       }}
     >
-      Construct
+      {actionText}
     </Button>
   );
 }
@@ -63,6 +69,7 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
   caption,
   renderData,
   action,
+  actionText,
 }) => {
   return (
     <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-full">
@@ -103,6 +110,7 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
                       building={row}
                       canAffordToTrain={canAffordToTrain}
                       mutate={action}
+                      actionText={actionText}
                     />
                   </>
                 )}
