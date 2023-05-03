@@ -2,7 +2,7 @@ import { Stringifier } from "@/utils/functions";
 
 export interface TestTableColumn {
   label: string;
-  accessor: string;
+  accessor: string | JSX.Element;
 }
 
 interface TableData {
@@ -46,11 +46,6 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
         </tr>
       </thead>
       <tbody>
-
-
-      
-
-
         {renderData.map((row, rowIndex) => (
           <tr
             key={rowIndex}
@@ -62,12 +57,11 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
                 data-th={col.label}
                 className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none"
               >
-              
-
-
-                <Stringifier value={row[col.accessor]} />
-
-
+                {typeof col.accessor === "string" ? (
+                  <Stringifier value={row[col.accessor]} />
+                ) : (
+                  <>{col.accessor}</>
+                )}
               </td>
             ))}
           </tr>
