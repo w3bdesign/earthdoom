@@ -43,7 +43,7 @@ const ResearchPage: NextPage = () => {
     { label: "Description", accessor: "buildingDescription" },
     { label: "ETA", accessor: "buildingETA" },
     { label: "Cost", accessor: "buildingCost" },
-    { label: "Action", accessor: <Button>Research</Button> },
+    { label: "Action", accessor: <Button />, type: "button" },
   ];
 
   const caption = "Research";

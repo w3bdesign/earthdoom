@@ -23,6 +23,7 @@ type TMutateType = UseMutateFunction<
 export interface TestTableColumn {
   label: string;
   accessor: string | JSX.Element;
+  type?: string;
 }
 
 export interface TestDataTableProps {
@@ -56,39 +57,45 @@ const ActionButton: React.FC<IActionButtonProps> = ({
 }) => {
   return (
     <>
-      {paPlayer[0] && building && paPlayer[0][building.buildingFieldName] === 0 && (
-        <Button
-          onClick={() => {
-            if (!paPlayer[0]) return;
-            if (
-              !canAffordToTrain(
-                paPlayer[0],
-                building.buildingCostCrystal,
-                building.buildingCostTitanium
-              )
-            ) {
-              ToastComponent({
-                message: "You can not afford this",
-                type: "error",
+      {paPlayer[0] &&
+        building &&
+        paPlayer[0][building.buildingFieldName] === 0 && (
+          <Button
+            onClick={() => {
+              if (!paPlayer[0]) return;
+              if (
+                !canAffordToTrain(
+                  paPlayer[0],
+                  building.buildingCostCrystal,
+                  building.buildingCostTitanium
+                )
+              ) {
+                ToastComponent({
+                  message: "You can not afford this",
+                  type: "error",
+                });
+                return;
+              }
+              mutate({
+                Userid: paPlayer[0].id,
+                buildingFieldName: building.buildingFieldName,
+                buildingETA: building.buildingETA,
+                buildingCostCrystal: building.buildingCostCrystal,
+                buildingCostTitanium: building.buildingCostTitanium,
               });
-              return;
-            }
-            mutate({
-              Userid: paPlayer[0].id,
-              buildingFieldName: building.buildingFieldName,
-              buildingETA: building.buildingETA,
-              buildingCostCrystal: building.buildingCostCrystal,
-              buildingCostTitanium: building.buildingCostTitanium,
-            });
-          }}
-        >
-          {actionText}
-        </Button>
-      )}
-      {paPlayer[0] && building && 
+            }}
+          >
+            {actionText}
+          </Button>
+        )}
+      {paPlayer[0] &&
+        building &&
         Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
         `${actionInProgress}`}
-      {paPlayer[0] && building && paPlayer[0][building.buildingFieldName] === 1 && "Done"}
+      {paPlayer[0] &&
+        building &&
+        paPlayer[0][building.buildingFieldName] === 1 &&
+        "Done"}
     </>
   );
 };
@@ -126,85 +133,69 @@ export const TestDataTable: React.FC<TestDataTableProps> = ({
         </tr>
       </thead>
       <tbody>
-        {!renderData && data && data.map((row, rowIndex) => (
-          <tr
-            key={rowIndex}
-            className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
-          >
-            {columns.map((col, colIndex) => (
-              <td
-                key={colIndex}
-                data-th={col.label}
-                className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:text-left"
-              >
-                {typeof col.accessor === "string" && (
-                  <Stringifier value={row[col.accessor]} />
-                )}
-                {typeof col.accessor !== "string" && action && actionText ? (
-                  <>
-                    <ActionButton
-                      paPlayer={data}
-                     
-                      canAffordToTrain={canAffordToTrain}
-                      mutate={action}
-                      actionText={actionText}
-                      actionInProgress={actionInProgress}
-                    />
-                  </>
-                ) : null}
-              </td>
-            ))}
-          </tr>
-        ))}
+        {!renderData &&
+          data &&
+          data.map((row, rowIndex) => (
+            <tr
+              key={rowIndex}
+              className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
+            >
+              {columns.map((col, colIndex) => (
+                <td
+                  key={colIndex}
+                  data-th={col.label}
+                  className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:text-left"
+                >
+                  {typeof col.accessor === "string" && (
+                    <Stringifier value={row[col.accessor]} />
+                  )}
+                  {col.type === "button" && action && actionText ? (
+                    <>
+                      <ActionButton
+                        paPlayer={data}
+                        canAffordToTrain={canAffordToTrain}
+                        mutate={action}
+                        actionText={actionText}
+                        actionInProgress={actionInProgress}
+                      />
+                    </>
+                  ) : null}
+                </td>
+              ))}
+            </tr>
+          ))}
 
-{renderData && renderData.map((row, rowIndex) => (
-          <tr
-            key={rowIndex}
-            className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
-          >
-            {columns.map((col, colIndex) => (
-              <td
-                key={colIndex}
-                data-th={col.label}
-                className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:text-left"
-              >
-                {typeof col.accessor === "string" && (
-                  <Stringifier value={row[col.accessor]} />
-                )}
-                {typeof col.accessor !== "string" && action && actionText ? (
-                  <>
-                    <ActionButton
-                      paPlayer={data}
-                      building={row}
-                      canAffordToTrain={canAffordToTrain}
-                      mutate={action}
-                      actionText={actionText}
-                      actionInProgress={actionInProgress}
-                    />
-                  </>
-                ) : null}
-              </td>
-            ))}
-          </tr>
-        ))}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        {renderData &&
+          renderData.map((row, rowIndex) => (
+            <tr
+              key={rowIndex}
+              className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
+            >
+              {columns.map((col, colIndex) => (
+                <td
+                  key={colIndex}
+                  data-th={col.label}
+                  className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:text-left"
+                >
+                  {typeof col.accessor === "string" && (
+                    <Stringifier value={row[col.accessor]} />
+                  )}
+                  {typeof col.accessor !== "string" && action && actionText ? (
+                    <>
+                      <ActionButton
+                        paPlayer={data}
+                        building={row}
+                        canAffordToTrain={canAffordToTrain}
+                        mutate={action}
+                        actionText={actionText}
+                        actionInProgress={actionInProgress}
+                      />
+                    </>
+                  ) : null}
+                </td>
+              ))}
+            </tr>
+          ))}
       </tbody>
     </table>
   );

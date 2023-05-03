@@ -38,7 +38,7 @@ const Energy: NextPage = () => {
     { label: "ETA", accessor: "buildingETA" },
     { label: "Amount", accessor: "ui_roids", type: "input" },
     { label: "Cost", accessor: "buildingCost" },
-    { label: "Action", accessor: <Button>Construct</Button>, type: "button" },
+    { label: "Action", accessor: <Button />, type: "button" },
   ];
 
   const caption = "Energy";

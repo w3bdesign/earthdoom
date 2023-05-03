@@ -37,7 +37,7 @@ const Construction: NextPage = () => {
     { label: "Description", accessor: "buildingDescription" },
     { label: "ETA", accessor: "buildingETA" },
     { label: "Cost", accessor: "buildingCost" },
-    { label: "Action", accessor: <Button>Construct</Button> },
+    { label: "Action", accessor: <Button />, type: "button" },
   ];
 
   const caption = "Construction";
