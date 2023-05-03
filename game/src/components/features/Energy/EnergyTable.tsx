@@ -127,7 +127,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
 
 const EnergyTable: FC<IEnergyProps> = ({ paPlayer }) => {
   return (
-    <table className="w-full text-left ring-1 ring-slate-400/10">
+    <table className="w-full text-left ring-1 ring-slate-400/10 mt-2">
       <tbody>
         <tr>
           <th

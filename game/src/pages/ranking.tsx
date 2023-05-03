@@ -7,7 +7,6 @@ import Ranking from "@/components/features/Ranking/Ranking";
 
 import { api } from "@/utils/api";
 
-
 const RankingPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 

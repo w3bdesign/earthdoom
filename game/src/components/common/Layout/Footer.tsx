@@ -11,7 +11,7 @@ const Footer = () => (
   <footer
     aria-label="Innholdet for bunnteksten med copyright"
     data-testid="footer"
-    className="fixed bottom-0 w-full"
+    className="fixed bottom-0 w-full hidden md:block"
   >
     <div className="w-full bg-gray-800 shadow">
       <div className="mx-auto inline-block w-full p-6 text-center font-semibold text-white">

@@ -26,7 +26,7 @@ export const DataTable: React.FC<DataTableProps> = ({
   caption,
 }) => {
   return (
-    <table className="mt-4 w-full text-left ring-1 ring-slate-400/10">
+    <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-full">
       <caption className="py-6 text-center text-2xl font-bold text-white">
         {caption}
       </caption>
@@ -47,7 +47,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         {data.map((row, rowIndex) => (
           <tr
             key={rowIndex}
-            className="block border-b bg-white last:border-b-0 sm:table-row sm:border-none"
+            className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
           >
             {columns.map((col, colIndex) => (
               <td
