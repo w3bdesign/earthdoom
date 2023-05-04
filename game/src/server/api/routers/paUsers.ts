@@ -288,6 +288,7 @@ export const paUsersRouter = createTRPCRouter({
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingETA: z.number() }))
     .input(z.object({ unitAmount: z.number().optional() }))
+    .input(z.object({ spyingType: z.enum(["land"]).optional() })) // TODO Add more types and make it required
 
     .mutation(async ({ ctx, input }) => {
       const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
