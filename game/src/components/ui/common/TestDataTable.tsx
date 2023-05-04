@@ -101,9 +101,17 @@ const ActionButton: FC<IActionButtonProps> = ({
             if (!paPlayer[0] || !paPlayer[0].id) return;
 
             // Using a single condition to check for multiple values
-            const hasInputField = [0, "undefined"].includes(
-              Number(building.hasInputField)
-            );
+            const hasInputField =
+              Number(building.hasInputField) === 1 ||
+              building.hasInputField !== "undefined";
+
+            if (hasInputField && Number(inputAmountRef?.current?.value) === 0) {
+              ToastComponent({
+                message: "Quantity needs to be more than 0",
+                type: "error",
+              });
+              return;
+            }
 
             // Using early returns to avoid nested if statements
             if (
@@ -120,7 +128,7 @@ const ActionButton: FC<IActionButtonProps> = ({
               });
               return;
             }
-            
+
             mutate({
               Userid: Number(paPlayer[0].id),
               buildingFieldName: building.buildingFieldName,
