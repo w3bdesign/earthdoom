@@ -33,7 +33,7 @@ export interface TestTableColumn {
   type?: string;
 }
 
-export interface TestDataTableProps {
+export interface AdvancedDataTableProps {
   columns: TestTableColumn[];
   data: PaPlayer[];
   caption: string;
@@ -55,7 +55,7 @@ interface IActionButtonProps {
 
 interface IInputNumberProps {
   canAffordToTrain: typeof canAffordToTrain;
-  inputAmountRef: React.RefObject<HTMLInputElement>;
+  inputAmountRef: RefObject<HTMLInputElement>;
 }
 
 const InputNumber: FC<IInputNumberProps> = ({ inputAmountRef }) => {
@@ -157,11 +157,11 @@ const ActionButton: FC<IActionButtonProps> = ({
 };
 
 /**
- * DataTable component for displaying data in a table
+ * Reusable AdvancedDataTable component for displaying data in a table
  * @param {DataTableProps} props - The props for the DataTable component
  * @returns {JSX.Element} - The DataTable component
  */
-export const TestDataTable: FC<TestDataTableProps> = ({
+export const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   columns,
   data,
   caption,
@@ -191,6 +191,9 @@ export const TestDataTable: FC<TestDataTableProps> = ({
         </tr>
       </thead>
       <tbody>
+        {
+          // TODO: This can probably be refactored in the future
+        }
         {!renderData &&
           data &&
           data.map((row, rowIndex) => (

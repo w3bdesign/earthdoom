@@ -8,7 +8,7 @@ import SpyingTable from "@/components/features/Spying/SpyingTable";
 
 import { api } from "@/utils/api";
 
-import { ToastComponent, Button, TestDataTable } from "@/components/ui/common";
+import { ToastComponent, Button, AdvancedDataTable } from "@/components/ui/common";
 import { SPYING } from "@/components/features/Spying/constants/SPYING";
 
 const Energy: NextPage = () => {
@@ -58,7 +58,7 @@ const Energy: NextPage = () => {
             {paPlayer && <SpyingTable paPlayer={paPlayer} />}
 
             {paPlayer && (
-              <TestDataTable
+              <AdvancedDataTable
                 columns={columns}
                 data={[paPlayer]}
                 caption={caption}

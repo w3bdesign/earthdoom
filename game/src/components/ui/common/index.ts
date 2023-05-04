@@ -2,4 +2,4 @@ export * from "./Button";
 export * from "./RenderNews";
 export * from "./ToastComponent";
 export * from "./DataTable";
-export * from "./TestDataTable";
+export * from "./AdvancedDataTable";

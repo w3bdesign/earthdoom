@@ -5,7 +5,7 @@ import { type NextPage } from "next";
 import { Layout } from "@/components/common/Layout";
 
 import { api } from "@/utils/api";
-import { TestDataTable } from "@/components/ui/common";
+import { AdvancedDataTable } from "@/components/ui/common";
 
 const RankingPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
@@ -28,7 +28,7 @@ const RankingPage: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {paPlayer && (
-              <TestDataTable
+              <AdvancedDataTable
                 columns={columns}
                 data={paPlayer}
                 caption={caption}

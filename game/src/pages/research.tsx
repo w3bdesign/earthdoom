@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import { BUILDINGS } from "@/components/features/Research/constants/RESEARCH";
-import { Button, TestDataTable, ToastComponent } from "@/components/ui/common";
+import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui/common";
 
 const ResearchPage: NextPage = () => {
   const ctx = api.useContext();
@@ -55,7 +55,7 @@ const ResearchPage: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative py-4 sm:mx-auto">
               {paPlayer && (
-                <TestDataTable
+                <AdvancedDataTable
                   columns={columns}
                   data={[paPlayer]}
                   caption={caption}
