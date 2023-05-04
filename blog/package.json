@@ -13,7 +13,7 @@
     "refresh": "rm -rf node_modules && rm package-lock.json && npm i && npm run format"
   },
   "dependencies": {
-    "@astrojs/mdx": "^0.19.0",
+    "@astrojs/mdx": "^0.19.1",
     "@astrojs/rss": "^2.4.1",
     "@astrojs/sitemap": "^1.2.2",
     "@astrojs/tailwind": "^3.1.2",
