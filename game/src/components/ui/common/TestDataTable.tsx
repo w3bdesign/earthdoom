@@ -99,7 +99,7 @@ const ActionButton: FC<IActionButtonProps> = ({
         // TODO Fix this
         <Button
           onClick={() => {
-            if (!paPlayer[0]) return;
+            if (!paPlayer[0] || !paPlayer[0].id) return;
             if (
               !canAffordToTrain(
                 paPlayer[0],
@@ -115,7 +115,7 @@ const ActionButton: FC<IActionButtonProps> = ({
             }
 
             mutate({
-              Userid: paPlayer[0].id,
+              Userid: Number(paPlayer[0].id),
               buildingFieldName: building.buildingFieldName,
               buildingETA: building.buildingETA,
               buildingCostCrystal: building.buildingCostCrystal,
