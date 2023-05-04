@@ -120,6 +120,7 @@ const ActionButton: FC<IActionButtonProps> = ({
               });
               return;
             }
+            
             mutate({
               Userid: Number(paPlayer[0].id),
               buildingFieldName: building.buildingFieldName,
