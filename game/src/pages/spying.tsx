@@ -8,7 +8,11 @@ import SpyingTable from "@/components/features/Spying/SpyingTable";
 
 import { api } from "@/utils/api";
 
+import { ToastComponent, Button, TestDataTable } from "@/components/ui/common";
+import { SPYING } from "@/components/features/Spying/constants/SPYING";
+
 const Energy: NextPage = () => {
+  const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
@@ -16,13 +20,53 @@ const Energy: NextPage = () => {
   const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
     nick: user.username,
   });
+
+  const { mutate } = api.paUsers.spyingInitiate.useMutation({
+    onSuccess: async () => {
+      ToastComponent({
+        message: "Spying complete",
+        type: "success",
+      });
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      ToastComponent({
+        message: "Database error",
+        type: "error",
+      });
+    },
+  });
+
+  const columns = [
+    { label: "Name", accessor: "buildingName" },
+    { label: "Description", accessor: "buildingDescription" },
+    { label: "Cost", accessor: "buildingCost" },
+    { label: "Amount", accessor: "amount", type: "inputNumber" },
+    { label: "Action", accessor: <Button />, type: "button" },
+  ];
+
+  const caption = "Spying";
+
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center mb-6">
+        <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
             {paPlayer && <SpyingTable paPlayer={paPlayer} />}
+
+            {paPlayer && (
+              <TestDataTable
+                columns={columns}
+                data={[paPlayer]}
+                caption={caption}
+                renderData={SPYING}
+                action={mutate}
+                actionText="Spy"
+              />
+            )}
           </div>
         </div>
       </Layout>

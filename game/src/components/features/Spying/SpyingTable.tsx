@@ -126,7 +126,9 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
                 Userid: paPlayer.id,
                 buildingFieldName: resource.buildingFieldName,
                 buildingCostCrystal: resource.buildingCostCrystal,
+                buildingCostTitanium: resource.buildingCostTitanium,
                 unitAmount: Number(spyingAmountRef?.current?.value),
+                buildingETA: 0
               });
             }}
           >
