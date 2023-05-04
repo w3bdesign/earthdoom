@@ -24,7 +24,7 @@ const Resources: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center mb-6">
+        <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
             <div className=" border-1 border-indigo-900 bg-white py-4 ">
