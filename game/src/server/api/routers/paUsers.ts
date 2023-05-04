@@ -250,10 +250,8 @@ export const paUsersRouter = createTRPCRouter({
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingFieldNameETA: z.string() }))
-
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
-
     .input(z.object({ unitAmount: z.number() }))
     .input(z.object({ buildingETA: z.number() }))
     .mutation(async ({ ctx, input }) => {
@@ -287,12 +285,15 @@ export const paUsersRouter = createTRPCRouter({
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingCostCrystal: z.number() }))
-    .input(z.object({ buildingETA: z.number().optional() }))
-    .input(z.object({ unitAmount: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
+    .input(z.object({ buildingETA: z.number() }))
+    .input(z.object({ unitAmount: z.number().optional() }))
 
     .mutation(async ({ ctx, input }) => {
       const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
         input;
+
+      const unitAmountDefault = unitAmount ? unitAmount : 0;
 
       const data = await ctx.prisma.paUsers.update({
         where: {
@@ -303,7 +304,7 @@ export const paUsersRouter = createTRPCRouter({
             increment: unitAmount,
           },
 
-          crystal: { decrement: buildingCostCrystal * unitAmount },
+          crystal: { decrement: buildingCostCrystal * unitAmountDefault },
           ui_roids: { increment: unitAmount },
         },
       });
