@@ -1,12 +1,14 @@
+import { useRef } from "react";
+
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
 import type { PaPlayer } from "@/components/features/Production/Production";
 import type { Building } from "@/components/features/Construct/types/types";
 import type { UseMutateFunction } from "@tanstack/react-query";
+import type { FC, RefObject } from "react";
 
 import Button from "./Button";
 import ToastComponent from "./ToastComponent";
-import { FC, useRef } from "react";
 
 type MutationData = unknown;
 
@@ -48,7 +50,7 @@ interface IActionButtonProps {
   mutate: TMutateType;
   actionText?: string;
   actionInProgress?: string;
-  inputAmountRef?: React.RefObject<HTMLInputElement>;
+  inputAmountRef?: RefObject<HTMLInputElement>;
 }
 
 interface IInputNumberProps {
@@ -113,7 +115,6 @@ const ActionButton: FC<IActionButtonProps> = ({
               });
               return;
             }
-
             mutate({
               Userid: Number(paPlayer[0].id),
               buildingFieldName: building.buildingFieldName,
