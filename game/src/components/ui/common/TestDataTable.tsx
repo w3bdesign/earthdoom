@@ -90,23 +90,28 @@ const ActionButton: FC<IActionButtonProps> = ({
   if (!paPlayer[0] || !building) return null;
 
   const shouldNotCheckFieldName =
-    typeof paPlayer[0][building.buildingNeedsFieldName as string] !==
-      "undefined" &&
-    paPlayer[0][building.buildingNeedsFieldName as string] !== 0;
+    building.needsFieldName === 0 || building.needsFieldName === "undefined";
 
   return (
     <>
-      {
-        //paPlayer[0][building.buildingFieldName] === 0 &&
-        // TODO Fix this
+      {(shouldNotCheckFieldName ||
+        paPlayer[0][building.buildingFieldName] === 0) && (
         <Button
           onClick={() => {
             if (!paPlayer[0] || !paPlayer[0].id) return;
+
+            // Using a single condition to check for multiple values
+            const hasInputField = [0, "undefined"].includes(
+              Number(building.hasInputField)
+            );
+
+            // Using early returns to avoid nested if statements
             if (
               !canAffordToTrain(
                 paPlayer[0],
                 building.buildingCostCrystal,
-                building.buildingCostTitanium
+                building.buildingCostTitanium,
+                hasInputField ? 1 : Number(inputAmountRef?.current?.value)
               )
             ) {
               ToastComponent({
@@ -127,13 +132,15 @@ const ActionButton: FC<IActionButtonProps> = ({
         >
           {actionText}
         </Button>
-      }
+      )}
       {paPlayer[0] &&
         building &&
+        !shouldNotCheckFieldName &&
         Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
         `${actionInProgress}`}
       {paPlayer[0] &&
         building &&
+        !shouldNotCheckFieldName &&
         paPlayer[0][building.buildingFieldName] === 1 &&
         "Done"}
     </>
