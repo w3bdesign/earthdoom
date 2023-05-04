@@ -126,6 +126,7 @@ const ResourceRow: FC<IResourceRowProps> = ({ paPlayer, resource }) => {
                 Userid: paPlayer.id,
                 buildingFieldName: resource.buildingFieldName,
                 buildingCostCrystal: resource.buildingCostCrystal,
+                buildingCostTitanium: resource.buildingCostTitanium,
                 unitAmount: Number(unitAmountRef?.current?.value),
                 buildingETA: resource.buildingETA,
               });

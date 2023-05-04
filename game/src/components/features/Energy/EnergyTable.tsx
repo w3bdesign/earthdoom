@@ -112,7 +112,9 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
                 Userid: paPlayer.id,
                 buildingFieldName: energy.buildingFieldName,
                 buildingCostCrystal: energy.buildingCostCrystal,
+                buildingCostTitanium: energy.buildingCostTitanium,
                 unitAmount: Number(unitAmountRef?.current?.value),
+                buildingETA: 0
               });
             }}
           >
