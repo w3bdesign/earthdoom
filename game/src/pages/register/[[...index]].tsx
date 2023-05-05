@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 
-import { SignOutButton, SignUp, SignedIn, SignedOut } from "@clerk/nextjs";
+import { UserButton, SignUp, SignedIn, SignedOut } from "@clerk/nextjs";
 
 import { Layout } from "@/components/common/Layout";
 
@@ -21,7 +21,7 @@ const Register: NextPage = () => {
                 </div>
               </SignedOut>
               <SignedIn>
-                <SignOutButton />
+                <UserButton />
               </SignedIn>
             </p>
           </div>
