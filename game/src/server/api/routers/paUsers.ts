@@ -1,42 +1,88 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 
 export const paUsersRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
+  createPlayer: publicProcedure
+    .input(z.object({ nick: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
+    }),
+  getAll: privateProcedure.query(({ ctx }) => {
     return ctx.prisma.paUsers.findMany();
   }),
-
-  getAttackedPlayer: publicProcedure
-  .input(z.object({ Userid: z.number() }))
-  .query(async ({ ctx, input }) => {
-    const player = await ctx.prisma.paUsers.findUnique({
-      where: {
-        id: input.Userid,
-      },
-    });
-
-    return player;
-  }),
-
-  getPlayerById: publicProcedure
-    .input(z.object({ Userid: z.number() }))
+  getResourceOverview: privateProcedure
+    .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       const player = await ctx.prisma.paUsers.findUnique({
-        where: {
-          id: input.Userid,
+        where: { nick: input.nick },
+        select: {
+          id: true,
+          metal: true,
+          crystal: true,
+          energy: true,
+          civilians: true,
+          asteroid_crystal: true,
+          asteroid_metal: true,
+          score: true,
+          rank: true,
+          nick: true,
         },
       });
 
       return player;
     }),
-
-  getFriendlies: publicProcedure
-    .input(z.object({ Userid: z.number() }))
+  getAttackedPlayer: privateProcedure
+    .input(z.object({ Warid: z.number() }))
     .query(async ({ ctx, input }) => {
+      const defender = await ctx.prisma.paUsers.findUnique({
+        where: { id: input.Warid },
+        select: { id: true, nick: true },
+      });
+
+      return defender;
+    }),
+  getDefendedPlayer: privateProcedure
+    .input(z.object({ Defid: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const defender = await ctx.prisma.paUsers.findUnique({
+        where: { id: input.Defid },
+        select: { id: true, nick: true },
+      });
+
+      return defender;
+    }),
+  getPlayerById: privateProcedure
+    .input(z.object({ nick: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true, tag: true },
+      });
+
+      const player = await ctx.prisma.paUsers.findUnique({
+        where: {
+          id: user?.id,
+        },
+      });
+
+      return player;
+    }),
+  getFriendlies: privateProcedure
+    .input(z.object({ nick: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true },
+      });
+
       const users = await ctx.prisma.paUsers.findMany({
         where: {
-          def: input.Userid,
+          def: user?.id,
         },
       });
 
@@ -50,25 +96,29 @@ export const paUsersRouter = createTRPCRouter({
             defender.destroyers +
             defender.scorpions;
           const eta = defender.defeta >= 5 ? defender.defeta - 5 : 0;
-          return `Friendly incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta})`;
+          return `Friendly incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta} ticks)`;
         })
         .join("\n \n");
 
       if (users.length === 0) {
-        return { defenders: "You have no incoming friendlies." };
+        return { defenders: "" };
       }
 
       return {
         defenders: forsvar,
       };
     }),
-
-  getHostiles: publicProcedure
-    .input(z.object({ Userid: z.number() }))
+  getHostiles: privateProcedure
+    .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true },
+      });
+
       const users = await ctx.prisma.paUsers.findMany({
         where: {
-          war: input.Userid,
+          war: user?.id,
         },
       });
 
@@ -82,16 +132,215 @@ export const paUsersRouter = createTRPCRouter({
             defender.destroyers +
             defender.scorpions;
           const eta = defender.wareta >= 5 ? defender.wareta - 5 : 0;
-          return `Hostile incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta})`;
+          return `Hostile incoming fleet of ${ships} units: ${defender.nick} #${defender.id} (ETA: ${eta} ticks)`;
         })
-        .join("");
+        .join("\n \n");
 
       if (users.length === 0) {
-        return { hostiles: "You have no incoming hostiles." };
+        return { hostiles: "" };
       }
 
       return {
         hostiles: krig,
       };
+    }),
+
+  getContinentIncoming: privateProcedure
+    .input(z.object({ nick: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true, x: true },
+      });
+
+      const hostiles = await ctx.prisma.paUsers.findMany({
+        where: {
+          motd: user?.x,
+          war: { gt: 0 },
+        },
+        select: { war: true, wareta: true, nick: true, id: true },
+      });
+
+      const friendly = await ctx.prisma.paUsers.findMany({
+        where: {
+          motd: user?.x,
+          def: { gt: 0 },
+        },
+        select: { def: true, defeta: true, nick: true, id: true },
+      });
+
+      const hostileFleets = hostiles.map((hostile) => {
+        const eta = hostile.wareta >= 5 ? hostile.wareta - 5 : 0;
+        return `Continent incoming fleet: ${hostile.nick} is attacking #${hostile.war} (ETA: ${eta})`;
+      });
+
+      const friendlyFleets = friendly.map((friendly) => {
+        const eta = friendly.defeta >= 10 ? friendly.defeta - 10 : 0;
+        return `Continent incoming fleet: ${friendly.nick} is defending #${friendly.def} (ETA: ${eta})`;
+      });
+
+      return {
+        hostiles: hostileFleets.join("\n"),
+        friendly: friendlyFleets.join("\n"),
+      };
+    }),
+
+  constructBuilding: privateProcedure
+    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingETA: z.number() }))
+
+    .mutation(async ({ ctx, input }) => {
+      const {
+        buildingFieldName,
+        buildingCostCrystal,
+        buildingCostTitanium,
+        buildingETA,
+      } = input;
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: input.Userid,
+        },
+        data: {
+          [buildingFieldName]: buildingETA,
+          crystal: { decrement: buildingCostCrystal },
+          metal: { decrement: buildingCostTitanium },
+        },
+      });
+
+      return data;
+    }),
+
+  researchBuilding: privateProcedure
+    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingETA: z.number() }))
+
+    .mutation(async ({ ctx, input }) => {
+      const {
+        buildingFieldName,
+        buildingCostCrystal,
+        buildingCostTitanium,
+        buildingETA,
+      } = input;
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: input.Userid,
+        },
+        data: {
+          [buildingFieldName]: buildingETA,
+          crystal: { decrement: buildingCostCrystal },
+          metal: { decrement: buildingCostTitanium },
+        },
+      });
+
+      return data;
+    }),
+
+  // TODO Combine constructBuilding, produceUnit, spyingInitiate and researchBuilding into one?
+
+  produceUnit: privateProcedure
+    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingFieldNameETA: z.string() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
+    .input(z.object({ unitAmount: z.number() }))
+    .input(z.object({ buildingETA: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const {
+        buildingFieldName,
+        buildingFieldNameETA,
+        buildingCostCrystal,
+        buildingCostTitanium,
+        unitAmount,
+        buildingETA,
+      } = input;
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: input.Userid,
+        },
+        data: {
+          [buildingFieldName]: {
+            increment: unitAmount,
+          },
+          [buildingFieldNameETA]: buildingETA,
+          crystal: { decrement: buildingCostCrystal * unitAmount },
+          metal: { decrement: buildingCostTitanium * unitAmount },
+        },
+      });
+
+      return data;
+    }),
+
+  spyingInitiate: privateProcedure
+    .input(z.object({ Userid: z.number() }))
+    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingCostCrystal: z.number() }))
+    .input(z.object({ buildingCostTitanium: z.number() }))
+    .input(z.object({ buildingETA: z.number() }))
+    .input(z.object({ unitAmount: z.number().optional() }))
+    .input(z.object({ spyingType: z.enum(["land"]).optional() })) // TODO Add more types and make it required
+
+    .mutation(async ({ ctx, input }) => {
+      const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
+        input;
+
+      const unitAmountDefault = unitAmount ? unitAmount : 0;
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: Userid,
+        },
+        data: {
+          [buildingFieldName]: {
+            increment: unitAmount,
+          },
+
+          crystal: { decrement: buildingCostCrystal * unitAmountDefault },
+          ui_roids: { increment: unitAmount },
+        },
+      });
+
+      return data;
+    }),
+
+  // TODO Add support for more spying options
+
+  militaryAction: privateProcedure
+    .input(
+      z.object({
+        Userid: z.number(),
+        target: z.string(),
+        mode: z.enum(["attack", "defend"]),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { Userid, target, mode } = input;
+
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: target },
+        select: { id: true },
+      });
+
+      const data = await ctx.prisma.paUsers.update({
+        where: {
+          id: Userid,
+        },
+        data: {
+          [mode === "attack" ? "war" : "def"]: user?.id,
+          [mode === "attack" ? "wareta" : "defeta"]: 30,
+        },
+      });
+
+      return data;
     }),
 });

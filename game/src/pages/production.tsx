@@ -1,19 +1,36 @@
+import { useUser } from "@clerk/nextjs";
+import Script from "next/script";
+
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
+import Production from "@/components/features/Production/Production";
 
-const Game: NextPage = () => {
+import { api } from "@/utils/api";
+
+const ProductionPage: NextPage = () => {
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
+
+  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+    nick: user.username,
+  });
+
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white"></p>
+        <div className="container mb-6 flex flex-col items-center justify-center">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
+            <div className="relative py-4 sm:mx-auto">
+              {paPlayer && <Production paPlayer={paPlayer} />}
+            </div>
           </div>
         </div>
+        <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
       </Layout>
     </>
   );
 };
 
-export default Game;
+export default ProductionPage;

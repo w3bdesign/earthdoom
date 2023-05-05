@@ -1,13 +1,13 @@
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
+import { Layout } from "@/components/common/Layout";
 
-const Game: NextPage = () => {
+const Politics: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
+        <div className="container mb-6 flex flex-col items-center justify-center">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <p className="text-2xl text-white"></p>
           </div>
         </div>
@@ -16,4 +16,4 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default Politics;

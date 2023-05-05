@@ -1,14 +1,62 @@
-import { type NextPage } from "next";
+import { useUser } from "@clerk/nextjs";
 
-import Layout from "@/components/Layout/Layout";
+import type { NextPage } from "next";
+import type { PaNews } from "@prisma/client";
 
-const Game: NextPage = () => {
+import { api } from "@/utils/api";
+
+import { Layout } from "@/components/common/Layout";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import NewsTable from "@/components/features/ContNews/ContNewsTable";
+
+interface IRenderContentProps {
+  news?: PaNews[];
+}
+
+const renderContent = (isLoading: boolean, paNews?: IRenderContentProps) => {
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-4">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  const hasNews = paNews?.news?.length ?? 0 > 0;
+  if (hasNews) {
+    return <NewsTable news={paNews?.news ?? []} />;
+  }
+
+  return (
+    <h1 className="text-bold p-4 text-center text-2xl text-black">
+      No news to report
+    </h1>
+  );
+};
+
+const News: NextPage = () => {
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
+
+  const { data: paNews, isLoading } = api.paNews.getAllNewsByUserId.useQuery({
+    nick: user.username,
+  });
+
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white"></p>
+        <div className="container mb-6 flex flex-col items-center justify-center">
+          <div className="relative flex flex-col justify-center overflow-hidden">
+            <div className="mt-8 flex min-w-[20.5rem] flex-col rounded bg-white text-black">
+              <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                  <div className="flex items-center justify-center overflow-hidden">
+                    {renderContent(isLoading, paNews)}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </Layout>
@@ -16,4 +64,4 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default News;

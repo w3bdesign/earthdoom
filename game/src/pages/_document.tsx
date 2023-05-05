@@ -1,10 +1,6 @@
-import Document, {
-  Html,
-  Head,
-  Main,
-  NextScript,
-  DocumentContext,
-} from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
+
+import type { DocumentContext } from "next/document";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -31,7 +27,7 @@ class MyDocument extends Document {
           <meta property="og:url" content="https://www.earthdoom.com" />
           <meta property="og:site_name" content="earthdoom.com" />
         </Head>
-        <body className="font-body bg-neutral-900 mb-24">
+        <body className="bg-neutral-900 font-body md:mb-[5rem]">
           <Main />
           <NextScript />
         </body>

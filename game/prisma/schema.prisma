@@ -16,24 +16,14 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Game models
 
 model PaUsers {
-    id               Int    @id @default(autoincrement()) 
+    id               Int    @id @default(autoincrement())
     nick             String
-    email            String
-    city             String
-    phone            String
-    password         String
-    crystal          BigInt @default(0)
-    metal            BigInt @default(0)
-    energy           BigInt @default(0)
+    crystal          Int    @default(0)
+    metal            Int    @default(0)
+    energy           Int    @default(0)
     r_energy         Int    @default(0)
     c_energy         Int    @default(0)
     sats             Int    @default(0)
@@ -52,11 +42,11 @@ model PaUsers {
     astropods_base   Int    @default(0)
     cobras_base      Int    @default(0)
     p_scorpions      Int    @default(0)
-    p_scorpionst     Int    @default(0)
+    p_scorpions_eta  Int    @default(0)
     p_cobras         Int    @default(0)
-    p_cobrast        Int    @default(0)
+    p_cobras_eta     Int    @default(0)
     missiles         Int    @default(0)
-    score            BigInt @default(0)
+    score            Int    @default(0)
     asteroids        Int    @default(0)
     asteroid_crystal Int    @default(0)
     asteroid_metal   Int    @default(0)
@@ -83,30 +73,30 @@ model PaUsers {
     r_uscan          Int    @default(0)
     r_oscan          Int    @default(0)
     p_infinitys      Int    @default(0)
-    p_infinityst     Int    @default(0)
+    p_infinitys_eta  Int    @default(0)
     p_wraiths        Int    @default(0)
-    p_wraithst       Int    @default(0)
+    p_wraiths_eta    Int    @default(0)
     p_warfrigs       Int    @default(0)
-    p_warfrigst      Int    @default(0)
+    p_warfrigs_eta   Int    @default(0)
     p_destroyers     Int    @default(0)
-    p_destroyerst    Int    @default(0)
+    p_destroyers_eta Int    @default(0)
     p_missiles       Int    @default(0)
-    p_missilest      Int    @default(0)
+    p_missiles_eta   Int    @default(0)
     timer            Int    @default(0)
     size             Int    @default(0)
     p_astropods      Int    @default(0)
-    p_astropodst     Int    @default(0)
-    tag              String
+    p_astropods_eta  Int    @default(0)
+    tag              String @default("")
     rank             Int    @default(0)
     rcannons         Int    @default(0)
     p_rcannons       Int    @default(0)
-    p_rcannonst      Int    @default(0)
+    p_rcannons_eta   Int    @default(0)
     avengers         Int    @default(0)
     p_avengers       Int    @default(0)
-    p_avengerst      Int    @default(0)
+    p_avengers_eta   Int    @default(0)
     lstalkers        Int    @default(0)
     p_lstalkers      Int    @default(0)
-    p_lstalkerst     Int    @default(0)
+    p_lstalkers_eta  Int    @default(0)
     r_odg            Int    @default(0)
     c_odg            Int    @default(0)
     sleep            Int    @default(0)
@@ -117,16 +107,20 @@ model PaUsers {
     commander        Int    @default(0)
     galname          String @default("No name")
     galpic           String @default("125x125earthdoom1.gif")
-    motd             String
-    vote             String
+    motd             Int    @default(0)
+    vote             String @default("")
     civilians        Int    @default(1000)
     tax              Int    @default(20)
     credits          Int    @default(5000)
-    newbie           Int    @default(100)   
+    newbie           Int    @default(100)
+
+    @@unique([nick])
+    @@index([nick])
 }
 
-model PaNew {
+model PaNews {
     id     Int    @id @default(autoincrement())
+    sentTo Int    @default(0)
     time   Int    @default(0)
     news   String
     seen   String @default("")
@@ -149,6 +143,9 @@ model PaTag {
     tag      String
     leader   String
     password String
+
+    @@unique([tag, password])
+    @@index([tag, password])
 }
 
 model PaMail {
@@ -159,11 +156,10 @@ model PaMail {
     seen   Int    @default(0)
     header String
 
-    @@unique([id])
     @@index([sentTo])
 }
 
-model PaPolit {
+model PaPolitics {
     id       Int    @id @default(autoincrement())
     time     Int    @default(0)
     tekst    String

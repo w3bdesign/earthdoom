@@ -1,14 +1,75 @@
+import { useUser } from "@clerk/nextjs";
+
 import { type NextPage } from "next";
 
-import Layout from "@/components/Layout/Layout";
+import { api } from "@/utils/api";
 
-const Game: NextPage = () => {
+import { Layout } from "@/components/common/Layout";
+import { BUILDINGS } from "@/components/features/Research/constants/RESEARCH";
+import {
+  Button,
+  AdvancedDataTable,
+  ToastComponent,
+} from "@/components/ui/common";
+
+const ResearchPage: NextPage = () => {
+  const ctx = api.useContext();
+  const { user, isSignedIn } = useUser();
+
+  if (!isSignedIn || !user.username) return null;
+
+  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+    nick: user.username,
+  });
+
+  const { mutate } = api.paUsers.researchBuilding.useMutation({
+    onSuccess: async () => {
+      ToastComponent({
+        message: "Research started",
+        type: "success",
+      });
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      ToastComponent({
+        message: "Database error",
+        type: "error",
+      });
+    },
+  });
+
+  if (!paPlayer) return null;
+
+  const columns = [
+    { label: "Name", accessor: "buildingName" },
+    { label: "Description", accessor: "buildingDescription" },
+    { label: "ETA", accessor: "buildingETA" },
+    { label: "Cost", accessor: "buildingCost" },
+    { label: "Action", accessor: <Button />, type: "button" },
+  ];
+
+  const caption = "Research";
+
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white"></p>
+        <div className="container mb-6 flex flex-col items-center justify-center">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
+            <div className="relative py-4 sm:mx-auto">
+              {paPlayer && (
+                <AdvancedDataTable
+                  columns={columns}
+                  data={[paPlayer]}
+                  caption={caption}
+                  renderData={BUILDINGS}
+                  action={mutate}
+                  actionText="Research"
+                  actionInProgress="Researching ..."
+                />
+              )}
+            </div>
           </div>
         </div>
       </Layout>
@@ -16,4 +77,4 @@ const Game: NextPage = () => {
   );
 };
 
-export default Game;
+export default ResearchPage;
