@@ -5,7 +5,11 @@ import { type NextPage } from "next";
 import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
-import { Button, TestDataTable, ToastComponent } from "@/components/ui/common";
+import {
+  Button,
+  AdvancedDataTable,
+  ToastComponent,
+} from "@/components/ui/common";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
 
 const Construction: NextPage = () => {
@@ -45,11 +49,11 @@ const Construction: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center mb-6">
+        <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative py-4 sm:mx-auto">
               {paPlayer && (
-                <TestDataTable
+                <AdvancedDataTable
                   columns={columns}
                   data={[paPlayer]}
                   caption={caption}

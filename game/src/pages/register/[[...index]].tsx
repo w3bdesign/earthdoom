@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 
-import { SignOutButton, SignUp, SignedIn, SignedOut } from "@clerk/nextjs";
+import { UserButton, SignUp, SignedIn, SignedOut } from "@clerk/nextjs";
 
 import { Layout } from "@/components/common/Layout";
 
@@ -8,7 +8,7 @@ const Register: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container flex flex-col items-center justify-center mb-6">
+        <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <p className="text-2xl text-white">
               <SignedOut>
@@ -21,7 +21,7 @@ const Register: NextPage = () => {
                 </div>
               </SignedOut>
               <SignedIn>
-                <SignOutButton />
+                <UserButton />
               </SignedIn>
             </p>
           </div>

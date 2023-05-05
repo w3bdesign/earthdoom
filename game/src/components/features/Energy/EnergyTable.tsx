@@ -114,7 +114,7 @@ const EnergyRow: FC<BuildingRowProps> = ({ paPlayer, energy }) => {
                 buildingCostCrystal: energy.buildingCostCrystal,
                 buildingCostTitanium: energy.buildingCostTitanium,
                 unitAmount: Number(unitAmountRef?.current?.value),
-                buildingETA: 0
+                buildingETA: 0,
               });
             }}
           >
