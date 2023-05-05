@@ -10,7 +10,16 @@ import ResourceTable from "@/components/features/Resources/ResourceTable";
 import { api } from "@/utils/api";
 import { renderIncomeData } from "@/utils/functions";
 
+import {
+  Button,
+  AdvancedDataTable,
+  ToastComponent,
+} from "@/components/ui/common";
+
+import { RESOURCE } from "@/components/features/Resources/constants/RESOURCE";
+
 const Resources: NextPage = () => {
+  const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
@@ -19,7 +28,35 @@ const Resources: NextPage = () => {
     nick: user.username,
   });
 
+  const { mutate } = api.paUsers.spyingInitiate.useMutation({
+    onSuccess: async () => {
+      ToastComponent({
+        message: "Production started",
+        type: "success",
+      });
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      ToastComponent({
+        message: "Database error",
+        type: "error",
+      });
+    },
+  });
+
   if (!paPlayer) return null;
+
+  const columns = [
+    { label: "Name", accessor: "buildingName" },
+    { label: "Description", accessor: "buildingDescription" },
+    { label: "Cost", accessor: "buildingCost" },
+    { label: "Amount", accessor: "amount", type: "inputNumber" },
+    { label: "Action", accessor: <Button />, type: "button" },
+  ];
+
+  const caption = "Resources";
 
   return (
     <>
@@ -27,18 +64,29 @@ const Resources: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            <div className=" border-1 border-indigo-900 bg-white py-4 ">
+            <div className="bg-white py-4 mb-4 mt-6">
               <BarGraph chartData={renderIncomeData(paPlayer)} />
             </div>
             {paPlayer && paPlayer?.ui_roids > 0 && (
-              <h1 className="mt-6 py-4 text-center text-2xl text-white">
+              <h1 className="mt-8 text-center text-2xl text-white">
                 Undeveloped land: {paPlayer?.ui_roids}
               </h1>
             )}
+
+
+           
+
+
             {paPlayer && paPlayer?.ui_roids > 0 && (
-              <div className="py-4">
-                <ResourceTable paPlayer={paPlayer} />
-              </div>
+              <AdvancedDataTable
+                columns={columns}
+                data={[paPlayer]}
+                caption={caption}
+                renderData={RESOURCE}
+                action={mutate}
+                actionText="Construct"
+                actionInProgress="Constructing ..."
+              />
             )}
             {paPlayer?.ui_roids === 0 && (
               <h1 className="mt-6 py-4 text-center text-2xl text-white">
