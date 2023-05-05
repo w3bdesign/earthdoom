@@ -5,7 +5,6 @@ import { type NextPage } from "next";
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
-
 import { api } from "@/utils/api";
 import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
 import {
