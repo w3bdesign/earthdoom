@@ -8,6 +8,23 @@ export const paNewsRouter = createTRPCRouter({
     return { news };
   }),
 
+  addNews: privateProcedure
+    .input(z.object({ sentTo: z.number() }))
+    .input(z.object({ news: z.string() }))
+    .input(z.object({ header: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const news = await ctx.prisma.paNews.create({
+        data: {
+          time: Math.floor(Date.now() / 1000), // get current time as a Unix timestamp
+          sentTo: input.sentTo,
+          news: input.news,
+          header: input.header,
+        },
+      });
+
+      return { news };
+    }),
+
   getAllNewsByUserId: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
