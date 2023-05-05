@@ -119,7 +119,7 @@ const ActionButton: FC<IActionButtonProps> = ({
                 paPlayer[0],
                 building.buildingCostCrystal,
                 building.buildingCostTitanium,
-                hasInputField ? 1 : Number(inputAmountRef?.current?.value)
+                Number(inputAmountRef?.current?.value)
               )
             ) {
               ToastComponent({
