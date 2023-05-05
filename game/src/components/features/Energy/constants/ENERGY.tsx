@@ -9,5 +9,8 @@ export const ENERGY = [
     buildingCost: "9500t",
     buildingCostCrystal: 0,
     buildingCostTitanium: 9500,
+    /* Extra rendering checks */
+    needsFieldName: 0,
+    hasInputField: 1,
   },
 ];
