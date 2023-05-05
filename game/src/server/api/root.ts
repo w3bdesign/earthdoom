@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/server/api/trpc";
 
+// Import all routers
 import { paUsersRouter } from "@/server/api/routers/paUsers";
 import { paMailRouter } from "@/server/api/routers/paMail";
 import { paNewsRouter } from "@/server/api/routers/paNews";

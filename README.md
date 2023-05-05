@@ -1,21 +1,35 @@
-![version](https://img.shields.io/badge/version-0.2.1-blue)
+![version](https://img.shields.io/badge/version-0.2.2-blue)
 ![React](https://img.shields.io/badge/React-18.2.0-success)
 ![Next.js](https://img.shields.io/badge/Next.js-13.4.0-success)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-success)
 
-> This game is under active development and has bugs. 
+## This game is under active development and may have bugs. 
 
-> Check back regularly to see the progress.
 
 * * *
 
 ## Earthdoom
 
-Monorepo for Earthdoom.com
-
 <img src="https://user-images.githubusercontent.com/45217974/232975051-79875585-ba7b-4742-a328-0556d9eca77e.png" alt="Screenshot" />
 
-Earthdoom is a web-based game built using Next.js, React, TypeScript, and Prisma. The application is designed to be fast and responsive with an intuitive user interface.
+Earthdoom is a full-stack web-based strategy game built using Typescript, Next.js, React, tRPC, Tailwind, Prisma and more. 
+
+The database is handled through mySQL and Planetscale. 
+
+Authentication is handled through Clerk.
+
+The application is designed with a modern, responsive and intuitive user interface.
+
+## Technologies used
+
+- [Next.js](https://nextjs.org)
+- [Prisma](https://prisma.io)
+- [Tailwind CSS](https://tailwindcss.com)
+- [tRPC](https://trpc.io)
+- [React Hot Toast](https://react-hot-toast.com)
+- [React Chart.js](https://react-chartjs-2.js.org)
+- [Clerk](https://clerk.com)
+- [Tailwind Elements](https://tailwind-elements.com)
 
 ## Table of Contents
 
@@ -28,13 +42,13 @@ Earthdoom is a web-based game built using Next.js, React, TypeScript, and Prisma
 
 ## Installation
 
-To install the required dependencies, simply run the following command in the project's root directory:
+To install the required dependencies, simply run the following command in the project's root directory (/game):
 
 ```bash
 npm install
 ```
 
-You now need to retrieve the API keys for Clerk and Planetscale and enter them into .env (you can rename  env.example)
+You now need to retrieve the API keys for Clerk and Planetscale and enter them into .env (you need to rename .env.example to .env)
 
 ## Usage
 
@@ -58,21 +72,6 @@ This project includes the following npm scripts for development and building:
 - `prisma:generate`: Generates the Prisma client.
 - `format`: Formats the codebase using Prettier.
 - `refresh`: Removes node_modules, package-lock.json, installs dependencies, and formats the codebase.
-
-## Dependencies
-
-This project uses the following key dependencies:
-
-- [Next.js](https://nextjs.org/)
-- [React](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Prisma](https://www.prisma.io/)
-- [react-query](https://react-query.tanstack.com/)
-- [tRPC](https://trpc.io/)
-- [Zod](https://github.com/colinhacks/zod)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [React Icons](https://react-icons.github.io/react-icons/)
-- [react-hot-toast](https://react-hot-toast.com/)
 
 ## Contributing
 

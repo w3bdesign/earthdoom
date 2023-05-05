@@ -23,7 +23,7 @@ const AlliancePage: NextPage = () => {
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <div className="relative py-4 sm:mx-auto"></div>
+            <div className="relative sm:mx-auto"></div>
             {paPlayer && paTag && (
               <Alliance paPlayer={paPlayer} paTag={paTag} />
             )}

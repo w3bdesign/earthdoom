@@ -71,7 +71,6 @@ const Resources: NextPage = () => {
                 Undeveloped land: {paPlayer?.ui_roids}
               </h1>
             )}
-
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <AdvancedDataTable
                 columns={columns}

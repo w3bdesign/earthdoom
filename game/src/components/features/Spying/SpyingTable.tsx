@@ -4,13 +4,14 @@ import { useRef } from "react";
 import { Button, ToastComponent } from "@/components/ui/common";
 
 import type { FC } from "react";
-import type { ISpying } from "./types/types";
+
 import type { PaUsers } from "@prisma/client";
 
 import { SPYING } from "./constants/SPYING";
 
 import { api } from "@/utils/api";
 import { canAffordToTrain } from "@/utils/functions";
+import { Building } from "../Construct/types/types";
 
 interface PaPlayer extends PaUsers {
   [key: string]: number | string;
@@ -18,7 +19,7 @@ interface PaPlayer extends PaUsers {
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
-  resource: ISpying;
+  resource: Building;
 }
 
 interface SpyingProps {
@@ -101,6 +102,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
         {!isLoading && (
           <Button
             onClick={() => {
+              if (!paPlayer || !paPlayer.id) return;
               if (Number(spyingAmountRef?.current?.value) === 0) {
                 ToastComponent({
                   message: "You need to enter a quantity more than 0",
@@ -123,7 +125,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
                 return;
               }
               mutate({
-                Userid: paPlayer.id,
+                Userid: Number(paPlayer.id),
                 buildingFieldName: resource.buildingFieldName,
                 buildingCostCrystal: resource.buildingCostCrystal,
                 buildingCostTitanium: resource.buildingCostTitanium,
