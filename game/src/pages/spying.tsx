@@ -4,7 +4,6 @@ import { type NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-import SpyingTable from "@/components/features/Spying/SpyingTable";
 
 import { api } from "@/utils/api";
 
@@ -59,8 +58,6 @@ const Energy: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            {paPlayer && <SpyingTable paPlayer={paPlayer} />}
-
             {paPlayer && (
               <AdvancedDataTable
                 columns={columns}

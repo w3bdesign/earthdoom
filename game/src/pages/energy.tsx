@@ -4,7 +4,7 @@ import { type NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-import EnergyTable from "@/components/features/Energy/EnergyTable";
+
 
 import { api } from "@/utils/api";
 import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
@@ -36,18 +36,16 @@ const Energy: NextPage = () => {
     },
   });
 
-  /*
   const columns = [
     { label: "Name", accessor: "buildingName" },
     { label: "Description", accessor: "buildingDescription" },
     { label: "ETA", accessor: "buildingETA" },
-    { label: "Amount", accessor: "ui_roids", type: "input" },
+    { label: "Amount", accessor: "ui_roids", type: "inputNumber" },
     { label: "Cost", accessor: "buildingCost" },
     { label: "Action", accessor: <Button />, type: "button" },
   ];
 
   const caption = "Energy";
-  */
 
   return (
     <>
@@ -55,7 +53,17 @@ const Energy: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            {paPlayer && <EnergyTable paPlayer={paPlayer} />}
+            {paPlayer && (
+              <AdvancedDataTable
+                columns={columns}
+                data={[paPlayer]}
+                caption={caption}
+                renderData={ENERGY}
+                action={mutate}
+                actionText="Construct"
+                actionInProgress="Constructing ..."
+              />
+            )}
           </div>
         </div>
       </Layout>

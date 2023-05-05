@@ -9,6 +9,9 @@ export const RESOURCE = [
     buildingCost: "500c",
     buildingCostCrystal: 500,
     buildingCostTitanium: 0,
+    /* Extra rendering checks */
+    needsFieldName: 0,
+    hasInputField: 1,
   },
   {
     buildingId: 2,
@@ -20,5 +23,8 @@ export const RESOURCE = [
     buildingCost: "300c",
     buildingCostCrystal: 300,
     buildingCostTitanium: 0,
+    /* Extra rendering checks */
+    needsFieldName: 0,
+    hasInputField: 1,
   },
 ];
