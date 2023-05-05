@@ -12,39 +12,43 @@ export const paTagRouter = createTRPCRouter({
     .input(z.object({ tagName: z.string() }))
 
     .mutation(async ({ ctx, input }) => {
-      const { tagName } = input;
+      const { Userid, tagName } = input;
 
-      const user = await ctx.prisma.paUsers.findUnique({
-        where: { id: input.Userid },
-        select: { id: true, tag: true, nick: true },
-      });
-
-      const tagExists = await ctx.prisma.paTag.findUnique({
+      const player = await ctx.prisma.paUsers.findUnique({
         where: {
-          //leader:
+          id: Userid,
         },
-        //select: { id: true, x: true },
       });
 
-      if (!tagExists && user) {
+      if (!player) return;
+
+      const tagExists = await ctx.prisma.paTag.findFirst({
+        where: {
+          tag: tagName,
+        },
+        select: { id: true, tag: true, leader: true, password: true },
+      });
+
+      if (!tagExists) {
         const garbage = "tag" + Math.random().toString(36).substring(7);
 
-        await ctx.prisma.paTag.create({
+        const tagCreated = await ctx.prisma.paTag.create({
           data: {
             tag: tagName,
             password: garbage,
-            leader: user.nick,
+            leader: player.nick,
           },
         });
 
         await ctx.prisma.paUsers.update({
           where: {
-            id: input.Userid,
+            id: Userid,
           },
           data: {
             tag: tagName,
           },
         });
+        return tagCreated;
       }
     }),
 
@@ -73,6 +77,25 @@ export const paTagRouter = createTRPCRouter({
             tag: tagExists.tag,
           },
         });
+        return { result: "Joined alliance" };
+      } else {
+        return { result: "Wrong password" };
       }
+    }),
+
+  leaveAlliance: privateProcedure
+    .input(z.object({ Userid: z.number() }))
+
+    .mutation(async ({ ctx, input }) => {
+      const { Userid } = input;
+
+      await ctx.prisma.paUsers.update({
+        where: {
+          id: Userid,
+        },
+        data: {
+          tag: "",
+        },
+      });
     }),
 });

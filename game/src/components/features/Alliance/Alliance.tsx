@@ -23,6 +23,10 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const isLeader =
     paTag.find((tag: PaTag) => tag.leader === paPlayer.nick) !== undefined;
 
+  const player = paPlayer.nick;
+  const allianceTag = paTag.find((tag) => tag.leader === player);
+  const alliancePassword = allianceTag ? allianceTag.password : null;
+
   const { mutate: createAlliance } = api.paTag.createAlliance.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Alliance created", type: "success" });
@@ -47,6 +51,18 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     },
   });
 
+  const { mutate: leaveAlliance } = api.paTag.leaveAlliance.useMutation({
+    onSuccess: async () => {
+      ToastComponent({ message: "Alliance left", type: "success" });
+      if (user && user.username) {
+        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+      }
+    },
+    onError: () => {
+      ToastComponent({ message: "Database error", type: "error" });
+    },
+  });
+
   return (
     <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
       <div className="relative py-4 sm:mx-auto">
@@ -62,38 +78,67 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                     </>
                   )}
                 </h2>
-                <div className="relative mt-2 w-64">
-                  <input
-                    type="text"
-                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    pattern="[A-Za-z]+"
-                    title="Please enter letters only"
-                    ref={createAllianceRef}
-                  />
-                  <label
-                    htmlFor="exampleInputEmail1"
-                    className="mb-2 block py-2 text-sm font-bold text-gray-500"
-                  >
-                    Create alliance
-                  </label>
-                </div>
-                <div className="flex items-center justify-center">
-                  <Button
-                    extraClasses="mb-4"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      if (!createAllianceRef?.current?.value) return;
-                      createAlliance({
-                        Userid: paPlayer.id,
-                        tagName: createAllianceRef.current.value,
-                      });
-                    }}
-                  >
-                    Create
-                  </Button>
-                </div>
+                {isLeader && paPlayer.tag && (
+                  <div className="relative mt-2 w-64">
+                    <h2 className="mb-4 text-center text-2xl font-bold text-black">
+                      Password: {alliancePassword}
+                    </h2>
+                  </div>
+                )}
+                {!paPlayer.tag && (
+                  <>
+                    <div className="relative mt-2 w-64">
+                      <input
+                        type="text"
+                        className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                        id="exampleInputEmail1"
+                        aria-describedby="emailHelp"
+                        pattern="[A-Za-z]+"
+                        title="Please enter letters only"
+                        ref={createAllianceRef}
+                      />
+                      <label
+                        htmlFor="exampleInputEmail1"
+                        className="mb-2 block py-2 text-sm font-bold text-gray-500"
+                      >
+                        Create alliance
+                      </label>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <Button
+                        extraClasses="mb-4"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          if (!createAllianceRef?.current?.value) return;
+                          createAlliance({
+                            Userid: paPlayer.id,
+                            tagName: createAllianceRef.current.value,
+                          });
+                        }}
+                      >
+                        Create
+                      </Button>
+                    </div>
+                  </>
+                )}
+                {paPlayer.tag && (
+                  <>
+                    <div className="flex items-center justify-center">
+                      <Button
+                        extraClasses="mb-4"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          leaveAlliance({
+                            Userid: paPlayer.id,
+                          });
+                        }}
+                      >
+                        Leave
+                      </Button>
+                    </div>
+                  </>
+                )}
+
                 <div className="relative mt-2 w-64">
                   <input
                     type="text"
