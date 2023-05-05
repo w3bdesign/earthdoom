@@ -67,7 +67,7 @@ const News: NextPage = () => {
                 <Button
                   variant="danger"
                   onClick={() => {
-                    if (!user || !user.username) return null;
+                    if (!user || !user.username) return;
                     deleteAllNews({ nick: user.username });
                   }}
                 >
@@ -79,7 +79,7 @@ const News: NextPage = () => {
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="flex items-center justify-center overflow-hidden">
-                    {renderNews(isLoading, paNews)}
+                    {paNews && renderNews(isLoading, paNews)}
                   </div>
                 </div>
               </div>

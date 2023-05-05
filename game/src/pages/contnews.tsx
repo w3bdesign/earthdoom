@@ -5,7 +5,8 @@ import { type NextPage } from "next";
 import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
-import { RenderNews } from "@/components/ui/common";
+import { RenderIncoming } from "@/components/ui/common";
+
 
 const ContNews: NextPage = () => {
   const { user, isSignedIn } = useUser();
@@ -23,7 +24,7 @@ const ContNews: NextPage = () => {
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <RenderNews
+            <RenderIncoming
               isLoading={isLoading}
               hostiles={paNews?.hostiles}
               friendlies={paNews?.friendly}
