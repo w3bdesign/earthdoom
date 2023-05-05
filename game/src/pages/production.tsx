@@ -22,7 +22,7 @@ const ProductionPage: NextPage = () => {
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <div className="relative py-4 sm:mx-auto">
+            <div className="relative sm:mx-auto">
               {paPlayer && <Production paPlayer={paPlayer} />}
             </div>
           </div>
