@@ -25,4 +25,29 @@ export const paNewsRouter = createTRPCRouter({
 
       return { news };
     }),
+
+  deleteSingleNews: privateProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const deleteNews = await ctx.prisma.paNews.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      return { deleteNews };
+    }),
+
+    deleteAllNews: privateProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const deleteNews = await ctx.prisma.paNews.delete({
+        where: {
+          sentTo: input.id,
+        },
+      });
+      return { deleteNews };
+    }),
+
+
+
 });
