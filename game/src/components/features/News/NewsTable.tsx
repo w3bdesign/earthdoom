@@ -1,5 +1,4 @@
 import React from "react";
-import { Toaster } from "react-hot-toast";
 
 import { Button, ToastComponent } from "@/components/ui/common";
 
@@ -18,18 +17,6 @@ const NewsTable: FC<INewsTableProps> = ({ news }) => {
   const { user } = useUser();
 
   const { mutate: deleteSingleNews } = api.paNews.deleteSingleNews.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "News deleted", type: "success" });
-      if (user && user.username) {
-        await ctx.paNews.getAll.invalidate();
-      }
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
-
-  const { mutate: deleteAllNews } = api.paNews.deleteAllNews.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "News deleted", type: "success" });
       if (user && user.username) {
@@ -93,7 +80,6 @@ const NewsTable: FC<INewsTableProps> = ({ news }) => {
                 >
                   Delete
                 </Button>
-                <Toaster />
               </td>
             </tr>
           ))}

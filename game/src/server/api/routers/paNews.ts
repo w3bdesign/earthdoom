@@ -37,17 +37,19 @@ export const paNewsRouter = createTRPCRouter({
       return { deleteNews };
     }),
 
-    deleteAllNews: privateProcedure
-    .input(z.object({ id: z.number() }))
+  deleteAllNews: privateProcedure
+    .input(z.object({ nick: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const deleteNews = await ctx.prisma.paNews.delete({
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { nick: input.nick },
+        select: { id: true },
+      });
+
+      const deleteNews = await ctx.prisma.paNews.deleteMany({
         where: {
-          sentTo: input.id,
+          sentTo: user?.id,
         },
       });
       return { deleteNews };
     }),
-
-
-
 });
