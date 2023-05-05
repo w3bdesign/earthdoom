@@ -102,6 +102,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
         {!isLoading && (
           <Button
             onClick={() => {
+              if(!paPlayer || !paPlayer.id) return;
               if (Number(spyingAmountRef?.current?.value) === 0) {
                 ToastComponent({
                   message: "You need to enter a quantity more than 0",
@@ -124,7 +125,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
                 return;
               }
               mutate({
-                Userid: paPlayer.id,
+                Userid: Number(paPlayer.id),
                 buildingFieldName: resource.buildingFieldName,
                 buildingCostCrystal: resource.buildingCostCrystal,
                 buildingCostTitanium: resource.buildingCostTitanium,
