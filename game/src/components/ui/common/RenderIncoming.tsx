@@ -22,7 +22,7 @@ const FriendlyNews = ({ content }: { content: string }) => {
   );
 };
 
-export const RenderNews = ({ isLoading, hostiles, friendlies }: INewsProps) => {
+export const RenderIncoming = ({ isLoading, hostiles, friendlies }: INewsProps) => {
   const hasNews = hostiles || friendlies;
 
   if (isLoading) {
