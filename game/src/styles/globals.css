@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide Clerky badge */
 .cl-internal-b3fm6y {
 	display: none;
 }
