@@ -18,7 +18,7 @@ interface IActionButtonProps {
   inputAmountRef?: RefObject<HTMLInputElement>;
 }
 
- const ActionButton: FC<IActionButtonProps> = ({
+const ActionButton: FC<IActionButtonProps> = ({
   paPlayer,
   building,
   canAffordToTrain,

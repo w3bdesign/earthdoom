@@ -1,4 +1,4 @@
-import {  canAffordToTrain } from "@/utils/functions";
+import { canAffordToTrain } from "@/utils/functions";
 
 import type { FC, RefObject } from "react";
 
@@ -7,8 +7,7 @@ interface IInputNumberProps {
   inputAmountRef: RefObject<HTMLInputElement>;
 }
 
-
- const InputNumber: FC<IInputNumberProps> = ({ inputAmountRef }) => {
+const InputNumber: FC<IInputNumberProps> = ({ inputAmountRef }) => {
   return (
     <td
       data-th="Production"
