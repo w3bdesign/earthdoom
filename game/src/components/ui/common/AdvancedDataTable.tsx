@@ -257,17 +257,15 @@ export const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   ) : null}
 
                   {typeof col.accessor !== "string" && action && actionText ? (
-                    <>
-                      <ActionButton
-                        paPlayer={data}
-                        building={row}
-                        canAffordToTrain={canAffordToTrain}
-                        mutate={action}
-                        actionText={actionText}
-                        actionInProgress={actionInProgress}
-                        inputAmountRef={inputAmountRef}
-                      />
-                    </>
+                    <ActionButton
+                      paPlayer={data}
+                      building={row}
+                      canAffordToTrain={canAffordToTrain}
+                      mutate={action}
+                      actionText={actionText}
+                      actionInProgress={actionInProgress}
+                      inputAmountRef={inputAmountRef}
+                    />
                   ) : null}
                 </td>
               ))}
