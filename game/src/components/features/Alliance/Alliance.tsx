@@ -78,7 +78,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                     </>
                   )}
                 </h2>
-                {isLeader && (
+                {isLeader && paPlayer.tag && (
                   <div className="relative mt-2 w-64">
                     <h2 className="mb-4 text-center text-2xl font-bold text-black">
                       Password: {alliancePassword}
