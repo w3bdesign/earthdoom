@@ -7,13 +7,14 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-import NewsTable from "@/components/features/ContNews/ContNewsTable";
+import NewsTable from "@/components/features/News/NewsTable";
+import { Button, ToastComponent } from "@/components/ui/common";
 
 interface IRenderContentProps {
   news?: PaNews[];
 }
 
-const renderContent = (isLoading: boolean, paNews?: IRenderContentProps) => {
+const renderNews = (isLoading: boolean, paNews: IRenderContentProps) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-4">
@@ -35,6 +36,7 @@ const renderContent = (isLoading: boolean, paNews?: IRenderContentProps) => {
 };
 
 const News: NextPage = () => {
+  const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
 
   if (!isSignedIn || !user.username) return null;
@@ -43,16 +45,41 @@ const News: NextPage = () => {
     nick: user.username,
   });
 
+  const { mutate: deleteAllNews } = api.paNews.deleteAllNews.useMutation({
+    onSuccess: async () => {
+      ToastComponent({ message: "News deleted", type: "success" });
+      if (user && user.username) {
+        await ctx.paNews.getAll.invalidate();
+      }
+    },
+    onError: () => {
+      ToastComponent({ message: "Database error", type: "error" });
+    },
+  });
+
   return (
     <>
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden">
-            <div className="mt-8 flex min-w-[20.5rem] flex-col rounded bg-white text-black">
+            <div className="container mt-6 flex justify-end">
+              {paNews && paNews.news.length > 0 && (
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    if (!user || !user.username) return;
+                    deleteAllNews({ nick: user.username });
+                  }}
+                >
+                  Delete All
+                </Button>
+              )}
+            </div>
+            <div className="mt-4 flex min-w-[20.5rem] flex-col bg-white text-black">
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                <div className="inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="flex items-center justify-center overflow-hidden">
-                    {renderContent(isLoading, paNews)}
+                    {paNews && renderNews(isLoading, paNews)}
                   </div>
                 </div>
               </div>

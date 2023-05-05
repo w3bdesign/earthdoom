@@ -1,5 +1,5 @@
 export * from "./Button";
-export * from "./RenderNews";
+export * from "./RenderIncoming";
 export * from "./ToastComponent";
 export * from "./DataTable";
 export * from "./AdvancedDataTable";
