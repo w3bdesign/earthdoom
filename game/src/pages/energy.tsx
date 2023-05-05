@@ -8,7 +8,11 @@ import EnergyTable from "@/components/features/Energy/EnergyTable";
 
 import { api } from "@/utils/api";
 import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
-import { Button, TestDataTable, ToastComponent } from "@/components/ui/common";
+import {
+  Button,
+  AdvancedDataTable,
+  ToastComponent,
+} from "@/components/ui/common";
 
 const Energy: NextPage = () => {
   const ctx = api.useContext();

@@ -1,12 +1,14 @@
+import { useRef } from "react";
+
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
 import type { PaPlayer } from "@/components/features/Production/Production";
 import type { Building } from "@/components/features/Construct/types/types";
 import type { UseMutateFunction } from "@tanstack/react-query";
+import type { FC, RefObject } from "react";
 
 import Button from "./Button";
 import ToastComponent from "./ToastComponent";
-import { FC, useRef } from "react";
 
 type MutationData = unknown;
 
@@ -31,7 +33,7 @@ export interface TestTableColumn {
   type?: string;
 }
 
-export interface TestDataTableProps {
+export interface AdvancedDataTableProps {
   columns: TestTableColumn[];
   data: PaPlayer[];
   caption: string;
@@ -48,12 +50,12 @@ interface IActionButtonProps {
   mutate: TMutateType;
   actionText?: string;
   actionInProgress?: string;
-  inputAmountRef?: React.RefObject<HTMLInputElement>;
+  inputAmountRef?: RefObject<HTMLInputElement>;
 }
 
 interface IInputNumberProps {
   canAffordToTrain: typeof canAffordToTrain;
-  inputAmountRef: React.RefObject<HTMLInputElement>;
+  inputAmountRef: RefObject<HTMLInputElement>;
 }
 
 const InputNumber: FC<IInputNumberProps> = ({ inputAmountRef }) => {
@@ -88,23 +90,36 @@ const ActionButton: FC<IActionButtonProps> = ({
   if (!paPlayer[0] || !building) return null;
 
   const shouldNotCheckFieldName =
-    typeof paPlayer[0][building.buildingNeedsFieldName as string] !==
-      "undefined" &&
-    paPlayer[0][building.buildingNeedsFieldName as string] !== 0;
+    building.needsFieldName === 0 || building.needsFieldName === "undefined";
 
   return (
     <>
-      {
-        //paPlayer[0][building.buildingFieldName] === 0 &&
-        // TODO Fix this
+      {(shouldNotCheckFieldName ||
+        paPlayer[0][building.buildingFieldName] === 0) && (
         <Button
           onClick={() => {
-            if (!paPlayer[0]) return;
+            if (!paPlayer[0] || !paPlayer[0].id) return;
+
+            // Using a single condition to check for multiple values
+            const hasInputField =
+              Number(building.hasInputField) === 1 ||
+              building.hasInputField !== "undefined";
+
+            if (hasInputField && Number(inputAmountRef?.current?.value) === 0) {
+              ToastComponent({
+                message: "Quantity needs to be more than 0",
+                type: "error",
+              });
+              return;
+            }
+
+            // Using early returns to avoid nested if statements
             if (
               !canAffordToTrain(
                 paPlayer[0],
                 building.buildingCostCrystal,
-                building.buildingCostTitanium
+                building.buildingCostTitanium,
+                hasInputField ? 1 : Number(inputAmountRef?.current?.value)
               )
             ) {
               ToastComponent({
@@ -115,7 +130,7 @@ const ActionButton: FC<IActionButtonProps> = ({
             }
 
             mutate({
-              Userid: paPlayer[0].id,
+              Userid: Number(paPlayer[0].id),
               buildingFieldName: building.buildingFieldName,
               buildingETA: building.buildingETA,
               buildingCostCrystal: building.buildingCostCrystal,
@@ -126,13 +141,15 @@ const ActionButton: FC<IActionButtonProps> = ({
         >
           {actionText}
         </Button>
-      }
+      )}
       {paPlayer[0] &&
         building &&
+        !shouldNotCheckFieldName &&
         Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
         `${actionInProgress}`}
       {paPlayer[0] &&
         building &&
+        !shouldNotCheckFieldName &&
         paPlayer[0][building.buildingFieldName] === 1 &&
         "Done"}
     </>
@@ -140,11 +157,11 @@ const ActionButton: FC<IActionButtonProps> = ({
 };
 
 /**
- * DataTable component for displaying data in a table
+ * Reusable AdvancedDataTable component for displaying data in a table
  * @param {DataTableProps} props - The props for the DataTable component
  * @returns {JSX.Element} - The DataTable component
  */
-export const TestDataTable: FC<TestDataTableProps> = ({
+export const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   columns,
   data,
   caption,
@@ -174,6 +191,9 @@ export const TestDataTable: FC<TestDataTableProps> = ({
         </tr>
       </thead>
       <tbody>
+        {
+          // TODO: This can probably be refactored in the future
+        }
         {!renderData &&
           data &&
           data.map((row, rowIndex) => (
@@ -237,17 +257,15 @@ export const TestDataTable: FC<TestDataTableProps> = ({
                   ) : null}
 
                   {typeof col.accessor !== "string" && action && actionText ? (
-                    <>
-                      <ActionButton
-                        paPlayer={data}
-                        building={row}
-                        canAffordToTrain={canAffordToTrain}
-                        mutate={action}
-                        actionText={actionText}
-                        actionInProgress={actionInProgress}
-                        inputAmountRef={inputAmountRef}
-                      />
-                    </>
+                    <ActionButton
+                      paPlayer={data}
+                      building={row}
+                      canAffordToTrain={canAffordToTrain}
+                      mutate={action}
+                      actionText={actionText}
+                      actionInProgress={actionInProgress}
+                      inputAmountRef={inputAmountRef}
+                    />
                   ) : null}
                 </td>
               ))}
