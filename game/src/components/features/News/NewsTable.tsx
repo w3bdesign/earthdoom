@@ -1,56 +1,91 @@
 import React from "react";
-import { Toaster } from "react-hot-toast";
 
-import { Button } from "@/components/ui/common";
+import { Button, ToastComponent } from "@/components/ui/common";
 
 import type { FC } from "react";
 import type { PaNews } from "@prisma/client";
+
+import { api } from "@/utils/api";
+import { useUser } from "@clerk/nextjs";
 
 interface INewsTableProps {
   news: PaNews[];
 }
 
 const NewsTable: FC<INewsTableProps> = ({ news }) => {
+  const ctx = api.useContext();
+  const { user } = useUser();
+
+  const { mutate: deleteSingleNews } = api.paNews.deleteSingleNews.useMutation({
+    onSuccess: async () => {
+      ToastComponent({ message: "News deleted", type: "success" });
+      if (user && user.username) {
+        await ctx.paNews.getAll.invalidate();
+      }
+    },
+    onError: () => {
+      ToastComponent({ message: "Database error", type: "error" });
+    },
+  });
+
   return (
-    <table className="min-w-full text-left text-sm font-light">
-      <thead className="border-b font-medium dark:border-neutral-500">
-        <tr>
-          <th scope="col" className="px-6 py-4">
-            ID
-          </th>
-          <th scope="col" className="px-6 py-4">
-            Title
-          </th>
-          <th scope="col" className="px-6 py-4">
-            Content
-          </th>
-          <th scope="col" className="px-6 py-4">
-            Delete
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {news?.map((news) => (
-          <tr key={news.id} className="border-b dark:border-neutral-500">
-            <td className="whitespace-nowrap px-6 py-4 font-medium">
-              {news.id}
-            </td>
-            <td className="whitespace-nowrap px-6 py-4">{news.header}</td>
-            <td className="whitespace-nowrap px-6 py-4">{news.news}</td>
-            <td className="whitespace-nowrap px-6 py-4">
-              <Button
-                type="button"
-                className="inline-block rounded bg-danger px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
-                onClick={() => alert(news.id)}
-              >
-                Delete
-              </Button>
-              <Toaster />
-            </td>
+    <>
+      <table className="min-w-full text-left text-sm font-light">
+        <thead className="border-b font-medium dark:border-neutral-500">
+          <tr>
+            <th
+              scope="col"
+              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
+            >
+              ID
+            </th>
+            <th
+              scope="col"
+              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
+            >
+              Title
+            </th>
+            <th
+              scope="col"
+              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
+            >
+              Content
+            </th>
+            <th
+              scope="col"
+              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
+            >
+              Delete
+            </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {news?.map((news) => (
+            <tr key={news.id} className="border-b dark:border-neutral-500">
+              <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                {news.id}
+              </td>
+              <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                {news.header}
+              </td>
+              <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                {news.news}
+              </td>
+              <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    deleteSingleNews({ id: news.id });
+                  }}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
 
