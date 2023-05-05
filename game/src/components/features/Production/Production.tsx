@@ -108,6 +108,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
           <Button
             onClick={() => {
+              if (!paPlayer || !paPlayer.id) return;
               if (Number(unitAmountRef?.current?.value) === 0) {
                 ToastComponent({
                   message: "Needs to be more than 0",
@@ -130,7 +131,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                 return;
               }
               mutate({
-                Userid: paPlayer.id,
+                Userid: Number(paPlayer.id),
                 buildingFieldName: production.buildingFieldName,
                 buildingFieldNameETA: production.buildingFieldNameETA,
                 buildingCostCrystal: production.buildingCostCrystal,
