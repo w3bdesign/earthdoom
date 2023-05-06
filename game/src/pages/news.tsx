@@ -45,16 +45,17 @@ const News: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate: deleteAllNews } = api.paNews.deleteAllNews.useMutation({
-    onSuccess:  () => {
-      ToastComponent({ message: "News deleted", type: "success" });
-      ctx.paNews.getAllNewsByUserId.invalidate();
-      ctx.paNews.getAllNewsByUserId.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate: deleteAllNews, isLoading: isDeleting } =
+    api.paNews.deleteAllNews.useMutation({
+      onSuccess: () => {
+        ToastComponent({ message: "News deleted", type: "success" });
+        ctx.paNews.getAllNewsByUserId.invalidate();
+        ctx.paNews.getAllNewsByUserId.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   return (
     <>
@@ -64,6 +65,7 @@ const News: NextPage = () => {
             <div className="container mt-6 flex justify-end">
               {paNews && paNews.news.length > 0 && (
                 <Button
+                  disabled={isDeleting}
                   variant="danger"
                   onClick={() => {
                     if (!user || !user.username) return;
