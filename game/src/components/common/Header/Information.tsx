@@ -9,8 +9,7 @@ import LoadingSpinner from "../Loader/LoadingSpinner";
 const Information = () => {
   // TODO See if we can get the user from the session instead of making a request
   // TODO Maybe we can use the user from the session to get the paPlayer data
-  // TODO Right now these queries take too long
-
+ 
   const { user } = useUser();
 
   if (!user || !user.username) return null;
@@ -35,16 +34,16 @@ const Information = () => {
     <>
       <div className="mt-4 flex w-full flex-col items-center justify-center gap-12 px-4 py-4 text-white">
         <div className="flex flex-col items-center gap-2 text-center text-lg md:w-[44.5625rem]">
-          {isLoading ? (
+          {isLoading && (
             <LoadingSpinner />
-          ) : (
+          )}
+            {hostilesData?.hostiles && (
             <div
               className="mb-4 rounded-lg bg-red-300 px-6 py-5 text-base text-black md:min-w-[30.625rem]"
               role="alert"
             >
               {/* Split the hostiles string into an array of lines */}
-              {hostilesData?.hostiles &&
-                hostilesData.hostiles.split("\n").map((line, index) => (
+              {hostilesData.hostiles.split("\n").map((line, index) => (
                   <div className="text-left" key={index}>
                     {line}
                   </div>
@@ -57,7 +56,7 @@ const Information = () => {
               role="alert"
             >
               {/* Split the defenders string into an array of lines */}
-              {friendliesData.defenders &&
+              {
                 friendliesData.defenders.split("\n").map((line, index) => (
                   <div className="text-left" key={index}>
                     {line}
