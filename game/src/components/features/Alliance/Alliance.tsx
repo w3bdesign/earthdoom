@@ -40,8 +40,13 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   });
 
   const { mutate: joinAlliance } = api.paTag.joinAlliance.useMutation({
-    onSuccess: async () => {
+    onSuccess: async (result: string) => {
+      if (result === "Wrong password") {
+        ToastComponent({ message: result, type: "error" });
+        return;
+      }
       ToastComponent({ message: "Alliance joined", type: "success" });
+
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
