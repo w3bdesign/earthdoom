@@ -46,12 +46,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     return <div>Loading user data...</div>;
   }
 
-  if (paPlayer[production.buildingRequirement] === 0)
-    return (
-      <h1 className="mt-6 py-4 text-center text-2xl text-white">
-        Nothing to produce
-      </h1>
-    );
+  if (paPlayer[production.buildingRequirement] === 0) return null;
 
   return (
     <tr
