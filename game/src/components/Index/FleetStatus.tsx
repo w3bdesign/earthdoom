@@ -65,7 +65,7 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
   return (
     <>
       <div className="mt-6 flex h-full w-full flex-col items-center justify-center">
-        <h2 className="py-6 text-center text-2xl font-bold text-white">
+        <h2 className="py-4 text-center text-2xl font-bold text-white">
           Fleet status
         </h2>
         <span className="text-md mx-auto mb-10 flex min-h-[6.25rem] w-full flex-col items-center justify-center rounded bg-white px-6 py-2 text-center shadow md:px-0 md:text-lg">
