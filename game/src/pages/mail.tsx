@@ -1,4 +1,3 @@
-import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 
 import { type NextPage } from "next";
@@ -12,15 +11,13 @@ import { ToastComponent } from "@/components/ui/common";
 
 const Mail: NextPage = () => {
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
-    onSuccess: () => {
-      ToastComponent({ message: "Marked all email as seen", type: "success" });
-    },
     onError: () => {
-      console.error("Failure marking as seen");
+      ToastComponent({ message: "Database error", type: "error" });
     },
   });
 
   useEffect(() => {
+    // TODO: Replace with actual user id
     markAsSeen({ sentTo: 12 });
   }, [markAsSeen]);
 
