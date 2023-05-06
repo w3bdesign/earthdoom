@@ -36,12 +36,6 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
                 scope="col"
                 className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
               >
-                ID
-              </th>
-              <th
-                scope="col"
-                className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-              >
                 Title
               </th>
               <th
@@ -49,6 +43,12 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
                 className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
               >
                 Content
+              </th>
+              <th
+                scope="col"
+                className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
+              >
+                Reply
               </th>
               <th
                 scope="col"
@@ -62,13 +62,19 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
             {allMail?.email.map((mail) => (
               <tr key={mail.id} className="border-b dark:border-neutral-500">
                 <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                  {mail.id}
-                </td>
-                <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                   {mail.header}
                 </td>
                 <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                   {mail.news}
+                </td>
+                <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                  <Button
+                    onClick={() => {
+                      alert("Reply");
+                    }}
+                  >
+                    Reply
+                  </Button>
                 </td>
                 <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                   <Button
