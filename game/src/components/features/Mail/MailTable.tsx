@@ -18,9 +18,10 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
 
   const { mutate: deleteSingleMail, isLoading: isDeletingMail } =
     api.paMail.deleteEmail.useMutation({
-      onSuccess: async () => {
+      onSuccess: () => {
         ToastComponent({ message: "Mail deleted", type: "success" });
-        await ctx.paMail.getAll.invalidate();
+        ctx.paMail.getAllMailByUserId.invalidate();
+        ctx.paMail.getAllMailByUserId.refetch();
       },
       onError: () => {
         console.error("Failure deleting!");

@@ -36,10 +36,11 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
 
   const { mutate: createAlliance, isLoading: isCreateAllianceLoading } =
     api.paTag.createAlliance.useMutation({
-      onSuccess: async () => {
+      onSuccess: () => {
         ToastComponent({ message: "Alliance created", type: "success" });
         if (user && user.username) {
-          await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
+          ctx.paUsers.getPlayerById.invalidate();
+          ctx.paUsers.getPlayerById.refetch();
         }
       },
       onError: () => {
