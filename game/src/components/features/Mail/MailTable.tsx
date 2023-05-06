@@ -16,15 +16,16 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
     Userid: 12,
   });
 
-  const { mutate: deleteSingleMail } = api.paMail.deleteEmail.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Mail deleted", type: "success" });
-      await ctx.paMail.getAllMailByUserId.invalidate({ Userid: 1 });
-    },
-    onError: () => {
-      console.error("Failure deleting!");
-    },
-  });
+  const { mutate: deleteSingleMail, isLoading: isDeletingMail } =
+    api.paMail.deleteEmail.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Mail deleted", type: "success" });
+        await ctx.paMail.getAll.invalidate();
+      },
+      onError: () => {
+        console.error("Failure deleting!");
+      },
+    });
 
   return (
     <>
@@ -78,6 +79,7 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
                 </td>
                 <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                   <Button
+                    disabled={isDeletingMail}
                     variant="danger"
                     onClick={() => {
                       deleteSingleMail({ id: mail.id });
