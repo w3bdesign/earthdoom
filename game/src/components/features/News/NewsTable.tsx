@@ -6,7 +6,6 @@ import type { FC } from "react";
 import type { PaNews } from "@prisma/client";
 
 import { api } from "@/utils/api";
-import { useUser } from "@clerk/nextjs";
 
 interface INewsTableProps {
   news: PaNews[];
@@ -14,19 +13,18 @@ interface INewsTableProps {
 
 const NewsTable: FC<INewsTableProps> = ({ news }) => {
   const ctx = api.useContext();
-  const { user } = useUser();
 
-  const { mutate: deleteSingleNews } = api.paNews.deleteSingleNews.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "News deleted", type: "success" });
-      if (user && user.username) {
-        await ctx.paNews.getAll.invalidate();
-      }
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate: deleteSingleNews, isLoading: isDeleting } =
+    api.paNews.deleteSingleNews.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "News deleted", type: "success" });
+        await ctx.paNews.getAllNewsByUserId.invalidate();
+        await ctx.paNews.getAllNewsByUserId.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   return (
     <>
@@ -73,6 +71,7 @@ const NewsTable: FC<INewsTableProps> = ({ news }) => {
               </td>
               <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                 <Button
+                  disabled={isDeleting}
                   variant="danger"
                   onClick={() => {
                     deleteSingleNews({ id: news.id });

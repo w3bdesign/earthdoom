@@ -34,9 +34,8 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Training started", type: "success" });
-      if (user && user.username) {
-        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
-      }
+      await ctx.paUsers.getPlayerById.invalidate();
+      await ctx.paUsers.getPlayerById.refetch();
     },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });
@@ -47,9 +46,12 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     return <div>Loading user data...</div>;
   }
 
-  // TODO Do not render table headers when we have done no construction/research?
-
-  //if (paPlayer[production.buildingRequirement] === 0) return null;
+  if (paPlayer[production.buildingRequirement] === 0)
+    return (
+      <h1 className="mt-6 py-4 text-center text-2xl text-white">
+        Nothing to produce
+      </h1>
+    );
 
   return (
     <tr

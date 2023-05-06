@@ -28,7 +28,7 @@ interface SpyingProps {
 
 const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const ctx = api.useContext();
-  const { user, isLoaded } = useUser();
+  const { isLoaded } = useUser();
   const spyingAmountRef = useRef<HTMLInputElement>(null);
 
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
@@ -37,9 +37,8 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
         message: "Spying complete",
         type: "success",
       });
-      if (user && user.username) {
-        await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
-      }
+      await ctx.paUsers.getPlayerById.invalidate();
+      await ctx.paUsers.getPlayerById.refetch();
     },
     onError: () => {
       ToastComponent({

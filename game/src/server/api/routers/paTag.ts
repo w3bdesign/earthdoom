@@ -77,9 +77,9 @@ export const paTagRouter = createTRPCRouter({
             tag: tagExists.tag,
           },
         });
-        return { result: "Joined alliance" };
+        return "Joined alliance";
       } else {
-        return { result: "Wrong password" };
+        return "Wrong password";
       }
     }),
 
