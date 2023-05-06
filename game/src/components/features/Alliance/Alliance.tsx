@@ -14,6 +14,13 @@ interface IAllianceProps {
   paTag: PaTag[];
 }
 
+/**
+ * Renders a form for creating, joining, and leaving an alliance.
+ * @param {Object} props - The component props.
+ * @param {Object} props.paPlayer - The player object.
+ * @param {Object[]} props.paTag - The array of tags.
+ * @returns {JSX.Element} - The rendered component.
+ */
 const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const ctx = api.useContext();
   const { user } = useUser();
@@ -141,7 +148,6 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                     </Button>
                   </div>
                 )}
-
                 <div className="relative mt-2 w-64">
                   <input
                     type="text"
