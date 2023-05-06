@@ -14,7 +14,7 @@ interface IRenderContentProps {
   news?: PaNews[];
 }
 
-const renderNews = (isLoading: boolean, paNews: IRenderContentProps) => {
+const renderNews = (isLoading: boolean, paNews: IRenderContentProps, isDeletingAll: boolean) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-4">
@@ -25,7 +25,7 @@ const renderNews = (isLoading: boolean, paNews: IRenderContentProps) => {
 
   const hasNews = paNews?.news?.length ?? 0 > 0;
   if (hasNews) {
-    return <NewsTable news={paNews?.news ?? []} />;
+    return <NewsTable isDeletingAll={isDeletingAll} news={paNews?.news ?? []} />;
   }
 
   return (
@@ -45,7 +45,7 @@ const News: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate: deleteAllNews, isLoading: isDeleting } =
+  const { mutate: deleteAllNews, isLoading: isDeletingAll } =
     api.paNews.deleteAllNews.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "News deleted", type: "success" });
@@ -65,7 +65,7 @@ const News: NextPage = () => {
             <div className="container mt-6 flex justify-end">
               {paNews && paNews.news.length > 0 && (
                 <Button
-                  disabled={isDeleting}
+                  disabled={isDeletingAll}
                   variant="danger"
                   onClick={() => {
                     if (!user || !user.username) return;
@@ -80,7 +80,7 @@ const News: NextPage = () => {
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="flex items-center justify-center overflow-hidden">
-                    {paNews && renderNews(isLoading, paNews)}
+                    {paNews && renderNews(isLoading, paNews, isDeletingAll)}
                   </div>
                 </div>
               </div>

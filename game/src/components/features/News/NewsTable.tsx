@@ -8,10 +8,11 @@ import type { PaNews } from "@prisma/client";
 import { api } from "@/utils/api";
 
 interface INewsTableProps {
+  isDeletingAll: boolean;
   news: PaNews[];
 }
 
-const NewsTable: FC<INewsTableProps> = ({ news }) => {
+const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
   const ctx = api.useContext();
 
   const { mutate: deleteSingleNews, isLoading: isDeleting } =
@@ -71,7 +72,7 @@ const NewsTable: FC<INewsTableProps> = ({ news }) => {
               </td>
               <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                 <Button
-                  disabled={isDeleting}
+                  disabled={isDeleting || isDeletingAll}
                   variant="danger"
                   onClick={() => {
                     deleteSingleNews({ id: news.id });
