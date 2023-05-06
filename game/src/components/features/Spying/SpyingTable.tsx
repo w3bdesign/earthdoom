@@ -32,13 +32,13 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const spyingAmountRef = useRef<HTMLInputElement>(null);
 
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       ToastComponent({
         message: "Spying complete",
         type: "success",
       });
-      ctx.paUsers.getPlayerById.invalidate();
-      ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerById.invalidate();
+      await ctx.paUsers.getPlayerById.refetch();
     },
     onError: () => {
       ToastComponent({

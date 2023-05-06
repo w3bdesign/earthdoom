@@ -23,10 +23,10 @@ const Construction: NextPage = () => {
   });
 
   const { mutate } = api.paUsers.constructBuilding.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       ToastComponent({ message: "Building started", type: "success" });
-      ctx.paUsers.getPlayerById.invalidate();
-      ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerById.invalidate();
+      await ctx.paUsers.getPlayerById.refetch();
     },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });

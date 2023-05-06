@@ -23,13 +23,13 @@ const ResearchPage: NextPage = () => {
   });
 
   const { mutate } = api.paUsers.researchBuilding.useMutation({
-    onSuccess:  () => {
+    onSuccess:  async () => {
       ToastComponent({
         message: "Research started",
         type: "success",
       });
-      ctx.paUsers.getPlayerById.invalidate();
-      ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerById.invalidate();
+      await ctx.paUsers.getPlayerById.refetch();
     },
     onError: () => {
       ToastComponent({

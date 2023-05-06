@@ -16,10 +16,10 @@ const NewsTable: FC<INewsTableProps> = ({ news }) => {
 
   const { mutate: deleteSingleNews, isLoading: isDeleting } =
     api.paNews.deleteSingleNews.useMutation({
-      onSuccess: () => {
+      onSuccess: async () => {
         ToastComponent({ message: "News deleted", type: "success" });
-        ctx.paNews.getAllNewsByUserId.invalidate();
-        ctx.paNews.getAllNewsByUserId.refetch();
+        await ctx.paNews.getAllNewsByUserId.invalidate();
+        await ctx.paNews.getAllNewsByUserId.refetch();
       },
       onError: () => {
         ToastComponent({ message: "Database error", type: "error" });

@@ -36,10 +36,10 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
 
   const { mutate: createAlliance, isLoading: isCreateAllianceLoading } =
     api.paTag.createAlliance.useMutation({
-      onSuccess: () => {
+      onSuccess: async () => {
         ToastComponent({ message: "Alliance created", type: "success" });
-        ctx.paUsers.getPlayerById.invalidate();
-        ctx.paUsers.getPlayerById.refetch();
+        await ctx.paUsers.getPlayerById.invalidate();
+        await ctx.paUsers.getPlayerById.refetch();
       },
       onError: () => {
         ToastComponent({ message: "Database error", type: "error" });
@@ -47,14 +47,14 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     });
   const { mutate: joinAlliance, isLoading: isJoinAllianceLoading } =
     api.paTag.joinAlliance.useMutation({
-      onSuccess: (result: string) => {
+      onSuccess: async (result: string) => {
         if (result === "Wrong password") {
           ToastComponent({ message: result, type: "error" });
           return;
         }
         ToastComponent({ message: "Alliance joined", type: "success" });
-        ctx.paUsers.getPlayerById.invalidate();
-        ctx.paUsers.getPlayerById.refetch();
+        await ctx.paUsers.getPlayerById.invalidate();
+        await ctx.paUsers.getPlayerById.refetch();
       },
       onError: () => {
         ToastComponent({ message: "Database error", type: "error" });
@@ -62,10 +62,10 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     });
 
   const { mutate: leaveAlliance } = api.paTag.leaveAlliance.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       ToastComponent({ message: "Alliance left", type: "success" });
-      ctx.paUsers.getPlayerById.invalidate();
-      ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerById.invalidate();
+      await ctx.paUsers.getPlayerById.refetch();
     },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });

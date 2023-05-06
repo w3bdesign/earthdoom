@@ -24,10 +24,10 @@ const Energy: NextPage = () => {
   });
 
   const { mutate } = api.paUsers.spyingInitiate.useMutation({
-    onSuccess:  () => {
+    onSuccess: async () => {
       ToastComponent({ message: "Construction started", type: "success" });
-      ctx.paUsers.getPlayerById.invalidate();
-      ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerById.invalidate();
+      await ctx.paUsers.getPlayerById.refetch();
     },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });
