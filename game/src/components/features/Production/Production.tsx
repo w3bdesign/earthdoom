@@ -28,7 +28,7 @@ export interface ConstructProps {
 
 const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const ctx = api.useContext();
-  const { user, isLoaded } = useUser();
+  const { isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
 
   const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
