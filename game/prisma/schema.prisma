@@ -122,7 +122,7 @@ model PaNews {
     id     Int    @id @default(autoincrement())
     sentTo Int    @default(0)
     time   Int    @default(0)
-    news   String
+    news   String @db.Text
     seen   String @default("")
     header String
 
