@@ -31,12 +31,10 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     Number(paPlayer.war) === 0 && Number(paPlayer.def) === 0;
 
   const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
-    onSuccess:  () => {
+    onSuccess: () => {
       ToastComponent({ message: "Action successful!", type: "success" });
-      if (user && user.username) {
-        ctx.paUsers.getPlayerById.invalidate();
-        ctx.paUsers.getPlayerById.refetch();
-      }
+      ctx.paUsers.getPlayerById.invalidate();
+      ctx.paUsers.getPlayerById.refetch();
     },
     onError: () => {
       ToastComponent({ message: "Error ...", type: "error" });

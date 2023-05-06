@@ -46,11 +46,10 @@ const News: NextPage = () => {
   });
 
   const { mutate: deleteAllNews } = api.paNews.deleteAllNews.useMutation({
-    onSuccess: async () => {
+    onSuccess:  () => {
       ToastComponent({ message: "News deleted", type: "success" });
-      if (user && user.username) {
-        await ctx.paNews.getAll.invalidate();
-      }
+      ctx.paNews.getAllNewsByUserId.invalidate();
+      ctx.paNews.getAllNewsByUserId.refetch();
     },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });
