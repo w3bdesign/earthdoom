@@ -1,4 +1,5 @@
 import { Button, ToastComponent } from "@/components/ui/common";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import type { FC } from "react";
 import type { PaMail } from "@prisma/client";
@@ -12,7 +13,7 @@ interface IMailTableProps {
 const MailTable: FC<IMailTableProps> = ({ mail }) => {
   const ctx = api.useContext();
 
-  const { data: allMail } = api.paMail.getAllMailByUserId.useQuery({
+  const { data: allMail, isLoading } = api.paMail.getAllMailByUserId.useQuery({
     Userid: 12,
   });
 
@@ -27,6 +28,10 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
         console.error("Failure deleting!");
       },
     });
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
