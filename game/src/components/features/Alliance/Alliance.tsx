@@ -120,7 +120,14 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                         extraClasses="mb-4"
                         onClick={(event) => {
                           event.preventDefault();
-                          if (!createAllianceRef?.current?.value) return;
+                          if (!createAllianceRef?.current?.value) {
+                            ToastComponent({
+                              message: "You need to type something",
+                              type: "error",
+                            });
+                            return;
+                          }
+
                           createAlliance({
                             Userid: paPlayer.id,
                             tagName: createAllianceRef.current.value,
@@ -168,7 +175,13 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                   <Button
                     onClick={(event) => {
                       event.preventDefault();
-                      if (!joinAllianceRef?.current?.value) return;
+                      if (!joinAllianceRef?.current?.value) {
+                        ToastComponent({
+                          message: "You need to type something",
+                          type: "error",
+                        });
+                        return;
+                      }
                       joinAlliance({
                         Userid: paPlayer.id,
                         tagPassword: joinAllianceRef.current.value,
