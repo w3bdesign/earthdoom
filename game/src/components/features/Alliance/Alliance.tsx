@@ -17,8 +17,8 @@ interface IAllianceProps {
 /**
  * Renders a form for creating, joining, and leaving an alliance.
  * @param {Object} props - The component props.
- * @param {Object} props.paPlayer - The player object.
- * @param {Object[]} props.paTag - The array of tags.
+ * @param {PaUsers} props.paPlayer - The player object.
+ * @param {PaTag[]} props.paTag - The array of tags.
  * @returns {JSX.Element} - The rendered component.
  */
 const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
@@ -53,7 +53,6 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
         return;
       }
       ToastComponent({ message: "Alliance joined", type: "success" });
-
       if (user && user.username) {
         await ctx.paUsers.getPlayerById.invalidate({ nick: user.username });
       }
