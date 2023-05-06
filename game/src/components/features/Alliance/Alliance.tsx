@@ -127,21 +127,19 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                   </>
                 )}
                 {paPlayer.tag && (
-                  <>
-                    <div className="flex items-center justify-center">
-                      <Button
-                        extraClasses="mb-4"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          leaveAlliance({
-                            Userid: paPlayer.id,
-                          });
-                        }}
-                      >
-                        Leave
-                      </Button>
-                    </div>
-                  </>
+                  <div className="flex items-center justify-center">
+                    <Button
+                      extraClasses="mb-4"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        leaveAlliance({
+                          Userid: paPlayer.id,
+                        });
+                      }}
+                    >
+                      Leave
+                    </Button>
+                  </div>
                 )}
 
                 <div className="relative mt-2 w-64">
