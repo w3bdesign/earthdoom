@@ -23,7 +23,7 @@ const ResearchPage: NextPage = () => {
   });
 
   const { mutate } = api.paUsers.researchBuilding.useMutation({
-    onSuccess:  async () => {
+    onSuccess: async () => {
       ToastComponent({
         message: "Research started",
         type: "success",
