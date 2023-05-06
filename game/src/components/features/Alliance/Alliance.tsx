@@ -127,7 +127,6 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                             });
                             return;
                           }
-
                           createAlliance({
                             Userid: paPlayer.id,
                             tagName: createAllianceRef.current.value,
