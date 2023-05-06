@@ -34,7 +34,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const allianceTag = paTag.find((tag) => tag.leader === player);
   const alliancePassword = allianceTag ? allianceTag.password : null;
 
-  const { mutate: createAlliance } = api.paTag.createAlliance.useMutation({
+  const { mutate: createAlliance, isLoading } = api.paTag.createAlliance.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Alliance created", type: "success" });
       if (user && user.username) {
@@ -118,6 +118,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                     <div className="flex items-center justify-center">
                       <Button
                         extraClasses="mb-4"
+                        disabled={isLoading}
                         onClick={(event) => {
                           event.preventDefault();
                           if (!createAllianceRef?.current?.value) {
