@@ -31,8 +31,11 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
     "All fleets at home";
 
   const returning =
-    (paPlayer && paPlayer.war < 0) ||
-    (paPlayer && paPlayer.def < 0 && `Returning ... ETA ${paPlayer.wareta}`);
+    paPlayer && (paPlayer.war < 0 || paPlayer.def < 0)
+      ? `Returning ... ETA ${
+          paPlayer.war < 0 ? paPlayer.wareta : paPlayer.defeta
+        }`
+      : false;
 
   const attacking =
     paPlayer &&
