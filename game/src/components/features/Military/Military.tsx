@@ -49,87 +49,91 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     setDefValue(event.target.value);
   };
 
+  const allFleetsAtHome = paPlayer && paPlayer.war === 0 && paPlayer.def === 0;
+
   return (
     <div className="flex flex-col items-center justify-center py-5">
       <div className="w-full max-w-lg">
-        <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
-          <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
-          <div className="mt-4 flex flex-col items-center justify-center">
-            <span className="text-md mb-2">Country nick:</span>
-            <input
-              type="text"
-              name="attack"
-              onChange={handleInputAttackChange}
-              className="w-64 rounded-md border border-gray-300 px-3 py-2"
-            />
-            <Button
-              disabled={isLoading}
-              onClick={(event) => {
-                event.preventDefault();
-                if (!areTroopsAvailable) {
-                  ToastComponent({
-                    message: "Troops are not available",
-                    type: "error",
+        {allFleetsAtHome ? (
+          <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
+            <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
+            <div className="mt-4 flex flex-col items-center justify-center">
+              <span className="text-md mb-2">Country nick:</span>
+              <input
+                type="text"
+                name="attack"
+                onChange={handleInputAttackChange}
+                className="w-64 rounded-md border border-gray-300 px-3 py-2"
+              />
+              <Button
+                disabled={isLoading}
+                onClick={(event) => {
+                  event.preventDefault();
+                  if (!areTroopsAvailable) {
+                    ToastComponent({
+                      message: "Troops are not available",
+                      type: "error",
+                    });
+                    return;
+                  }
+                  if (!attackValue.trim().length) {
+                    ToastComponent({
+                      message: "You need to enter a target",
+                      type: "error",
+                    });
+                    return;
+                  }
+                  mutate({
+                    Userid: paPlayer.id,
+                    target: attackValue,
+                    mode: "attack",
                   });
-                  return;
-                }
-                if (!attackValue.trim().length) {
-                  ToastComponent({
-                    message: "You need to enter a target",
-                    type: "error",
+                }}
+                extraClasses="w-32 mt-4"
+              >
+                Attack
+              </Button>
+            </div>
+            <h2 className="py-4 text-center text-xl font-bold">Defend:</h2>
+            <form className="mt-4 flex flex-col items-center justify-center">
+              <span className="text-md mb-2">Country nick:</span>
+              <input
+                type="text"
+                name="defend"
+                onChange={handleInputDefChange}
+                className="w-64 rounded-md border border-gray-300 px-3 py-2"
+              />
+              <Button
+                disabled={isLoading}
+                extraClasses="w-32 mt-4"
+                onClick={(event) => {
+                  event.preventDefault();
+                  if (!areTroopsAvailable) {
+                    ToastComponent({
+                      message: "Troops are not available",
+                      type: "error",
+                    });
+                    return;
+                  }
+                  if (!defValue.trim().length) {
+                    ToastComponent({
+                      message: "You need to enter a target",
+                      type: "error",
+                    });
+                    return;
+                  }
+                  mutate({
+                    Userid: paPlayer.id,
+                    target: defValue,
+                    mode: "defend",
                   });
-                  return;
-                }
-                mutate({
-                  Userid: paPlayer.id,
-                  target: attackValue,
-                  mode: "attack",
-                });
-              }}
-              extraClasses="w-32 mt-4"
-            >
-              Attack
-            </Button>
+                }}
+              >
+                Defend
+              </Button>
+            </form>
           </div>
-          <h2 className="py-4 text-center text-xl font-bold">Defend:</h2>
-          <form className="mt-4 flex flex-col items-center justify-center">
-            <span className="text-md mb-2">Country nick:</span>
-            <input
-              type="text"
-              name="defend"
-              onChange={handleInputDefChange}
-              className="w-64 rounded-md border border-gray-300 px-3 py-2"
-            />
-            <Button
-              disabled={isLoading}
-              extraClasses="w-32 mt-4"
-              onClick={(event) => {
-                event.preventDefault();
-                if (!areTroopsAvailable) {
-                  ToastComponent({
-                    message: "Troops are not available",
-                    type: "error",
-                  });
-                  return;
-                }
-                if (!defValue.trim().length) {
-                  ToastComponent({
-                    message: "You need to enter a target",
-                    type: "error",
-                  });
-                  return;
-                }
-                mutate({
-                  Userid: paPlayer.id,
-                  target: defValue,
-                  mode: "defend",
-                });
-              }}
-            >
-              Defend
-            </Button>
-          </form>
-        </div>
+        ) : null}
       </div>
     </div>
   );
