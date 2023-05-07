@@ -9,12 +9,17 @@ import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import NewsTable from "@/components/features/News/NewsTable";
 import { Button, ToastComponent } from "@/components/ui/common";
+import { CombatReport } from "@/components/features/News";
 
 interface IRenderContentProps {
   news?: PaNews[];
 }
 
-const renderNews = (isLoading: boolean, paNews: IRenderContentProps, isDeletingAll: boolean) => {
+const renderNews = (
+  isLoading: boolean,
+  paNews: IRenderContentProps,
+  isDeletingAll: boolean
+) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-4">
@@ -25,7 +30,9 @@ const renderNews = (isLoading: boolean, paNews: IRenderContentProps, isDeletingA
 
   const hasNews = paNews?.news?.length ?? 0 > 0;
   if (hasNews) {
-    return <NewsTable isDeletingAll={isDeletingAll} news={paNews?.news ?? []} />;
+    return (
+      <NewsTable isDeletingAll={isDeletingAll} news={paNews?.news ?? []} />
+    );
   }
 
   return (
@@ -57,6 +64,53 @@ const News: NextPage = () => {
       },
     });
 
+  const data = {
+    title: "Combat report",
+    defenders: {
+      "Light Infantry": { total: 0, lost: "0" },
+      Shadows: { total: 645, lost: "0" },
+      Goliaths: { total: 235, lost: "0" },
+      Hellspawns: { total: 23, lost: "0" },
+      Medusas: { total: 0, lost: "0" },
+      Grabbers: { total: 0, lost: "0" },
+      Ares: { total: 0, lost: "0" },
+    },
+    attackers: {
+      "Light Infantry": { total: 0, lost: "0" },
+      Shadows: { total: 0, lost: "0" },
+      Goliaths: { total: 0, lost: "0" },
+      Hellspawns: { total: 0, lost: "0" },
+      Grabbers: { total: 0, lost: "0" },
+      Ares: { total: 0, lost: "0" },
+    },
+    yours: {
+      "Light Infantry": 0,
+      Shadows: 645,
+      Goliaths: 235,
+      Hellspawns: 23,
+      Medusas: "0",
+      Grabbers: 0,
+      Ares: 0,
+    },
+  };
+
+  const combatReports = paNews?.news.map((report) => {
+    const news = JSON.parse(report.news);
+
+    console.log("Json News er: ", news);
+
+    if (news.title !== "Combat report") {
+      return;
+    }
+
+    return {
+      title: news.title,
+      defenders: news.defenders,
+      attackers: news.attackers,
+      yours: news.yours,
+    };
+  });
+
   return (
     <>
       <Layout>
@@ -84,6 +138,18 @@ const News: NextPage = () => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="mt-4 flex min-w-[20.5rem] flex-col bg-white text-black">
+              {combatReports &&
+                combatReports.map((report: any, index) => (
+                  <CombatReport
+                    key={index}
+                    title={report.title}
+                    defenders={report.defenders}
+                    attackers={report.attackers}
+                    yours={report.yours}
+                  />
+                ))}
             </div>
           </div>
         </div>
