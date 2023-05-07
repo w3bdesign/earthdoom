@@ -7,42 +7,63 @@ interface CombatReportProps {
   };
 }
 
-const CombatReport = ({ data }: CombatReportProps) => {
-  return (
-    <table>
-      <thead>
+interface Props {
+  data: {
+    news: {
+      id: number;
+      sentTo: number;
+      time: number;
+      news: string;
+      seen: string;
+      header: string;
+    }[];
+  };
+}
+
+const CombatReport = ({ data }: Props) => {
+  console.log("Combatreport news: ", data);
+
+  //if (!data) return;
+
+  const tableHtml = `
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Defenders</th>
+        <th>Attackers</th>
+        <th>Yours</th>
+        <th>Time</th>
+        <th>Seen</th>
+        <th>Header</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${data.news
+        .map(
+          (item) => `
         <tr>
-          <th colSpan={Object.keys(data.defenders).length}>Defenders</th>
-          <th colSpan={Object.keys(data.attackers).length}>Attackers</th>
-          <th colSpan={Object.keys(data.yours).length}>Yours</th>
+          <td>${item.id}</td>
+          <td>${JSON.parse(item.news).title}</td>
+          <td>${JSON.stringify(JSON.parse(item.news).defenders)}</td>
+          <td>${JSON.stringify(JSON.parse(item.news).attackers)}</td>
+          <td>${JSON.stringify(JSON.parse(item.news).yours)}</td>
+          <td>${item.time}</td>
+          <td>${item.seen}</td>
+          <td>${item.header}</td>
         </tr>
-        <tr>
-          {Object.entries(data.defenders).map(([key, value]) => (
-            <th key={key}>{key}</th>
-          ))}
-          {Object.entries(data.attackers).map(([key, value]) => (
-            <th key={key}>{key}</th>
-          ))}
-          {Object.entries(data.yours).map(([key, value]) => (
-            <th key={key}>{key}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {Object.entries(data.defenders).map(([key, value]) => (
-            <td key={key}>{value.total}</td>
-          ))}
-          {Object.entries(data.attackers).map(([key, value]) => (
-            <td key={key}>{value.total}</td>
-          ))}
-          {Object.entries(data.yours).map(([key, value]) => (
-            <td key={key}>{value}</td>
-          ))}
-        </tr>
-      </tbody>
-    </table>
-  );
+      `
+        )
+        .join("")}
+    </tbody>
+  </table>
+`;
+
+
+
+
+  return(<h1>Test: {tableHtml}</h1>)
 };
 
 export default CombatReport;
