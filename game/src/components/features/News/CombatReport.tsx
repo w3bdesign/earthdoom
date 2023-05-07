@@ -60,10 +60,7 @@ const CombatReport = ({ data }: Props) => {
   </table>
 `;
 
-
-
-
-  return(<h1>Test: {tableHtml}</h1>)
+  return <h1>Test: {tableHtml}</h1>;
 };
 
 export default CombatReport;
