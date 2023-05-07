@@ -32,9 +32,7 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
 
   const returning =
     paPlayer && (paPlayer.war < 0 || paPlayer.def < 0)
-      ? `Returning ... ETA ${
-          paPlayer.war < 0 ? paPlayer.wareta : paPlayer.defeta
-        }`
+      ? `Returning ... ETA ${paPlayer.wareta}`
       : false;
 
   const attacking =
