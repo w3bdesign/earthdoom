@@ -15,6 +15,24 @@ interface IRenderContentProps {
   news?: PaNews[];
 }
 
+interface Combatants {
+  [key: string]: {
+    total: number;
+    lost: string;
+  };
+}
+
+interface Yours {
+  [key: string]: string | number;
+}
+
+interface CombatReport {
+  title: string;
+  defenders: Combatants;
+  attackers: Combatants;
+  yours: Yours;
+}
+
 const renderNews = (
   isLoading: boolean,
   paNews: IRenderContentProps,
@@ -64,40 +82,10 @@ const News: NextPage = () => {
       },
     });
 
-  const data = {
-    title: "Combat report",
-    defenders: {
-      "Light Infantry": { total: 0, lost: "0" },
-      Shadows: { total: 645, lost: "0" },
-      Goliaths: { total: 235, lost: "0" },
-      Hellspawns: { total: 23, lost: "0" },
-      Medusas: { total: 0, lost: "0" },
-      Grabbers: { total: 0, lost: "0" },
-      Ares: { total: 0, lost: "0" },
-    },
-    attackers: {
-      "Light Infantry": { total: 0, lost: "0" },
-      Shadows: { total: 0, lost: "0" },
-      Goliaths: { total: 0, lost: "0" },
-      Hellspawns: { total: 0, lost: "0" },
-      Grabbers: { total: 0, lost: "0" },
-      Ares: { total: 0, lost: "0" },
-    },
-    yours: {
-      "Light Infantry": 0,
-      Shadows: 645,
-      Goliaths: 235,
-      Hellspawns: 23,
-      Medusas: "0",
-      Grabbers: 0,
-      Ares: 0,
-    },
-  };
+  if (!paNews) return null;
 
-  const combatReports = paNews?.news.map((report) => {
-    const news = JSON.parse(report.news);
-
-    console.log("Json News er: ", news);
+  const combatReports = paNews.news.map((report) => {
+    const news: CombatReport = JSON.parse(report.news) as CombatReport;
 
     if (news.title !== "Combat report") {
       return;
@@ -141,13 +129,13 @@ const News: NextPage = () => {
             </div>
             <div className="mt-4 flex min-w-[20.5rem] flex-col bg-white text-black">
               {combatReports &&
-                combatReports.map((report: any, index) => (
+                combatReports.map((report) => (
                   <CombatReport
-                    key={index}
-                    title={report.title}
-                    defenders={report.defenders}
-                    attackers={report.attackers}
-                    yours={report.yours}
+                    key={report?.title}
+                    title={report!.title}
+                    defenders={report!.defenders}
+                    attackers={report!.attackers}
+                    yours={report!.yours}
                   />
                 ))}
             </div>

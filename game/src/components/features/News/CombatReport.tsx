@@ -1,4 +1,4 @@
-interface CombatReportProps {
+export interface CombatReportProps {
   title: string;
   defenders: {
     [key: string]: {

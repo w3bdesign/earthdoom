@@ -33,7 +33,9 @@ const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
 
   if (isOnlyCombatReport)
     return (
-      <h2 className="py-4 text-right text-xl font-bold">No general news to display</h2>
+      <h2 className="py-4 text-right text-xl font-bold">
+        No general news to display
+      </h2>
     );
 
   return (
@@ -68,39 +70,32 @@ const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
           </tr>
         </thead>
         <tbody>
-          {news?.map((news) =>
-            news.header !== "Combat report" ? (
-              <tr key={news.id} className="border-b dark:border-neutral-500">
-                <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                  {news.id}
-                </td>
-                <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                  {news.header}
-                </td>
-                <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                  {news.news}
-                </td>
-                <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                  <Button
-                    disabled={isDeleting || isDeletingAll}
-                    variant="danger"
-                    onClick={() => {
-                      deleteSingleNews({ id: news.id });
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ) : (
-              <tr>
-                <td>
-                  <h2 className="py-4 text-right text-xl font-bold">
-                    No data to display
-                  </h2>
-                </td>
-              </tr>
-            )
+          {news?.map(
+            (news) =>
+              news.header !== "Combat report" && (
+                <tr key={news.id} className="border-b dark:border-neutral-500">
+                  <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                    {news.id}
+                  </td>
+                  <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                    {news.header}
+                  </td>
+                  <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                    {news.news}
+                  </td>
+                  <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                    <Button
+                      disabled={isDeleting || isDeletingAll}
+                      variant="danger"
+                      onClick={() => {
+                        deleteSingleNews({ id: news.id });
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              )
           )}
         </tbody>
       </table>
