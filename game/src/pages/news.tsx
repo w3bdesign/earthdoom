@@ -9,12 +9,35 @@ import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import NewsTable from "@/components/features/News/NewsTable";
 import { Button, ToastComponent } from "@/components/ui/common";
+import { CombatReport } from "@/components/features/News";
 
 interface IRenderContentProps {
   news?: PaNews[];
 }
 
-const renderNews = (isLoading: boolean, paNews: IRenderContentProps, isDeletingAll: boolean) => {
+interface Combatants {
+  [key: string]: {
+    total: number;
+    lost: string;
+  };
+}
+
+interface Yours {
+  [key: string]: string | number;
+}
+
+interface CombatReport {
+  title: string;
+  defenders: Combatants;
+  attackers: Combatants;
+  yours: Yours;
+}
+
+const renderNews = (
+  isLoading: boolean,
+  paNews: IRenderContentProps,
+  isDeletingAll: boolean
+) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-4">
@@ -25,7 +48,9 @@ const renderNews = (isLoading: boolean, paNews: IRenderContentProps, isDeletingA
 
   const hasNews = paNews?.news?.length ?? 0 > 0;
   if (hasNews) {
-    return <NewsTable isDeletingAll={isDeletingAll} news={paNews?.news ?? []} />;
+    return (
+      <NewsTable isDeletingAll={isDeletingAll} news={paNews?.news ?? []} />
+    );
   }
 
   return (
@@ -57,6 +82,23 @@ const News: NextPage = () => {
       },
     });
 
+  if (!paNews) return null;
+
+  const combatReports = paNews.news.map((report) => {
+    const news: CombatReport = JSON.parse(report.news) as CombatReport;
+
+    if (news.title !== "Combat report") {
+      return;
+    }
+
+    return {
+      title: news.title,
+      defenders: news.defenders,
+      attackers: news.attackers,
+      yours: news.yours,
+    };
+  });
+
   return (
     <>
       <Layout>
@@ -84,6 +126,18 @@ const News: NextPage = () => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="mt-4 flex min-w-[20.5rem] flex-col bg-white text-black">
+              {combatReports &&
+                combatReports.map((report) => (
+                  <CombatReport
+                    key={report?.title}
+                    title={report!.title}
+                    defenders={report!.defenders}
+                    attackers={report!.attackers}
+                    yours={report!.yours}
+                  />
+                ))}
             </div>
           </div>
         </div>
