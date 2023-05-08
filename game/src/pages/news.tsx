@@ -26,11 +26,16 @@ interface Yours {
   [key: string]: string | number;
 }
 
+interface Land {
+  [key: string]: string | number;
+}
+
 interface CombatReport {
   title: string;
   defenders: Combatants;
   attackers: Combatants;
   yours: Yours;
+  land: Land;
 }
 
 const renderNews = (
@@ -91,11 +96,14 @@ const News: NextPage = () => {
       return;
     }
 
+    console.log("Land: ", news.land);
+
     return {
       title: news.title,
       defenders: news.defenders,
       attackers: news.attackers,
       yours: news.yours,
+      land: news.land,
     };
   });
 
@@ -136,6 +144,7 @@ const News: NextPage = () => {
                     defenders={report!.defenders}
                     attackers={report!.attackers}
                     yours={report!.yours}
+                    land={report!.land}
                   />
                 ))}
             </div>

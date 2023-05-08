@@ -15,6 +15,9 @@ export interface CombatReportProps {
   yours: {
     [key: string]: number | string;
   };
+  land: {
+    [key: string]: number | string;
+  };
 }
 
 const CombatReport: React.FC<CombatReportProps> = ({
@@ -22,6 +25,7 @@ const CombatReport: React.FC<CombatReportProps> = ({
   defenders,
   attackers,
   yours,
+  land,
 }) => {
   const renderRow = (name: string, data: { total: number; lost: string }) => (
     <tr key={name}>
@@ -80,6 +84,26 @@ const CombatReport: React.FC<CombatReportProps> = ({
           <td className="bg-slate-400/90"></td>
         </tr>
         {Object.entries(yours).map(([name, value]) => (
+          <tr
+            className="block bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
+            key={name}
+          >
+            <td className=" flex h-12 items-center border-r px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+              {name}
+            </td>
+            <td className="flex h-12 items-center border-r px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+              {value}
+            </td>
+          </tr>
+        ))}
+        <tr className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0">
+          <td className="flex h-12 items-center bg-slate-400/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+            Land captures
+          </td>
+          <td className="bg-slate-400/90"></td>
+          <td className="bg-slate-400/90"></td>
+        </tr>
+        {Object.entries(land).map(([name, value]) => (
           <tr
             className="block bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
             key={name}
