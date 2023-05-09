@@ -331,13 +331,16 @@ export const paUsersRouter = createTRPCRouter({
         select: { id: true },
       });
 
+      // TODO Show an error if user is not found
+      if(!user) return;
+
       const data = await ctx.prisma.paUsers.update({
         where: {
           id: Userid,
         },
         data: {
-          [mode === "attack" ? "war" : "def"]: user?.id,
-          [mode === "attack" ? "wareta" : "defeta"]: 30,
+          [mode === "attack" ? "war" : "def"]: user.id,        
+          wareta: 30,
         },
       });
 

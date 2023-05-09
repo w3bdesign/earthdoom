@@ -64,15 +64,13 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   return (
     <div className="flex flex-col items-center justify-center py-5">
       <div className="w-full max-w-lg">
-        {allFleetsAtHome ? (
+        {allFleetsAtHome && shipCount > 0 ? (
           <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
-            {shipCount > 0 && (
-              <h2 className="py-4 text-center text-xl font-bold">
-                Cost to attack: {energyCost} energy
-                <br />
-                (defending is free)
-              </h2>
-            )}
+            <h2 className="py-4 text-center text-xl font-bold">
+              Cost to attack: {energyCost} energy
+              <br />
+              (defending is free)
+            </h2>
             <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
             <div className="mt-4 flex flex-col items-center justify-center">
               <span className="text-md mb-2">Country nick:</span>
@@ -86,13 +84,6 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                 disabled={isLoading}
                 onClick={(event) => {
                   event.preventDefault();
-                  if (!areTroopsAvailable) {
-                    ToastComponent({
-                      message: "Troops are not available",
-                      type: "error",
-                    });
-                    return;
-                  }
                   if (!attackValue.trim().length) {
                     ToastComponent({
                       message: "You need to enter a target",
@@ -100,11 +91,29 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                     });
                     return;
                   }
+                  if (paPlayer.energy < energyCost) {
+                    ToastComponent({
+                      message: "You need more energy to attack",
+                      type: "error",
+                    });
+                    return;
+                  }
+                  if (!areTroopsAvailable) {
+                    ToastComponent({
+                      message: "Troops are not available",
+                      type: "error",
+                    });
+                    return;
+                  }
+              
+                 
+                  
                   mutate({
                     Userid: paPlayer.id,
-                    target: attackValue,
+                    target:attackValue,
                     mode: "attack",
                   });
+                  
                 }}
                 extraClasses="w-32 mt-4"
               >
@@ -125,13 +134,6 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                 extraClasses="w-32 mt-4"
                 onClick={(event) => {
                   event.preventDefault();
-                  if (!areTroopsAvailable) {
-                    ToastComponent({
-                      message: "Troops are not available",
-                      type: "error",
-                    });
-                    return;
-                  }
                   if (!defValue.trim().length) {
                     ToastComponent({
                       message: "You need to enter a target",
@@ -139,6 +141,13 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                     });
                     return;
                   }
+                  if (!areTroopsAvailable) {
+                    ToastComponent({
+                      message: "Troops are not available",
+                      type: "error",
+                    });
+                    return;
+                  }                 
                   mutate({
                     Userid: paPlayer.id,
                     target: defValue,
