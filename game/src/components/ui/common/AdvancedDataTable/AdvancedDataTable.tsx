@@ -34,7 +34,7 @@ export interface AdvancedTableColumn {
 }
 
 export interface AdvancedDataTableProps {
-  isLoading: boolean;
+  isLoading?: boolean;
   columns: AdvancedTableColumn[];
   data: PaPlayer[];
   caption: string;
@@ -58,7 +58,7 @@ export interface AdvancedDataTableProps {
  * @returns {JSX.Element} - The DataTable component
  */
 const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
-  isLoading,
+  isLoading = false,
   columns,
   data,
   caption,

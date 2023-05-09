@@ -27,7 +27,7 @@ const Resources: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate } = api.paUsers.spyingInitiate.useMutation({
+  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
       ToastComponent({
         message: "Production started",
@@ -72,6 +72,7 @@ const Resources: NextPage = () => {
             )}
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <AdvancedDataTable
+              isLoading={isLoading}
                 columns={columns}
                 data={[paPlayer]}
                 caption={caption}

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
 

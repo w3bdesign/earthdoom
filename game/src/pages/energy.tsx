@@ -23,7 +23,7 @@ const Energy: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate } = api.paUsers.spyingInitiate.useMutation({
+  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Construction started", type: "success" });
       await ctx.paUsers.getPlayerById.invalidate();
@@ -53,6 +53,7 @@ const Energy: NextPage = () => {
             {!isLoaded && <LoadingSpinner />}
             {paPlayer && (
               <AdvancedDataTable
+                isLoading={isLoading}
                 columns={columns}
                 data={[paPlayer]}
                 caption={caption}
