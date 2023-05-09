@@ -96,8 +96,6 @@ const News: NextPage = () => {
       return;
     }
 
-    console.log("Land: ", news.land);
-
     return {
       title: news.title,
       defenders: news.defenders,
