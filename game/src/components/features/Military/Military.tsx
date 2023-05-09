@@ -105,15 +105,13 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                     });
                     return;
                   }
-              
-                 
-                  
+
                   mutate({
                     Userid: paPlayer.id,
-                    target:attackValue,
+                    target: attackValue,
+                    energyCost: energyCost,
                     mode: "attack",
                   });
-                  
                 }}
                 extraClasses="w-32 mt-4"
               >
@@ -147,10 +145,11 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                       type: "error",
                     });
                     return;
-                  }                 
+                  }
                   mutate({
                     Userid: paPlayer.id,
                     target: defValue,
+
                     mode: "defend",
                   });
                 }}
