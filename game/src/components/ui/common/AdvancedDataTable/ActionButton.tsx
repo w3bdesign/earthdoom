@@ -1,4 +1,4 @@
-import type { FC, RefObject } from "react";
+import { FC, RefObject, useState } from "react";
 import type { Building } from "@/components/features/Construct/types/types";
 import type { PaPlayer } from "@/components/features/Production/Production";
 
@@ -9,6 +9,7 @@ import { canAffordToTrain } from "@/utils/functions";
 import { TMutateType } from "./AdvancedDataTable";
 
 interface IActionButtonProps {
+  isLoading: boolean;
   paPlayer: PaPlayer[];
   building?: Building;
   canAffordToTrain: typeof canAffordToTrain;
@@ -19,6 +20,7 @@ interface IActionButtonProps {
 }
 
 const ActionButton: FC<IActionButtonProps> = ({
+  isLoading,
   paPlayer,
   building,
   canAffordToTrain,
@@ -27,6 +29,9 @@ const ActionButton: FC<IActionButtonProps> = ({
   actionInProgress = "Constructing ...",
   inputAmountRef,
 }) => {
+
+  const [clicked, setClicked] = useState(false)
+
   if (!paPlayer[0] || !building) return null;
 
   const shouldNotCheckFieldName =
@@ -37,7 +42,9 @@ const ActionButton: FC<IActionButtonProps> = ({
       {(shouldNotCheckFieldName ||
         paPlayer[0][building.buildingFieldName] === 0) && (
         <Button
+          disabled={isLoading || clicked}
           onClick={() => {
+            setClicked(true)
             if (!paPlayer[0] || !paPlayer[0].id) return;
 
             // Using a single condition to check for multiple values
@@ -77,6 +84,7 @@ const ActionButton: FC<IActionButtonProps> = ({
               buildingCostTitanium: building.buildingCostTitanium,
               unitAmount: Number(inputAmountRef?.current?.value),
             });
+            setClicked(false)
           }}
         >
           {actionText}

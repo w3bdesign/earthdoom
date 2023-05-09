@@ -22,7 +22,7 @@ const Construction: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate } = api.paUsers.constructBuilding.useMutation({
+  const { mutate, isLoading } = api.paUsers.constructBuilding.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Building started", type: "success" });
       await ctx.paUsers.getPlayerById.invalidate();
@@ -53,6 +53,7 @@ const Construction: NextPage = () => {
             <div className="relative sm:mx-auto">
               {paPlayer && (
                 <AdvancedDataTable
+                  isLoading={isLoading}
                   columns={columns}
                   data={[paPlayer]}
                   caption={caption}
