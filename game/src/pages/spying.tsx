@@ -59,7 +59,7 @@ const Energy: NextPage = () => {
             {!isLoaded && <LoadingSpinner />}
             {paPlayer && (
               <AdvancedDataTable
-              isLoading={isLoading}
+                isLoading={isLoading}
                 columns={columns}
                 data={[paPlayer]}
                 caption={caption}
