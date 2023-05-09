@@ -34,6 +34,7 @@ export interface AdvancedTableColumn {
 }
 
 export interface AdvancedDataTableProps {
+  isLoading?: boolean;
   columns: AdvancedTableColumn[];
   data: PaPlayer[];
   caption: string;
@@ -46,6 +47,7 @@ export interface AdvancedDataTableProps {
 /**
  * Reusable AdvancedDataTable component for displaying data in a table
  * @param {object} props - The props for the DataTable component
+ * @param {boolean} props.isLoading - Is the mutation loading?
  * @param {Array<object>} props.columns - An array of objects representing the columns of the table
  * @param {Array<object>} props.data - An array of objects representing the data to be displayed in the table
  * @param {string} props.caption - The caption of the table
@@ -56,6 +58,7 @@ export interface AdvancedDataTableProps {
  * @returns {JSX.Element} - The DataTable component
  */
 const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
+  isLoading = false,
   columns,
   data,
   caption,
@@ -110,6 +113,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   ) : null}
                   {col.type === "button" && action && actionText ? (
                     <ActionButton
+                      isLoading={isLoading}
                       paPlayer={data}
                       canAffordToTrain={canAffordToTrain}
                       mutate={action}
@@ -123,6 +127,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   actionText &&
                   row.buildingId ? (
                     <ActionButton
+                      isLoading={isLoading}
                       paPlayer={data}
                       building={row as Building}
                       canAffordToTrain={canAffordToTrain}

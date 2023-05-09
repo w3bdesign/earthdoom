@@ -22,7 +22,7 @@ const ResearchPage: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate } = api.paUsers.researchBuilding.useMutation({
+  const { mutate, isLoading } = api.paUsers.researchBuilding.useMutation({
     onSuccess: async () => {
       ToastComponent({
         message: "Research started",
@@ -59,6 +59,7 @@ const ResearchPage: NextPage = () => {
             <div className="relative sm:mx-auto">
               {paPlayer && (
                 <AdvancedDataTable
+                  isLoading={isLoading}
                   columns={columns}
                   data={[paPlayer]}
                   caption={caption}

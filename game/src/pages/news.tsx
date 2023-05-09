@@ -137,16 +137,18 @@ const News: NextPage = () => {
             </div>
             <div className="mt-4 flex min-w-[20.5rem] flex-col bg-white text-black">
               {combatReports &&
-                combatReports.map((report) => (
-                  <CombatReport
-                    key={report?.title}
-                    title={report!.title}
-                    defenders={report!.defenders}
-                    attackers={report!.attackers}
-                    yours={report!.yours}
-                    land={report!.land}
-                  />
-                ))}
+                combatReports.map((report) =>
+                  report?.title ? (
+                    <CombatReport
+                      key={report.title}
+                      title={report.title}
+                      defenders={report.defenders}
+                      attackers={report.attackers}
+                      yours={report.yours}
+                      land={report.land}
+                    />
+                  ) : null
+                )}
             </div>
           </div>
         </div>
