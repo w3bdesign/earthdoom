@@ -72,7 +72,7 @@ const Resources: NextPage = () => {
             )}
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <AdvancedDataTable
-              isLoading={isLoading}
+                isLoading={isLoading}
                 columns={columns}
                 data={[paPlayer]}
                 caption={caption}
