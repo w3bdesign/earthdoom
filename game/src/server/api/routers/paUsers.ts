@@ -13,7 +13,11 @@ export const paUsersRouter = createTRPCRouter({
       return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
     }),
   getAll: privateProcedure.query(({ ctx }) => {
-    return ctx.prisma.paUsers.findMany();
+    return ctx.prisma.paUsers.findMany({
+      orderBy: {
+        rank: "asc",
+      },
+    });
   }),
   getResourceOverview: privateProcedure
     .input(z.object({ nick: z.string() }))
