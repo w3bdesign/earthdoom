@@ -320,24 +320,31 @@ export const paUsersRouter = createTRPCRouter({
       z.object({
         Userid: z.number(),
         target: z.string(),
+        energyCost: z.number().optional(),
         mode: z.enum(["attack", "defend"]),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { Userid, target, mode } = input;
+      const { Userid, target, mode, energyCost } = input;
 
       const user = await ctx.prisma.paUsers.findUnique({
         where: { nick: target },
         select: { id: true },
       });
 
+      // TODO Show an error if user is not found
+      if (!user) return;
+
       const data = await ctx.prisma.paUsers.update({
         where: {
           id: Userid,
         },
         data: {
-          [mode === "attack" ? "war" : "def"]: user?.id,
-          [mode === "attack" ? "wareta" : "defeta"]: 30,
+          [mode === "attack" ? "war" : "def"]: user.id,
+          wareta: 30,
+          ...(energyCost !== undefined && energyCost > 0
+            ? { energy: { decrement: energyCost } }
+            : {}),
         },
       });
 

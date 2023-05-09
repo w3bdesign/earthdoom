@@ -7,7 +7,6 @@ interface FleetStatusProps {
     war: number;
     def: number;
     wareta: number;
-    defeta: number;
   } | null;
 }
 
@@ -52,15 +51,15 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
   const defending =
     paPlayer &&
     paDefendedName &&
-    paPlayer.defeta >= 5 &&
+    paPlayer.wareta >= 5 &&
     `Defending ${paDefendedName.nick} #${paDefendedName.id}   (ETA: ${
-      paPlayer.defeta - 5
+      paPlayer.wareta - 5
     } ticks)`;
 
   const defendingWithZeroEta =
     paPlayer &&
     paDefendedName &&
-    paPlayer.defeta < 5 &&
+    paPlayer.wareta < 5 &&
     `Defending ${paDefendedName.nick} #${paDefendedName.id}   (ETA: 0 ticks)`;
 
   return (
