@@ -51,11 +51,28 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
 
   const allFleetsAtHome = paPlayer && paPlayer.war === 0 && paPlayer.def === 0;
 
+  const shipCount =
+    paPlayer["astropods"] +
+    paPlayer["infinitys"] +
+    paPlayer["wraiths"] +
+    paPlayer["warfrigs"] +
+    paPlayer["destroyers"] +
+    paPlayer["scorpions"];
+
+  const energyCost = 9 * shipCount;
+
   return (
     <div className="flex flex-col items-center justify-center py-5">
       <div className="w-full max-w-lg">
         {allFleetsAtHome ? (
           <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
+            {shipCount > 0 && (
+              <h2 className="py-4 text-center text-xl font-bold">
+                Cost to attack: {energyCost} energy
+                <br />
+                (defending is free)
+              </h2>
+            )}
             <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
             <div className="mt-4 flex flex-col items-center justify-center">
               <span className="text-md mb-2">Country nick:</span>
