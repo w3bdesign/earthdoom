@@ -43,7 +43,7 @@ const Navbar = () => {
             <div
               className={`!visible ${
                 expanded ? "" : "hidden"
-              } flex-grow basis-[100%] items-center lg:!flex lg:basis-auto`} 
+              } flex-grow basis-[100%] items-center lg:!flex lg:basis-auto`}
               id="navbarSupportedContentX"
             >
               <ul className="mr-auto flex flex-row">
@@ -74,10 +74,9 @@ const Navbar = () => {
                     </span>
                   </button>
                   <div
-                    className={`                    
-                    absolute left-0 right-0 top-full z-[1000] mt-0 ${
-                      expanded ? "" : "hidden"
-                    } w-full border-none bg-white bg-clip-padding text-neutral-600  dark:bg-neutral-700 dark:text-neutral-200 [&[data-te-dropdown-show]]:block`}
+                    className={`absolute left-0 right-0 top-full z-[1000] mt-0 w-full border-none bg-white bg-clip-padding text-neutral-600 transition-all duration-500 dark:bg-neutral-700 dark:text-neutral-200 ${
+                      expanded ? "visible opacity-100" : "invisible opacity-0"
+                    }`}
                     aria-labelledby="dropdownMenuButtonX"
                   >
                     <div className="px-6 py-5 lg:px-8">
