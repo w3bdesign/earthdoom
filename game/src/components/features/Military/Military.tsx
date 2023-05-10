@@ -39,26 +39,33 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     },
   });
 
-  const { data: attackedPlayer } = api.paUsers.getPlayerByNick.useQuery(
+  const { data: targetedPlayer } = api.paUsers.getPlayerByNick.useQuery(
     {
-      nick: attackValue,
+      nick: attackValue || defValue,
     },
     {
-      enabled: attackValue.length > 3,
+      enabled: attackValue.length > 3 || defValue.length > 3,
     }
   );
 
   const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
     onSuccess: async () => {
-      ToastComponent({ message: "Action successful!", type: "success" });
+      ToastComponent({ message: "Troops are on their way", type: "success" });
       await ctx.paUsers.getPlayerByNick.invalidate();
       await ctx.paUsers.getPlayerByNick.refetch();
 
-      if (attackedPlayer) {
+      if (targetedPlayer && attackValue) {
         addNews({
-          sentTo: attackedPlayer.id,
+          sentTo: targetedPlayer.id,
           news: `${paPlayer.nick} is attacking you, ETA 30 mins`,
           header: "Incoming hostile fleet",
+        });
+      }
+      if (targetedPlayer && defValue) {
+        addNews({
+          sentTo: targetedPlayer.id,
+          news: `${paPlayer.nick} is defending you, ETA 25 mins`,
+          header: "Incoming defending fleet",
         });
       }
     },
