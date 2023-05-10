@@ -13,7 +13,7 @@ const Home = () => {
 
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
 
-  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
   });
 

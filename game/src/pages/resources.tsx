@@ -23,7 +23,7 @@ const Resources: NextPage = () => {
 
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
 
-  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
   });
 
@@ -33,8 +33,8 @@ const Resources: NextPage = () => {
         message: "Production started",
         type: "success",
       });
-      await ctx.paUsers.getPlayerById.invalidate();
-      await ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerByNick.invalidate();
+      await ctx.paUsers.getPlayerByNick.refetch();
     },
     onError: () => {
       ToastComponent({

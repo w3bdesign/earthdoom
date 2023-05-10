@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
@@ -10,6 +11,7 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import NewsTable from "@/components/features/News/NewsTable";
 import { Button, ToastComponent } from "@/components/ui/common";
 import { CombatReport } from "@/components/features/News";
+import { isJSON } from "@/utils/functions";
 
 interface IRenderContentProps {
   news?: PaNews[];
@@ -36,6 +38,7 @@ interface CombatReport {
   attackers: Combatants;
   yours: Yours;
   land: Land;
+  time: string;
 }
 
 const renderNews = (
@@ -90,21 +93,26 @@ const News: NextPage = () => {
   if (!paNews) return null;
 
   const combatReports = paNews.news.map((report) => {
-    const news: CombatReport = JSON.parse(report.news) as CombatReport;
+    const date = new Date(report.time * 1000);
+    const formattedDate = format(date, "dd/MM-yyyy HH:mm:ss");
+    const isJsonString = isJSON(report.news);
 
-    if (news.title !== "Combat report") {
-      return;
+    if (isJsonString) {
+      const news: CombatReport = JSON.parse(report.news) as CombatReport;
+
+      if (news.title !== "Combat report") {
+        return;
+      }
+
+      return {
+        title: news.title,
+        defenders: news.defenders,
+        attackers: news.attackers,
+        yours: news.yours,
+        land: news.land,
+        time: formattedDate,
+      };
     }
-
-    console.log("Land: ", news.land);
-
-    return {
-      title: news.title,
-      defenders: news.defenders,
-      attackers: news.attackers,
-      yours: news.yours,
-      land: news.land,
-    };
   });
 
   return (
@@ -139,14 +147,7 @@ const News: NextPage = () => {
               {combatReports &&
                 combatReports.map((report) =>
                   report?.title ? (
-                    <CombatReport
-                      key={report.title}
-                      title={report.title}
-                      defenders={report.defenders}
-                      attackers={report.attackers}
-                      yours={report.yours}
-                      land={report.land}
-                    />
+                    <CombatReport key={report.title} {...report} />
                   ) : null
                 )}
             </div>

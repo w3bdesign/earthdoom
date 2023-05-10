@@ -20,7 +20,7 @@ const Energy: NextPage = () => {
 
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
 
-  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
   });
 
@@ -30,8 +30,8 @@ const Energy: NextPage = () => {
         message: "Spying complete",
         type: "success",
       });
-      await ctx.paUsers.getPlayerById.invalidate();
-      await ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerByNick.invalidate();
+      await ctx.paUsers.getPlayerByNick.refetch();
     },
     onError: () => {
       ToastComponent({

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
 
 import { api } from "@/utils/api";
 
@@ -22,7 +21,6 @@ interface IHandleInputChange {
 
 const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const ctx = api.useContext();
-  const { user } = useUser();
 
   const [attackValue, setAttackValue] = useState<string>("");
   const [defValue, setDefValue] = useState<string>("");
@@ -30,11 +28,46 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const areTroopsAvailable =
     Number(paPlayer.war) === 0 && Number(paPlayer.def) === 0;
 
+  const { mutate: addNews } = api.paNews.addNews.useMutation({
+    onSuccess: async () => {
+      ToastComponent({ message: "News added", type: "success" });
+      await ctx.paNews.getAllNewsByUserId.invalidate();
+      await ctx.paNews.getAllNewsByUserId.refetch();
+    },
+    onError: () => {
+      ToastComponent({ message: "Error ...", type: "error" });
+    },
+  });
+
+  const { data: targetedPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    {
+      nick: attackValue || defValue,
+    },
+    {
+      enabled: attackValue.length > 3 || defValue.length > 3,
+    }
+  );
+
   const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
     onSuccess: async () => {
-      ToastComponent({ message: "Action successful!", type: "success" });
-      await ctx.paUsers.getPlayerById.invalidate();
-      await ctx.paUsers.getPlayerById.refetch();
+      ToastComponent({ message: "Troops are on their way", type: "success" });
+      await ctx.paUsers.getPlayerByNick.invalidate();
+      await ctx.paUsers.getPlayerByNick.refetch();
+
+      if (targetedPlayer && attackValue) {
+        addNews({
+          sentTo: targetedPlayer.id,
+          news: `${paPlayer.nick} is attacking you, ETA 30 mins`,
+          header: "Incoming hostile fleet",
+        });
+      }
+      if (targetedPlayer && defValue) {
+        addNews({
+          sentTo: targetedPlayer.id,
+          news: `${paPlayer.nick} is defending you, ETA 25 mins`,
+          header: "Incoming defending fleet",
+        });
+      }
     },
     onError: () => {
       ToastComponent({ message: "Error ...", type: "error" });

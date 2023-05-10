@@ -60,7 +60,7 @@ export const paUsersRouter = createTRPCRouter({
 
       return defender;
     }),
-  getPlayerById: privateProcedure
+  getPlayerByNick: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({

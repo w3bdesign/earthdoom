@@ -13,7 +13,7 @@ const ProductionPage: NextPage = () => {
 
   if (!isSignedIn || !user.username) return null;
 
-  const { data: paPlayer } = api.paUsers.getPlayerById.useQuery({
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
   });
 

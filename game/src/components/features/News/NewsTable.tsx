@@ -6,6 +6,7 @@ import type { FC } from "react";
 import type { PaNews } from "@prisma/client";
 
 import { api } from "@/utils/api";
+import { format } from "date-fns";
 
 interface INewsTableProps {
   isDeletingAll: boolean;
@@ -47,7 +48,7 @@ const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
               scope="col"
               className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
             >
-              ID
+              Time
             </th>
             <th
               scope="col"
@@ -75,7 +76,7 @@ const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
               news.header !== "Combat report" && (
                 <tr key={news.id} className="border-b dark:border-neutral-500">
                   <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                    {news.id}
+                    {format(new Date(news.time * 1000), "dd/MM-yyyy HH:mm:ss")}
                   </td>
                   <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                     {news.header}
