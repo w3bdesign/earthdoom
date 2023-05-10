@@ -24,8 +24,8 @@ interface IProduction {
  * @returns {boolean} - Returns true if the string is valid JSON, false otherwise.
  * @throws {SyntaxError} - Throws a SyntaxError if the string is not valid JSON.
  */
-export const isJSON = (str: string) => {
-  let value = str;
+export const isJSON = (str: string): boolean => {
+  let value: unknown = str;
   try {
     value = JSON.parse(str);
   } catch (err) {
