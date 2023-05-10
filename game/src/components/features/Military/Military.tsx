@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
 
 import { api } from "@/utils/api";
 
@@ -22,7 +21,6 @@ interface IHandleInputChange {
 
 const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const ctx = api.useContext();
-  const { user } = useUser();
 
   const [attackValue, setAttackValue] = useState<string>("");
   const [defValue, setDefValue] = useState<string>("");
@@ -41,10 +39,14 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     },
   });
 
-  // TODO This calls every time, but we can't have it inside the onSuccess?
-  const { data: attackedPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: attackValue,
-  });
+  const { data: attackedPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    {
+      nick: attackValue,
+    },
+    {
+      enabled: attackValue.length > 3,
+    }
+  );
 
   const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
     onSuccess: async () => {
