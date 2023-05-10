@@ -16,10 +16,14 @@ const AddUser: NextPage = () => {
   const { mutate } = api.paUsers.createPlayer.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Player created", type: "success" });
-      // Redirect after 2 seconds
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
+      // Wrap setTimeout in a Promise to allow using await
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 2000);
+      });
+      // Make the function async to allow for use of await
+      await router.push("/");
     },
   });
 
