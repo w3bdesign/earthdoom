@@ -1,12 +1,13 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
+import { ToastComponent } from "@/components/ui/common";
 
 import { api } from "@/utils/api";
-import { useEffect } from "react";
 
 const AddUser: NextPage = () => {
   const { user } = useUser();
@@ -14,10 +15,15 @@ const AddUser: NextPage = () => {
 
   const { mutate } = api.paUsers.createPlayer.useMutation({
     onSuccess: async () => {
+      ToastComponent({ message: "Player created", type: "success" });
+      // Wrap setTimeout in a Promise to allow using await
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 2000);
+      });
+      // Make the function async to allow for use of await
       await router.push("/");
-    },
-    onError: async () => {
-      await router.push("/error");
     },
   });
 
