@@ -17,8 +17,8 @@ const AddUser: NextPage = () => {
     onSuccess: async () => {
       ToastComponent({ message: "Player created", type: "success" });
       // Redirect after 2 seconds
-      setTimeout(async () => {
-        await router.push("/");
+      setTimeout(() => {
+        router.push("/");
       }, 2000);
     },
   });
