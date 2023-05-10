@@ -90,10 +90,32 @@ const News: NextPage = () => {
 
   if (!paNews) return null;
 
+
+
+  function isJSON(str: any) {
+    try {
+      JSON.parse(str);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+
+
+
+
+
   const combatReports = paNews.news.map((report) => {
     const date = new Date(report.time * 1000);
     const formattedDate = format(date, "dd/MM-yyyy HH:mm:ss");
 
+    const isJsonString = isJSON(report.news);
+
+   
+
+
+if(isJsonString) {
     const news: CombatReport = JSON.parse(report.news) as CombatReport;
 
     if (news.title !== "Combat report") {
@@ -108,7 +130,7 @@ const News: NextPage = () => {
       land: news.land,
       time: formattedDate,
     };
-  });
+  }});
 
   return (
     <>
