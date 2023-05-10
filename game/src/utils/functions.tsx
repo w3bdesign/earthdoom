@@ -19,6 +19,22 @@ interface IProduction {
 }
 
 /**
+ * Determines if a string is valid JSON or not.
+ * @param {string} str - The string to be validated.
+ * @returns {boolean} - Returns true if the string is valid JSON, false otherwise.
+ * @throws {SyntaxError} - Throws a SyntaxError if the string is not valid JSON.
+ */
+export const isJSON = (str: string) => {
+  let value = str;
+  try {
+    value = JSON.parse(str);
+  } catch (err) {
+    throw new SyntaxError(`String '${str}' is not valid JSON.`);
+  }
+  return typeof value === "object" && value !== null;
+};
+
+/**
  * Converts a value to a string and renders it as a React element.
  * @param {IStringifierProps} props - The props for the component
  * @returns {JSX.Element} The stringified value as a React element
