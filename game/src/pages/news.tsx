@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
@@ -90,6 +91,9 @@ const News: NextPage = () => {
   if (!paNews) return null;
 
   const combatReports = paNews.news.map((report) => {
+    const date = new Date(report.time * 1000);
+    const formattedDate = format(date, "dd/MM-yyyy HH:mm:ss");
+
     const news: CombatReport = JSON.parse(report.news) as CombatReport;
 
     if (news.title !== "Combat report") {
@@ -102,6 +106,7 @@ const News: NextPage = () => {
       attackers: news.attackers,
       yours: news.yours,
       land: news.land,
+      time: formattedDate,
     };
   });
 
@@ -109,7 +114,7 @@ const News: NextPage = () => {
     <>
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden">
+          <div className="w-[26rem] relative flex flex-col justify-center overflow-hidden">
             <div className="container mt-6 flex justify-end">
               {paNews && paNews.news.length > 0 && (
                 <Button
@@ -144,6 +149,7 @@ const News: NextPage = () => {
                       attackers={report.attackers}
                       yours={report.yours}
                       land={report.land}
+                      time={report.time}
                     />
                   ) : null
                 )}
