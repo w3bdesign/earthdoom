@@ -41,7 +41,9 @@ const Navbar = () => {
               </span>
             </button>
             <div
-              className="!visible hidden flex-grow basis-[100%] items-center lg:!flex lg:basis-auto"
+              className={`!visible ${
+                expanded ? "" : "hidden"
+              } flex-grow basis-[100%] items-center lg:!flex lg:basis-auto`} 
               id="navbarSupportedContentX"
             >
               <ul className="mr-auto flex flex-row">
@@ -50,7 +52,7 @@ const Navbar = () => {
                     className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold  transition duration-150 ease-in-out hover:text-slate-300  dark:hover:text-white dark:focus:text-white lg:px-2"
                     type="button"
                     id="dropdownMenuButtonX"
-                    aria-expanded="false"
+                    aria-expanded={expanded}
                     onClick={() => {
                       setExpanded(!expanded);
                     }}
