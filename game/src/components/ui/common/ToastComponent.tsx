@@ -1,6 +1,6 @@
 import { toast } from "react-hot-toast";
 
-import { ToasterProps, DefaultToastOptions } from "react-hot-toast";
+import type { ToasterProps, DefaultToastOptions } from "react-hot-toast";
 
 interface ToastComponentProps extends ToasterProps {
   type: "success" | "error";
