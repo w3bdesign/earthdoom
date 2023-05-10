@@ -29,7 +29,7 @@ export const isJSON = (str: string): boolean => {
   try {
     value = JSON.parse(str);
   } catch (err) {
-    throw new SyntaxError(`String '${str}' is not valid JSON.`);
+    return false;
   }
   return typeof value === "object" && value !== null;
 };

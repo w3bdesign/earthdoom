@@ -119,7 +119,7 @@ const News: NextPage = () => {
     <>
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex w-[26rem] flex-col justify-center overflow-hidden">
+          <div className="relative flex flex-col justify-center overflow-hidden">
             <div className="container mt-6 flex justify-end">
               {paNews && paNews.news.length > 0 && (
                 <Button
@@ -147,15 +147,7 @@ const News: NextPage = () => {
               {combatReports &&
                 combatReports.map((report) =>
                   report?.title ? (
-                    <CombatReport
-                      key={report.title}
-                      title={report.title}
-                      defenders={report.defenders}
-                      attackers={report.attackers}
-                      yours={report.yours}
-                      land={report.land}
-                      time={report.time}
-                    />
+                    <CombatReport key={report.title} {...report} />
                   ) : null
                 )}
             </div>
