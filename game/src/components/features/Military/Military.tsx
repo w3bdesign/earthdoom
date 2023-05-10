@@ -30,11 +30,34 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const areTroopsAvailable =
     Number(paPlayer.war) === 0 && Number(paPlayer.def) === 0;
 
+  const { mutate: addNews } = api.paNews.addNews.useMutation({
+    onSuccess: async () => {
+      ToastComponent({ message: "News added", type: "success" });
+      await ctx.paNews.getAllNewsByUserId.invalidate();
+      await ctx.paNews.getAllNewsByUserId.refetch();
+    },
+    onError: () => {
+      ToastComponent({ message: "Error ...", type: "error" });
+    },
+  });
+
+  const { data: attackedPlayer } = api.paUsers.getPlayerByNick.useQuery({
+    nick: attackValue,
+  });
+
   const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Action successful!", type: "success" });
-      await ctx.paUsers.getPlayerById.invalidate();
-      await ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerByNick.invalidate();
+      await ctx.paUsers.getPlayerByNick.refetch();
+
+      if (attackedPlayer) {
+        addNews({
+          sentTo: attackedPlayer.id,
+          news: `${paPlayer.nick} is attacking you, ETA 30 mins`,
+          header: "Incoming hostile fleet",
+        });
+      }
     },
     onError: () => {
       ToastComponent({ message: "Error ...", type: "error" });

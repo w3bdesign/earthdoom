@@ -37,8 +37,8 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
         message: "Spying complete",
         type: "success",
       });
-      await ctx.paUsers.getPlayerById.invalidate();
-      await ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerByNick.invalidate();
+      await ctx.paUsers.getPlayerByNick.refetch();
     },
     onError: () => {
       ToastComponent({

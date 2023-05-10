@@ -34,8 +34,8 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Training started", type: "success" });
-      await ctx.paUsers.getPlayerById.invalidate();
-      await ctx.paUsers.getPlayerById.refetch();
+      await ctx.paUsers.getPlayerByNick.invalidate();
+      await ctx.paUsers.getPlayerByNick.refetch();
     },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });
