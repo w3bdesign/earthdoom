@@ -41,6 +41,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     },
   });
 
+  // TODO This calls every time, but we can't have it inside the onSuccess?
   const { data: attackedPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: attackValue,
   });
