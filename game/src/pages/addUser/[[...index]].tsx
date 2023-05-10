@@ -18,10 +18,6 @@ const AddUser: NextPage = () => {
       ToastComponent({ message: "Player created", type: "success" });
       await router.push("/");
     },
-    onError: async () => {
-      ToastComponent({ message: "Error creating player", type: "error" });
-      await router.push("/error");
-    },
   });
 
   useEffect(() => {
