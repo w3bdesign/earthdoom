@@ -40,12 +40,7 @@ const Navbar = () => {
                 </svg>
               </span>
             </button>
-            <div
-              className={`flex-grow basis-[100%] items-center transition-all duration-500 lg:!flex lg:basis-auto ${
-                expanded ? "visible opacity-100" : "invisible opacity-0"
-              }`}
-              id="navbarSupportedContentX"
-            >
+            <div id="navbarSupportedContentX">
               <ul className="mr-auto flex flex-row">
                 <li className="static">
                   <button

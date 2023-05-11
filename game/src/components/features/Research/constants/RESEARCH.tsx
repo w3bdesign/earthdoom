@@ -51,6 +51,7 @@ export const BUILDINGS = [
     buildingCostCrystal: 5000,
     buildingCostTitanium: 3000,
   },
+  /*
   {
     buildingId: 6,
     buildingName: "Unit infiltration",
@@ -60,7 +61,7 @@ export const BUILDINGS = [
     buildingCost: "10000c 10000t",
     buildingCostCrystal: 10000,
     buildingCostTitanium: 10000,
-  },
+  },*/
   {
     buildingId: 7,
     buildingName: "BDU studies",
@@ -70,7 +71,7 @@ export const BUILDINGS = [
     buildingCost: "10000t 10000c",
     buildingCostCrystal: 10000,
     buildingCostTitanium: 10000,
-  },
+  },/*
   {
     buildingId: 8,
     buildingName: "BDU infiltration",
@@ -80,5 +81,5 @@ export const BUILDINGS = [
     buildingCost: "20000c 20000t",
     buildingCostCrystal: 20000,
     buildingCostTitanium: 20000,
-  },
+  },*/
 ];

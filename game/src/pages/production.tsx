@@ -23,7 +23,16 @@ const ProductionPage: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative sm:mx-auto">
-              {paPlayer && <Production paPlayer={paPlayer} />}
+              {paPlayer?.c_airport === 0 && (
+                <div className="mb-4 mt-8 rounded-lg bg-white px-8 py-5 shadow-md">
+                  <h1 className="text-center text-2xl font-bold text-black">
+                    You need to construct barracks before you can produce units
+                  </h1>
+                </div>
+              )}
+              {paPlayer && paPlayer.c_airport && (
+                <Production paPlayer={paPlayer} />
+              )}
             </div>
           </div>
         </div>

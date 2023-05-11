@@ -2,10 +2,10 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
+import { api } from "@/utils/api";
+
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-
-import { api } from "@/utils/api";
 import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
 import {
   Button,
@@ -51,7 +51,14 @@ const Energy: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            {paPlayer && (
+            {paPlayer?.r_energy === 0 && (
+              <div className="mt-8 mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
+                <h1 className="text-center text-2xl font-bold text-black">
+                  You need to research power plants before you can build them
+                </h1>
+              </div>
+            )}
+            {paPlayer && paPlayer.r_energy && (
               <AdvancedDataTable
                 isLoading={isLoading}
                 columns={columns}
