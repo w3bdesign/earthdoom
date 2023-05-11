@@ -30,7 +30,7 @@ const ProductionPage: NextPage = () => {
                   </h2>
                 </div>
               )}
-              {(paPlayer && paPlayer.c_airport === 1) && (
+              {paPlayer && paPlayer.c_airport === 1 && (
                 <Production paPlayer={paPlayer} />
               )}
             </div>
