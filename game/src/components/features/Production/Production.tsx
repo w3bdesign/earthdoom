@@ -46,7 +46,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     return <div>Loading user data...</div>;
   }
 
-  if (paPlayer[production.buildingRequirement] === 0) return null;
+   if (paPlayer[production.buildingRequirement] === 0) return null;
 
   return (
     <tr
