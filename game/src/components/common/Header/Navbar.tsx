@@ -40,10 +40,7 @@ const Navbar = () => {
                 </svg>
               </span>
             </button>
-            <div
-             
-              id="navbarSupportedContentX"
-            >
+            <div id="navbarSupportedContentX">
               <ul className="mr-auto flex flex-row">
                 <li className="static">
                   <button
