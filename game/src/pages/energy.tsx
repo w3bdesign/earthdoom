@@ -52,13 +52,13 @@ const Energy: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
             {paPlayer?.r_energy === 0 && (
-              <div className="mt-8 mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
-                <h1 className="text-center text-2xl font-bold text-black">
+              <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
+                <h2 className="p-2 text-center text-xl font-bold text-black">
                   You need to research power plants before you can build them
-                </h1>
+                </h2>
               </div>
             )}
-            {paPlayer && paPlayer.r_energy && (
+            {paPlayer && paPlayer.r_energy === 1 && (
               <AdvancedDataTable
                 isLoading={isLoading}
                 columns={columns}
