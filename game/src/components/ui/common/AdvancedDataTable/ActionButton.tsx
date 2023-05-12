@@ -37,65 +37,70 @@ const ActionButton: FC<IActionButtonProps> = ({
 
   return (
     <>
-      {(shouldNotCheckFieldName ||
-        paPlayer[0][building.buildingFieldName] === 0) && (
-        <Button
-          disabled={isLoading}
-          onClick={() => {
-            if (!paPlayer[0] || !paPlayer[0].id) return;
+      <td className="flex items-center px-8 md:px-0 text-base text-black transition duration-300 before:text-black first:border-l-0 sm:table-cell sm:before:content-none md:h-12">
+        {(shouldNotCheckFieldName ||
+          paPlayer[0][building.buildingFieldName] === 0) && (
+          <Button
+            disabled={isLoading}
+            onClick={() => {
+              if (!paPlayer[0] || !paPlayer[0].id) return;
 
-            // Using a single condition to check for multiple values
-            const hasInputField =
-              Number(building.hasInputField) === 1 ||
-              building.hasInputField !== "undefined";
+              // Using a single condition to check for multiple values
+              const hasInputField =
+                Number(building.hasInputField) === 1 ||
+                building.hasInputField !== "undefined";
 
-            if (hasInputField && Number(inputAmountRef?.current?.value) === 0) {
-              ToastComponent({
-                message: "Quantity needs to be more than 0",
-                type: "error",
+              if (
+                hasInputField &&
+                Number(inputAmountRef?.current?.value) === 0
+              ) {
+                ToastComponent({
+                  message: "Quantity needs to be more than 0",
+                  type: "error",
+                });
+                return;
+              }
+
+              // Using early returns to avoid nested if statements
+              if (
+                !canAffordToTrain(
+                  paPlayer[0],
+                  building.buildingCostCrystal,
+                  building.buildingCostTitanium,
+                  Number(inputAmountRef?.current?.value)
+                )
+              ) {
+                ToastComponent({
+                  message: "You can not afford this",
+                  type: "error",
+                });
+                return;
+              }
+
+              mutate({
+                Userid: Number(paPlayer[0].id),
+                buildingFieldName: building.buildingFieldName,
+                buildingETA: building.buildingETA,
+                buildingCostCrystal: building.buildingCostCrystal,
+                buildingCostTitanium: building.buildingCostTitanium,
+                unitAmount: Number(inputAmountRef?.current?.value),
               });
-              return;
-            }
-
-            // Using early returns to avoid nested if statements
-            if (
-              !canAffordToTrain(
-                paPlayer[0],
-                building.buildingCostCrystal,
-                building.buildingCostTitanium,
-                Number(inputAmountRef?.current?.value)
-              )
-            ) {
-              ToastComponent({
-                message: "You can not afford this",
-                type: "error",
-              });
-              return;
-            }
-
-            mutate({
-              Userid: Number(paPlayer[0].id),
-              buildingFieldName: building.buildingFieldName,
-              buildingETA: building.buildingETA,
-              buildingCostCrystal: building.buildingCostCrystal,
-              buildingCostTitanium: building.buildingCostTitanium,
-              unitAmount: Number(inputAmountRef?.current?.value),
-            });
-          }}
-        >
-          {actionText}
-        </Button>
-      )}
-      {paPlayer[0] &&
-        building &&
-        !shouldNotCheckFieldName &&
-        Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
-        `${actionInProgress}`}
-      {paPlayer[0] &&
-        building &&
-        !shouldNotCheckFieldName &&
-        paPlayer[0][building.buildingFieldName] === 1 &&
-        "Done"}
+            }}
+          >
+            {actionText}
+          </Button>
+        )}
+        {paPlayer[0] &&
+          building &&
+          !shouldNotCheckFieldName &&
+          Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
+          `${actionInProgress}`}
+        {paPlayer[0] &&
+          building &&
+          !shouldNotCheckFieldName &&
+          paPlayer[0][building.buildingFieldName] === 1 &&
+          "Done"}
+      </td>
     </>
   );
 };
