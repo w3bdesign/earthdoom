@@ -48,31 +48,32 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     }
   );
 
-  const { mutate, isLoading } = api.paUsers.militaryAction.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Troops are on their way", type: "success" });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
+  const { mutate: militaryAction, isLoading } =
+    api.paUsers.militaryAction.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Troops are on their way", type: "success" });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
 
-      if (targetedPlayer && attackValue) {
-        addNews({
-          sentTo: targetedPlayer.id,
-          news: `${paPlayer.nick} is attacking you, ETA 30 mins`,
-          header: "Incoming hostile fleet",
-        });
-      }
-      if (targetedPlayer && defValue) {
-        addNews({
-          sentTo: targetedPlayer.id,
-          news: `${paPlayer.nick} is defending you, ETA 25 mins`,
-          header: "Incoming defending fleet",
-        });
-      }
-    },
-    onError: () => {
-      ToastComponent({ message: "Error ...", type: "error" });
-    },
-  });
+        if (targetedPlayer && attackValue) {
+          addNews({
+            sentTo: targetedPlayer.id,
+            news: `${paPlayer.nick} is attacking you, ETA 30 mins`,
+            header: "Incoming hostile fleet",
+          });
+        }
+        if (targetedPlayer && defValue) {
+          addNews({
+            sentTo: targetedPlayer.id,
+            news: `${paPlayer.nick} is defending you, ETA 25 mins`,
+            header: "Incoming defending fleet",
+          });
+        }
+      },
+      onError: () => {
+        ToastComponent({ message: "Error ...", type: "error" });
+      },
+    });
 
   const handleInputAttackChange: IHandleInputChange = (event) => {
     setAttackValue(event.target.value);
@@ -96,7 +97,30 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
 
   return (
     <div className="flex flex-col items-center justify-center py-5">
-      <div className="w-full max-w-lg">
+      <div className="w-full">
+        {!allFleetsAtHome && shipCount > 0 && (
+          <>
+            <div className="md:w-[44.563rem] mb-4 flex flex-col items-center justify-center rounded bg-white px-8 py-5 shadow">
+              <h2 className="py-4 text-center text-xl font-bold">
+                Retreat troops:
+              </h2>
+              <Button
+                extraClasses="mt-4 mb-4"
+                disabled={isLoading}
+                onClick={(event) => {
+                  event.preventDefault();
+                  militaryAction({
+                    Userid: paPlayer.id,
+                    mode: "retreat",
+                  });
+                }}
+              >
+                Retreat
+              </Button>
+            </div>
+          </>
+        )}
+
         {allFleetsAtHome && shipCount > 0 ? (
           <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
             <h2 className="py-4 text-center text-xl font-bold">
@@ -138,8 +162,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                     });
                     return;
                   }
-
-                  mutate({
+                  militaryAction({
                     Userid: paPlayer.id,
                     target: attackValue,
                     energyCost: energyCost,
@@ -179,7 +202,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                     });
                     return;
                   }
-                  mutate({
+                  militaryAction({
                     Userid: paPlayer.id,
                     target: defValue,
 
