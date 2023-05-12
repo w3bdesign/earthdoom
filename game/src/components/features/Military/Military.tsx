@@ -49,7 +49,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   );
 
   const { mutate: militaryAction, isLoading } =
-    api.paUsers.militaryAction.useMutation({
+    api.paMilitary.militaryAction.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "Troops are on their way", type: "success" });
         await ctx.paUsers.getPlayerByNick.invalidate();
@@ -75,6 +75,17 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
       },
     });
 
+  const { mutate: retreatTroops } = api.paMilitary.retreatTroops.useMutation({
+    onSuccess: async () => {
+      ToastComponent({ message: "Troops are returning", type: "success" });
+      await ctx.paUsers.getPlayerByNick.invalidate();
+      await ctx.paUsers.getPlayerByNick.refetch();
+    },
+    onError: () => {
+      ToastComponent({ message: "Error ...", type: "error" });
+    },
+  });
+
   const handleInputAttackChange: IHandleInputChange = (event) => {
     setAttackValue(event.target.value);
   };
@@ -95,10 +106,13 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
 
   const energyCost = 9 * shipCount;
 
+  const shouldShowRetreatButton =
+    !allFleetsAtHome && shipCount > 0 && paPlayer.war > 0;
+
   return (
     <div className="flex flex-col items-center justify-center py-5">
       <div className="w-full">
-        {!allFleetsAtHome && shipCount > 0 && (
+        {shouldShowRetreatButton && (
           <>
             <div className="mb-4 flex flex-col items-center justify-center rounded bg-white px-8 py-5 shadow md:w-[44.563rem]">
               <h2 className="py-4 text-center text-xl font-bold">
@@ -109,9 +123,8 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                 disabled={isLoading}
                 onClick={(event) => {
                   event.preventDefault();
-                  militaryAction({
+                  retreatTroops({
                     Userid: paPlayer.id,
-                    mode: "retreat",
                   });
                 }}
               >
@@ -120,7 +133,6 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
             </div>
           </>
         )}
-
         {allFleetsAtHome && shipCount > 0 ? (
           <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
             <h2 className="py-4 text-center text-xl font-bold">
