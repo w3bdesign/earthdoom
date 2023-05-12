@@ -317,46 +317,4 @@ export const paUsersRouter = createTRPCRouter({
 
       return data;
     }),
-
-  militaryAction: privateProcedure
-    .input(
-      z.object({
-        Userid: z.number(),
-        target: z.string().optional(),
-        energyCost: z.number().optional(),
-        mode: z.enum(["attack", "defend", "retreat"]),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const { Userid, target, mode, energyCost } = input;
-
-      const user = await ctx.prisma.paUsers.findUnique({
-        where: { nick: target },
-        select: { id: true },
-      });
-
-      // TODO Show an error if user is not found
-      if (!user) return;
-
-      const fieldMap = {
-        attack: "war",
-        defend: "def",
-        retreat: "war",
-      };
-
-      const data = await ctx.prisma.paUsers.update({
-        where: {
-          id: Userid,
-        },
-        data: {
-          [fieldMap[mode]]: mode === "retreat" ? -1 : user.id,
-          wareta: 30,
-          ...(energyCost !== undefined && energyCost > 0
-            ? { energy: { decrement: energyCost } }
-            : {}),
-        },
-      });
-
-      return data;
-    }),
 });
