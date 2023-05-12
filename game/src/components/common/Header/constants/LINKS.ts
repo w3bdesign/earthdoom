@@ -34,7 +34,6 @@ export const LINKS: ILinks[] = [
     text: "Mail",
   },*/
 
-  
   {
     id: 5,
     href: "/production",

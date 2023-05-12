@@ -100,7 +100,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
       <div className="w-full">
         {!allFleetsAtHome && shipCount > 0 && (
           <>
-            <div className="md:w-[44.563rem] mb-4 flex flex-col items-center justify-center rounded bg-white px-8 py-5 shadow">
+            <div className="mb-4 flex flex-col items-center justify-center rounded bg-white px-8 py-5 shadow md:w-[44.563rem]">
               <h2 className="py-4 text-center text-xl font-bold">
                 Retreat troops:
               </h2>

@@ -285,6 +285,7 @@ export const paUsersRouter = createTRPCRouter({
       return data;
     }),
 
+  // TODO Add support for more spying options
   spyingInitiate: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
@@ -317,15 +318,13 @@ export const paUsersRouter = createTRPCRouter({
       return data;
     }),
 
-  // TODO Add support for more spying options
-
   militaryAction: privateProcedure
     .input(
       z.object({
         Userid: z.number(),
-        target: z.string(),
+        target: z.string().optional(),
         energyCost: z.number().optional(),
-        mode: z.enum(["attack", "defend"]),
+        mode: z.enum(["attack", "defend", "retreat"]),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -339,12 +338,18 @@ export const paUsersRouter = createTRPCRouter({
       // TODO Show an error if user is not found
       if (!user) return;
 
+      const fieldMap = {
+        attack: "war",
+        defend: "def",
+        retreat: "war",
+      };
+
       const data = await ctx.prisma.paUsers.update({
         where: {
           id: Userid,
         },
         data: {
-          [mode === "attack" ? "war" : "def"]: user.id,
+          [fieldMap[mode]]: mode === "retreat" ? -1 : user.id,
           wareta: 30,
           ...(energyCost !== undefined && energyCost > 0
             ? { energy: { decrement: energyCost } }

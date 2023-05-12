@@ -71,7 +71,7 @@ export const BUILDINGS = [
     buildingCost: "10000t 10000c",
     buildingCostCrystal: 10000,
     buildingCostTitanium: 10000,
-  },/*
+  } /*
   {
     buildingId: 8,
     buildingName: "BDU infiltration",
@@ -81,5 +81,5 @@ export const BUILDINGS = [
     buildingCost: "20000c 20000t",
     buildingCostCrystal: 20000,
     buildingCostTitanium: 20000,
-  },*/
+  },*/,
 ];
