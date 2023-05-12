@@ -24,7 +24,7 @@ const ProductionPage: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative sm:mx-auto">
               {paPlayer?.c_airport === 0 && (
-                <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
+                <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[44.563rem]">
                   <h2 className="p-2 text-center text-xl font-bold text-black">
                     You need to construct barracks before you can produce units
                   </h2>

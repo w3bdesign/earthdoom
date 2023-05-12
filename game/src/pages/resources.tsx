@@ -67,7 +67,7 @@ const Resources: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            <div className="mb-4 mt-6 w-[30rem] rounded bg-white py-4 shadow">
+            <div className="mb-4 mt-6 md:w-[44.563rem] rounded bg-white py-4 shadow">
               {hasNoLand ? (
                 <h2 className="p-4 text-center text-2xl font-bold">
                   No land, no income.
