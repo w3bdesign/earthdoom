@@ -6,7 +6,6 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import Military from "@/components/features/Military/Military";
-
 import UnitsTable from "@/components/Index/UnitsTable";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import FleetStatus from "@/components/Index/FleetStatus";
@@ -26,9 +25,7 @@ const MilitaryPage: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {paPlayer ? (
-              <>
-                <UnitsTable paPlayer={paPlayer} />
-              </>
+              <UnitsTable paPlayer={paPlayer} />
             ) : (
               <div className="py-6">
                 <LoadingSpinner />

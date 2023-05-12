@@ -5,6 +5,7 @@ import { paUsersRouter } from "@/server/api/routers/paUsers";
 import { paMailRouter } from "@/server/api/routers/paMail";
 import { paNewsRouter } from "@/server/api/routers/paNews";
 import { paTagRouter } from "@/server/api/routers/paTag";
+import { paMilitaryRouter } from "@/server/api/routers/paMilitary";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   paMail: paMailRouter,
   paNews: paNewsRouter,
   paTag: paTagRouter,
+  paMilitary: paMilitaryRouter,
 });
 
 // export type definition of API
