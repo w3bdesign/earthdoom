@@ -56,6 +56,11 @@ const Resources: NextPage = () => {
 
   const caption = "Resources";
 
+  const hasNoLand =
+    paPlayer?.ui_roids === 0 &&
+    paPlayer?.asteroid_crystal === 0 &&
+    paPlayer?.asteroid_metal === 0;
+
   return (
     <>
       <Layout>
@@ -82,7 +87,7 @@ const Resources: NextPage = () => {
                 actionInProgress="Constructing ..."
               />
             )}
-            {paPlayer?.ui_roids === 0 && (
+            {hasNoLand && (
               <h1 className="mt-6 py-4 text-center text-2xl text-white">
                 You have no land
               </h1>
