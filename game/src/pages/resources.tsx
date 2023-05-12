@@ -67,8 +67,14 @@ const Resources: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            <div className="mb-4 mt-6 bg-white py-4">
-              <BarGraph chartData={renderIncomeData(paPlayer)} />
+            <div className="mb-4 mt-6 w-[30rem] rounded bg-white py-4 shadow">
+              {hasNoLand ? (
+                <h2 className="p-4 text-center text-2xl font-bold">
+                  No land, no income.
+                </h2>
+              ) : (
+                <BarGraph chartData={renderIncomeData(paPlayer)} />
+              )}
             </div>
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <h1 className="mt-8 text-center text-2xl text-white">
@@ -86,11 +92,6 @@ const Resources: NextPage = () => {
                 actionText="Construct"
                 actionInProgress="Constructing ..."
               />
-            )}
-            {hasNoLand && (
-              <h1 className="mt-6 py-4 text-center text-2xl text-white">
-                You have no land
-              </h1>
             )}
           </div>
         </div>

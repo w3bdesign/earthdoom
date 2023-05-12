@@ -113,7 +113,7 @@ export const canAffordToTrain = (
  */
 export const renderIncomeData = (paPlayer: PaUsers) => {
   const tax = 20; // Set your tax value here
-  const sats = 5; // Set your sats value here
+  const sats = paPlayer.sats; // Set your sats value here
   const extraTitanium = 1; // Set your extraTitanium value here
   const extraCrystal = 1; // Set your extraCrystal value here
 
