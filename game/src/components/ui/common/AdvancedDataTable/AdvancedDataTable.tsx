@@ -72,7 +72,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   const dataToMap = renderData ? renderData : data;
 
   return (
-    <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-full">
+    <table className="mt-4 w-[20.625rem] text-left md:w-full block pl-2 md:pl-0">
       <caption className="py-6 text-center text-2xl font-bold text-white">
         {caption}
       </caption>
@@ -100,7 +100,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                 <td
                   key={colIndex}
                   data-th={col.label}
-                  className="flex h-12 items-center px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:text-left"
+                  className="flex h-[7rem] md:h-12 items-center md:px-6 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:text-left"
                 >
                   {typeof col.accessor === "string" && (
                     <Stringifier value={row[col.accessor]} />

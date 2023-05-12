@@ -9,10 +9,7 @@ interface IInputNumberProps {
 
 const InputNumber: FC<IInputNumberProps> = ({ inputAmountRef }) => {
   return (
-    <td
-      data-th="Production"
-      className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:before:content-none md:h-12"
-    >
+    <td className="flex items-center pr-6 py-2 text-base text-black transition duration-300 before:text-black first:border-l-0 sm:table-cell sm:before:content-none md:h-12">
       <input
         type="number"
         aria-label="Amount"
