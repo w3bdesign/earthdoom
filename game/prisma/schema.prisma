@@ -5,7 +5,7 @@ generator client {
     provider = "prisma-client-js"
 }
 
-datasource db { 
+datasource db {
     provider     = "mysql"
     url          = env("DATABASE_URL")
     relationMode = "prisma"
@@ -19,8 +19,19 @@ model PaUsers {
     crystal          Int    @default(0)
     metal            Int    @default(0)
     energy           Int    @default(0)
-    r_energy         Int    @default(0)
+    c_crystal        Int    @default(0)
+    c_metal          Int    @default(0)
+    c_airport        Int    @default(0)
+    c_abase          Int    @default(0)
+    c_wstation       Int    @default(0)
+    c_amp1           Int    @default(0)
+    c_amp2           Int    @default(0)
+    c_warfactory     Int    @default(0)
+    c_destfact       Int    @default(0)
+    c_scorpfact      Int    @default(0)
     c_energy         Int    @default(0)
+    c_odg            Int    @default(0)
+    r_energy         Int    @default(0)
     sats             Int    @default(0)
     infinitys        Int    @default(0)
     wraiths          Int    @default(0)
@@ -50,16 +61,6 @@ model PaUsers {
     def              Int    @default(0)
     wareta           Int    @default(0)
     defeta           Int    @default(0)
-    c_crystal        Int    @default(0)
-    c_metal          Int    @default(0)
-    c_airport        Int    @default(0)
-    c_abase          Int    @default(0)
-    c_wstation       Int    @default(0)
-    c_amp1           Int    @default(0)
-    c_amp2           Int    @default(0)
-    c_warfactory     Int    @default(0)
-    c_destfact       Int    @default(0)
-    c_scorpfact      Int    @default(0)
     r_imcrystal      Int    @default(0)
     r_immetal        Int    @default(0)
     r_iafs           Int    @default(0)
@@ -93,7 +94,6 @@ model PaUsers {
     p_lstalkers      Int    @default(0)
     p_lstalkers_eta  Int    @default(0)
     r_odg            Int    @default(0)
-    c_odg            Int    @default(0)
     sleep            Int    @default(0)
     lastsleep        Int    @default(0)
     closed           Int    @default(0)
@@ -121,7 +121,7 @@ model PaNews {
     seen   String @default("")
     header String
 
-     @@index([sentTo])
+    @@index([sentTo])
 }
 
 model PaLogging {
