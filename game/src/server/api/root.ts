@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/server/api/trpc";
 
 // Import all routers
 import { paUsersRouter } from "@/server/api/routers/paUsers";
+import { paConstructRouter } from "@/server/api/routers/paConstruct";
 import { paMailRouter } from "@/server/api/routers/paMail";
 import { paNewsRouter } from "@/server/api/routers/paNews";
 import { paTagRouter } from "@/server/api/routers/paTag";
@@ -14,6 +15,7 @@ import { paMilitaryRouter } from "@/server/api/routers/paMilitary";
  */
 export const appRouter = createTRPCRouter({
   paUsers: paUsersRouter,
+  paConstruct: paConstructRouter,
   paMail: paMailRouter,
   paNews: paNewsRouter,
   paTag: paTagRouter,
