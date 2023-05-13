@@ -63,7 +63,7 @@ const CombatReport: React.FC<CombatReportProps> = ({
         </tr>
       </thead>
       <tbody>
-        <tr className="block border-b p-4 last:border-b-0 sm:table-row sm:border-none md:p-0">
+        <tr className="block last:border-b-0 sm:table-row sm:border-none md:p-0">
           <td className="flex h-12 items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black  first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
             Defenders
           </td>
@@ -71,15 +71,15 @@ const CombatReport: React.FC<CombatReportProps> = ({
           <td className="bg-slate-300/90"></td>
         </tr>
         {Object.entries(defenders).map(([name, data]) => renderRow(name, data))}
-        <tr className="mt-4 block border-b p-4 last:border-b-0 sm:table-row sm:border-none md:p-0">
-          <td className="mt-4 flex h-12 items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black  first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+        <tr className="block last:border-b-0 sm:table-row sm:border-none md:p-0">
+          <td className="flex h-12 items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black  first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
             Attackers
           </td>
           <td className="bg-slate-300/90"></td>
           <td className="bg-slate-300/90"></td>
         </tr>
         {Object.entries(attackers).map(([name, data]) => renderRow(name, data))}
-        <tr className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0">
+        <tr className="block last:border-b-0 sm:table-row sm:border-none md:p-0">
           <td className="flex h-12  items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black  first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
             Yours
           </td>
@@ -99,7 +99,7 @@ const CombatReport: React.FC<CombatReportProps> = ({
             </td>
           </tr>
         ))}
-        <tr className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0">
+        <tr className="block last:border-b-0 sm:table-row sm:border-none md:p-0">
           <td className="flex h-12 items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black  first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
             Land captures
           </td>
