@@ -67,7 +67,7 @@ const Resources: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            <div className="mb-4 mt-6 rounded bg-white py-4 shadow mx-auto md:w-[44.563rem]">
+            <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[44.563rem]">
               {hasNoLand ? (
                 <h2 className="p-4 text-center text-2xl font-bold">
                   No land, no income.
@@ -77,10 +77,10 @@ const Resources: NextPage = () => {
               )}
             </div>
             {paPlayer && paPlayer?.ui_roids > 0 && (
-               <div className="mt-4 rounded bg-white py-4 shadow mx-auto md:w-[44.563rem] w-[20.625rem]">
-              <h1 className="py-4 text-center text-2xl ">
-                Undeveloped land: {paPlayer?.ui_roids}
-              </h1>
+              <div className="mx-auto mt-4 w-[20.625rem] rounded bg-white py-4 shadow md:w-[44.563rem]">
+                <h1 className="py-4 text-center text-2xl ">
+                  Undeveloped land: {paPlayer?.ui_roids}
+                </h1>
               </div>
             )}
             {paPlayer && paPlayer?.ui_roids > 0 && (
