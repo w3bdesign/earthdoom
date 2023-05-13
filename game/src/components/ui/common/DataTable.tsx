@@ -47,7 +47,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         {data.map((row, rowIndex) => (
           <tr
             key={rowIndex}
-            className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
+            className="block bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0 rounded shadow"
           >
             {columns.map((col, colIndex) => (
               <td
