@@ -50,7 +50,7 @@ export const Stringifier = ({ value }: IStringifierProps) => {
   } else {
     stringifiedValue = "";
   }
-  return <span className="pl-8 md:pl-0 max-w-[12rem]">{stringifiedValue}</span>;
+  return <span className="max-w-[12rem] pl-8 md:pl-0">{stringifiedValue}</span>;
 };
 
 /**

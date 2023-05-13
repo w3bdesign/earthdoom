@@ -37,7 +37,7 @@ const ActionButton: FC<IActionButtonProps> = ({
 
   return (
     <>
-      <td className="flex items-center px-8 md:px-0 text-base text-black transition duration-300 before:text-black first:border-l-0 sm:table-cell sm:before:content-none md:h-12">
+      <td className="flex items-center px-8 text-base text-black transition duration-300 before:text-black first:border-l-0 sm:table-cell sm:before:content-none md:h-12 md:px-0">
         {(shouldNotCheckFieldName ||
           paPlayer[0][building.buildingFieldName] === 0) && (
           <Button
