@@ -9,9 +9,18 @@ import {
 export const paUsersRouter = createTRPCRouter({
   createPlayer: publicProcedure
     .input(z.object({ nick: z.string() }))
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.paUsers.create({ data: { nick: input.nick } });
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.paUsers.create({
+        data: {
+          nick: input.nick,
+          construction: { create: {} }, // create the construction field
+        },
+        include: { construction: true }, // include the construction field in the response
+      });
+
+      return user;
     }),
+
   getAll: privateProcedure.query(({ ctx }) => {
     return ctx.prisma.paUsers.findMany({
       orderBy: {
@@ -65,7 +74,7 @@ export const paUsersRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
         where: { nick: input.nick },
-        select: { id: true, tag: true },
+        select: { id: true, tag: true, construction: true },
       });
 
       const player = await ctx.prisma.paUsers.findUnique({
@@ -74,7 +83,17 @@ export const paUsersRouter = createTRPCRouter({
         },
       });
 
-      return player;
+      if (!player) {
+        return null;
+      }
+
+      const paConstruct = await ctx.prisma.paConstruct.findUnique({
+        where: { id: player.paConstructId || 1 },
+      });
+
+      const newPlayer = { ...player, ...paConstruct };
+
+      return newPlayer;
     }),
   getFriendlies: privateProcedure
     .input(z.object({ nick: z.string() }))

@@ -14,7 +14,7 @@ import { api } from "@/utils/api";
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
 
 export interface PaPlayer extends PaUsers {
-  [key: string]: number | string;
+  [key: string]: number | string | null;
 }
 
 interface BuildingRowProps {
