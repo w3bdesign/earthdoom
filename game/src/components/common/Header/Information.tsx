@@ -20,8 +20,6 @@ const Information = () => {
     nick: user.username,
   });
 
-  if (!paPlayer) return null;
-
   const { data: hostilesData, isLoading } = api.paUsers.getHostiles.useQuery({
     nick: user.username,
   });
