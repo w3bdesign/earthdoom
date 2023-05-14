@@ -22,16 +22,17 @@ const Construction: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate, isLoading } = api.paConstruct.constructBuilding.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Building started", type: "success" });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate: constructBuilding, isLoading } =
+    api.paConstruct.constructBuilding.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Building started", type: "success" });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   if (!paPlayer) return null;
 
@@ -58,7 +59,7 @@ const Construction: NextPage = () => {
                   data={[paPlayer]}
                   caption={caption}
                   renderData={BUILDINGS}
-                  action={mutate}
+                  action={constructBuilding}
                   actionText="Construct"
                   actionInProgress="Constructing ..."
                 />

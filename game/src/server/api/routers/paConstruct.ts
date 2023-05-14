@@ -9,7 +9,6 @@ export const paConstructRouter = createTRPCRouter({
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingETA: z.number() }))
-
     .mutation(async ({ ctx, input }) => {
       const {
         buildingFieldName,
@@ -18,17 +17,36 @@ export const paConstructRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
-      const data = await ctx.prisma.paUsers.update({
-        where: {
-          id: input.Userid,
-        },
+      const user = await ctx.prisma.paUsers.findUnique({
+        where: { id: input.Userid },
+        include: { construction: true },
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const construct = user.construction;
+
+      if (!construct) {
+        throw new Error("Construction not found");
+      }
+
+      await ctx.prisma.paConstruct.update({
+        where: { id: construct.id },
         data: {
           [buildingFieldName]: buildingETA,
+        },
+      });
+
+      const updatedUser = await ctx.prisma.paUsers.update({
+        where: { id: input.Userid },
+        data: {
           crystal: { decrement: buildingCostCrystal },
           metal: { decrement: buildingCostTitanium },
         },
       });
 
-      return data;
+      return updatedUser;
     }),
 });

@@ -3,13 +3,9 @@ import { useState } from "react";
 import { api } from "@/utils/api";
 
 import type { FC, ChangeEvent } from "react";
-import type { PaUsers } from "@prisma/client";
+import type { PaPlayer } from "../Production/Production";
 
 import { Button, ToastComponent } from "@/components/ui/common";
-
-export interface PaPlayer extends PaUsers {
-  [key: string]: number | string;
-}
 
 interface IMilitaryProps {
   paPlayer: PaPlayer;
