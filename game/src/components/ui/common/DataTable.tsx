@@ -1,3 +1,4 @@
+import { PaPlayer } from "@/components/features/Production/Production";
 import { Stringifier } from "@/utils/functions";
 
 export interface TableColumn {
@@ -5,13 +6,9 @@ export interface TableColumn {
   accessor: string;
 }
 
-interface TableData {
-  [key: string]: string | number;
-}
-
 export interface DataTableProps {
   columns: TableColumn[];
-  data: TableData[];
+  data: PaPlayer[];
   caption: string;
 }
 
