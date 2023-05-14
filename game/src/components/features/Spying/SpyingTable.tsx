@@ -4,17 +4,13 @@ import { useRef } from "react";
 import { Button, ToastComponent } from "@/components/ui/common";
 
 import type { FC } from "react";
-import type { PaUsers } from "@prisma/client";
 import type { Building } from "../Construct/types/types";
 
 import { SPYING } from "./constants/SPYING";
 
 import { api } from "@/utils/api";
 import { canAffordToTrain } from "@/utils/functions";
-
-interface PaPlayer extends PaUsers {
-  [key: string]: number | string;
-}
+import { PaPlayer } from "../Production/Production";
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
