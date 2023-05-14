@@ -23,14 +23,12 @@ export const paConstructRouter = createTRPCRouter({
       });
 
       if (!user) {
-        // handle the case where the user is null or undefined
         throw new Error("User not found");
       }
 
       const construct = user.construction;
 
       if (!construct) {
-        // handle the case where the construction field is null or undefined
         throw new Error("Construction not found");
       }
 
