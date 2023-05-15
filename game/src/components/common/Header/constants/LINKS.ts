@@ -53,12 +53,12 @@ export const LINKS: ILinks[] = [
     id: 8,
     href: "/energy",
     text: "Energy",
-  },/*
+  } /*
   {
     id: 9,
     href: "/resources",
     text: "Resources",
-  },*/
+  },*/,
   {
     id: 10,
     href: "/military",
