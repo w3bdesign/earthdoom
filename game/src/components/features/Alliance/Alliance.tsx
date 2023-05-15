@@ -77,7 +77,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
       <div className="relative py-4 sm:mx-auto">
         <div className="mx-auto max-w-7xl px-4 pb-8 pt-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center">
-            <div className="flex w-[20.625rem] items-center justify-center rounded bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 lg:w-[31.25rem]">
+            <div className="flex items-center justify-center rounded bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 lg:w-[31.25rem] w-[20.625rem]">
               <form>
                 <h2 className="mb-4 text-center text-2xl font-bold text-black">
                   Alliance{" "}

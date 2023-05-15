@@ -33,6 +33,8 @@ const Construction: NextPage = () => {
     },
   });
 
+  if (!paPlayer) return null;
+
   const columns = [
     { label: "Name", accessor: "buildingName" },
     { label: "Description", accessor: "buildingDescription" },

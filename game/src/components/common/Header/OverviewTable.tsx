@@ -1,10 +1,23 @@
-import type { FC } from "react";
+import { type FC } from "react";
 
 import { DataTable } from "@/components/ui/common";
-import { PaUsers } from "@prisma/client";
+
+interface PaPlayer {
+  id: number;
+  metal: number;
+  crystal: number;
+  energy: number;
+  civilians: number;
+  asteroid_crystal: number;
+  asteroid_metal: number;
+  score: number;
+  rank: number;
+  nick: string;
+  [key: string]: string | number;
+}
 
 interface OverviewTableProps {
-  paPlayer: PaUsers;
+  paPlayer: PaPlayer;
 }
 
 const OverviewTable: FC<OverviewTableProps> = ({ paPlayer }) => {
