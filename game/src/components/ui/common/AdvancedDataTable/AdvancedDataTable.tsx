@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
@@ -39,7 +39,9 @@ export interface AdvancedDataTableProps {
   data: PaPlayer[];
   caption: string;
   renderData?: Building[];
-  action?: TMutateType;
+  //action?: TMutateType;
+  action?: any;
+
   actionText?: string;
   actionInProgress?: string;
 }
@@ -67,9 +69,9 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   actionText,
   actionInProgress,
 }) => {
-  const inputAmountRef = useRef<HTMLInputElement>(null);
-
   const dataToMap = renderData ? renderData : data;
+
+  const inputAmountRefs = columns.map(() => useRef(null));
 
   return (
     <table className="mt-4 block w-[20.625rem] pl-2 text-left md:w-full md:pl-0">
@@ -108,7 +110,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   {col.type === "inputNumber" && canAffordToTrain ? (
                     <InputNumber
                       canAffordToTrain={canAffordToTrain}
-                      inputAmountRef={inputAmountRef}
+                      inputAmountRef={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
                   {col.type === "button" && action && actionText ? (
@@ -119,7 +121,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                       mutate={action}
                       actionText={actionText}
                       actionInProgress={actionInProgress}
-                      inputAmountRef={inputAmountRef}
+                      inputAmountRef={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
                   {typeof col.accessor !== "string" &&
@@ -134,7 +136,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                       mutate={action}
                       actionText={actionText}
                       actionInProgress={actionInProgress}
-                      inputAmountRef={inputAmountRef}
+                      inputAmountRef={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
                 </td>

@@ -35,6 +35,15 @@ const ActionButton: FC<IActionButtonProps> = ({
   const shouldNotCheckFieldName =
     building.needsFieldName === 0 || building.needsFieldName === "undefined";
 
+    console.log("inputAmountRef", inputAmountRef);
+
+  console.log("inputAmountRef?.current?", inputAmountRef?.current);
+
+  console.log(
+    "inputAmountRef?.current?.value: ",
+    Number(inputAmountRef?.current?.value)
+  );
+
   return (
     <>
       <td className="flex items-center px-8 text-base text-black transition duration-300 before:text-black first:border-l-0 sm:table-cell sm:before:content-none md:h-12 md:px-0">
@@ -78,8 +87,7 @@ const ActionButton: FC<IActionButtonProps> = ({
               }
 
               mutate({
-                //Userid: Number(paPlayer[0].id),
-                Userid: 7,
+                Userid: Number(paPlayer[0].id),
                 buildingFieldName: building.buildingFieldName,
                 buildingETA: building.buildingETA,
                 buildingCostCrystal: building.buildingCostCrystal,
