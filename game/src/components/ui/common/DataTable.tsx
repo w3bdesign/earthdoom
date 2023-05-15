@@ -1,4 +1,3 @@
-import { PaPlayer } from "@/components/features/Production/Production";
 import { Stringifier } from "@/utils/functions";
 
 export interface TableColumn {
@@ -6,9 +5,13 @@ export interface TableColumn {
   accessor: string;
 }
 
+interface TableData {
+  [key: string]: string | number;
+}
+
 export interface DataTableProps {
   columns: TableColumn[];
-  data: PaPlayer[];
+  data: TableData[];
   caption: string;
 }
 
@@ -44,7 +47,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         {data.map((row, rowIndex) => (
           <tr
             key={rowIndex}
-            className="block rounded bg-white p-4 shadow last:border-b-0 sm:table-row sm:border-none md:p-0"
+            className="block bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0 rounded shadow"
           >
             {columns.map((col, colIndex) => (
               <td

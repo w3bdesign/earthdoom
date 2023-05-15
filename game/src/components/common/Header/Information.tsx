@@ -1,8 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
-import type { PaUsers } from "@prisma/client";
-
 import { api } from "@/utils/api";
 
 import OverviewTable from "./OverviewTable";
@@ -31,8 +29,6 @@ const Information = () => {
   const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
     nick: user.username,
   });
-
-  const castedPlayer = paPlayer as PaUsers;
 
   return (
     <>
@@ -77,7 +73,7 @@ const Information = () => {
           ) : (
             ""
           )}
-          {paPlayer && <OverviewTable paPlayer={castedPlayer} />}
+          {paPlayer && <OverviewTable paPlayer={paPlayer} />}
         </div>
       </div>
     </>
