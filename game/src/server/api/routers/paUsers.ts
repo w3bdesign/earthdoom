@@ -83,12 +83,8 @@ export const paUsersRouter = createTRPCRouter({
         },
       });
 
-      if (!player) {
-        return null;
-      }
-
       const paConstruct = await ctx.prisma.paConstruct.findUnique({
-        where: { id: player.paConstructId || 1 },
+        where: { id: player?.paConstructId || 0 },
       });
 
       const newPlayer = { ...player, ...paConstruct };
