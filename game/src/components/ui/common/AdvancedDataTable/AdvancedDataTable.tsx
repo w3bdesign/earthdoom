@@ -39,9 +39,7 @@ export interface AdvancedDataTableProps {
   data: PaPlayer[];
   caption: string;
   renderData?: Building[];
-  //action?: TMutateType;
-  action?: any;
-
+  action: TMutateType;
   actionText?: string;
   actionInProgress?: string;
 }
@@ -113,7 +111,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                       inputAmountRef={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
-                  {col.type === "button" && action && actionText ? (
+                  {col.type === "button" && actionText ? (
                     <ActionButton
                       isLoading={isLoading}
                       paPlayer={data}
@@ -125,7 +123,6 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                     />
                   ) : null}
                   {typeof col.accessor !== "string" &&
-                  action &&
                   actionText &&
                   row.buildingId ? (
                     <ActionButton
