@@ -91,8 +91,7 @@ export const paUsersRouter = createTRPCRouter({
         where: { id: player.paConstructId || 1 },
       });
 
-      const newPlayer = { ...player, ...paConstruct };
-
+      const newPlayer = { ...paConstruct, ...player, id: player.id };
       return newPlayer;
     }),
   getFriendlies: privateProcedure
