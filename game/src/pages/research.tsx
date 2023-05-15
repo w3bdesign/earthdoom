@@ -53,7 +53,7 @@ const ResearchPage: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative sm:mx-auto">

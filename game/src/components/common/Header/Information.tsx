@@ -8,17 +8,17 @@ import { api } from "@/utils/api";
 import OverviewTable from "./OverviewTable";
 import LoadingSpinner from "../Loader/LoadingSpinner";
 
-const Information = () => {
+interface InformationProps {
+  paPlayer?: PaUsers;
+}
+
+const Information: React.FC<InformationProps> = ({ paPlayer }) => {
   // TODO See if we can get the user from the session instead of making a request
   // TODO Maybe we can use the user from the session to get the paPlayer data
 
   const { user } = useUser();
 
   if (!user || !user.username) return null;
-
-  const { data: paPlayer } = api.paUsers.getResourceOverview.useQuery({
-    nick: user.username,
-  });
 
   const { data: hostilesData, isLoading } = api.paUsers.getHostiles.useQuery({
     nick: user.username,

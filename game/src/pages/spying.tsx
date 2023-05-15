@@ -24,6 +24,8 @@ const Energy: NextPage = () => {
     nick: user.username,
   });
 
+  if (!paPlayer) return null;
+
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
       ToastComponent({
@@ -53,7 +55,7 @@ const Energy: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}

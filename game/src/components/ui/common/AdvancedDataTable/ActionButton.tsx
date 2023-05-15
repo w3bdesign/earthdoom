@@ -78,7 +78,8 @@ const ActionButton: FC<IActionButtonProps> = ({
               }
 
               mutate({
-                Userid: Number(paPlayer[0].id),
+                //Userid: Number(paPlayer[0].id),
+                Userid: 7,
                 buildingFieldName: building.buildingFieldName,
                 buildingETA: building.buildingETA,
                 buildingCostCrystal: building.buildingCostCrystal,

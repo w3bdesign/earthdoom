@@ -13,7 +13,15 @@ const RankingPage: NextPage = () => {
 
   if (!isSignedIn || !user.username) return null;
 
-  const { data: paPlayer, isLoading } = api.paUsers.getAll.useQuery();
+  const { data: paRanking, isLoading } = api.paUsers.getAll.useQuery();
+
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
+    nick: user.username,
+  });
+
+  if (!paPlayer) return null;
+
+  if (!paRanking) return null;
 
   const columns = [
     { label: "Nick", accessor: "nick" },
@@ -25,14 +33,14 @@ const RankingPage: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {isLoading && <LoadingSpinner />}
             {paPlayer && (
               <AdvancedDataTable
                 columns={columns}
-                data={paPlayer}
+                data={paRanking}
                 caption={caption}
               />
             )}
