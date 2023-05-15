@@ -30,7 +30,7 @@ const Resources: NextPage = () => {
   const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
     onSuccess: async () => {
       ToastComponent({
-        message: "Production started",
+        message: "Resource initiated",
         type: "success",
       });
       await ctx.paUsers.getPlayerByNick.invalidate();
