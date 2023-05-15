@@ -16,11 +16,13 @@ const AlliancePage: NextPage = () => {
     nick: user.username,
   });
 
+  if (!paPlayer) return null;
+
   const { data: paTag } = api.paTag.getAll.useQuery();
 
   return (
     <>
-      <Layout>
+     <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center text-white">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <div className="relative sm:mx-auto"></div>

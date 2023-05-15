@@ -78,6 +78,12 @@ const News: NextPage = () => {
     nick: user.username,
   });
 
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
+    nick: user.username,
+  });
+
+
+
   const { mutate: deleteAllNews, isLoading: isDeletingAll } =
     api.paNews.deleteAllNews.useMutation({
       onSuccess: async () => {
@@ -91,6 +97,7 @@ const News: NextPage = () => {
     });
 
   if (!paNews) return null;
+  if (!paPlayer) return null;
 
   const combatReports = paNews.news.map((report) => {
     const date = new Date(report.time * 1000);
@@ -117,7 +124,7 @@ const News: NextPage = () => {
 
   return (
     <>
-      <Layout>
+     <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden md:w-[44.563rem]">
             <div className="container mt-6 flex justify-end">

@@ -6,12 +6,14 @@ import type { ReactNode } from "react";
 import Navbar from "@/components/common/Header/Navbar";
 import Information from "@/components/common/Header/Information";
 import Footer from "./Footer";
+import { PaPlayer } from "@/components/features/Production/Production";
 
 interface ILayoutProps {
+  paPlayer?: PaPlayer;
   children: ReactNode;
 }
 
-const Layout = ({ children }: ILayoutProps) => {
+const Layout = ({ paPlayer, children }: ILayoutProps) => {
   return (
     <>
       <Head>
@@ -21,7 +23,7 @@ const Layout = ({ children }: ILayoutProps) => {
       </Head>
       <Navbar />
       <SignedIn>
-        <Information />
+        <Information paPlayer={paPlayer} />
       </SignedIn>
       <main className="mb-8 flex items-center justify-center md:mb-0 lg:px-[5rem] 2xl:px-0">
         {children}
