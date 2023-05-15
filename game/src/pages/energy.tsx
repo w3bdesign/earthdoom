@@ -49,17 +49,18 @@ const Energy: NextPage = () => {
 
   return (
     <>
-       <Layout paPlayer={paPlayer}>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {!isLoaded && <LoadingSpinner />}
-            {paPlayer?.r_energy === 0 && (
-              <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
-                <h2 className="p-2 text-center text-xl font-bold text-black">
-                  You need to research power plants before you can build them
-                </h2>
-              </div>
-            )}
+            {paPlayer.r_energy === 0 ||
+              (paPlayer.r_energy > 1 && (
+                <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
+                  <h2 className="p-2 text-center text-xl font-bold text-black">
+                    You need to research power plants before you can build them
+                  </h2>
+                </div>
+              ))}
             {paPlayer && paPlayer.r_energy === 1 && (
               <AdvancedDataTable
                 isLoading={isLoading}
