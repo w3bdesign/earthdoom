@@ -16,8 +16,6 @@ const AlliancePage: NextPage = () => {
     nick: user.username,
   });
 
-  if (!paPlayer) return null;
-
   const { data: paTag } = api.paTag.getAll.useQuery();
 
   return (
