@@ -70,15 +70,10 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
 }) => {
   const dataToMap = renderData ? renderData : data;
 
-  //const inputAmountRefs = columns.map(() => useRef(null));
-  /*const inputAmountRefs: React.MutableRefObject<null>[] = Array.from({
-    length: columns.length,
-  }).map(() => useRef(null));*/
-
   const inputAmountRefs = useMultipleRefs(columns.length);
 
   return (
-    <table className="mt-4 block w-[20.625rem] pl-2 text-left md:w-full md:pl-0">
+    <table className="mt-4 block pl-2 text-left md:pl-0">
       <caption className="py-6 text-center text-2xl font-bold text-white">
         {caption}
       </caption>
