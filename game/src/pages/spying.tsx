@@ -24,9 +24,7 @@ const Energy: NextPage = () => {
     nick: user.username,
   });
 
-  if (!paPlayer) return null;
-
-  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
+  const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async () => {
       ToastComponent({
         message: "Spying complete",
@@ -52,6 +50,8 @@ const Energy: NextPage = () => {
   ];
 
   const caption = "Spying";
+
+  if (!paPlayer) return null;
 
   return (
     <>

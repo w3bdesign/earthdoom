@@ -23,7 +23,7 @@ const Energy: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
+  const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Construction started", type: "success" });
       await ctx.paUsers.getPlayerByNick.invalidate();
