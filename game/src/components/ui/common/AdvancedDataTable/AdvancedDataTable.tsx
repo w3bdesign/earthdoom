@@ -9,6 +9,7 @@ import type { UseMutateFunction } from "@tanstack/react-query";
 
 import ActionButton from "./ActionButton";
 import InputNumber from "./InputNumber";
+import { useMultipleRefs } from "@/utils/hooks";
 
 type MutationData = unknown;
 
@@ -67,9 +68,14 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   actionText,
   actionInProgress,
 }) => {
-  const inputAmountRef = useRef<HTMLInputElement>(null);
-
   const dataToMap = renderData ? renderData : data;
+
+  //const inputAmountRefs = columns.map(() => useRef(null));
+  /*const inputAmountRefs: React.MutableRefObject<null>[] = Array.from({
+    length: columns.length,
+  }).map(() => useRef(null));*/
+
+  const inputAmountRefs = useMultipleRefs(columns.length);
 
   return (
     <table className="mt-4 block w-[20.625rem] pl-2 text-left md:w-full md:pl-0">
@@ -108,7 +114,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   {col.type === "inputNumber" && canAffordToTrain ? (
                     <InputNumber
                       canAffordToTrain={canAffordToTrain}
-                      inputAmountRef={inputAmountRef}
+                      inputAmountRef={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
                   {col.type === "button" && action && actionText ? (
@@ -119,12 +125,12 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                       mutate={action}
                       actionText={actionText}
                       actionInProgress={actionInProgress}
-                      inputAmountRef={inputAmountRef}
+                      inputAmountRef={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
                   {typeof col.accessor !== "string" &&
-                  action &&
                   actionText &&
+                  action &&
                   row.buildingId ? (
                     <ActionButton
                       isLoading={isLoading}
@@ -134,7 +140,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                       mutate={action}
                       actionText={actionText}
                       actionInProgress={actionInProgress}
-                      inputAmountRef={inputAmountRef}
+                      inputAmountRef={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
                 </td>

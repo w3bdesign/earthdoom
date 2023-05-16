@@ -27,10 +27,10 @@ const Resources: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
+  const { mutate, isLoading } = api.paConstruct.developLand.useMutation({
     onSuccess: async () => {
       ToastComponent({
-        message: "Production started",
+        message: "Resource initiated",
         type: "success",
       });
       await ctx.paUsers.getPlayerByNick.invalidate();
@@ -43,8 +43,6 @@ const Resources: NextPage = () => {
       });
     },
   });
-
-  if (!paPlayer) return null;
 
   const columns = [
     { label: "Name", accessor: "buildingName" },
@@ -60,6 +58,8 @@ const Resources: NextPage = () => {
     paPlayer?.ui_roids === 0 &&
     paPlayer?.asteroid_crystal === 0 &&
     paPlayer?.asteroid_metal === 0;
+
+  if (!paPlayer) return null;
 
   return (
     <>
