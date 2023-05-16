@@ -18,6 +18,8 @@ const AlliancePage: NextPage = () => {
 
   const { data: paTag } = api.paTag.getAll.useQuery();
 
+  if (!paPlayer) return null;
+
   return (
     <>
       <Layout paPlayer={paPlayer}>

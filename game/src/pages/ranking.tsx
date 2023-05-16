@@ -19,10 +19,6 @@ const RankingPage: NextPage = () => {
     nick: user.username,
   });
 
-  if (!paPlayer) return null;
-
-  if (!paRanking) return null;
-
   const columns = [
     { label: "Nick", accessor: "nick" },
     { label: "Score", accessor: "score" },
@@ -30,6 +26,10 @@ const RankingPage: NextPage = () => {
   ];
 
   const caption = `Player ranking`;
+
+  if (!paRanking) return null;
+
+  if (!paPlayer) return null;
 
   return (
     <>
