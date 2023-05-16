@@ -53,7 +53,7 @@ const Energy: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div
             className={`relative flex flex-col justify-center overflow-hidden bg-neutral-900 ${
-              paPlayer.r_energy === 1 && "md:w-[63rem]"
+              paPlayer.r_energy === 1 ? "md:w-[63rem]" : ""
             }`}
           >
             {!isLoaded && <LoadingSpinner />}
