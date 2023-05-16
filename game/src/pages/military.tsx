@@ -21,6 +21,8 @@ const MilitaryPage: NextPage = () => {
 
   if (!paPlayer) return null;
 
+   
+
   return (
     <>
       <Layout paPlayer={paPlayer}>

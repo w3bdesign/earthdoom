@@ -39,8 +39,6 @@ const ResearchPage: NextPage = () => {
     },
   });
 
-  if (!paPlayer) return null;
-
   const columns = [
     { label: "Name", accessor: "buildingName" },
     { label: "Description", accessor: "buildingDescription" },
@@ -50,6 +48,8 @@ const ResearchPage: NextPage = () => {
   ];
 
   const caption = "Research";
+
+  if (!paPlayer) return null;
 
   return (
     <>

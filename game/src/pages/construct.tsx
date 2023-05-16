@@ -34,7 +34,7 @@ const Construction: NextPage = () => {
       },
     });
 
-  if (!paPlayer) return null;
+   
 
   const columns = [
     { label: "Name", accessor: "buildingName" },
@@ -45,6 +45,8 @@ const Construction: NextPage = () => {
   ];
 
   const caption = "Construction";
+
+  if (!paPlayer) return null;
 
   return (
     <>

@@ -95,7 +95,9 @@ const News: NextPage = () => {
     });
 
   if (!paNews) return null;
+
   if (!paPlayer) return null;
+   
 
   const combatReports = paNews.news.map((report) => {
     const date = new Date(report.time * 1000);
