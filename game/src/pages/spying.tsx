@@ -51,8 +51,6 @@ const Energy: NextPage = () => {
 
   const caption = "Spying";
 
-  if (!paPlayer) return null;
-
   return (
     <>
       <Layout paPlayer={paPlayer}>

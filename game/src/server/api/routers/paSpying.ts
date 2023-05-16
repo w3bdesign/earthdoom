@@ -29,7 +29,7 @@ export const paSpyingRouter = createTRPCRouter({
           },
 
           crystal: { decrement: buildingCostCrystal * unitAmountDefault },
-          ui_roids: { increment: unitAmount },
+          ui_roids: { increment: unitAmount }, // TODO Make this more random, and decrease amount when you have more land
         },
       });
 
