@@ -1,5 +1,3 @@
-import { useRef } from "react";
-
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
 import type { FC } from "react";
@@ -108,7 +106,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   )}
                   {col.type === "inputNumber" && canAffordToTrain ? (
                     <InputNumber
-                      canAffordToTrain={canAffordToTrain}                     
+                      canAffordToTrain={canAffordToTrain}
                       ref={inputAmountRefs[rowIndex]}
                     />
                   ) : null}

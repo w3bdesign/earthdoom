@@ -1,8 +1,7 @@
-import { ForwardedRef, forwardRef } from "react";
+import { forwardRef } from "react";
 
-import type { FC } from "react";
-
-import { canAffordToTrain } from "@/utils/functions";
+import type { FC, ForwardedRef } from "react";
+import type { canAffordToTrain } from "@/utils/functions";
 
 interface IInputNumberProps {
   canAffordToTrain: typeof canAffordToTrain;

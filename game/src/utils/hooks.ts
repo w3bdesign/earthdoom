@@ -1,4 +1,6 @@
-import { createRef, RefObject } from "react";
+import { createRef } from "react";
+
+import type { RefObject } from "react";
 
 /**
  * Creates an array of RefObjects for the specified length.
