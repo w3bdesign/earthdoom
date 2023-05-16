@@ -22,30 +22,3 @@ export const useMultipleRefs = <T extends HTMLInputElement>(
     .map(() => createRef<T>());
   return refs;
 };
-
-/**
- * A custom React hook that manages state with local storage.
- *
- * @template T - The type of the value to be stored in local storage.
- * @param {string} key - The key under which the value will be stored in local storage.
- * @param {T} initialValue - The initial value to be stored in local storage.
- * @returns {UseLocalStorageResult<T>} - An object containing the current value and a function to update the value.
- */
-export const useLocalStorage = <T>(
-  key: string,
-  initialValue: T
-): UseLocalStorageResult<T> => {
-  const [value, setValue] = useState<T>(() => {
-    const storedValue = localStorage.getItem(key);
-    if (storedValue !== null) {
-      return JSON.parse(storedValue);
-    }
-    return initialValue;
-  });
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
-
-  return { value, setValue };
-};
