@@ -34,8 +34,6 @@ const Energy: NextPage = () => {
     },
   });
 
-   
-
   const columns = [
     { label: "Name", accessor: "buildingName" },
     { label: "Description", accessor: "buildingDescription" },

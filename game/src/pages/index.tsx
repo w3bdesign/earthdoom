@@ -19,8 +19,6 @@ const Home = () => {
 
   if (!paPlayer) return null;
 
-   
-
   return (
     <Layout paPlayer={paPlayer}>
       <div className="container mb-6 flex flex-col items-center justify-center">
