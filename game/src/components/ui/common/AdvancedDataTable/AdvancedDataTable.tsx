@@ -108,8 +108,8 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   )}
                   {col.type === "inputNumber" && canAffordToTrain ? (
                     <InputNumber
-                      canAffordToTrain={canAffordToTrain}
-                      inputAmountRef={inputAmountRefs[rowIndex]}
+                      canAffordToTrain={canAffordToTrain}                     
+                      ref={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
                   {col.type === "button" && action && actionText ? (
