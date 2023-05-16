@@ -4,7 +4,7 @@ export const BUILDINGS: Building[] = [
   {
     buildingId: 1,
     buildingName: "Tax collectors",
-    buildingDescription: "Automatically collects tax from civilians.",
+    buildingDescription: "Automatically collects tax from civilians. Taxes generate credits which you need to produce units, do research and more.",
     buildingFieldName: "c_crystal",
     buildingETA: 10,
     buildingCost: "Free",
@@ -14,7 +14,7 @@ export const BUILDINGS: Building[] = [
   {
     buildingId: 2,
     buildingName: "Titanium extractor",
-    buildingDescription: "Enables titanium extractor.",
+    buildingDescription: "Enables titanium extractor, which gives you titanium each tick. ",
     buildingFieldName: "c_metal",
     buildingETA: 20,
     buildingCost: "500c",
@@ -24,7 +24,7 @@ export const BUILDINGS: Building[] = [
   {
     buildingId: 3,
     buildingName: "Fusion power plant",
-    buildingDescription: "Enables construction of fusion power plants.",
+    buildingDescription: "Enables construction of fusion power plants, which generate energy.",
     buildingFieldName: "c_energy",
     buildingETA: 50,
     buildingCost: "5000c",
