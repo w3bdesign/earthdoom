@@ -22,4 +22,6 @@ const InputNumber: FC<IInputNumberProps> = forwardRef(({ inputAmountRef }) => (
   </td>
 ));
 
+InputNumber.displayName = "InputNumber";
+
 export default InputNumber;

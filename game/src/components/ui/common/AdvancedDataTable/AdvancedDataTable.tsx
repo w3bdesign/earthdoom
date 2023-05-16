@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
@@ -9,6 +9,7 @@ import type { UseMutateFunction } from "@tanstack/react-query";
 
 import ActionButton from "./ActionButton";
 import InputNumber from "./InputNumber";
+import { useMultipleRefs } from "@/utils/hooks";
 
 type MutationData = unknown;
 
@@ -39,7 +40,7 @@ export interface AdvancedDataTableProps {
   data: PaPlayer[];
   caption: string;
   renderData?: Building[];
-  action: TMutateType;
+  action?: TMutateType;
   actionText?: string;
   actionInProgress?: string;
 }
@@ -69,7 +70,12 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
 }) => {
   const dataToMap = renderData ? renderData : data;
 
-  const inputAmountRefs = columns.map(() => useRef(null));
+  //const inputAmountRefs = columns.map(() => useRef(null));
+  /*const inputAmountRefs: React.MutableRefObject<null>[] = Array.from({
+    length: columns.length,
+  }).map(() => useRef(null));*/
+
+  const inputAmountRefs = useMultipleRefs(columns.length);
 
   return (
     <table className="mt-4 block w-[20.625rem] pl-2 text-left md:w-full md:pl-0">
@@ -111,7 +117,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                       inputAmountRef={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
-                  {col.type === "button" && actionText ? (
+                  {col.type === "button" && action && actionText ? (
                     <ActionButton
                       isLoading={isLoading}
                       paPlayer={data}
@@ -124,6 +130,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   ) : null}
                   {typeof col.accessor !== "string" &&
                   actionText &&
+                  action &&
                   row.buildingId ? (
                     <ActionButton
                       isLoading={isLoading}
