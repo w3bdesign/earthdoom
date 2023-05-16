@@ -59,6 +59,8 @@ const Resources: NextPage = () => {
     paPlayer?.asteroid_crystal === 0 &&
     paPlayer?.asteroid_metal === 0;
 
+  const hasNoUndevelopedLand = paPlayer?.ui_roids === 0;
+
   if (!paPlayer) return null;
 
   return (
@@ -76,6 +78,13 @@ const Resources: NextPage = () => {
                 <BarGraph chartData={renderIncomeData(paPlayer)} />
               )}
             </div>
+            {hasNoUndevelopedLand && (
+              <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[44.563rem]">
+                <h2 className="p-4 text-center text-2xl font-bold">
+                  You have no land to develop
+                </h2>
+              </div>
+            )}
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <div className="mx-auto mt-4 w-[20.625rem] rounded bg-white py-4 shadow md:w-[44.563rem]">
                 <h1 className="py-4 text-center text-2xl ">
