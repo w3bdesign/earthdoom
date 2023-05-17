@@ -97,6 +97,7 @@ model PaUsers {
     tax              Int          @default(20)
     credits          Int          @default(5000)
     newbie           Int          @default(100)
+    tutorial         Boolean      @default(true)
     paConstructId    Int?
 
     @@unique([nick])
