@@ -19,7 +19,7 @@ model PaUsers {
     crystal          Int          @default(0)
     metal            Int          @default(0)
     energy           Int          @default(0)
-    construction     PaConstruct? @relation(fields: [paConstructId], references: [id])
+    construction     PaConstruct? @relation(fields: [paConstructId], references: [id], onDelete: Cascade)
     r_energy         Int          @default(0)
     sats             Int          @default(0)
     infinitys        Int          @default(0)
