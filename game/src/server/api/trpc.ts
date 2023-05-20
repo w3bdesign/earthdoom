@@ -19,6 +19,8 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { getAuth } from "@clerk/nextjs/server";
 import { prisma } from "@/server/db";
 
+import { env } from "@/env.mjs";
+
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
  * it from here.
@@ -100,7 +102,9 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.userId) {
+  const isDev = env.NODE_ENV === "development";
+
+  if (!ctx.userId && !isDev) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });
@@ -108,7 +112,7 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
 
   return next({
     ctx: {
-      userId: ctx.userId,
+      userId: isDev ? "killah" : ctx.userId,
     },
   });
 });
