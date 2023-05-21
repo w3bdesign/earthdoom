@@ -1,8 +1,8 @@
 import { Layout } from "@/components/common/Layout";
-import LandTable from "@/components/Index/LandTable";
-import BDUTable from "@/components/Index/BDUTable";
-import UnitsTable from "@/components/Index/UnitsTable";
-import FleetStatus from "@/components/Index/FleetStatus";
+import LandTable from "@/components/ui/tables/LandTable";
+import BDUTable from "@/components/ui/tables/BDUTable";
+import UnitsTable from "@/components/ui/tables/UnitsTable";
+import FleetStatus from "@/components/ui/tables/FleetStatus";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
