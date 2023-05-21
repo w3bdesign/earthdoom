@@ -6,11 +6,7 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import { BUILDINGS } from "@/components/features/Research/constants/RESEARCH";
-import {
-  Button,
-  AdvancedDataTable,
-  ToastComponent,
-} from "@/components/ui/common";
+import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 
 const ResearchPage: NextPage = () => {
   const ctx = api.useContext();

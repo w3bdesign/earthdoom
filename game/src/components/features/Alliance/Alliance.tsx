@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 
-import { Button } from "@/components/ui/common";
+import { Button } from "@/components/ui";
 
 import type { PaUsers, PaTag } from "@prisma/client";
 import type { FC } from "react";
 
 import { api } from "@/utils/api";
-import ToastComponent from "@/components/ui/common/ToastComponent";
+import ToastComponent from "@/components/ui/notifications/ToastComponent";
 
 interface IAllianceProps {
   paPlayer: PaUsers;
@@ -23,7 +23,7 @@ interface IAllianceProps {
  */
 const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const ctx = api.useContext();
-  const { user } = useUser();
+
   const createAllianceRef = useRef<HTMLInputElement>(null);
   const joinAllianceRef = useRef<HTMLInputElement>(null);
 
@@ -31,13 +31,17 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     paTag.find((tag: PaTag) => tag.leader === paPlayer.nick) !== undefined;
 
   const player = paPlayer.nick;
-  const allianceTag = paTag.find((tag) => tag.leader === player);
+  const allianceTag = paTag.find(
+    (tag: { leader: string }) => tag.leader === player
+  );
   const alliancePassword = allianceTag ? allianceTag.password : null;
 
   const { mutate: createAlliance, isLoading: isCreateAllianceLoading } =
     api.paTag.createAlliance.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "Alliance created", type: "success" });
+        await ctx.paTag.getAll.invalidate();
+        await ctx.paTag.getAll.refetch();
         await ctx.paUsers.getPlayerByNick.invalidate();
         await ctx.paUsers.getPlayerByNick.refetch();
       },
@@ -53,6 +57,8 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
           return;
         }
         ToastComponent({ message: "Alliance joined", type: "success" });
+        await ctx.paTag.getAll.invalidate();
+        await ctx.paTag.getAll.refetch();
         await ctx.paUsers.getPlayerByNick.invalidate();
         await ctx.paUsers.getPlayerByNick.refetch();
       },
@@ -61,16 +67,17 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
       },
     });
 
-  const { mutate: leaveAlliance } = api.paTag.leaveAlliance.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Alliance left", type: "success" });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate: leaveAlliance, isLoading: isLeaveAllianceLoading } =
+    api.paTag.leaveAlliance.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Alliance left", type: "success" });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   return (
     <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
@@ -116,8 +123,12 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                     <div className="flex items-center justify-center">
                       <Button
                         extraClasses="mb-4"
-                        disabled={isCreateAllianceLoading}
-                        onClick={(event) => {
+                        disabled={
+                          isCreateAllianceLoading ||
+                          isLeaveAllianceLoading ||
+                          isJoinAllianceLoading
+                        }
+                        onClick={(event: { preventDefault: () => void }) => {
                           event.preventDefault();
                           if (!createAllianceRef?.current?.value) {
                             ToastComponent({
@@ -140,8 +151,13 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                 {paPlayer.tag && (
                   <div className="flex items-center justify-center">
                     <Button
+                      disabled={
+                        isCreateAllianceLoading ||
+                        isLeaveAllianceLoading ||
+                        isJoinAllianceLoading
+                      }
                       extraClasses="mb-4"
-                      onClick={(event) => {
+                      onClick={(event: { preventDefault: () => void }) => {
                         event.preventDefault();
                         leaveAlliance({
                           Userid: paPlayer.id,
@@ -172,8 +188,12 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                 <div className="flex items-center justify-center">
                   <Button
                     extraClasses="mb-4"
-                    disabled={isJoinAllianceLoading}
-                    onClick={(event) => {
+                    disabled={
+                      isCreateAllianceLoading ||
+                      isLeaveAllianceLoading ||
+                      isJoinAllianceLoading
+                    }
+                    onClick={(event: { preventDefault: () => void }) => {
                       event.preventDefault();
                       if (!joinAllianceRef?.current?.value) {
                         ToastComponent({

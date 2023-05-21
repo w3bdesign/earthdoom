@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/ui/common";
+import { DataTable } from "@/components/ui";
 
 import type { PaUsers } from "@prisma/client";
 import type { FC } from "react";

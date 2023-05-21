@@ -5,7 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
-import { ToastComponent } from "@/components/ui/common";
+import { ToastComponent } from "@/components/ui";
 
 import { api } from "@/utils/api";
 

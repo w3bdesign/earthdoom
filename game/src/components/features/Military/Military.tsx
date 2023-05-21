@@ -5,7 +5,7 @@ import { api } from "@/utils/api";
 import type { FC, ChangeEvent } from "react";
 import type { PaPlayer } from "../Production/Production";
 
-import { Button, ToastComponent } from "@/components/ui/common";
+import { Button, ToastComponent } from "@/components/ui";
 
 interface IMilitaryProps {
   paPlayer: PaPlayer;

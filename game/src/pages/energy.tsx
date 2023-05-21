@@ -7,11 +7,7 @@ import { api } from "@/utils/api";
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
-import {
-  Button,
-  AdvancedDataTable,
-  ToastComponent,
-} from "@/components/ui/common";
+import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 
 const Energy: NextPage = () => {
   const ctx = api.useContext();

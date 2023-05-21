@@ -9,11 +9,7 @@ import BarGraph from "@/components/features/Resources/BarGraph";
 import { api } from "@/utils/api";
 import { renderIncomeData } from "@/utils/functions";
 
-import {
-  Button,
-  AdvancedDataTable,
-  ToastComponent,
-} from "@/components/ui/common";
+import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 
 import { RESOURCE } from "@/components/features/Resources/constants/RESOURCE";
 
