@@ -18,6 +18,8 @@ The database is handled through mySQL and Planetscale.
 
 Authentication is handled through Clerk.
 
+Front page is developed with Astro.
+
 The application is designed with a modern, responsive and intuitive user interface.
 
 ## Technologies used
