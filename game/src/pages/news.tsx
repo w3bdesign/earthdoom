@@ -9,7 +9,7 @@ import { api } from "@/utils/api";
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import NewsTable from "@/components/features/News/NewsTable";
-import { Button, ToastComponent } from "@/components/ui/common";
+import { Button, ToastComponent } from "@/components/ui";
 import { CombatReport } from "@/components/features/News";
 import { isJSON } from "@/utils/functions";
 

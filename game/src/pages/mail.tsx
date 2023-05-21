@@ -7,7 +7,7 @@ import { api } from "@/utils/api";
 import { Layout } from "@/components/common/Layout";
 
 import MailTable from "@/components/features/Mail/MailTable";
-import { ToastComponent } from "@/components/ui/common";
+import { ToastComponent } from "@/components/ui";
 
 const Mail: NextPage = () => {
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({

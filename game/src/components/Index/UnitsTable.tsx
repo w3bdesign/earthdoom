@@ -2,7 +2,7 @@ import { type FC } from "react";
 
 import type { PaPlayer } from "../features/Production/Production";
 
-import { DataTable } from "@/components/ui/common";
+import { DataTable } from "@/components/ui";
 
 interface LandTableProps {
   paPlayer: PaPlayer;
