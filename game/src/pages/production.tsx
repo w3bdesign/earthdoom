@@ -26,7 +26,7 @@ const ProductionPage: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
             <div className="relative sm:mx-auto">
               {(paPlayer && paPlayer.c_airport === 0) ||
-                (paPlayer && paPlayer.c_airport! > 1 && (
+                (paPlayer && paPlayer.c_airport > 1 && (
                   <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[44.563rem]">
                     <h2 className="p-2 text-center text-xl font-bold text-black">
                       You need to construct barracks before you can produce
