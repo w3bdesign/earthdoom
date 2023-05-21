@@ -40,6 +40,8 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     api.paTag.createAlliance.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "Alliance created", type: "success" });
+        await ctx.paTag.getAll.invalidate();
+        await ctx.paTag.getAll.refetch();
         await ctx.paUsers.getPlayerByNick.invalidate();
         await ctx.paUsers.getPlayerByNick.refetch();
       },
@@ -55,6 +57,8 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
           return;
         }
         ToastComponent({ message: "Alliance joined", type: "success" });
+        await ctx.paTag.getAll.invalidate();
+        await ctx.paTag.getAll.refetch();
         await ctx.paUsers.getPlayerByNick.invalidate();
         await ctx.paUsers.getPlayerByNick.refetch();
       },
@@ -63,16 +67,17 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
       },
     });
 
-  const { mutate: leaveAlliance } = api.paTag.leaveAlliance.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Alliance left", type: "success" });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate: leaveAlliance, isLoading: isLeaveAllianceLoading } =
+    api.paTag.leaveAlliance.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Alliance left", type: "success" });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   return (
     <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
@@ -82,7 +87,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
             <div className="flex w-[20.625rem] items-center justify-center rounded bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 md:w-[44.563rem]">
               <form>
                 <h2 className="mb-4 text-center text-2xl font-bold text-black">
-                  Alliance {" "}
+                  Alliance{" "}
                   {paPlayer.tag && (
                     <>
                       - {isLeader ? "leader" : "member"} of {paPlayer.tag}
@@ -118,7 +123,11 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                     <div className="flex items-center justify-center">
                       <Button
                         extraClasses="mb-4"
-                        disabled={isCreateAllianceLoading}
+                        disabled={
+                          isCreateAllianceLoading ||
+                          isLeaveAllianceLoading ||
+                          isJoinAllianceLoading
+                        }
                         onClick={(event: { preventDefault: () => void }) => {
                           event.preventDefault();
                           if (!createAllianceRef?.current?.value) {
@@ -142,6 +151,11 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                 {paPlayer.tag && (
                   <div className="flex items-center justify-center">
                     <Button
+                      disabled={
+                        isCreateAllianceLoading ||
+                        isLeaveAllianceLoading ||
+                        isJoinAllianceLoading
+                      }
                       extraClasses="mb-4"
                       onClick={(event: { preventDefault: () => void }) => {
                         event.preventDefault();
@@ -174,7 +188,11 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                 <div className="flex items-center justify-center">
                   <Button
                     extraClasses="mb-4"
-                    disabled={isJoinAllianceLoading}
+                    disabled={
+                      isCreateAllianceLoading ||
+                      isLeaveAllianceLoading ||
+                      isJoinAllianceLoading
+                    }
                     onClick={(event: { preventDefault: () => void }) => {
                       event.preventDefault();
                       if (!joinAllianceRef?.current?.value) {
