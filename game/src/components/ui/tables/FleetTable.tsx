@@ -1,26 +1,23 @@
 import { api } from "@/utils/api";
 
+import type { PaUsers } from "@prisma/client";
+import type { FC } from "react";
+
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 interface FleetStatusProps {
-  paPlayer: {
-    war: number;
-    def: number;
-    wareta: number;
-  } | null;
+  paPlayer: PaUsers;
 }
 
-const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
-  if (!paPlayer) return <LoadingSpinner />;
-
+const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
   const { data: paAttackedName, isLoading: isLoadingAttacked } =
     api.paUsers.getAttackedPlayer.useQuery({
-      Warid: paPlayer.war,
+      Warid: paPlayer?.war,
     });
 
   const { data: paDefendedName, isLoading: isLoadingDefended } =
     api.paUsers.getDefendedPlayer.useQuery({
-      Defid: paPlayer.def,
+      Defid: paPlayer?.def,
     });
 
   const allFleetsAtHome =
@@ -61,6 +58,8 @@ const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
     paDefendedName &&
     paPlayer.wareta < 5 &&
     `Defending ${paDefendedName.nick} #${paDefendedName.id}   (ETA: 0 ticks)`;
+
+  if (!paPlayer) return <LoadingSpinner />;
 
   return (
     <>
