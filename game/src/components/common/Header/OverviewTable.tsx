@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { DataTable } from "@/components/ui/common";
+import { DataTable } from "@/components/ui";
 import { PaUsers } from "@prisma/client";
 
 interface OverviewTableProps {

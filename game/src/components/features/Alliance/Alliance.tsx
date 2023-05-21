@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 
-import { Button } from "@/components/ui/common";
+import { Button } from "@/components/ui";
 
 import type { PaUsers, PaTag } from "@prisma/client";
 import type { FC } from "react";
 
 import { api } from "@/utils/api";
-import ToastComponent from "@/components/ui/common/ToastComponent";
+import ToastComponent from "@/components/ui/notifications/ToastComponent";
 
 interface IAllianceProps {
   paPlayer: PaUsers;
@@ -23,7 +23,7 @@ interface IAllianceProps {
  */
 const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const ctx = api.useContext();
-  const { user } = useUser();
+
   const createAllianceRef = useRef<HTMLInputElement>(null);
   const joinAllianceRef = useRef<HTMLInputElement>(null);
 
@@ -31,7 +31,9 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     paTag.find((tag: PaTag) => tag.leader === paPlayer.nick) !== undefined;
 
   const player = paPlayer.nick;
-  const allianceTag = paTag.find((tag) => tag.leader === player);
+  const allianceTag = paTag.find(
+    (tag: { leader: string }) => tag.leader === player
+  );
   const alliancePassword = allianceTag ? allianceTag.password : null;
 
   const { mutate: createAlliance, isLoading: isCreateAllianceLoading } =
@@ -80,7 +82,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
             <div className="flex w-[20.625rem] items-center justify-center rounded bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 md:w-[44.563rem]">
               <form>
                 <h2 className="mb-4 text-center text-2xl font-bold text-black">
-                  Alliance{" "}
+                  Alliance {" "}
                   {paPlayer.tag && (
                     <>
                       - {isLeader ? "leader" : "member"} of {paPlayer.tag}
@@ -117,7 +119,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                       <Button
                         extraClasses="mb-4"
                         disabled={isCreateAllianceLoading}
-                        onClick={(event) => {
+                        onClick={(event: { preventDefault: () => void }) => {
                           event.preventDefault();
                           if (!createAllianceRef?.current?.value) {
                             ToastComponent({
@@ -141,7 +143,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                   <div className="flex items-center justify-center">
                     <Button
                       extraClasses="mb-4"
-                      onClick={(event) => {
+                      onClick={(event: { preventDefault: () => void }) => {
                         event.preventDefault();
                         leaveAlliance({
                           Userid: paPlayer.id,
@@ -173,7 +175,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                   <Button
                     extraClasses="mb-4"
                     disabled={isJoinAllianceLoading}
-                    onClick={(event) => {
+                    onClick={(event: { preventDefault: () => void }) => {
                       event.preventDefault();
                       if (!joinAllianceRef?.current?.value) {
                         ToastComponent({

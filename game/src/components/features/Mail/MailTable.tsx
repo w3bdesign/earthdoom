@@ -1,4 +1,4 @@
-import { Button, ToastComponent } from "@/components/ui/common";
+import { Button, ToastComponent } from "@/components/ui";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import type { FC } from "react";

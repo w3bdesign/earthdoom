@@ -5,7 +5,7 @@ import { type NextPage } from "next";
 import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
-import { AdvancedDataTable } from "@/components/ui/common";
+import { AdvancedDataTable } from "@/components/ui";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 const RankingPage: NextPage = () => {

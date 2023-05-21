@@ -7,11 +7,7 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
 
-import {
-  ToastComponent,
-  Button,
-  AdvancedDataTable,
-} from "@/components/ui/common";
+import { ToastComponent, Button, AdvancedDataTable } from "@/components/ui";
 import { SPYING } from "@/components/features/Spying/constants/SPYING";
 
 const Energy: NextPage = () => {
