@@ -1,13 +1,12 @@
 import { api } from "@/utils/api";
 
+import type { PaUsers } from "@prisma/client";
+
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
+
 interface FleetStatusProps {
-  paPlayer: {
-    war: number;
-    def: number;
-    wareta: number;
-  } | null;
+  paPlayer: PaUsers;
 }
 
 const FleetStatus: React.FC<FleetStatusProps> = ({ paPlayer }) => {
