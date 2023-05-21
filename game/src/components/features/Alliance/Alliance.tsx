@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { useUser } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui";
 

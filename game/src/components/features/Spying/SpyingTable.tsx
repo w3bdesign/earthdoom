@@ -5,12 +5,12 @@ import { Button, ToastComponent } from "@/components/ui";
 
 import type { FC } from "react";
 import type { Building } from "../Construct/types/types";
+import type { PaPlayer } from "../Production/Production";
 
 import { SPYING } from "./constants/SPYING";
 
 import { api } from "@/utils/api";
 import { canAffordToTrain } from "@/utils/functions";
-import { PaPlayer } from "../Production/Production";
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
