@@ -2,7 +2,7 @@ import { Layout } from "@/components/common/Layout";
 import LandTable from "@/components/ui/tables/LandTable";
 import BDUTable from "@/components/ui/tables/BDUTable";
 import UnitsTable from "@/components/ui/tables/UnitsTable";
-import FleetStatus from "@/components/ui/tables/FleetStatus";
+import FleetStatus from "@/components/ui/tables/FleetTable";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
@@ -17,7 +17,7 @@ const Home = () => {
     nick: user.username,
   });
 
-  if (!paPlayer) return null;
+  if (!paPlayer) return <LoadingSpinner />;
 
   return (
     <Layout paPlayer={paPlayer}>

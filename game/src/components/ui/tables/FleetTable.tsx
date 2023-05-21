@@ -9,7 +9,7 @@ interface FleetStatusProps {
   paPlayer: PaUsers;
 }
 
-const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
+const FleetTable: FC<FleetStatusProps> = ({ paPlayer }) => {
   const { data: paAttackedName, isLoading: isLoadingAttacked } =
     api.paUsers.getAttackedPlayer.useQuery({
       Warid: paPlayer?.war,
@@ -81,4 +81,4 @@ const FleetStatus: FC<FleetStatusProps> = ({ paPlayer }) => {
   );
 };
 
-export default FleetStatus;
+export default FleetTable;
