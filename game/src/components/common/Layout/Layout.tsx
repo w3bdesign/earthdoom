@@ -2,11 +2,11 @@ import Head from "next/head";
 import { SignedIn } from "@clerk/nextjs";
 
 import type { ReactNode } from "react";
+import type { PaPlayer } from "@/components/features/Production/Production";
 
 import Navbar from "@/components/common/Header/Navbar";
 import Information from "@/components/common/Header/Information";
 import Footer from "./Footer";
-import { PaPlayer } from "@/components/features/Production/Production";
 
 interface ILayoutProps {
   paPlayer?: PaPlayer;

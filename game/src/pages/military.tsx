@@ -6,9 +6,9 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import Military from "@/components/features/Military/Military";
-import UnitsTable from "@/components/Index/UnitsTable";
+import UnitsTable from "@/components/ui/tables/UnitsTable";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-import FleetStatus from "@/components/Index/FleetStatus";
+import FleetTable from "@/components/ui/tables/FleetTable";
 
 const MilitaryPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
@@ -33,7 +33,7 @@ const MilitaryPage: NextPage = () => {
                 <LoadingSpinner />
               </div>
             )}
-            {paPlayer && <FleetStatus paPlayer={paPlayer} />}
+            {paPlayer && <FleetTable paPlayer={paPlayer} />}
             {paPlayer && <Military paPlayer={paPlayer} />}
           </div>
         </div>

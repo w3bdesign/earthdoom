@@ -1,4 +1,5 @@
-import { PaPlayer } from "@/components/features/Production/Production";
+import type { PaPlayer } from "@/components/features/Production/Production";
+
 import { Stringifier } from "@/utils/functions";
 
 export interface TableColumn {
