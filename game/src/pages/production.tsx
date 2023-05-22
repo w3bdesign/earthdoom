@@ -21,7 +21,6 @@ const ProductionPage: NextPage = () => {
   const renderBarracksMessage = (paPlayer: PaPlayer) => {
     if (
       paPlayer &&
-      paPlayer.c_airport &&
       (paPlayer.c_airport === 0 || Number(paPlayer.c_airport) > 1)
     ) {
       return (
@@ -45,7 +44,12 @@ const ProductionPage: NextPage = () => {
             <div className="relative sm:mx-auto">
               {renderBarracksMessage(paPlayer)}
               {paPlayer && paPlayer.c_airport === 1 && (
-                <Production paPlayer={paPlayer} />
+                <>
+                  <h1 className="py-6 text-center text-2xl font-bold text-white">
+                    Production
+                  </h1>
+                  <Production paPlayer={paPlayer} />
+                </>
               )}
             </div>
           </div>
