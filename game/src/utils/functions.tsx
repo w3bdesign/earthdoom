@@ -144,3 +144,23 @@ export const renderIncomeData = (paPlayer: PaUsers) => {
 
   return data;
 };
+
+/**
+ * Calculates the total count of ships for a given PaUsers object.
+ * @param {PaUsers} paPlayer - The PaUsers object to calculate the ship count for.
+ * @returns {number} The total count of ships for the given PaUsers object.
+ */
+export const getShipCount = (paPlayer: PaPlayer) => {
+  const shipProperties = [
+    "astropods",
+    "infinitys",
+    "wraiths",
+    "warfrigs",
+    "destroyers",
+    "scorpions",
+  ];
+  return shipProperties.reduce(
+    (count, property) => count + Number(paPlayer[property]),
+    0
+  );
+};
