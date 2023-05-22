@@ -1,4 +1,4 @@
-![version](https://img.shields.io/badge/version-0.3.4-blue)
+![version](https://img.shields.io/badge/version-0.3.5-blue)
 ![React](https://img.shields.io/badge/React-18.2.0-success)
 ![Next.js](https://img.shields.io/badge/Next.js-13.4.1-success)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-success)
@@ -17,6 +17,8 @@ Earthdoom is a full-stack web-based strategy game built using Typescript, Next.j
 The database is handled through mySQL and Planetscale. 
 
 Authentication is handled through Clerk.
+
+Front page is developed with Astro.
 
 The application is designed with a modern, responsive and intuitive user interface.
 
