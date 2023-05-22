@@ -1,23 +1,15 @@
-import { type FC } from "react";
-
+import type { FC } from "react";
 import type { PaPlayer } from "../../features/Production/Production";
 
 import { DataTable } from "@/components/ui";
+
+import { getShipCount } from "@/utils/functions";
 
 interface LandTableProps {
   paPlayer: PaPlayer;
 }
 
 const UnitsTable: FC<LandTableProps> = ({ paPlayer }) => {
-  let shipCount = 0;
-
-  shipCount =
-    paPlayer.astropods +
-    paPlayer.infinitys +
-    paPlayer.warfrigs +
-    paPlayer.destroyers +
-    paPlayer.scorpions;
-
   const columns = [
     { label: "Astropods", accessor: "astropods" },
     { label: "Infinitys", accessor: "infinitys" },
@@ -27,7 +19,7 @@ const UnitsTable: FC<LandTableProps> = ({ paPlayer }) => {
     { label: "Scorpions", accessor: "scorpions" },
   ];
 
-  const caption = `Units (${shipCount} total)`;
+  const caption = `Units (${getShipCount(paPlayer)} total)`;
 
   return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
 };
