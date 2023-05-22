@@ -1,4 +1,4 @@
-![version](https://img.shields.io/badge/version-0.3.4-blue)
+![version](https://img.shields.io/badge/version-0.3.5-blue)
 ![React](https://img.shields.io/badge/React-18.2.0-success)
 ![Next.js](https://img.shields.io/badge/Next.js-13.4.1-success)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-success)
