@@ -17,15 +17,21 @@ const ContNews: NextPage = () => {
 
   if (!isSignedIn || !user.username) return null;
 
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
+    nick: user.username,
+  });
+
   const { data: paNews, isLoading } = api.paUsers.getContinentIncoming.useQuery(
     {
       nick: user.username,
     }
   );
 
+  if (!paPlayer) return null;
+
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 ">
             <RenderIncoming
