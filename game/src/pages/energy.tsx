@@ -9,6 +9,11 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 
+/**
+ * A page component that renders the Energy page.
+ *
+ * @return {JSX.Element} The Energy page.
+ */
 const Energy: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();

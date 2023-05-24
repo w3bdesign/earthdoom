@@ -8,6 +8,11 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 
+/**
+ * Renders the Home page with player data if signed in, otherwise displays a loading spinner.
+ *
+ * @returns {JSX.Element} The Home page with player data or a loading spinner.
+ */
 const Home = () => {
   const { user, isSignedIn } = useUser();
 

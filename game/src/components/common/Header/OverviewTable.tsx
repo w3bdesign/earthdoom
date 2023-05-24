@@ -7,6 +7,12 @@ interface OverviewTableProps {
   paPlayer: PaUsers;
 }
 
+/**
+ * Renders an overview table for a given player.
+ *
+ * @param {OverviewTableProps} paPlayer - The player to render the table for.
+ * @return {JSX.Element} The rendered overview table.
+ */
 const OverviewTable: FC<OverviewTableProps> = ({ paPlayer }) => {
   const columns = [
     { label: "Crystal", accessor: "crystal" },

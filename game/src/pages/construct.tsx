@@ -8,6 +8,11 @@ import { Layout } from "@/components/common/Layout";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
 
+/**
+ * A page component that displays a table of buildings a user can construct.
+ *
+ * @return {JSX.Element} The constructed page component.
+ */
 const Construction: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();

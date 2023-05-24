@@ -8,6 +8,11 @@ import { Layout } from "@/components/common/Layout";
 import Alliance from "@/components/features/Alliance";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
+/**
+ * Renders the Alliance page if the user is signed in and has a username.
+ *
+ * @return {JSX.Element} The rendered Alliance page.
+ */
 const AlliancePage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
