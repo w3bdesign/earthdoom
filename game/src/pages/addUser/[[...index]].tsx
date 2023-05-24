@@ -9,6 +9,11 @@ import { ToastComponent } from "@/components/ui";
 
 import { api } from "@/utils/api";
 
+/**
+ * Renders a page for creating a player and creates a new player for the logged in user.
+ *
+ * @return {JSX.Element} The page component for creating a player.
+ */
 const AddUser: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();

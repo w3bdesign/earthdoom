@@ -2,15 +2,20 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
-import { Layout } from "@/components/common/Layout";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-
 import { api } from "@/utils/api";
 
+import { Layout } from "@/components/common/Layout";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import { ToastComponent, Button, AdvancedDataTable } from "@/components/ui";
 import { SPYING } from "@/components/features/Spying/constants/SPYING";
 
-const Energy: NextPage = () => {
+/**
+ * Renders the spying page
+ * Required for getting more land early in the game
+ *
+ * @returns {JSX.Element} The spying page component.
+ */
+const Spying: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
@@ -73,4 +78,4 @@ const Energy: NextPage = () => {
   );
 };
 
-export default Energy;
+export default Spying;

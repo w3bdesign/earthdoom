@@ -5,6 +5,11 @@ import { type NextPage } from "next";
 import { Layout } from "@/components/common/Layout";
 import { Button } from "@/components/ui";
 
+/**
+ * Renders a logout button that either signs out the user or redirects them to the sign in page depending on their authentication status.
+ *
+ * @return {JSX.Element} The JSX element containing the logout button
+ */
 const Logout: NextPage = () => {
   return (
     <>

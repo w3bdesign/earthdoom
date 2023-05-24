@@ -6,7 +6,6 @@ import { BiCopyright } from "react-icons/bi";
  * @function Footer
  * @returns {JSX.Element} - Rendered Hamburger component
  */
-
 const Footer = () => (
   <footer
     aria-label="Innholdet for bunnteksten med copyright"
