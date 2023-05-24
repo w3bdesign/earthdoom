@@ -13,6 +13,11 @@ import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 
 import { RESOURCE } from "@/components/features/Resources/constants/RESOURCE";
 
+/**
+ * Renders a resource management page for a user, displaying their current income and available resources.
+ *
+ * @return {JSX.Element} A React component representing the resources page
+ */
 const Resources: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();

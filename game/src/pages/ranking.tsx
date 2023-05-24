@@ -8,6 +8,11 @@ import { Layout } from "@/components/common/Layout";
 import { AdvancedDataTable } from "@/components/ui";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
+/**
+ * Renders the Ranking page component, which displays the player ranking table.
+ *
+ * @return {JSX.Element} The RankingPage component to be rendered.
+ */
 const RankingPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
@@ -28,7 +33,6 @@ const RankingPage: NextPage = () => {
   const caption = `Player ranking`;
 
   if (!paRanking) return null;
-
   if (!paPlayer) return null;
 
   return (

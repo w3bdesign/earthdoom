@@ -8,6 +8,15 @@ import { Layout } from "@/components/common/Layout";
 import { BUILDINGS } from "@/components/features/Research/constants/RESEARCH";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 
+/**
+ * Renders the research page if the user is signed in and has a username. The page
+ * displays a table of buildings with their descriptions, ETAs, and costs, and allows
+ * the user to research a building by clicking a button. 
+ * When the button is clicked, a mutation is made to the database to start the research and a success message is
+ * displayed. If there is an error, an error message is displayed.
+ *
+ * @return {JSX.Element} The research page component
+ */
 const ResearchPage: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
