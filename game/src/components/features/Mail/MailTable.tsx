@@ -1,5 +1,4 @@
 import { Button, ToastComponent } from "@/components/ui";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import type { FC } from "react";
 import type { PaMail } from "@prisma/client";
@@ -19,29 +18,21 @@ interface IMailTableProps {
 const MailTable: FC<IMailTableProps> = ({ mail }) => {
   const ctx = api.useContext();
 
-  const { data: allMail, isLoading } = api.paMail.getAllMailByUserId.useQuery({
-    Userid: 12,
-  });
-
   const { mutate: deleteSingleMail, isLoading: isDeletingMail } =
     api.paMail.deleteEmail.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "Mail deleted", type: "success" });
-        await ctx.paMail.getAllMailByUserId.invalidate();
-        await ctx.paMail.getAllMailByUserId.refetch();
+        await ctx.paMail.getAllMailByNick.invalidate();
+        await ctx.paMail.getAllMailByNick.refetch();
       },
       onError: () => {
-        console.error("Failure deleting!");
+        ToastComponent({ message: "Failed to delete", type: "error" });
       },
     });
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <>
-      {allMail && allMail.email.length > 0 && (
+      {mail && mail.length > 0 && (
         <table className="min-w-full text-left text-sm font-light">
           <thead className="border-b font-medium dark:border-neutral-500">
             <tr>
@@ -72,7 +63,7 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
             </tr>
           </thead>
           <tbody>
-            {allMail?.email.map((mail) => (
+            {mail.map((mail) => (
               <tr key={mail.id} className="border-b dark:border-neutral-500">
                 <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                   {mail.header}
@@ -105,7 +96,7 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
           </tbody>
         </table>
       )}
-      {allMail?.email.length === 0 && (
+      {mail.length === 0 && (
         <h1 className="text-bold p-4 text-center text-2xl text-black">
           No email to display
         </h1>
