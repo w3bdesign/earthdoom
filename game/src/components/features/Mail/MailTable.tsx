@@ -7,9 +7,15 @@ import type { PaMail } from "@prisma/client";
 import { api } from "@/utils/api";
 
 interface IMailTableProps {
-  mail?: PaMail[];
+  mail: PaMail[];
 }
 
+/**
+ * Renders a table of emails and allows the user to delete individual emails.
+ *
+ * @param {IMailTableProps} mail - the list of emails to display
+ * @return {JSX.Element} - the email table component
+ */
 const MailTable: FC<IMailTableProps> = ({ mail }) => {
   const ctx = api.useContext();
 
