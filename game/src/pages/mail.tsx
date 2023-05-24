@@ -18,11 +18,11 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
  * @return {JSX.Element} The JSX element for the Mail component.
  */
 const Mail: NextPage = () => {
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { user, isSignedIn } = useUser();
 
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
 
-  const { data: paMail, isLoading } = api.paMail.getAllMailByNick.useQuery({
+  const { data: paMail } = api.paMail.getAllMailByNick.useQuery({
     nick: user.username,
   });
 
@@ -36,11 +36,9 @@ const Mail: NextPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (paPlayer) {
-      markAsSeen({ sentTo: paPlayer.id });
-    }
-  }, [paPlayer]);
+  /*useEffect(() => {
+    markAsSeen({ sentTo: paPlayer.id });
+  }, [markAsSeen]);*/
 
   return (
     <>
