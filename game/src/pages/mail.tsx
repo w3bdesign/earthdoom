@@ -7,7 +7,7 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import MailTable from "@/components/features/Mail/MailTable";
-import { ToastComponent } from "@/components/ui";
+import { Button, ToastComponent } from "@/components/ui";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 /**
@@ -31,14 +31,13 @@ const Mail: NextPage = () => {
   });
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
+    onSuccess: () => {
+      ToastComponent({ message: "Mail marked as seen", type: "success" });
+    },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });
     },
   });
-
-  /*useEffect(() => {
-    markAsSeen({ sentTo: paPlayer.id });
-  }, [markAsSeen]);*/
 
   return (
     <>
@@ -48,6 +47,16 @@ const Mail: NextPage = () => {
             <h2 className="py-4 text-center text-2xl font-bold text-white">
               Mail
             </h2>
+            <div className="mt-6 flex justify-end py-4">
+              {paPlayer && (
+                <Button
+                  extraClasses="w-64"
+                  onClick={() => markAsSeen({ sentTo: paPlayer.id })}
+                >
+                  Mark all as seen
+                </Button>
+              )}
+            </div>
             <div className="mt-2 flex flex-col bg-white text-black">
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full sm:px-6 lg:px-8">
