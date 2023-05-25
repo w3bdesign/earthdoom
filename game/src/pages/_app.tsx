@@ -22,7 +22,6 @@ import "@/styles/globals.css";
 //   "/foo/[...bar]"  for pages/foo/[...bar].js
 const publicPages = ["/login/[[...index]]", "/register/[[...index]]"];
 
-
 /**
  * Renders the app, either directly or using Clerk for authentication, based on the current route.
  *
