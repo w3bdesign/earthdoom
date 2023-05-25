@@ -18,6 +18,8 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
  * @return {JSX.Element} The JSX element for the Mail component.
  */
 const Mail: NextPage = () => {
+  let hasUnseenEmail = false;
+
   const { user, isSignedIn } = useUser();
 
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
@@ -32,12 +34,19 @@ const Mail: NextPage = () => {
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
     onSuccess: () => {
+      //TODO Invalidate and refetch
       ToastComponent({ message: "Mail marked as seen", type: "success" });
     },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });
     },
   });
+
+  if (!paMail || !paPlayer) return <LoadingSpinner />;
+
+  hasUnseenEmail = paMail.mail.find((mail) => mail.seen === 0) !== undefined;
+
+  console.log("hasUnseenEmail", hasUnseenEmail);
 
   return (
     <>
@@ -48,7 +57,7 @@ const Mail: NextPage = () => {
               Mail
             </h2>
             <div className="mt-6 flex justify-end py-4">
-              {paPlayer && (
+              {paPlayer && hasUnseenEmail && (
                 <Button
                   extraClasses="w-64"
                   onClick={() => markAsSeen({ sentTo: paPlayer.id })}
