@@ -5,7 +5,7 @@ import { UserButton, SignUp, SignedIn, SignedOut } from "@clerk/nextjs";
 import { Layout } from "@/components/common/Layout";
 
 /**
- * Renders the Register component that displays a form for users to sign up. 
+ * Renders the Register component that displays a form for users to sign up.
  *
  * @return {JSX.Element} The JSX element representing the Register component.
  */

@@ -10,12 +10,12 @@ import Production from "@/components/features/Production/Production";
 import { api } from "@/utils/api";
 
 /**
- * Renders the production page if the user is signed in and has a username. 
+ * Renders the production page if the user is signed in and has a username.
  * If the user does not have a username, it returns null.
  * If the user's query for their player data has not returned, it also returns null.
- * If the user has not constructed barracks, a message is displayed indicating that 
+ * If the user has not constructed barracks, a message is displayed indicating that
  * they need to construct barracks before they can produce units.
- * 
+ *
  * @param {PaPlayer} paPlayer - The player data for the user
  * @return {JSX.Element} - The production page JSX if the user has constructed an airport
  * and is signed in with a username, otherwise null
