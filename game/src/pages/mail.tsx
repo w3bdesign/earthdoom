@@ -7,7 +7,7 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import MailTable from "@/components/features/Mail/MailTable";
-import { ToastComponent } from "@/components/ui";
+import { Button, ToastComponent } from "@/components/ui";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 /**
@@ -18,6 +18,8 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
  * @return {JSX.Element} The JSX element for the Mail component.
  */
 const Mail: NextPage = () => {
+  let hasUnseenEmail = false;
+
   const { user, isSignedIn } = useUser();
 
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
@@ -31,14 +33,20 @@ const Mail: NextPage = () => {
   });
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
+    onSuccess: () => {
+      //TODO Invalidate and refetch
+      ToastComponent({ message: "Mail marked as seen", type: "success" });
+    },
     onError: () => {
       ToastComponent({ message: "Database error", type: "error" });
     },
   });
 
-  /*useEffect(() => {
-    markAsSeen({ sentTo: paPlayer.id });
-  }, [markAsSeen]);*/
+  if (!paMail || !paPlayer) return <LoadingSpinner />;
+
+  hasUnseenEmail = paMail.mail.find((mail) => mail.seen === 0) !== undefined;
+
+  console.log("hasUnseenEmail", hasUnseenEmail);
 
   return (
     <>
@@ -48,6 +56,16 @@ const Mail: NextPage = () => {
             <h2 className="py-4 text-center text-2xl font-bold text-white">
               Mail
             </h2>
+            <div className="mt-6 flex justify-end py-4">
+              {paPlayer && hasUnseenEmail && (
+                <Button
+                  extraClasses="w-64"
+                  onClick={() => markAsSeen({ sentTo: paPlayer.id })}
+                >
+                  Mark all as seen
+                </Button>
+              )}
+            </div>
             <div className="mt-2 flex flex-col bg-white text-black">
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full sm:px-6 lg:px-8">
