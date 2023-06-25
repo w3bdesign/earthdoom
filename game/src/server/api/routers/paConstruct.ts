@@ -9,7 +9,6 @@ export const paConstructRouter = createTRPCRouter({
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingETA: z.number() }))
-
     .mutation(async ({ ctx, input }) => {
       const {
         buildingFieldName,
@@ -18,16 +17,37 @@ export const paConstructRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
+      // Fetch the associated PaConstruct for the user
+      const paConstruct = await ctx.prisma.paUsers
+        .findUnique({ where: { id: input.Userid } })
+        .construction();
+
+      if (!paConstruct) {
+        throw new Error(
+          `No PaConstruct found for user with ID: ${input.Userid}`
+        );
+      }
+
+      // Update the PaConstruct
+      await ctx.prisma.paConstruct.update({
+        where: {
+          id: paConstruct.id,
+        },
+        data: {
+          [buildingFieldName]: { set: buildingETA },
+        },
+      });
+
+      // Update the PaUsers
       return await ctx.prisma.paUsers.update({
-              where: {
-                id: input.Userid,
-              },
-              data: {
-                [buildingFieldName]: buildingETA,
-                crystal: { decrement: buildingCostCrystal },
-                metal: { decrement: buildingCostTitanium },
-              },
-            });
+        where: {
+          id: input.Userid,
+        },
+        data: {
+          crystal: { decrement: buildingCostCrystal },
+          metal: { decrement: buildingCostTitanium },
+        },
+      });
     }),
 
   developLand: privateProcedure
@@ -45,17 +65,17 @@ export const paConstructRouter = createTRPCRouter({
       const unitAmountDefault = unitAmount || 0;
 
       return await ctx.prisma.paUsers.update({
-              where: {
-                id: Userid,
-              },
-              data: {
-                [buildingFieldName]: {
-                  increment: unitAmount,
-                },
-      
-                crystal: { decrement: buildingCostCrystal * unitAmountDefault },
-                ui_roids: { decrement: unitAmount },
-              },
-            });
+        where: {
+          id: Userid,
+        },
+        data: {
+          [buildingFieldName]: {
+            increment: unitAmount,
+          },
+
+          crystal: { decrement: buildingCostCrystal * unitAmountDefault },
+          ui_roids: { decrement: unitAmount },
+        },
+      });
     }),
 });
