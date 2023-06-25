@@ -10,15 +10,13 @@ export const paUsersRouter = createTRPCRouter({
   createPlayer: publicProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const user = await ctx.prisma.paUsers.create({
+      return await ctx.prisma.paUsers.create({
         data: {
           nick: input.nick,
           construction: { create: {} }, // create the construction field
         },
         include: { construction: true }, // include the construction field in the response
       });
-
-      return user;
     }),
 
   getAll: privateProcedure.query(({ ctx }) => {
