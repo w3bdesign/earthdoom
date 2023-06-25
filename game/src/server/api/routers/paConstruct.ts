@@ -18,18 +18,16 @@ export const paConstructRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
-      const data = await ctx.prisma.paUsers.update({
-        where: {
-          id: input.Userid,
-        },
-        data: {
-          [buildingFieldName]: buildingETA,
-          crystal: { decrement: buildingCostCrystal },
-          metal: { decrement: buildingCostTitanium },
-        },
-      });
-
-      return data;
+      return await ctx.prisma.paUsers.update({
+              where: {
+                id: input.Userid,
+              },
+              data: {
+                [buildingFieldName]: buildingETA,
+                crystal: { decrement: buildingCostCrystal },
+                metal: { decrement: buildingCostTitanium },
+              },
+            });
     }),
 
   developLand: privateProcedure
@@ -44,22 +42,20 @@ export const paConstructRouter = createTRPCRouter({
       const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
         input;
 
-      const unitAmountDefault = unitAmount ? unitAmount : 0;
+      const unitAmountDefault = unitAmount || 0;
 
-      const data = await ctx.prisma.paUsers.update({
-        where: {
-          id: Userid,
-        },
-        data: {
-          [buildingFieldName]: {
-            increment: unitAmount,
-          },
-
-          crystal: { decrement: buildingCostCrystal * unitAmountDefault },
-          ui_roids: { decrement: unitAmount },
-        },
-      });
-
-      return data;
+      return await ctx.prisma.paUsers.update({
+              where: {
+                id: Userid,
+              },
+              data: {
+                [buildingFieldName]: {
+                  increment: unitAmount,
+                },
+      
+                crystal: { decrement: buildingCostCrystal * unitAmountDefault },
+                ui_roids: { decrement: unitAmount },
+              },
+            });
     }),
 });
