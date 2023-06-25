@@ -2,7 +2,7 @@ import { useUser } from "@clerk/nextjs";
 import Script from "next/script";
 
 import type { NextPage } from "next";
-import type { PaPlayer } from "@/components/features/Production/Production";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { Layout } from "@/components/common/Layout";
 import Production from "@/components/features/Production/Production";

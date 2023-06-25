@@ -1,10 +1,11 @@
+import type { PaPlayer } from "@/components/features/Military/Military";
+
 import { DataTable } from "@/components/ui";
 
-import type { PaUsers } from "@prisma/client";
-import type { FC } from "react";
+import { type FC } from "react";
 
 interface BDUTableProps {
-  paPlayer: PaUsers;
+  paPlayer: PaPlayer;
 }
 
 const BDUTable: FC<BDUTableProps> = ({ paPlayer }) => {

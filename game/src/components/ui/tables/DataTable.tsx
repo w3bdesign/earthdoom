@@ -1,4 +1,4 @@
-import type { PaPlayer } from "@/components/features/Production/Production";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { Stringifier } from "@/utils/functions";
 

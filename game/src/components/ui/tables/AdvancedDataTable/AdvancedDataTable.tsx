@@ -1,7 +1,7 @@
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
 import type { FC } from "react";
-import type { PaPlayer } from "@/components/features/Production/Production";
+import type { PaPlayer } from "@/components/features/Military/Military";
 import type { Building } from "@/components/features/Construct/types/types";
 import type { UseMutateFunction } from "@tanstack/react-query";
 
@@ -66,7 +66,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   actionText,
   actionInProgress,
 }) => {
-  const dataToMap = renderData ? renderData : data;
+  const dataToMap = renderData || data;
 
   const inputAmountRefs = useMultipleRefs(columns.length);
 
