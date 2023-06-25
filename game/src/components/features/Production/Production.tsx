@@ -5,17 +5,13 @@ import { Button, ToastComponent } from "@/components/ui";
 
 import type { FC } from "react";
 import type { IProduction } from "./types/types";
-import type { PaUsers } from "@prisma/client";
+import type { PaPlayer } from "../Military/Military";
 
 import { PRODUCTION } from "./constants/PRODUCTION";
 
 import { api } from "@/utils/api";
 
 import { canAffordToTrain, maximumToTrain } from "@/utils/functions";
-
-export interface PaPlayer extends PaUsers {
-  [key: string]: number | string;
-}
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;

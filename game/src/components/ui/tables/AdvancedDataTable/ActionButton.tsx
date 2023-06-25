@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import type { FC } from "react";
 import type { Building } from "@/components/features/Construct/types/types";
-import type { PaPlayer } from "@/components/features/Production/Production";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import Button from "../../../common/Button";
 import ToastComponent from "../../notifications/ToastComponent";
