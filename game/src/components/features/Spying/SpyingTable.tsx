@@ -1,20 +1,16 @@
 import { useUser } from "@clerk/nextjs";
 import { useRef } from "react";
 
-import { Button, ToastComponent } from "@/components/ui/common";
+import { Button, ToastComponent } from "@/components/ui";
 
 import type { FC } from "react";
-import type { PaUsers } from "@prisma/client";
 import type { Building } from "../Construct/types/types";
+import type { PaPlayer } from "../Production/Production";
 
 import { SPYING } from "./constants/SPYING";
 
 import { api } from "@/utils/api";
 import { canAffordToTrain } from "@/utils/functions";
-
-interface PaPlayer extends PaUsers {
-  [key: string]: number | string;
-}
 
 interface BuildingRowProps {
   paPlayer: PaPlayer;
@@ -30,7 +26,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const { isLoaded } = useUser();
   const spyingAmountRef = useRef<HTMLInputElement>(null);
 
-  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
+  const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async () => {
       ToastComponent({
         message: "Spying complete",

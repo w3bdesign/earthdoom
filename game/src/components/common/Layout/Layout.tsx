@@ -2,16 +2,29 @@ import Head from "next/head";
 import { SignedIn } from "@clerk/nextjs";
 
 import type { ReactNode } from "react";
+import type { PaPlayer } from "@/components/features/Production/Production";
 
 import Navbar from "@/components/common/Header/Navbar";
 import Information from "@/components/common/Header/Information";
 import Footer from "./Footer";
 
 interface ILayoutProps {
+  paPlayer?: PaPlayer;
   children: ReactNode;
 }
 
-const Layout = ({ children }: ILayoutProps) => {
+/**
+ * Renders the layout for the page by including the Navbar, Information, Footer
+ * and the main content area.
+ * Uses the paPlayer parameter to display the player information from the API.
+ *
+ * @param {Object} ILayoutProps - The props object containing paPlayer and children.
+ * @param {Object} ILayoutProps.paPlayer - The player object containing player information.
+ * @param {ReactNode} ILayoutProps.children - The children components to be rendered.
+ *
+ * @return {JSX.Element} The JSX element containing the entire layout.
+ */
+const Layout = ({ paPlayer, children }: ILayoutProps) => {
   return (
     <>
       <Head>
@@ -21,7 +34,7 @@ const Layout = ({ children }: ILayoutProps) => {
       </Head>
       <Navbar />
       <SignedIn>
-        <Information />
+        <Information paPlayer={paPlayer} />
       </SignedIn>
       <main className="mb-8 flex items-center justify-center md:mb-0 lg:px-[5rem] 2xl:px-0">
         {children}

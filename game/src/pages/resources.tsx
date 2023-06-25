@@ -9,14 +9,15 @@ import BarGraph from "@/components/features/Resources/BarGraph";
 import { api } from "@/utils/api";
 import { renderIncomeData } from "@/utils/functions";
 
-import {
-  Button,
-  AdvancedDataTable,
-  ToastComponent,
-} from "@/components/ui/common";
+import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 
 import { RESOURCE } from "@/components/features/Resources/constants/RESOURCE";
 
+/**
+ * Renders a resource management page for a user, displaying their current income and available resources.
+ *
+ * @return {JSX.Element} A React component representing the resources page
+ */
 const Resources: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
@@ -27,10 +28,10 @@ const Resources: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
+  const { mutate, isLoading } = api.paConstruct.developLand.useMutation({
     onSuccess: async () => {
       ToastComponent({
-        message: "Production started",
+        message: "Resource initiated",
         type: "success",
       });
       await ctx.paUsers.getPlayerByNick.invalidate();
@@ -43,8 +44,6 @@ const Resources: NextPage = () => {
       });
     },
   });
-
-  if (!paPlayer) return null;
 
   const columns = [
     { label: "Name", accessor: "buildingName" },
@@ -61,11 +60,15 @@ const Resources: NextPage = () => {
     paPlayer?.asteroid_crystal === 0 &&
     paPlayer?.asteroid_metal === 0;
 
+  const hasNoUndevelopedLand = paPlayer?.ui_roids === 0;
+
+  if (!paPlayer) return null;
+
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
             {!isLoaded && <LoadingSpinner />}
             <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[44.563rem]">
               {hasNoLand ? (
@@ -76,6 +79,13 @@ const Resources: NextPage = () => {
                 <BarGraph chartData={renderIncomeData(paPlayer)} />
               )}
             </div>
+            {hasNoUndevelopedLand && (
+              <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[44.563rem]">
+                <h2 className="p-4 text-center text-2xl font-bold">
+                  You have no land to develop
+                </h2>
+              </div>
+            )}
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <div className="mx-auto mt-4 w-[20.625rem] rounded bg-white py-4 shadow md:w-[44.563rem]">
                 <h1 className="py-4 text-center text-2xl ">

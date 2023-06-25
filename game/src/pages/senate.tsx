@@ -3,6 +3,7 @@ import { type NextPage } from "next";
 import { Layout } from "@/components/common/Layout";
 
 const Senate: NextPage = () => {
+  // TODO Implement this feature
   return (
     <>
       <Layout>

@@ -2,19 +2,20 @@ import { useUser } from "@clerk/nextjs";
 
 import { type NextPage } from "next";
 
-import { Layout } from "@/components/common/Layout";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-
 import { api } from "@/utils/api";
 
-import {
-  ToastComponent,
-  Button,
-  AdvancedDataTable,
-} from "@/components/ui/common";
+import { Layout } from "@/components/common/Layout";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import { ToastComponent, Button, AdvancedDataTable } from "@/components/ui";
 import { SPYING } from "@/components/features/Spying/constants/SPYING";
 
-const Energy: NextPage = () => {
+/**
+ * Renders the spying page
+ * Required for getting more land early in the game
+ *
+ * @returns {JSX.Element} The spying page component.
+ */
+const Spying: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
@@ -24,7 +25,7 @@ const Energy: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate, isLoading } = api.paUsers.spyingInitiate.useMutation({
+  const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async () => {
       ToastComponent({
         message: "Spying complete",
@@ -51,11 +52,13 @@ const Energy: NextPage = () => {
 
   const caption = "Spying";
 
+  if (!paPlayer) return null;
+
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
             {!isLoaded && <LoadingSpinner />}
             {paPlayer && (
               <AdvancedDataTable
@@ -75,4 +78,4 @@ const Energy: NextPage = () => {
   );
 };
 
-export default Energy;
+export default Spying;

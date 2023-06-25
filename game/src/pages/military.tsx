@@ -6,10 +6,16 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import Military from "@/components/features/Military/Military";
-import UnitsTable from "@/components/Index/UnitsTable";
+import UnitsTable from "@/components/ui/tables/UnitsTable";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-import FleetStatus from "@/components/Index/FleetStatus";
+import FleetTable from "@/components/ui/tables/FleetTable";
 
+/**
+ * Renders the Military page component which displays the military information of a user's PA account.
+ * Also allows the player to send troops to attack or defend
+ *
+ * @return {JSX.Element} The MilitaryPage component.
+ */
 const MilitaryPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
@@ -19,9 +25,11 @@ const MilitaryPage: NextPage = () => {
     nick: user.username,
   });
 
+  if (!paPlayer) return null;
+
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             {paPlayer ? (
@@ -31,7 +39,7 @@ const MilitaryPage: NextPage = () => {
                 <LoadingSpinner />
               </div>
             )}
-            {paPlayer && <FleetStatus paPlayer={paPlayer} />}
+            {paPlayer && <FleetTable paPlayer={paPlayer} />}
             {paPlayer && <Military paPlayer={paPlayer} />}
           </div>
         </div>

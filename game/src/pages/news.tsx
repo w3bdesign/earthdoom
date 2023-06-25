@@ -9,7 +9,7 @@ import { api } from "@/utils/api";
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import NewsTable from "@/components/features/News/NewsTable";
-import { Button, ToastComponent } from "@/components/ui/common";
+import { Button, ToastComponent } from "@/components/ui";
 import { CombatReport } from "@/components/features/News";
 import { isJSON } from "@/utils/functions";
 
@@ -41,6 +41,14 @@ interface CombatReport {
   time: string;
 }
 
+/**
+ * Renders news based on isLoading, paNews, and isDeletingAll.
+ *
+ * @param {boolean} isLoading - a flag to indicate whether the news is currently being loaded or not
+ * @param {IRenderContentProps} paNews - the news to be rendered
+ * @param {boolean} isDeletingAll - a flag to indicate whether all news is currently being deleted or not
+ * @return {JSX.Element} the rendered news based on the provided flags and news data
+ */
 const renderNews = (
   isLoading: boolean,
   paNews: IRenderContentProps,
@@ -68,6 +76,11 @@ const renderNews = (
   );
 };
 
+/**
+ * Renders the News component that displays news and combat reports.
+ *
+ * @return {JSX.Element} The News component.
+ */
 const News: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
@@ -75,6 +88,10 @@ const News: NextPage = () => {
   if (!isSignedIn || !user.username) return null;
 
   const { data: paNews, isLoading } = api.paNews.getAllNewsByUserId.useQuery({
+    nick: user.username,
+  });
+
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
   });
 
@@ -91,6 +108,7 @@ const News: NextPage = () => {
     });
 
   if (!paNews) return null;
+  if (!paPlayer) return null;
 
   const combatReports = paNews.news.map((report) => {
     const date = new Date(report.time * 1000);
@@ -117,7 +135,7 @@ const News: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden md:w-[44.563rem]">
             <div className="container mt-6 flex justify-end">

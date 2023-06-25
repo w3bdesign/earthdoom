@@ -1,25 +1,18 @@
-import { type FC } from "react";
+import type { FC } from "react";
 
-import { DataTable } from "@/components/ui/common";
-
-interface PaPlayer {
-  id: number;
-  metal: number;
-  crystal: number;
-  energy: number;
-  civilians: number;
-  asteroid_crystal: number;
-  asteroid_metal: number;
-  score: number;
-  rank: number;
-  nick: string;
-  [key: string]: string | number;
-}
+import { DataTable } from "@/components/ui";
+import { PaUsers } from "@prisma/client";
 
 interface OverviewTableProps {
-  paPlayer: PaPlayer;
+  paPlayer: PaUsers;
 }
 
+/**
+ * Renders an overview table for a given player.
+ *
+ * @param {OverviewTableProps} paPlayer - The player to render the table for.
+ * @return {JSX.Element} The rendered overview table.
+ */
 const OverviewTable: FC<OverviewTableProps> = ({ paPlayer }) => {
   const columns = [
     { label: "Crystal", accessor: "crystal" },

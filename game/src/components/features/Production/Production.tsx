@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/nextjs";
 import { useRef } from "react";
 
-import { Button, ToastComponent } from "@/components/ui/common";
+import { Button, ToastComponent } from "@/components/ui";
 
 import type { FC } from "react";
 import type { IProduction } from "./types/types";

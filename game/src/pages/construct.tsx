@@ -5,13 +5,14 @@ import { type NextPage } from "next";
 import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
-import {
-  Button,
-  AdvancedDataTable,
-  ToastComponent,
-} from "@/components/ui/common";
+import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
 
+/**
+ * A page component that displays a table of buildings a user can construct.
+ *
+ * @return {JSX.Element} The constructed page component.
+ */
 const Construction: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
@@ -33,8 +34,6 @@ const Construction: NextPage = () => {
     },
   });
 
-  if (!paPlayer) return null;
-
   const columns = [
     { label: "Name", accessor: "buildingName" },
     { label: "Description", accessor: "buildingDescription" },
@@ -45,11 +44,13 @@ const Construction: NextPage = () => {
 
   const caption = "Construction";
 
+  if (!paPlayer) return null;
+
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
             <div className="relative sm:mx-auto">
               {paPlayer && (
                 <AdvancedDataTable

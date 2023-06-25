@@ -1,24 +1,21 @@
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
+import type { PaUsers } from "@prisma/client";
+
 import { api } from "@/utils/api";
 
 import OverviewTable from "./OverviewTable";
 import LoadingSpinner from "../Loader/LoadingSpinner";
 
-const Information = () => {
-  // TODO See if we can get the user from the session instead of making a request
-  // TODO Maybe we can use the user from the session to get the paPlayer data
+interface InformationProps {
+  paPlayer?: PaUsers;
+}
 
+const Information: React.FC<InformationProps> = ({ paPlayer }) => {
   const { user } = useUser();
 
   if (!user || !user.username) return null;
-
-  const { data: paPlayer } = api.paUsers.getResourceOverview.useQuery({
-    nick: user.username,
-  });
-
-  if (!paPlayer) return null;
 
   const { data: hostilesData, isLoading } = api.paUsers.getHostiles.useQuery({
     nick: user.username,
@@ -28,9 +25,11 @@ const Information = () => {
     nick: user.username,
   });
 
-  const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
+  const { data: paUnseenMail } = api.paMail.getUnseenMailByUserId.useQuery({
     nick: user.username,
   });
+
+  const castedPlayer = paPlayer as PaUsers;
 
   return (
     <>
@@ -63,7 +62,7 @@ const Information = () => {
               ))}
             </div>
           )}
-          {paMail?.email?.length && paMail?.email?.length > 0 ? (
+          {paUnseenMail?.email?.length && paUnseenMail?.email?.length > 0 ? (
             <div
               className="mb-4 min-w-[27.125rem] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800 md:min-w-[30.375rem]"
               role="alert"
@@ -75,7 +74,7 @@ const Information = () => {
           ) : (
             ""
           )}
-          {paPlayer && <OverviewTable paPlayer={paPlayer} />}
+          {paPlayer && <OverviewTable paPlayer={castedPlayer} />}
         </div>
       </div>
     </>
