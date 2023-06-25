@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
-import type { PaUsers } from "@prisma/client";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { api } from "@/utils/api";
 
@@ -9,13 +9,15 @@ import OverviewTable from "./OverviewTable";
 import LoadingSpinner from "../Loader/LoadingSpinner";
 
 interface InformationProps {
-  paPlayer?: PaUsers;
+  paPlayer?: PaPlayer;
 }
 
 const Information: React.FC<InformationProps> = ({ paPlayer }) => {
   const { user } = useUser();
 
-  if (!user || !user.username) return null;
+  if (!user || !user.username || !paPlayer) {
+    return null;
+  }
 
   const { data: hostilesData, isLoading } = api.paUsers.getHostiles.useQuery({
     nick: user.username,
@@ -28,8 +30,6 @@ const Information: React.FC<InformationProps> = ({ paPlayer }) => {
   const { data: paUnseenMail } = api.paMail.getUnseenMailByUserId.useQuery({
     nick: user.username,
   });
-
-  const castedPlayer = paPlayer as PaUsers;
 
   return (
     <>
@@ -74,7 +74,7 @@ const Information: React.FC<InformationProps> = ({ paPlayer }) => {
           ) : (
             ""
           )}
-          {paPlayer && <OverviewTable paPlayer={castedPlayer} />}
+          {paPlayer && <OverviewTable paPlayer={paPlayer} />}
         </div>
       </div>
     </>

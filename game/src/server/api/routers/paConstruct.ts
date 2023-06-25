@@ -9,7 +9,6 @@ export const paConstructRouter = createTRPCRouter({
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingETA: z.number() }))
-
     .mutation(async ({ ctx, input }) => {
       const {
         buildingFieldName,
@@ -18,18 +17,37 @@ export const paConstructRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
-      const data = await ctx.prisma.paUsers.update({
+      // Fetch the associated PaConstruct for the user
+      const paConstruct = await ctx.prisma.paUsers
+        .findUnique({ where: { id: input.Userid } })
+        .construction();
+
+      if (!paConstruct) {
+        throw new Error(
+          `No PaConstruct found for user with ID: ${input.Userid}`
+        );
+      }
+
+      // Update the PaConstruct
+      await ctx.prisma.paConstruct.update({
+        where: {
+          id: paConstruct.id,
+        },
+        data: {
+          [buildingFieldName]: { set: buildingETA },
+        },
+      });
+
+      // Update the PaUsers
+      return await ctx.prisma.paUsers.update({
         where: {
           id: input.Userid,
         },
         data: {
-          [buildingFieldName]: buildingETA,
           crystal: { decrement: buildingCostCrystal },
           metal: { decrement: buildingCostTitanium },
         },
       });
-
-      return data;
     }),
 
   developLand: privateProcedure
@@ -44,9 +62,9 @@ export const paConstructRouter = createTRPCRouter({
       const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
         input;
 
-      const unitAmountDefault = unitAmount ? unitAmount : 0;
+      const unitAmountDefault = unitAmount || 0;
 
-      const data = await ctx.prisma.paUsers.update({
+      return await ctx.prisma.paUsers.update({
         where: {
           id: Userid,
         },
@@ -59,7 +77,5 @@ export const paConstructRouter = createTRPCRouter({
           ui_roids: { decrement: unitAmount },
         },
       });
-
-      return data;
     }),
 });
