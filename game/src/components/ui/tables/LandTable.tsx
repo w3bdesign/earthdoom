@@ -1,13 +1,10 @@
-import { type FC } from "react";
+import type { FC } from "react";
+import type { PaPlayer } from "@/components/features/Production/Production";
 
 import { DataTable } from "@/components/ui";
 
 interface LandTableProps {
-  paPlayer: {
-    asteroid_metal: number;
-    asteroid_crystal: number;
-    ui_roids: number;
-  };
+  paPlayer: PaPlayer;
 }
 
 const LandTable: FC<LandTableProps> = ({ paPlayer }) => {

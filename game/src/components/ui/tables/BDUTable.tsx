@@ -1,13 +1,11 @@
+import type { PaPlayer } from "@/components/features/Production/Production";
+
 import { DataTable } from "@/components/ui";
 
 import { type FC } from "react";
 
 interface BDUTableProps {
-  paPlayer: {
-    rcannons: number;
-    avengers: number;
-    lstalkers: number;
-  };
+  paPlayer: PaPlayer;
 }
 
 const BDUTable: FC<BDUTableProps> = ({ paPlayer }) => {
