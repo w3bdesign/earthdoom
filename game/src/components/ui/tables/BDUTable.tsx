@@ -1,10 +1,13 @@
 import { DataTable } from "@/components/ui";
 
-import type { PaUsers } from "@prisma/client";
-import type { FC } from "react";
+import { type FC } from "react";
 
 interface BDUTableProps {
-  paPlayer: PaUsers;
+  paPlayer: {
+    rcannons: number;
+    avengers: number;
+    lstalkers: number;
+  };
 }
 
 const BDUTable: FC<BDUTableProps> = ({ paPlayer }) => {
