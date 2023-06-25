@@ -17,7 +17,9 @@ const Construction: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return null;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,

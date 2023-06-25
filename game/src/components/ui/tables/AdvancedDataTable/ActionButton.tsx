@@ -30,7 +30,9 @@ const ActionButton: FC<IActionButtonProps> = ({
   actionInProgress = "Constructing ...",
   inputAmountRef,
 }) => {
-  if (!paPlayer[0] || !building) return null;
+  if (!paPlayer[0] || !building) {
+    return null;
+  }
 
   const shouldNotCheckFieldName =
     building.needsFieldName === 0 || building.needsFieldName === "undefined";
