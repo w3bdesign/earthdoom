@@ -19,7 +19,9 @@ import FleetTable from "@/components/ui/tables/FleetTable";
 const MilitaryPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return null;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,

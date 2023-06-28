@@ -85,7 +85,9 @@ const News: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return null;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paNews, isLoading } = api.paNews.getAllNewsByUserId.useQuery({
     nick: user.username,

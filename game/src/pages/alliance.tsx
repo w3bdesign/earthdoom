@@ -16,7 +16,9 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 const AlliancePage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return null;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
