@@ -1,10 +1,10 @@
-import { type FC } from "react";
-import type { PaUsers } from "@prisma/client";
+import type { FC } from "react";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { DataTable } from "@/components/ui";
 
 interface LandTableProps {
-  paPlayer: PaUsers;
+  paPlayer: PaPlayer;
 }
 
 const LandTable: FC<LandTableProps> = ({ paPlayer }) => {

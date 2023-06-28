@@ -2,7 +2,7 @@ import { useUser } from "@clerk/nextjs";
 import Script from "next/script";
 
 import type { NextPage } from "next";
-import type { PaPlayer } from "@/components/features/Production/Production";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { Layout } from "@/components/common/Layout";
 import Production from "@/components/features/Production/Production";
@@ -23,7 +23,9 @@ import { api } from "@/utils/api";
 const ProductionPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return null;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,

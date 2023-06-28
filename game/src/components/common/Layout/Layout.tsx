@@ -2,7 +2,7 @@ import Head from "next/head";
 import { SignedIn } from "@clerk/nextjs";
 
 import type { ReactNode } from "react";
-import type { PaPlayer } from "@/components/features/Production/Production";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import Navbar from "@/components/common/Header/Navbar";
 import Information from "@/components/common/Header/Information";

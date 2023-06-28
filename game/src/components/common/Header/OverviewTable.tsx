@@ -1,10 +1,10 @@
 import type { FC } from "react";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { DataTable } from "@/components/ui";
-import { PaUsers } from "@prisma/client";
 
 interface OverviewTableProps {
-  paPlayer: PaUsers;
+  paPlayer: PaPlayer;
 }
 
 /**

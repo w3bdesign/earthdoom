@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { PaPlayer } from "../../features/Production/Production";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { DataTable } from "@/components/ui";
 

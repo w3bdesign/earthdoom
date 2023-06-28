@@ -17,37 +17,37 @@ export const paConstructRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
-      const user = await ctx.prisma.paUsers.findUnique({
-        where: { id: input.Userid },
-        include: { construction: true },
-      });
+      // Fetch the associated PaConstruct for the user
+      const paConstruct = await ctx.prisma.paUsers
+        .findUnique({ where: { id: input.Userid } })
+        .construction();
 
-      if (!user) {
-        throw new Error("User not found");
+      if (!paConstruct) {
+        throw new Error(
+          `No PaConstruct found for user with ID: ${input.Userid}`
+        );
       }
 
-      const construct = user.construction;
-
-      if (!construct) {
-        throw new Error("Construction not found");
-      }
-
+      // Update the PaConstruct
       await ctx.prisma.paConstruct.update({
-        where: { id: construct.id },
+        where: {
+          id: paConstruct.id,
+        },
         data: {
-          [buildingFieldName]: buildingETA,
+          [buildingFieldName]: { set: buildingETA },
         },
       });
 
-      const updatedUser = await ctx.prisma.paUsers.update({
-        where: { id: input.Userid },
+      // Update the PaUsers
+      return await ctx.prisma.paUsers.update({
+        where: {
+          id: input.Userid,
+        },
         data: {
           crystal: { decrement: buildingCostCrystal },
           metal: { decrement: buildingCostTitanium },
         },
       });
-
-      return updatedUser;
     }),
 
   developLand: privateProcedure
@@ -62,9 +62,9 @@ export const paConstructRouter = createTRPCRouter({
       const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
         input;
 
-      const unitAmountDefault = unitAmount ? unitAmount : 0;
+      const unitAmountDefault = unitAmount || 0;
 
-      const data = await ctx.prisma.paUsers.update({
+      return await ctx.prisma.paUsers.update({
         where: {
           id: Userid,
         },
@@ -77,7 +77,5 @@ export const paConstructRouter = createTRPCRouter({
           ui_roids: { decrement: unitAmount },
         },
       });
-
-      return data;
     }),
 });
