@@ -29,13 +29,15 @@ const RankingPage: NextPage = () => {
   const columns = [
     { label: "Nick", accessor: "nick" },
     { label: "Score", accessor: "score" },
+    { label: "Size", accessor: "size" },
     { label: "Rank", accessor: "rank" },
   ];
 
   const caption = `Player ranking`;
 
-  if (!paRanking) return null;
-  if (!paPlayer) return null;
+  if (!paRanking || !paPlayer) {
+    return null;
+  }
 
   return (
     <>
