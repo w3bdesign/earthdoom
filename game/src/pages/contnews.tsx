@@ -15,7 +15,9 @@ import { RenderIncoming } from "@/components/ui";
 const ContNews: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return null;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,

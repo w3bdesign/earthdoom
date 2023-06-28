@@ -16,7 +16,9 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 const RankingPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return null;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paRanking, isLoading } = api.paUsers.getAll.useQuery();
 
