@@ -97,7 +97,6 @@ const ActionButton: FC<IActionButtonProps> = ({
           !shouldNotCheckFieldName &&
           Number(paPlayer[0][building?.buildingFieldName]) >= 2 &&
           `${Number(paPlayer[0][building?.buildingFieldName])} ticks left`}
-
         {paPlayer[0] &&
           building &&
           !shouldNotCheckFieldName &&
