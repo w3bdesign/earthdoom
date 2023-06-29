@@ -34,7 +34,7 @@ const ProductionPage: NextPage = () => {
   const renderBarracksMessage = (paPlayer: PaPlayer) => {
     if (
       paPlayer &&
-      (paPlayer.c_airport === 0 || Number(paPlayer.c_airport) > 1)
+      (Number(paPlayer.c_airport) === 0 || Number(paPlayer.c_airport) > 1)
     ) {
       return (
         <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[44.563rem]">
