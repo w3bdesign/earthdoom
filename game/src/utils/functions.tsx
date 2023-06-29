@@ -1,22 +1,38 @@
 import type { PaPlayer } from "@/components/features/Military/Military";
+import { IProduction } from "@/components/features/Production/types/types";
 import type { PaUsers } from "@prisma/client";
 
 interface IStringifierProps {
   value?: unknown;
 }
 
-interface IProduction {
-  buildingId: number;
-  buildingName: string;
-  buildingDescription: string;
-  buildingFieldName: string;
-  buildingFieldNameETA?: string | number;
-  buildingETA: number;
-  buildingConstruct?: JSX.Element;
-  buildingCost: string;
-  buildingCostCrystal: number;
-  buildingCostTitanium: number;
+interface IRenderMessageProps {
+  title: string;
+  message: string;
 }
+
+/**
+ * Renders a message component with a title and a message.
+ *
+ * @param {IRenderMessageProps} props - The properties of the message component.
+ * @param {string} props.title - The title of the message.
+ * @param {string} props.message - The content of the message.
+ * @return {JSX.Element} The rendered message component.
+ */
+export const renderMessage = ({ title, message }: IRenderMessageProps) => {
+  return (
+    <>
+      <h1 className="mt-6 text-center text-2xl font-bold text-white">
+        {title}
+      </h1>
+      <div className="mb-4 mt-6 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
+        <h2 className="text-md p-2 text-center text-black md:text-lg">
+          {message}
+        </h2>
+      </div>
+    </>
+  );
+};
 
 /**
  * Determines if a string is valid JSON or not.
