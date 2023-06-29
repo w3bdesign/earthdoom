@@ -51,22 +51,22 @@ const Mail: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <h2 className="py-4 text-center text-2xl font-bold text-white">
               Mail
             </h2>
-            <div className="mt-6 flex justify-end py-4">
-              {paPlayer && hasUnseenEmail && (
+            {paPlayer && hasUnseenEmail && (
+              <div className="mt-6 flex justify-end py-4">
                 <Button
                   extraClasses="w-64"
                   onClick={() => markAsSeen({ sentTo: paPlayer.id })}
                 >
                   Mark all as seen
                 </Button>
-              )}
-            </div>
+              </div>
+            )}
             <div className="mt-2 flex flex-col bg-white text-black">
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full sm:px-6 lg:px-8">
