@@ -38,11 +38,16 @@ const ProductionPage: NextPage = () => {
       (Number(paPlayer.c_airport) === 0 || Number(paPlayer.c_airport) > 1)
     ) {
       return (
-        <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[44.563rem]">
-          <h2 className="p-2 text-center text-xl font-bold text-black">
-            You need to construct barracks before you can produce units
-          </h2>
-        </div>
+        <>
+          <h1 className="text-center text-2xl font-bold text-white mt-6 ">
+            Production
+          </h1>
+          <div className="mb-4 mt-6 rounded bg-white px-8 py-5 shadow-md md:w-[44.563rem]">
+            <h2 className="text-md p-2 text-center text-black  md:text-lg">
+              You need to construct barracks before you can produce units
+            </h2>
+          </div>
+        </>
       );
     }
     return null;
