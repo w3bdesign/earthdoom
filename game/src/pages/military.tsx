@@ -43,8 +43,12 @@ const MilitaryPage: NextPage = () => {
                 <LoadingSpinner />
               </div>
             )}
-            {paPlayer && <FleetTable paPlayer={paPlayer} />}
-            {paPlayer && <Military paPlayer={paPlayer} />}
+            {paPlayer && (
+              <>
+                <FleetTable paPlayer={paPlayer} />
+                <Military paPlayer={paPlayer} />
+              </>
+            )}
           </div>
         </div>
       </Layout>
