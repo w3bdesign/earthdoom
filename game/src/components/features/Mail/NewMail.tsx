@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { api } from "@/utils/api";
 
-import type { FC, ChangeEvent } from "react";
+import type { FC, ChangeEvent, FormEvent } from "react";
 import type { PaUsers } from "@prisma/client";
 
 import { Button, ToastComponent } from "@/components/ui";
@@ -24,6 +24,7 @@ const NewMail: FC<IMilitaryProps> = ({ paPlayer }) => {
   const [mailTarget, setMailTarget] = useState("");
   const [mailContent, setMailContent] = useState("");
   const [mailHeader, setMailHeader] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { mutate: sendMail, isLoading } = api.paMail.sendMail.useMutation({
     onSuccess: async () => {
@@ -48,55 +49,62 @@ const NewMail: FC<IMilitaryProps> = ({ paPlayer }) => {
     setMailHeader(event.target.value);
   };
 
+  const handleMailSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    formRef.current?.reset();
+
+    sendMail({
+      nick: mailTarget,
+      news: mailContent,
+      header: mailHeader,
+    });
+  };
+
   return (
     <div className="flex flex-col items-center justify-center py-4">
       <div className="w-full">
-        <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
-          <h2 className="py-4 text-center text-xl font-bold">Mail</h2>
-          <div className="flex flex-col items-center justify-center">
-            <span className="text-md py-4">Nick:</span>
-            <input
-              type="text"
-              name="attack"
-              onChange={handleInputMailTargetChange}
-              className="w-64 rounded-md border border-gray-300 px-3 py-2"
-              required
-            />
-            <span className="text-md py-4">Title:</span>
-            <input
-              type="text"
-              name="attack"
-              onChange={handleInputMailHeaderChange}
-              className="w-64 rounded-md border border-gray-300 px-3 py-2"
-              required
-            />
-
-            <span className="text-md py-4">Content:</span>
-            <textarea
-              name="attack"
-              onChange={handleInputMailContentChange}
-              className="w-64 rounded-md border border-gray-300 px-3 py-2"
-              required
-            />
-            <Button
-              disabled={isLoading}
-              onClick={(event) => {
-                event.preventDefault();
-
-                console.log("mailTarget", mailTarget);
-
-                sendMail({
-                  nick: mailTarget,
-                  news: mailContent,
-                  header: mailHeader,
-                });
-              }}
-              extraClasses="w-32 mt-4"
-            >
-              Send
-            </Button>
+        <form ref={formRef} onSubmit={handleMailSubmit}>
+          <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
+            <h2 className="py-4 text-center text-xl font-bold">Mail</h2>
+            <div className="flex flex-col items-center justify-center">
+              <label className="text-md py-4" htmlFor="nick">
+                Nick:
+              </label>
+              <input
+                type="text"
+                id="nick"
+                name="attack"
+                onChange={handleInputMailTargetChange}
+                className="w-64 rounded-md border border-gray-300 px-3 py-2"
+                required
+              />
+              <label className="text-md py-4" htmlFor="title">
+                Title:
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="attack"
+                onChange={handleInputMailHeaderChange}
+                className="w-64 rounded-md border border-gray-300 px-3 py-2"
+                required
+              />
+              <label className="text-md py-4" htmlFor="content">
+                Content:
+              </label>
+              <textarea
+                id="content"
+                name="attack"
+                onChange={handleInputMailContentChange}
+                className="w-64 rounded-md border border-gray-300 px-3 py-2"
+                required
+              />
+              <Button disabled={isLoading} extraClasses="w-32 mt-4">
+                Send
+              </Button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
