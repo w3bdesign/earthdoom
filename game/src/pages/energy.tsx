@@ -1,8 +1,10 @@
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { api } from "@/utils/api";
+import { renderMessage } from "@/utils/functions";
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
@@ -58,6 +60,16 @@ const Energy: NextPage = () => {
     );
   }
 
+  const renderEnergyMessage = (paPlayer: PaPlayer) => {
+    if (paPlayer && (paPlayer.r_energy === 0 || paPlayer.r_energy > 1)) {
+      return renderMessage({
+        title: "Energy",
+        message: "You need to research power plants before you can build them",
+      });
+    }
+    return null;
+  };
+
   return (
     <>
       <Layout paPlayer={paPlayer}>
@@ -67,19 +79,7 @@ const Energy: NextPage = () => {
               paPlayer.r_energy === 1 ? "md:w-[63rem]" : ""
             }`}
           >
-            {!isLoaded && <LoadingSpinner />}
-            {(paPlayer.r_energy === 0 || paPlayer.r_energy > 1) && (
-              <>
-                <h1 className="mt-6 text-center text-2xl font-bold text-white ">
-                  Energy
-                </h1>
-                <div className="mb-4 mt-6 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
-                  <h2 className="text-md p-2 text-center text-black  md:text-lg">
-                    You need to research power plants before you can build them
-                  </h2>
-                </div>
-              </>
-            )}
+            {renderEnergyMessage(paPlayer)}
             {paPlayer && paPlayer.r_energy === 1 && (
               <AdvancedDataTable
                 isLoading={isLoading}
