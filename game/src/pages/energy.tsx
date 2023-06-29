@@ -69,11 +69,16 @@ const Energy: NextPage = () => {
           >
             {!isLoaded && <LoadingSpinner />}
             {(paPlayer.r_energy === 0 || paPlayer.r_energy > 1) && (
-              <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
-                <h2 className="p-2 text-center text-xl font-bold text-black">
-                  You need to research power plants before you can build them
-                </h2>
-              </div>
+              <>
+                <h1 className="mt-6 text-center text-2xl font-bold text-white ">
+                  Energy
+                </h1>
+                <div className="mb-4 mt-6 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
+                  <h2 className="text-md p-2 text-center text-black  md:text-lg">
+                    You need to research power plants before you can build them
+                  </h2>
+                </div>
+              </>
             )}
             {paPlayer && paPlayer.r_energy === 1 && (
               <AdvancedDataTable

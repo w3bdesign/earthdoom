@@ -43,7 +43,7 @@ const ProductionPage: NextPage = () => {
             Production
           </h1>
           <div className="mb-4 mt-6 rounded bg-white px-8 py-5 shadow-md md:w-[44.563rem]">
-            <h2 className="text-md p-2 text-center text-black  md:text-lg">
+            <h2 className="text-md p-2 text-center text-black md:text-lg">
               You need to construct barracks before you can produce units
             </h2>
           </div>
