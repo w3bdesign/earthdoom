@@ -52,7 +52,9 @@ const Spying: NextPage = () => {
 
   const caption = "Spying";
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>

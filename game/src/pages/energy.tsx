@@ -46,7 +46,9 @@ const Energy: NextPage = () => {
 
   const caption = "Energy";
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>

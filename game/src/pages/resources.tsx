@@ -62,7 +62,9 @@ const Resources: NextPage = () => {
 
   const hasNoUndevelopedLand = paPlayer?.ui_roids === 0;
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>

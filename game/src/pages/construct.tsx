@@ -46,7 +46,9 @@ const Construction: NextPage = () => {
 
   const caption = "Construction";
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>

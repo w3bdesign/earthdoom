@@ -27,7 +27,9 @@ const MilitaryPage: NextPage = () => {
     nick: user.username,
   });
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>

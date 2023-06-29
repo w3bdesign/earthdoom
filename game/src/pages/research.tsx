@@ -56,7 +56,9 @@ const ResearchPage: NextPage = () => {
 
   const caption = "Research";
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>

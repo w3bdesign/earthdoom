@@ -29,7 +29,9 @@ const ContNews: NextPage = () => {
     }
   );
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>

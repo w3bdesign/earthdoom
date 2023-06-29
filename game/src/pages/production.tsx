@@ -47,7 +47,9 @@ const ProductionPage: NextPage = () => {
     return null;
   };
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>
