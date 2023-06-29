@@ -4,6 +4,7 @@ import type { FC } from "react";
 import type { PaMail } from "@prisma/client";
 
 import { api } from "@/utils/api";
+import { format } from "date-fns";
 
 interface IMailTableProps {
   mail: PaMail[];
@@ -40,6 +41,12 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
                 scope="col"
                 className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
               >
+                Sent
+              </th>
+              <th
+                scope="col"
+                className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
+              >
                 Title
               </th>
               <th
@@ -48,12 +55,7 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
               >
                 Content
               </th>
-              <th
-                scope="col"
-                className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-              >
-                Reply
-              </th>
+
               <th
                 scope="col"
                 className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
@@ -66,20 +68,15 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
             {mail.map((mail) => (
               <tr key={mail.id} className="border-b dark:border-neutral-500">
                 <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
+                  {format(new Date(mail.time * 1000), "dd/MM-yyyy HH:mm:ss")}
+                </td>
+                <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                   {mail.header}
                 </td>
                 <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                   {mail.news}
                 </td>
-                <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                  <Button
-                    onClick={() => {
-                      alert("Reply");
-                    }}
-                  >
-                    Reply
-                  </Button>
-                </td>
+
                 <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
                   <Button
                     disabled={isDeletingMail}

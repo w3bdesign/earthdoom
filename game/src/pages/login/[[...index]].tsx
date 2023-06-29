@@ -1,6 +1,6 @@
 import { SignIn, SignedOut } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
 
