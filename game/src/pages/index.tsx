@@ -16,13 +16,23 @@ import { useUser } from "@clerk/nextjs";
 const Home = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return <LoadingSpinner />;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
   });
 
-  if (!paPlayer) return <LoadingSpinner />;
+  if (!paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout paPlayer={paPlayer}>

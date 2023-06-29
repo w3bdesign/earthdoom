@@ -23,7 +23,9 @@ const Mail: NextPage = () => {
 
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return <LoadingSpinner />;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paMail } = api.paMail.getAllMailByNick.useQuery({
     nick: user.username,
@@ -44,11 +46,16 @@ const Mail: NextPage = () => {
     },
   });
 
-  if (!paMail || !paPlayer) return <LoadingSpinner />;
+  if (!paMail || !paPlayer)
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
 
   hasUnseenEmail = paMail.mail.find((mail) => mail.seen === 0) !== undefined;
-
-  console.log("hasUnseenEmail", hasUnseenEmail);
 
   return (
     <>

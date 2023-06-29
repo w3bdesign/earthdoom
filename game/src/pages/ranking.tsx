@@ -35,8 +35,14 @@ const RankingPage: NextPage = () => {
 
   const caption = `Player ranking`;
 
-  if (!paRanking || !paPlayer) {
-    return null;
+  if (!paPlayer || !paRanking) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
   }
 
   return (

@@ -26,7 +26,15 @@ const AlliancePage: NextPage = () => {
 
   const { data: paTag, isLoading } = api.paTag.getAll.useQuery();
 
-  if (!paPlayer) return <LoadingSpinner />;
+  if (!paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <>

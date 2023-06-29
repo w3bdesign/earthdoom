@@ -28,9 +28,14 @@ const MilitaryPage: NextPage = () => {
   });
 
   if (!paPlayer) {
-    return null;
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
   }
-
   return (
     <>
       <Layout paPlayer={paPlayer}>
@@ -39,7 +44,7 @@ const MilitaryPage: NextPage = () => {
             {paPlayer ? (
               <UnitsTable paPlayer={paPlayer} />
             ) : (
-              <div className="py-6">
+              <div className="mt-12">
                 <LoadingSpinner />
               </div>
             )}

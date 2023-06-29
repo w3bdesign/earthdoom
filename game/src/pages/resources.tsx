@@ -63,9 +63,14 @@ const Resources: NextPage = () => {
   const hasNoUndevelopedLand = paPlayer?.ui_roids === 0;
 
   if (!paPlayer) {
-    return null;
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
   }
-
   return (
     <>
       <Layout paPlayer={paPlayer}>

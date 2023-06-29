@@ -62,7 +62,8 @@ const renderNews = (
     );
   }
 
-  const hasNews = paNews?.news?.length ?? 0 > 0;
+  const hasNews = (paNews?.news?.length || 0) > 0;
+
   if (hasNews) {
     return (
       <NewsTable isDeletingAll={isDeletingAll} news={paNews?.news ?? []} />
@@ -109,9 +110,14 @@ const News: NextPage = () => {
       },
     });
 
-  if (!paNews) return null;
-  if (!paPlayer) {
-    return null;
+  if (!paNews || !paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
   }
 
   const combatReports = paNews.news.map((report) => {
