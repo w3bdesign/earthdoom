@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
@@ -18,6 +17,7 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
  * @return {JSX.Element} The JSX element for the Mail component.
  */
 const Mail: NextPage = () => {
+  const ctx = api.useContext();
   let hasUnseenEmail = false;
 
   const { user, isSignedIn } = useUser();
@@ -33,8 +33,9 @@ const Mail: NextPage = () => {
   });
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
-    onSuccess: () => {
-      //TODO Invalidate and refetch
+    onSuccess: async () => {
+      await ctx.paMail.getAllMailByNick.invalidate();
+      await ctx.paMail.getAllMailByNick.refetch();
       ToastComponent({ message: "Mail marked as seen", type: "success" });
     },
     onError: () => {
