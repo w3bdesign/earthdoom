@@ -71,8 +71,6 @@ export const paMailRouter = createTRPCRouter({
         },
       });
 
-      console.log("Mail:", mail);
-
       return { mail };
     }),
 
