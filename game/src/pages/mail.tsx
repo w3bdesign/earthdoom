@@ -8,6 +8,7 @@ import { Layout } from "@/components/common/Layout";
 import MailTable from "@/components/features/Mail/MailTable";
 import { Button, ToastComponent } from "@/components/ui";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import NewMail from "@/components/features/Mail/NewMail";
 
 /**
  * Renders the Mail component and fetches the user's mail data from the server.
@@ -55,7 +56,7 @@ const Mail: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <h2 className="mt-4 py-4 text-center text-2xl font-bold text-white">
-              Mail
+              Received Mail
             </h2>
             {paPlayer && hasUnseenEmail && (
               <div className="mt-6 flex justify-end py-4">
@@ -75,6 +76,12 @@ const Mail: NextPage = () => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div>
+              <h2 className="mt-6 py-4 text-center text-2xl font-bold text-white">
+                Send New Mail
+              </h2>
+              {paPlayer && <NewMail paPlayer={paPlayer} />}
             </div>
           </div>
         </div>
