@@ -54,7 +54,7 @@ const Mail: NextPage = () => {
       <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <h2 className="py-4 text-center text-2xl font-bold text-white">
+            <h2 className="mt-4 py-4 text-center text-2xl font-bold text-white">
               Mail
             </h2>
             {paPlayer && hasUnseenEmail && (
