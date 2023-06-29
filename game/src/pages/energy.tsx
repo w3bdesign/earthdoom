@@ -18,7 +18,9 @@ const Energy: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
-  if (!isSignedIn || !user.username) return <LoadingSpinner />;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
@@ -46,8 +48,14 @@ const Energy: NextPage = () => {
 
   const caption = "Energy";
 
-  if (!paPlayer) {
-    return null;
+  if (!paPlayer || !isSignedIn || !user.username) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
   }
 
   return (

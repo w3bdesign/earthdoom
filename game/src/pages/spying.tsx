@@ -53,9 +53,14 @@ const Spying: NextPage = () => {
   const caption = "Spying";
 
   if (!paPlayer) {
-    return null;
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
   }
-
   return (
     <>
       <Layout paPlayer={paPlayer}>

@@ -8,6 +8,7 @@ import { Layout } from "@/components/common/Layout";
 import Production from "@/components/features/Production/Production";
 
 import { api } from "@/utils/api";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 /**
  * Renders the production page if the user is signed in and has a username.
@@ -48,7 +49,13 @@ const ProductionPage: NextPage = () => {
   };
 
   if (!paPlayer) {
-    return null;
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
   }
 
   return (
