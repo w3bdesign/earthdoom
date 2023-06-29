@@ -70,8 +70,7 @@ export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
   // We filter out NaN values because if the player has no resources, the division will result in NaN.
   const filteredMaxValues = maxValues.filter((value) => !isNaN(value));
   // We use Math.min to determine the maximum number of units that can be trained.
-  const maximumAmount = Math.min(...filteredMaxValues);
-  return maximumAmount;
+  return Math.min(...filteredMaxValues);
 };
 
 /**
@@ -112,10 +111,11 @@ export const canAffordToTrain = (
  * @returns {Object} - The income data object containing labels, datasets and their respective data
  */
 export const renderIncomeData = (paPlayer: PaUsers) => {
-  const tax = 20; // Set your tax value here
-  const sats = paPlayer.sats; // Set your sats value here
-  const extraTitanium = 1; // Set your extraTitanium value here
-  const extraCrystal = 1; // Set your extraCrystal value here
+  const { sats } = paPlayer;
+
+  const tax = 20;
+  const extraTitanium = 1;
+  const extraCrystal = 1;
 
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;
@@ -129,7 +129,7 @@ export const renderIncomeData = (paPlayer: PaUsers) => {
     metalroid * 60 + (extraTitanium === 1 ? Math.floor(metalroid * 0.1) : 0);
   const incomeEnergy = sats * 45;
 
-  const data = {
+  return {
     labels: ["Titanium", "Credits", "Energy"],
     datasets: [
       {
@@ -141,8 +141,6 @@ export const renderIncomeData = (paPlayer: PaUsers) => {
       },
     ],
   };
-
-  return data;
 };
 
 /**
