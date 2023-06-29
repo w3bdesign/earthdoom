@@ -156,12 +156,13 @@ model PaTag {
 }
 
 model PaMail {
-    id     Int    @id @default(autoincrement())
-    sentTo Int    @default(0)
-    time   Int    @default(0)
-    news   String
-    seen   Int    @default(0)
-    header String
+    id       Int    @id @default(autoincrement())
+    // sentFrom String
+    sentTo   Int    @default(0)
+    time     Int    @default(0)
+    news     String
+    seen     Int    @default(0)
+    header   String
 
     @@index([sentTo])
 }

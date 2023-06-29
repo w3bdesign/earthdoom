@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import Link from "next/link";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { api } from "@/utils/api";
 
