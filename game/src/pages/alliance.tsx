@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { api } from "@/utils/api";
 
@@ -26,7 +26,15 @@ const AlliancePage: NextPage = () => {
 
   const { data: paTag, isLoading } = api.paTag.getAll.useQuery();
 
-  if (!paPlayer) return <LoadingSpinner />;
+  if (!paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <>

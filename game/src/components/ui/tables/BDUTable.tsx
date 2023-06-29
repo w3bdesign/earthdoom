@@ -1,8 +1,7 @@
 import type { PaPlayer } from "@/components/features/Military/Military";
+import type { FC } from "react";
 
 import { DataTable } from "@/components/ui";
-
-import { type FC } from "react";
 
 interface BDUTableProps {
   paPlayer: PaPlayer;

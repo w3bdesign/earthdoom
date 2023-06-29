@@ -1,12 +1,13 @@
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 /**
  * A page component that displays a table of buildings a user can construct.
@@ -46,7 +47,15 @@ const Construction: NextPage = () => {
 
   const caption = "Construction";
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <>

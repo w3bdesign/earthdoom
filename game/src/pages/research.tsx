@@ -1,12 +1,13 @@
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import { BUILDINGS } from "@/components/features/Research/constants/RESEARCH";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 /**
  * Renders the research page if the user is signed in and has a username. The page
@@ -56,8 +57,15 @@ const ResearchPage: NextPage = () => {
 
   const caption = "Research";
 
-  if (!paPlayer) return null;
-
+  if (!paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
   return (
     <>
       <Layout paPlayer={paPlayer}>

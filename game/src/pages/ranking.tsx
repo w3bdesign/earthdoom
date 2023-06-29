@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { api } from "@/utils/api";
 
@@ -29,20 +29,27 @@ const RankingPage: NextPage = () => {
   const columns = [
     { label: "Nick", accessor: "nick" },
     { label: "Score", accessor: "score" },
+    { label: "Size", accessor: "size" },
     { label: "Rank", accessor: "rank" },
   ];
 
   const caption = `Player ranking`;
 
-  if (!paRanking) return null;
-  if (!paPlayer) return null;
+  if (!paPlayer || !paRanking) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <>
       <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            {isLoading && <LoadingSpinner />}
             {paPlayer && (
               <AdvancedDataTable
                 columns={columns}

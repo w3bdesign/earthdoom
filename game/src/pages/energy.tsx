@@ -1,8 +1,10 @@
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
+import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { api } from "@/utils/api";
+import { renderMessage } from "@/utils/functions";
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
@@ -18,7 +20,9 @@ const Energy: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
-  if (!isSignedIn || !user.username) return <LoadingSpinner />;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
@@ -46,7 +50,25 @@ const Energy: NextPage = () => {
 
   const caption = "Energy";
 
-  if (!paPlayer) return null;
+  if (!paPlayer || !isSignedIn || !user.username) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
+
+  const renderEnergyMessage = (paPlayer: PaPlayer) => {
+    if (paPlayer && (paPlayer.r_energy === 0 || paPlayer.r_energy > 1)) {
+      return renderMessage({
+        title: "Energy",
+        message: "You need to research power plants before you can build them",
+      });
+    }
+    return null;
+  };
 
   return (
     <>
@@ -57,14 +79,7 @@ const Energy: NextPage = () => {
               paPlayer.r_energy === 1 ? "md:w-[63rem]" : ""
             }`}
           >
-            {!isLoaded && <LoadingSpinner />}
-            {(paPlayer.r_energy === 0 || paPlayer.r_energy > 1) && (
-              <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
-                <h2 className="p-2 text-center text-xl font-bold text-black">
-                  You need to research power plants before you can build them
-                </h2>
-              </div>
-            )}
+            {renderEnergyMessage(paPlayer)}
             {paPlayer && paPlayer.r_energy === 1 && (
               <AdvancedDataTable
                 isLoading={isLoading}

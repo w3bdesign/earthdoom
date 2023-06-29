@@ -6,8 +6,10 @@ import type { PaPlayer } from "@/components/features/Military/Military";
 
 import { Layout } from "@/components/common/Layout";
 import Production from "@/components/features/Production/Production";
+import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
+import { renderMessage } from "@/utils/functions";
 
 /**
  * Renders the production page if the user is signed in and has a username.
@@ -34,20 +36,25 @@ const ProductionPage: NextPage = () => {
   const renderBarracksMessage = (paPlayer: PaPlayer) => {
     if (
       paPlayer &&
-      (paPlayer.c_airport === 0 || Number(paPlayer.c_airport) > 1)
+      (Number(paPlayer.c_airport) === 0 || Number(paPlayer.c_airport) > 1)
     ) {
-      return (
-        <div className="mb-4 mt-8 rounded bg-white px-8 py-5 shadow-md md:w-[44.563rem]">
-          <h2 className="p-2 text-center text-xl font-bold text-black">
-            You need to construct barracks before you can produce units
-          </h2>
-        </div>
-      );
+      return renderMessage({
+        title: "Production",
+        message: "You need to construct barracks before you can produce units",
+      });
     }
     return null;
   };
 
-  if (!paPlayer) return null;
+  if (!paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <>

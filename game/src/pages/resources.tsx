@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
@@ -62,8 +62,15 @@ const Resources: NextPage = () => {
 
   const hasNoUndevelopedLand = paPlayer?.ui_roids === 0;
 
-  if (!paPlayer) return null;
-
+  if (!paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
   return (
     <>
       <Layout paPlayer={paPlayer}>

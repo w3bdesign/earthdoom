@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
@@ -9,6 +8,7 @@ import { Layout } from "@/components/common/Layout";
 import MailTable from "@/components/features/Mail/MailTable";
 import { Button, ToastComponent } from "@/components/ui";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import NewMail from "@/components/features/Mail/NewMail";
 
 /**
  * Renders the Mail component and fetches the user's mail data from the server.
@@ -18,11 +18,14 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
  * @return {JSX.Element} The JSX element for the Mail component.
  */
 const Mail: NextPage = () => {
+  const ctx = api.useContext();
   let hasUnseenEmail = false;
 
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) return <LoadingSpinner />;
+  if (!isSignedIn || !user.username) {
+    return null;
+  }
 
   const { data: paMail } = api.paMail.getAllMailByNick.useQuery({
     nick: user.username,
@@ -33,8 +36,9 @@ const Mail: NextPage = () => {
   });
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
-    onSuccess: () => {
-      //TODO Invalidate and refetch
+    onSuccess: async () => {
+      await ctx.paMail.getAllMailByNick.invalidate();
+      await ctx.paMail.getAllMailByNick.refetch();
       ToastComponent({ message: "Mail marked as seen", type: "success" });
     },
     onError: () => {
@@ -42,30 +46,35 @@ const Mail: NextPage = () => {
     },
   });
 
-  if (!paMail || !paPlayer) return <LoadingSpinner />;
+  if (!paMail || !paPlayer)
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
 
   hasUnseenEmail = paMail.mail.find((mail) => mail.seen === 0) !== undefined;
 
-  console.log("hasUnseenEmail", hasUnseenEmail);
-
   return (
     <>
-      <Layout>
+      <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <h2 className="py-4 text-center text-2xl font-bold text-white">
-              Mail
+            <h2 className="mt-4 py-4 text-center text-2xl font-bold text-white">
+              Received Mail
             </h2>
-            <div className="mt-6 flex justify-end py-4">
-              {paPlayer && hasUnseenEmail && (
+            {paPlayer && hasUnseenEmail && (
+              <div className="mt-6 flex justify-end py-4">
                 <Button
                   extraClasses="w-64"
                   onClick={() => markAsSeen({ sentTo: paPlayer.id })}
                 >
                   Mark all as seen
                 </Button>
-              )}
-            </div>
+              </div>
+            )}
             <div className="mt-2 flex flex-col bg-white text-black">
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full sm:px-6 lg:px-8">
@@ -74,6 +83,12 @@ const Mail: NextPage = () => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div>
+              <h2 className="mt-6 py-4 text-center text-2xl font-bold text-white">
+                Send New Mail
+              </h2>
+              {paPlayer && <NewMail paPlayer={paPlayer} />}
             </div>
           </div>
         </div>

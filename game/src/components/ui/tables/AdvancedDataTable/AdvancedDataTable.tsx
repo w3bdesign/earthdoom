@@ -71,7 +71,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   const inputAmountRefs = useMultipleRefs(columns.length);
 
   return (
-    <table className="mt-4 block pl-2 text-left md:pl-0">
+    <table className="mb-8 mt-4 block pl-2 text-left md:pl-0">
       <caption className="py-6 text-center text-2xl font-bold text-white">
         {caption}
       </caption>

@@ -21,7 +21,9 @@ export const paMilitaryRouter = createTRPCRouter({
       });
 
       // TODO Show an error if user is not found
-      if (!user) return;
+      if (!user) {
+        return;
+      }
 
       const data = await ctx.prisma.paUsers.update({
         where: {

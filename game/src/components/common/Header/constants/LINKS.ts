@@ -26,13 +26,11 @@ export const LINKS: ILinks[] = [
     href: "/contnews",
     text: "Continent News",
   },*/
-
-  /*
   {
     id: 4,
     href: "/mail",
     text: "Mail",
-  },*/
+  },
 
   {
     id: 5,

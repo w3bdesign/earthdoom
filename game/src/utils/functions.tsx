@@ -1,22 +1,38 @@
 import type { PaPlayer } from "@/components/features/Military/Military";
+import { IProduction } from "@/components/features/Production/types/types";
 import type { PaUsers } from "@prisma/client";
 
 interface IStringifierProps {
   value?: unknown;
 }
 
-interface IProduction {
-  buildingId: number;
-  buildingName: string;
-  buildingDescription: string;
-  buildingFieldName: string;
-  buildingFieldNameETA?: string | number;
-  buildingETA: number;
-  buildingConstruct?: JSX.Element;
-  buildingCost: string;
-  buildingCostCrystal: number;
-  buildingCostTitanium: number;
+interface IRenderMessageProps {
+  title: string;
+  message: string;
 }
+
+/**
+ * Renders a message component with a title and a message.
+ *
+ * @param {IRenderMessageProps} props - The properties of the message component.
+ * @param {string} props.title - The title of the message.
+ * @param {string} props.message - The content of the message.
+ * @return {JSX.Element} The rendered message component.
+ */
+export const renderMessage = ({ title, message }: IRenderMessageProps) => {
+  return (
+    <>
+      <h1 className="mt-6 text-center text-2xl font-bold text-white">
+        {title}
+      </h1>
+      <div className="mb-4 mt-6 rounded bg-white px-8 py-5 shadow-md md:w-[713px]">
+        <h2 className="text-md p-2 text-center text-black md:text-lg">
+          {message}
+        </h2>
+      </div>
+    </>
+  );
+};
 
 /**
  * Determines if a string is valid JSON or not.
@@ -70,8 +86,7 @@ export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
   // We filter out NaN values because if the player has no resources, the division will result in NaN.
   const filteredMaxValues = maxValues.filter((value) => !isNaN(value));
   // We use Math.min to determine the maximum number of units that can be trained.
-  const maximumAmount = Math.min(...filteredMaxValues);
-  return maximumAmount;
+  return Math.min(...filteredMaxValues);
 };
 
 /**
@@ -112,10 +127,11 @@ export const canAffordToTrain = (
  * @returns {Object} - The income data object containing labels, datasets and their respective data
  */
 export const renderIncomeData = (paPlayer: PaUsers) => {
-  const tax = 20; // Set your tax value here
-  const sats = paPlayer.sats; // Set your sats value here
-  const extraTitanium = 1; // Set your extraTitanium value here
-  const extraCrystal = 1; // Set your extraCrystal value here
+  const { sats } = paPlayer;
+
+  const tax = 20;
+  const extraTitanium = 1;
+  const extraCrystal = 1;
 
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;
@@ -129,7 +145,7 @@ export const renderIncomeData = (paPlayer: PaUsers) => {
     metalroid * 60 + (extraTitanium === 1 ? Math.floor(metalroid * 0.1) : 0);
   const incomeEnergy = sats * 45;
 
-  const data = {
+  return {
     labels: ["Titanium", "Credits", "Energy"],
     datasets: [
       {
@@ -141,8 +157,6 @@ export const renderIncomeData = (paPlayer: PaUsers) => {
       },
     ],
   };
-
-  return data;
 };
 
 /**

@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 import { api } from "@/utils/api";
 
@@ -27,8 +27,15 @@ const MilitaryPage: NextPage = () => {
     nick: user.username,
   });
 
-  if (!paPlayer) return null;
-
+  if (!paPlayer) {
+    return (
+      <Layout>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
   return (
     <>
       <Layout paPlayer={paPlayer}>
@@ -37,12 +44,16 @@ const MilitaryPage: NextPage = () => {
             {paPlayer ? (
               <UnitsTable paPlayer={paPlayer} />
             ) : (
-              <div className="py-6">
+              <div className="mt-12">
                 <LoadingSpinner />
               </div>
             )}
-            {paPlayer && <FleetTable paPlayer={paPlayer} />}
-            {paPlayer && <Military paPlayer={paPlayer} />}
+            {paPlayer && (
+              <>
+                <FleetTable paPlayer={paPlayer} />
+                <Military paPlayer={paPlayer} />
+              </>
+            )}
           </div>
         </div>
       </Layout>
