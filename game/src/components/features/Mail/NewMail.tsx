@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { api } from "@/utils/api";
 
-import type { FC, ChangeEvent } from "react";
+import type { FC, ChangeEvent, FormEvent } from "react";
 import type { PaUsers } from "@prisma/client";
 
 import { Button, ToastComponent } from "@/components/ui";
@@ -24,6 +24,7 @@ const NewMail: FC<IMilitaryProps> = ({ paPlayer }) => {
   const [mailTarget, setMailTarget] = useState("");
   const [mailContent, setMailContent] = useState("");
   const [mailHeader, setMailHeader] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { mutate: sendMail, isLoading } = api.paMail.sendMail.useMutation({
     onSuccess: async () => {
@@ -48,8 +49,9 @@ const NewMail: FC<IMilitaryProps> = ({ paPlayer }) => {
     setMailHeader(event.target.value);
   };
 
-  const handleMailSubmit = (event: { preventDefault: () => void }) => {
+  const handleMailSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    formRef.current?.reset();
 
     sendMail({
       nick: mailTarget,
@@ -61,7 +63,7 @@ const NewMail: FC<IMilitaryProps> = ({ paPlayer }) => {
   return (
     <div className="flex flex-col items-center justify-center py-4">
       <div className="w-full">
-        <form onSubmit={handleMailSubmit}>
+        <form ref={formRef} onSubmit={handleMailSubmit}>
           <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
             <h2 className="py-4 text-center text-xl font-bold">Mail</h2>
             <div className="flex flex-col items-center justify-center">
