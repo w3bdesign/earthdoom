@@ -19,16 +19,22 @@ const Spying: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
+  let uiRoids = 0;
+
   if (!isSignedIn || !user.username) return <LoadingSpinner />;
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
   });
 
+  uiRoids = paPlayer?.ui_roids || 0;
+
   const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
-    onSuccess: async () => {
+    onSuccess: async (data) => {
+      const newAmountOfRoids = data.ui_roids - uiRoids;
+
       ToastComponent({
-        message: "Spying complete",
+        message: `Spying complete - found ${newAmountOfRoids} land`,
         type: "success",
       });
       await ctx.paUsers.getPlayerByNick.invalidate();
