@@ -92,8 +92,6 @@ const ProductionPage: NextPage = () => {
       <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
-
-
             <div className="relative sm:mx-auto">
               {renderBarracksMessage(paPlayer)}
               {paPlayer && paPlayer.c_airport === 1 && (
@@ -105,7 +103,6 @@ const ProductionPage: NextPage = () => {
                 </>
               )}
             </div>
-
 
             <div className="relative sm:mx-auto">
               {paPlayer && (
@@ -123,7 +120,6 @@ const ProductionPage: NextPage = () => {
             </div>
           </div>
         </div>
-       
       </Layout>
     </>
   );
