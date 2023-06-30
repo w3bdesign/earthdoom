@@ -12,6 +12,29 @@ interface IRenderMessageProps {
 }
 
 /**
+ * Calculates the amount of land discovered based on the number of search attempts.
+ *
+ * @param {number} searchAttempts - The number of search attempts made.
+ * @return {number} The total amount of land discovered.
+ */
+export const calculateLand = (searchAttempts: number): number => {
+  let totalLand = 0;
+
+  for (
+    let currentAttempt = 0;
+    currentAttempt < searchAttempts;
+    currentAttempt++
+  ) {
+    const randomFactor = Math.floor(Math.random() * (2 + totalLand));
+    if (randomFactor < 20) {
+      totalLand++;
+    }
+  }
+
+  return totalLand;
+};
+
+/**
  * Renders a message component with a title and a message.
  *
  * @param {IRenderMessageProps} props - The properties of the message component.
