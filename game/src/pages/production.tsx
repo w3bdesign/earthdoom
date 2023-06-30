@@ -10,6 +10,8 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
 import { api } from "@/utils/api";
 import { renderMessage } from "@/utils/functions";
+import { AdvancedDataTable, Button, ToastComponent } from "@/components/ui";
+import { PRODUCTION } from "@/components/features/Production/constants/PRODUCTION";
 
 /**
  * Renders the production page if the user is signed in and has a username.
@@ -23,6 +25,7 @@ import { renderMessage } from "@/utils/functions";
  * and is signed in with a username, otherwise null
  */
 const ProductionPage: NextPage = () => {
+  const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
 
   if (!isSignedIn || !user.username) {
@@ -46,6 +49,34 @@ const ProductionPage: NextPage = () => {
     return null;
   };
 
+  const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
+    onSuccess: async () => {
+      ToastComponent({
+        message: "Training started",
+        type: "success",
+      });
+      await ctx.paUsers.getPlayerByNick.invalidate();
+      await ctx.paUsers.getPlayerByNick.refetch();
+    },
+    onError: () => {
+      ToastComponent({
+        message: "Database error",
+        type: "error",
+      });
+    },
+  });
+
+  const columns = [
+    { label: "Name", accessor: "buildingName" },
+    { label: "Description", accessor: "buildingDescription" },
+    { label: "ETA", accessor: "buildingETA" },
+    { label: "Cost", accessor: "buildingCost" },
+    { label: "Amount", accessor: "amount", type: "inputNumber" },
+    { label: "Action", accessor: <Button />, type: "button" },
+  ];
+
+  const caption = "Production";
+
   if (!paPlayer) {
     return (
       <Layout>
@@ -61,6 +92,8 @@ const ProductionPage: NextPage = () => {
       <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
+
+
             <div className="relative sm:mx-auto">
               {renderBarracksMessage(paPlayer)}
               {paPlayer && paPlayer.c_airport === 1 && (
@@ -72,9 +105,25 @@ const ProductionPage: NextPage = () => {
                 </>
               )}
             </div>
+
+
+            <div className="relative sm:mx-auto">
+              {paPlayer && (
+                <AdvancedDataTable
+                  isLoading={isLoading}
+                  columns={columns}
+                  data={[paPlayer]}
+                  caption={caption}
+                  renderData={PRODUCTION}
+                  action={mutate}
+                  actionText="Train"
+                  actionInProgress="Training ..."
+                />
+              )}
+            </div>
           </div>
         </div>
-        <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
+       
       </Layout>
     </>
   );
