@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 
+import { calculateLand } from "@/utils/functions";
+
 export const paSpyingRouter = createTRPCRouter({
   // TODO Add support for more spying options
   spyingInitiate: privateProcedure
@@ -17,9 +19,11 @@ export const paSpyingRouter = createTRPCRouter({
       const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
         input;
 
-      const unitAmountDefault = unitAmount ? unitAmount : 0;
+      const unitAmountDefault = unitAmount || 0;
 
-      const data = await ctx.prisma.paUsers.update({
+      const landFound = calculateLand(unitAmountDefault);
+
+      return await ctx.prisma.paUsers.update({
         where: {
           id: Userid,
         },
@@ -29,10 +33,8 @@ export const paSpyingRouter = createTRPCRouter({
           },
 
           crystal: { decrement: buildingCostCrystal * unitAmountDefault },
-          ui_roids: { increment: unitAmount }, // TODO Make this more random, and decrease amount when you have more land
+          ui_roids: { increment: landFound },
         },
       });
-
-      return data;
     }),
 });
