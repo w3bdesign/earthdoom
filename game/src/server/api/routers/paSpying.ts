@@ -17,9 +17,9 @@ export const paSpyingRouter = createTRPCRouter({
       const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
         input;
 
-      const unitAmountDefault = unitAmount ? unitAmount : 0;
+      const unitAmountDefault = unitAmount || 0;
 
-      const data = await ctx.prisma.paUsers.update({
+      return await ctx.prisma.paUsers.update({
         where: {
           id: Userid,
         },
@@ -32,7 +32,5 @@ export const paSpyingRouter = createTRPCRouter({
           ui_roids: { increment: unitAmount }, // TODO Make this more random, and decrease amount when you have more land
         },
       });
-
-      return data;
     }),
 });
