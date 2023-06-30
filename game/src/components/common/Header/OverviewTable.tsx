@@ -19,7 +19,8 @@ const OverviewTable: FC<OverviewTableProps> = ({ paPlayer }) => {
     { label: "Titanium", accessor: "metal" },
     { label: "Energy", accessor: "energy" },
     { label: "Houses", accessor: "asteroid_crystal" },
-    { label: "Titanium Mine", accessor: "asteroid_metal" },
+    { label: "Mines", accessor: "asteroid_metal" },
+    { label: "Undeveloped", accessor: "ui_roids" },
     { label: "Rank", accessor: "rank" },
   ];
 
