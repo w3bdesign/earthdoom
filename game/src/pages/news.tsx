@@ -147,7 +147,7 @@ const News: NextPage = () => {
     <>
       <Layout paPlayer={paPlayer}>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden md:w-[44.563rem]">
+          <div className="relative flex flex-col justify-center overflow-hidden md:w-[47.125rem]">
             <div className="container mt-6 flex justify-end">
               {paNews && paNews.news.length > 0 && (
                 <Button
