@@ -1,4 +1,4 @@
-<section class="text-md md:text-xl max-w-[1100px] mx-auto">
+<section class="text-md md:text-xl md:w-[1100px] w-[95vw] p-4 mx-auto">
   <div class="my-4">
     <h1 class="text-xl md:text-3xl font-bold mb-4">Gameplay Overview</h1>
     <p class="my-4">
@@ -197,5 +197,128 @@
       dangerous will the fights be. You might lose ten or twenty ranks in a bad
       battle, but in the end it can be a really fun way to kill some time.
     </p>
+    <div class="container mx-auto py-2">
+      <div class="table-scroll overflow-y-auto">
+        <div class="overflow-x-auto">
+          <p class="text-md text-white font-semibold mb-6">
+            Ships dealing damage (top) Targets (left). Values are the damage
+            dealt
+          </p>
+          <table class="w-full text-center table-fixed bg-gray-800 mt-6">
+            <thead>
+              <tr class="h-12">
+                <th class="w-[7rem]"></th>
+                <th class="w-[6rem]">Infantry</th>
+                <th class="w-[6rem]">Shadows</th>
+                <th class="w-[7rem]">Goliaths</th>
+                <th class="w-[7rem]">Hellspawn</th>
+                <th class="w-[7rem]">Ares</th>
+                <th class="w-[7rem]">Lucius</th>
+                <th class="w-[7rem]">Avengers</th>
+                <th class="w-[7rem]">Reaper</th>
+              </tr>
+            </thead>
+            <tbody class="text-white">
+              <tr class="h-12">
+                <th>Infantry</th>
+                <td>0.025</td>
+                <td>0.15</td>
+                <td>1.5</td>
+                <td>0.8</td>
+                <td>1.00</td>
+                <td></td>
+                <td></td>
+                <td>0.08</td>
+              </tr>
+              <tr class="bg-gray-700 h-12">
+                <th>Shadows</th>
+                <td>0.01</td>
+                <td>0.125</td>
+                <td>0.4</td>
+                <td>0.21</td>
+                <td>0.35</td>
+                <td></td>
+                <td>0.1</td>
+                <td></td>
+              </tr>
+              <tr class="h-12">
+                <th>Goliaths</th>
+                <td>0.015</td>
+                <td>0.025</td>
+                <td>0.05</td>
+                <td>0.3</td>
+                <td>0.125</td>
+                <td></td>
+                <td>0.07</td>
+                <td></td>
+              </tr>
+              <tr class="bg-gray-700 h-12">
+                <th>Grabbers</th>
+                <td>0.015</td>
+                <td>0.015</td>
+                <td>0.055</td>
+                <td>0.11</td>
+                <td>0.135</td>
+                <td></td>
+                <td></td>
+                <td>0.1</td>
+              </tr>
+              <tr class="h-12">
+                <th>Hellspawn</th>
+                <td>0.0025</td>
+                <td>0.037</td>
+                <td>0.025</td>
+                <td>0.05</td>
+                <td>0.18</td>
+                <td>0.08</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr class="bg-gray-700 h-12">
+                <th>Ares</th>
+                <td>0.0035</td>
+                <td>0.025</td>
+                <td>0.025</td>
+                <td>0.04</td>
+                <td>0.05</td>
+                <td>0.1</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr class="h-12">
+                <th>Medusas</th>
+                <td>0.02</td>
+                <td>0.07</td>
+                <td>0.015</td>
+                <td>0.25</td>
+                <td>1.00</td>
+                <td></td>
+                <td></td>
+                <td>0.09</td>
+              </tr>
+              <tr class="bg-gray-700 h-12">
+                <th>Reaper</th>
+                <td>0.005</td>
+                <td>0.04</td>
+                <td>0.1</td>
+                <td>0.15</td>
+                <td>0.25</td>
+                <td></td>
+                <td>0.2</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  @media (min-width: 640px) {
+    .table-scroll {
+      overflow-x: auto;
+    }
+  }
+</style>
