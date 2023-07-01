@@ -1,5 +1,4 @@
 import { useUser } from "@clerk/nextjs";
-import Script from "next/script";
 
 import type { NextPage } from "next";
 import type { PaPlayer } from "@/components/features/Military/Military";
@@ -74,7 +73,6 @@ const ProductionPage: NextPage = () => {
             </div>
           </div>
         </div>
-        <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
       </Layout>
     </>
   );
