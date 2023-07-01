@@ -24,7 +24,7 @@ export const DataTable: React.FC<DataTableProps> = ({
   caption,
 }) => {
   return (
-    <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-full">
+    <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-[47.125rem]">
       <caption className="py-6 text-center text-2xl font-bold text-white">
         {caption}
       </caption>

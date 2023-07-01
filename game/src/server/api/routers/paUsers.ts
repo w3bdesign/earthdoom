@@ -29,7 +29,7 @@ export const paUsersRouter = createTRPCRouter({
   getResourceOverview: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
-      const player = await ctx.prisma.paUsers.findUnique({
+      return await ctx.prisma.paUsers.findUnique({
         where: { nick: input.nick },
         select: {
           id: true,
@@ -44,28 +44,22 @@ export const paUsersRouter = createTRPCRouter({
           nick: true,
         },
       });
-
-      return player;
     }),
   getAttackedPlayer: privateProcedure
     .input(z.object({ Warid: z.number() }))
     .query(async ({ ctx, input }) => {
-      const defender = await ctx.prisma.paUsers.findUnique({
+      return await ctx.prisma.paUsers.findUnique({
         where: { id: input.Warid },
         select: { id: true, nick: true },
       });
-
-      return defender;
     }),
   getDefendedPlayer: privateProcedure
     .input(z.object({ Defid: z.number() }))
     .query(async ({ ctx, input }) => {
-      const defender = await ctx.prisma.paUsers.findUnique({
+      return await ctx.prisma.paUsers.findUnique({
         where: { id: input.Defid },
         select: { id: true, nick: true },
       });
-
-      return defender;
     }),
   getPlayerByNick: privateProcedure
     .input(z.object({ nick: z.string() }))
@@ -89,8 +83,7 @@ export const paUsersRouter = createTRPCRouter({
         where: { id: player.paConstructId || 1 },
       });
 
-      const newPlayer = { ...paConstruct, ...player, id: player.id };
-      return newPlayer;
+      return { ...paConstruct, ...player, id: player.id };
     }),
   getFriendlies: privateProcedure
     .input(z.object({ nick: z.string() }))
@@ -221,7 +214,7 @@ export const paUsersRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
-      const data = await ctx.prisma.paUsers.update({
+      return await ctx.prisma.paUsers.update({
         where: {
           id: input.Userid,
         },
@@ -231,8 +224,6 @@ export const paUsersRouter = createTRPCRouter({
           metal: { decrement: buildingCostTitanium },
         },
       });
-
-      return data;
     }),
 
   // TODO Combine constructBuilding, produceUnit and researchBuilding into one?
