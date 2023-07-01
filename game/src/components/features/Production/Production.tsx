@@ -77,7 +77,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
       >
         {Number(paPlayer[production.buildingFieldName]) > 0 &&
           paPlayer[production.buildingFieldName]}
-
         {isLoading && "Starting ..."}
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
           <input
