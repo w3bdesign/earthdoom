@@ -51,13 +51,13 @@ const CombatReport: React.FC<CombatReportProps> = ({
       </caption>
       <thead>
         <tr className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0">
-          <th className="h-12 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell">
+          <th className="h-12 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell pl-[2.2rem] md:pl-4">
             Unit
           </th>
-          <th className="h-12  px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell">
+          <th className="h-12  px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell pl-[2.2rem] md:pl-4">
             Total
           </th>
-          <th className="h-12  px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell">
+          <th className="h-12  px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell pl-[2.2rem] md:pl-4">
             Lost
           </th>
         </tr>
