@@ -19,7 +19,7 @@ export type TMutateType = UseMutateFunction<
     buildingFieldName: string;
     buildingNeedsFieldName?: number;
     buildingETA: number;
-    buildingFieldNameETA?: number;
+    buildingFieldNameETA?: number | string;
     buildingCostCrystal: number;
     buildingCostTitanium: number;
     unitAmount?: number;

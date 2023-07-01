@@ -145,7 +145,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
           </Button>
         )}
         {Number(paPlayer[production.buildingFieldName]) >= 1 &&
-          `${paPlayer[production.buildingFieldNameETA]} ticks left`}
+          `${Number(paPlayer[production.buildingFieldNameETA])} ticks left`}
       </td>
     </tr>
   );
