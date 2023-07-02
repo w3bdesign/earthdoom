@@ -10,6 +10,12 @@ import UnitsTable from "@/components/ui/tables/UnitsTable";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import FleetTable from "@/components/ui/tables/FleetTable";
 
+/**
+ * Renders the Military page component which displays the military information of a user's PA account.
+ * Also allows the player to send troops to attack or defend
+ *
+ * @return {JSX.Element} The MilitaryPage component.
+ */
 const MilitaryPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 

@@ -13,6 +13,17 @@ interface ILayoutProps {
   children: ReactNode;
 }
 
+/**
+ * Renders the layout for the page by including the Navbar, Information, Footer
+ * and the main content area.
+ * Uses the paPlayer parameter to display the player information from the API.
+ *
+ * @param {Object} ILayoutProps - The props object containing paPlayer and children.
+ * @param {Object} ILayoutProps.paPlayer - The player object containing player information.
+ * @param {ReactNode} ILayoutProps.children - The children components to be rendered.
+ *
+ * @return {JSX.Element} The JSX element containing the entire layout.
+ */
 const Layout = ({ paPlayer, children }: ILayoutProps) => {
   return (
     <>

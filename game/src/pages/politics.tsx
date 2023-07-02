@@ -3,6 +3,7 @@ import { type NextPage } from "next";
 import { Layout } from "@/components/common/Layout";
 
 const Politics: NextPage = () => {
+  // TODO - Implement this functionality
   return (
     <>
       <Layout>

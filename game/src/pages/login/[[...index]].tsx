@@ -4,6 +4,11 @@ import { type NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
 
+/**
+ * Renders the Login component with a sign-in form
+ *
+ * @return {JSX.Element} The Login component
+ */
 const Login: NextPage = () => {
   return (
     <>

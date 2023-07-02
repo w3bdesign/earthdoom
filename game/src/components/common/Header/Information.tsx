@@ -13,9 +13,6 @@ interface InformationProps {
 }
 
 const Information: React.FC<InformationProps> = ({ paPlayer }) => {
-  // TODO See if we can get the user from the session instead of making a request
-  // TODO Maybe we can use the user from the session to get the paPlayer data
-
   const { user } = useUser();
 
   if (!user || !user.username) return null;
@@ -28,7 +25,7 @@ const Information: React.FC<InformationProps> = ({ paPlayer }) => {
     nick: user.username,
   });
 
-  const { data: paMail } = api.paMail.getUnseenMailByUserId.useQuery({
+  const { data: paUnseenMail } = api.paMail.getUnseenMailByUserId.useQuery({
     nick: user.username,
   });
 
@@ -65,7 +62,7 @@ const Information: React.FC<InformationProps> = ({ paPlayer }) => {
               ))}
             </div>
           )}
-          {paMail?.email?.length && paMail?.email?.length > 0 ? (
+          {paUnseenMail?.email?.length && paUnseenMail?.email?.length > 0 ? (
             <div
               className="mb-4 min-w-[27.125rem] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800 md:min-w-[30.375rem]"
               role="alert"
