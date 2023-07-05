@@ -1,4 +1,8 @@
-<section class="text-md md:text-xl max-w-[1100px] mx-auto">
+---
+import Stats from "./Stats.astro";
+---
+
+<section class="text-md md:text-xl md:w-[1100px] w-full p-4 mx-auto mr-8 md:mr-0">
   <div class="my-4">
     <h1 class="text-xl md:text-3xl font-bold mb-4">Gameplay Overview</h1>
     <p class="my-4">
@@ -197,5 +201,14 @@
       dangerous will the fights be. You might lose ten or twenty ranks in a bad
       battle, but in the end it can be a really fun way to kill some time.
     </p>
+    <Stats />
   </div>
 </section>
+
+<style>
+  @media (min-width: 640px) {
+    .table-scroll {
+      overflow-x: auto;
+    }
+  }
+</style>

@@ -42,7 +42,7 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;
   const session = getAuth(req);
 
-  const userId = session.userId;
+  const { userId } = session;
   const username = session.user?.username;
 
   return {
