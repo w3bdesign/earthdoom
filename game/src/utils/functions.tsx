@@ -48,7 +48,7 @@ export const renderMessage = ({ title, message }: IRenderMessageProps) => {
       <h1 className="mt-6 text-center text-2xl font-bold text-white">
         {title}
       </h1>
-      <div className="mb-4 mt-6 rounded bg-white px-8 py-5 shadow-md w-[20.625rem] md:w-[47.125rem]">
+      <div className="mb-4 mt-6 w-[20.625rem] rounded bg-white px-8 py-5 shadow-md md:w-[47.125rem]">
         <h2 className="text-md p-2 text-center text-black md:text-lg">
           {message}
         </h2>
