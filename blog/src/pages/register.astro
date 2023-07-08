@@ -1,0 +1,25 @@
+---
+import BaseHead from "../components/Header/BaseHead.astro";
+import Header from "../components/Header/Header.astro";
+import Footer from "../components/Footer/Footer.astro";
+
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="bg-neutral-900">
+    <Header title={SITE_TITLE} />
+    <main>
+      <div
+        class="flex flex-col items-center justify-center h-[530px] lg:h-[700px]"
+      >
+        Register comes here
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
