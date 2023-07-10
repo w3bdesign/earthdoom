@@ -16,7 +16,7 @@ const Navbar = () => {
   const navbarRef = useRef(null);
 
   useClickAway(navbarRef, () => {
-    setExpanded(!expanded);
+    setExpanded(false);
   });
 
   return (
