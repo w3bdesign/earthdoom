@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { SignedIn } from "@clerk/nextjs";
 import Link from "next/link";
 
 import { LINKS } from "./constants/LINKS";
-import { useState } from "react";
+
 
 const Navbar = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
