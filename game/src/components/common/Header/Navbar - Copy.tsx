@@ -225,7 +225,6 @@ const Navbar = () => (
         </div>
       </nav>
     </SignedIn>
-    <Script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></Script>
   </div>
 );
 

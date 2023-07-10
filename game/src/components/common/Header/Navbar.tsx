@@ -1,14 +1,29 @@
+import { useState, useRef } from "react";
 import { SignedIn } from "@clerk/nextjs";
+import { useClickAway } from "react-use";
 import Link from "next/link";
 
 import { LINKS } from "./constants/LINKS";
-import { useState } from "react";
 
+/**
+ * A React functional component that represents a Navbar.
+ *
+ * @return {JSX.Element} The rendered Navbar component.
+ */
 const Navbar = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
+  const navbarRef = useRef(null);
+
+  useClickAway(navbarRef, () => {
+    setExpanded(false);
+  });
+
   return (
-    <div className="flex min-h-[6.875rem] justify-center bg-gray-800 p-6">
+    <div
+      ref={navbarRef}
+      className="flex min-h-[6.875rem] justify-center bg-gray-800 p-6"
+    >
       <SignedIn>
         <nav className="relative flex w-full items-center justify-between bg-gray-800 py-2 text-white  dark:bg-neutral-700 dark:text-neutral-300 lg:flex-wrap lg:justify-center">
           <div className="px-6">
