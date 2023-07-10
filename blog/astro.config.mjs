@@ -9,6 +9,6 @@ import vercel from "@astrojs/vercel/serverless";
 export default defineConfig({
   site: 'https://www.earthdoom.com',
   integrations: [mdx(), sitemap(), tailwind()],
-  output: "static",
+  output: "hybrid",
   adapter: vercel()
 });
