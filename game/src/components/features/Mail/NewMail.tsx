@@ -19,7 +19,13 @@ interface IHandleInputChange {
   (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void;
 }
 
-const NewMail: FC<IMilitaryProps> = ({ paPlayer }) => {
+/**
+ * Renders a form for sending a mail.
+ *
+ * @param {IMilitaryProps} paPlayer - The military props.
+ * @return {FC} The mail form component.
+ */
+const NewMail: FC<IMilitaryProps> = () => {
   const ctx = api.useContext();
   const [mailTarget, setMailTarget] = useState("");
   const [mailContent, setMailContent] = useState("");
