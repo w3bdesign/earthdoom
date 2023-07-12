@@ -18,7 +18,7 @@ import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
  */
 const Energy: NextPage = () => {
   const ctx = api.useContext();
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { user, isSignedIn } = useUser();
 
   if (!isSignedIn || !user.username) {
     return null;
