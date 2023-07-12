@@ -2,12 +2,12 @@ import type { RefObject } from "react";
 import type { FC } from "react";
 import type { Building } from "@/components/features/Construct/types/types";
 import type { PaPlayer } from "@/components/features/Military/Military";
+import type { TMutateType } from "./AdvancedDataTable";
 
 import Button from "../../../common/Button";
 import ToastComponent from "../../notifications/ToastComponent";
 
 import { canAffordToTrain } from "@/utils/functions";
-import { TMutateType } from "./AdvancedDataTable";
 
 interface IActionButtonProps {
   isLoading: boolean;
