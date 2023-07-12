@@ -1,6 +1,5 @@
 import { SignedIn } from "@clerk/nextjs";
 import Link from "next/link";
-import Script from "next/script";
 
 const Navbar = () => (
   <div className="flex min-h-[6.875rem] justify-center bg-gray-800 p-6">
