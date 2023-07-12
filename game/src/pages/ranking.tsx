@@ -20,7 +20,7 @@ const RankingPage: NextPage = () => {
     return null;
   }
 
-  const { data: paRanking, isLoading } = api.paUsers.getAll.useQuery();
+  const { data: paRanking } = api.paUsers.getAll.useQuery();
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user.username,
