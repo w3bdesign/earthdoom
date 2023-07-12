@@ -27,7 +27,6 @@ const ActionButton: FC<IActionButtonProps> = ({
   canAffordToTrain,
   mutate,
   actionText,
-  actionInProgress = "Constructing ...",
   inputAmountRef,
 }) => {
   if (!paPlayer[0] || !building) {
