@@ -9,11 +9,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="flex items-center justify-center">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
-  <body class="bg-neutral-900">
+  <body
+  class="bg-neutral-900 container flex flex-col items-center justify-center p-2"
+>
     <Header title={SITE_TITLE} />
     <Hero />
     <Intro />
