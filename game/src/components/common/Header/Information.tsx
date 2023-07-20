@@ -15,7 +15,7 @@ interface InformationProps {
 const Information: React.FC<InformationProps> = ({ paPlayer }) => {
   const { user } = useUser();
 
-  if (!user || !user.username || !paPlayer) {
+  if (!user?.username) {
     return null;
   }
 
@@ -30,6 +30,10 @@ const Information: React.FC<InformationProps> = ({ paPlayer }) => {
   const { data: paUnseenMail } = api.paMail.getUnseenMailByUserId.useQuery({
     nick: user.username,
   });
+
+  if (!paPlayer) {
+    return null;
+  }
 
   return (
     <>
