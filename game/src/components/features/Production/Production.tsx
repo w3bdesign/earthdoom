@@ -73,7 +73,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
       </td>
       <td
         data-th="Production"
-        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none md:h-12"
       >
         {Number(paPlayer[production.buildingFieldName]) > 0 &&
           paPlayer[production.buildingFieldName]}
