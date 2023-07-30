@@ -45,7 +45,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     },
     {
       enabled: attackValue.length > 3 || defValue.length > 3,
-    }
+    },
   );
 
   const { mutate: militaryAction, isLoading } =

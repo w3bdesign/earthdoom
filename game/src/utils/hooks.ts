@@ -15,7 +15,7 @@ interface UseLocalStorageResult<T> {
  * @returns {RefObject<T>[]} - An array of RefObjects of the specified length.
  */
 export const useMultipleRefs = <T extends HTMLInputElement>(
-  length: number
+  length: number,
 ): RefObject<T>[] => {
   const refs = Array(length)
     .fill(null)

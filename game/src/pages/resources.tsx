@@ -77,7 +77,7 @@ const Resources: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
             {!isLoaded && <LoadingSpinner />}
-            <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[44.563rem]">
+            <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[47.125rem]">
               {hasNoLand ? (
                 <h2 className="p-4 text-center text-2xl font-bold">
                   No land, no income.
@@ -87,14 +87,14 @@ const Resources: NextPage = () => {
               )}
             </div>
             {hasNoUndevelopedLand && (
-              <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[44.563rem]">
+              <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[47.125rem]">
                 <h2 className="p-4 text-center text-2xl font-bold">
                   You have no land to develop
                 </h2>
               </div>
             )}
             {paPlayer && paPlayer?.ui_roids > 0 && (
-              <div className="mx-auto mt-4 w-[20.625rem] rounded bg-white py-4 shadow md:w-[44.563rem]">
+              <div className="mx-auto mt-4 w-[20.625rem] rounded bg-white py-4 shadow md:w-[47.125rem]">
                 <h1 className="py-4 text-center text-2xl ">
                   Undeveloped land: {paPlayer?.ui_roids}
                 </h1>

@@ -10,7 +10,7 @@ export const paMilitaryRouter = createTRPCRouter({
         target: z.string(),
         energyCost: z.number().optional(),
         mode: z.enum(["attack", "defend"]),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { Userid, target, mode, energyCost } = input;
@@ -45,7 +45,7 @@ export const paMilitaryRouter = createTRPCRouter({
     .input(
       z.object({
         Userid: z.number(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { Userid } = input;

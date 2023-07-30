@@ -26,7 +26,7 @@ const ContNews: NextPage = () => {
   const { data: paNews, isLoading } = api.paUsers.getContinentIncoming.useQuery(
     {
       nick: user.username,
-    }
+    },
   );
 
   if (!paPlayer) {
