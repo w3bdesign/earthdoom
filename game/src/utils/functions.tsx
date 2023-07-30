@@ -103,7 +103,7 @@ export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
   maxValues.push(Math.floor(paPlayer.crystal / production.buildingCostCrystal));
   if (production.buildingCostTitanium !== 0) {
     maxValues.push(
-      Math.floor(paPlayer.metal / production.buildingCostTitanium)
+      Math.floor(paPlayer.metal / production.buildingCostTitanium),
     );
   }
   // We filter out NaN values because if the player has no resources, the division will result in NaN.
@@ -124,7 +124,7 @@ export const canAffordToTrain = (
   paPlayer: PaPlayer,
   costCrystal: number,
   costTitanium: number,
-  quantity?: number
+  quantity?: number,
 ): boolean => {
   const trainQuantity = quantity || 1;
   const crystalCost = trainQuantity * costCrystal;
@@ -198,6 +198,6 @@ export const getShipCount = (paPlayer: PaPlayer) => {
   ];
   return shipProperties.reduce(
     (count, property) => count + Number(paPlayer[property]),
-    0
+    0,
   );
 };

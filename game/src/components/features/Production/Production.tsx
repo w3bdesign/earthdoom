@@ -99,10 +99,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
       </td>
       <td
         data-th="Build"
-        className="flex items-center md:w-[8rem] px-6 md:px-4 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
+        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t  sm:before:content-none md:h-12 md:w-[8rem] md:px-4"
       >
         {isLoading && <div className="mb-1">Starting ...</div>}
-       
+
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
           <Button
             onClick={() => {
@@ -121,7 +121,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                   paPlayer,
                   production.buildingCostCrystal,
                   production.buildingCostTitanium,
-                  Number(unitAmountRef?.current?.value)
+                  Number(unitAmountRef?.current?.value),
                 )
               ) {
                 ToastComponent({

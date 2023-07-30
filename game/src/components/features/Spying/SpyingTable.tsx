@@ -109,7 +109,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
                   paPlayer,
                   resource.buildingCostCrystal,
                   resource.buildingCostTitanium,
-                  Number(spyingAmountRef?.current?.value)
+                  Number(spyingAmountRef?.current?.value),
                 )
               ) {
                 ToastComponent({
