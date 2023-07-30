@@ -121,7 +121,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                   paPlayer,
                   production.buildingCostCrystal,
                   production.buildingCostTitanium,
-                  Number(unitAmountRef?.current?.value)
+                  Number(unitAmountRef?.current?.value),
                 )
               ) {
                 ToastComponent({

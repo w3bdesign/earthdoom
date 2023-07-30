@@ -29,7 +29,7 @@ const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
     });
 
   const isOnlyCombatReport = news.every(
-    ({ header }) => header === "Combat report"
+    ({ header }) => header === "Combat report",
   );
 
   if (isOnlyCombatReport)
@@ -96,7 +96,7 @@ const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
                     </Button>
                   </td>
                 </tr>
-              )
+              ),
           )}
         </tbody>
       </table>

@@ -24,7 +24,7 @@ export const paConstructRouter = createTRPCRouter({
 
       if (!paConstruct) {
         throw new Error(
-          `No PaConstruct found for user with ID: ${input.Userid}`
+          `No PaConstruct found for user with ID: ${input.Userid}`,
         );
       }
 

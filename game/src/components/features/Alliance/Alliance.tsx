@@ -31,7 +31,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
 
   const player = paPlayer.nick;
   const allianceTag = paTag.find(
-    (tag: { leader: string }) => tag.leader === player
+    (tag: { leader: string }) => tag.leader === player,
   );
   const alliancePassword = allianceTag ? allianceTag.password : null;
 

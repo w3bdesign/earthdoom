@@ -52,7 +52,7 @@ interface CombatReport {
 const renderNews = (
   isLoading: boolean,
   paNews: IRenderContentProps,
-  isDeletingAll: boolean
+  isDeletingAll: boolean,
 ) => {
   if (isLoading) {
     return (
@@ -176,7 +176,7 @@ const News: NextPage = () => {
                 combatReports.map((report) =>
                   report?.title ? (
                     <CombatReport key={report.title} {...report} />
-                  ) : null
+                  ) : null,
                 )}
             </div>
           </div>
