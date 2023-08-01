@@ -19,7 +19,7 @@ interface BuildingRowProps {
 }
 
 export interface ConstructProps {
-  paPlayer: PaPlayer;
+  paPlayer: PaPlayer[];
 }
 
 const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
@@ -116,9 +116,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                 });
                 return;
               }
+
               if (
                 !canAffordToTrain(
-                  paPlayer,
+                  [paPlayer],
                   production.buildingCostCrystal,
                   production.buildingCostTitanium,
                   Number(unitAmountRef?.current?.value),

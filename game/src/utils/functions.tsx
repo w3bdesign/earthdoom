@@ -126,9 +126,11 @@ export const canAffordToTrain = (
   paPlayer: PaPlayer[],
   costCrystal: number,
   costTitanium: number,
-  unitAmount: number = 1,
+  unitAmount: number,
   considerLand: boolean = false,
 ): boolean => {
+  unitAmount = unitAmount || 1;
+
   const crystalCost = unitAmount * costCrystal;
   const titaniumCost = unitAmount * costTitanium;
 
