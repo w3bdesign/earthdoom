@@ -116,9 +116,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                 });
                 return;
               }
+
               if (
                 !canAffordToTrain(
-                  paPlayer,
+                  [paPlayer],
                   production.buildingCostCrystal,
                   production.buildingCostTitanium,
                   Number(unitAmountRef?.current?.value),
