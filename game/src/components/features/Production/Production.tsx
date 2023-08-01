@@ -19,7 +19,7 @@ interface BuildingRowProps {
 }
 
 export interface ConstructProps {
-  paPlayer: PaPlayer[];
+  paPlayer: PaPlayer;
 }
 
 const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
