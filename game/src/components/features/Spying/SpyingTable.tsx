@@ -106,7 +106,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
               }
               if (
                 !canAffordToTrain(
-                  paPlayer,
+                  [paPlayer],
                   resource.buildingCostCrystal,
                   resource.buildingCostTitanium,
                   Number(spyingAmountRef?.current?.value),

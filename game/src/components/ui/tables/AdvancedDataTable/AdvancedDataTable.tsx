@@ -42,21 +42,25 @@ export interface AdvancedDataTableProps {
   action?: TMutateType;
   actionText?: string;
   actionInProgress?: string;
+  considerLand?: boolean;
 }
 
 /**
- * Reusable AdvancedDataTable component for displaying data in a table
- * @param {object} props - The props for the DataTable component
- * @param {boolean} props.isLoading - Is the mutation loading?
- * @param {Array<object>} props.columns - An array of objects representing the columns of the table
- * @param {Array<object>} props.data - An array of objects representing the data to be displayed in the table
- * @param {string} props.caption - The caption of the table
- * @param {Array<object>} [props.renderData] - An optional array of objects representing additional data to be rendered in the table
- * @param {string} [props.action] - An optional string representing an action to be performed on the data
- * @param {string} [props.actionText] - An optional string representing the text for the action button
- * @param {string} [props.actionInProgress] - An optional string representing the text to be displayed while the action is in progress
- * @returns {JSX.Element} - The DataTable component
+ * Renders an advanced data table component.
+ *
+ * @param {AdvancedDataTableProps} props - The component props.
+ * @param {boolean} props.isLoading - Indicates if the data is currently loading.
+ * @param {Array<AdvancedTableColumn>} props.columns - The columns to be displayed in the table.
+ * @param {Array<PaPlayer>} props.data - The data to be rendered in the table.
+ * @param {string} props.caption - The caption of the table.
+ * @param {Array<Building>} props.renderData - The data to be rendered in the table, optionally overridden by the renderData prop.
+ * @param {TMutateType} props.action - The action to be performed on the data.
+ * @param {string} props.actionText - The text for the action button.
+ * @param {string} props.actionInProgress - The text to be displayed while the action is in progress.
+ * @param {boolean} props.considerLand - Indicates if land should be considered.
+ * @return {JSX.Element} The rendered advanced data table.
  */
+
 const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   isLoading = false,
   columns,
@@ -66,6 +70,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   action,
   actionText,
   actionInProgress,
+  considerLand = false,
 }) => {
   const dataToMap = renderData || data;
 
@@ -115,11 +120,11 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                     <ActionButton
                       isLoading={isLoading}
                       paPlayer={data}
-                      canAffordToTrain={canAffordToTrain}
                       mutate={action}
                       actionText={actionText}
                       actionInProgress={actionInProgress}
                       inputAmountRef={inputAmountRefs[rowIndex]}
+                      considerLand={considerLand}
                     />
                   ) : null}
                   {typeof col.accessor !== "string" &&
@@ -130,11 +135,11 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                       isLoading={isLoading}
                       paPlayer={data}
                       building={row as Building}
-                      canAffordToTrain={canAffordToTrain}
                       mutate={action}
                       actionText={actionText}
                       actionInProgress={actionInProgress}
                       inputAmountRef={inputAmountRefs[rowIndex]}
+                      considerLand={considerLand}
                     />
                   ) : null}
                 </td>

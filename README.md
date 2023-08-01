@@ -1,20 +1,17 @@
-![version](https://img.shields.io/badge/version-0.4.1-blue)
+![version](https://img.shields.io/badge/version-0.4.3-blue)
 ![React](https://img.shields.io/badge/React-18.2.0-success)
-![Next.js](https://img.shields.io/badge/Next.js-13.4.1-success)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-success)
+![Next.js](https://img.shields.io/badge/Next.js-13.4.12-success)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.1.6-success)
 
-## This game is under active development and may have bugs. 
-
-
-* * *
+## This game is under active development and may have bugs.
 
 ## Earthdoom
 
 <img src="https://user-images.githubusercontent.com/45217974/232975051-79875585-ba7b-4742-a328-0556d9eca77e.png" alt="Screenshot" />
 
-Earthdoom is a full-stack web-based strategy game built using Typescript, Next.js, React, tRPC, Tailwind, Prisma and more. 
+Earthdoom is a full-stack web-based strategy game built using Typescript, Next.js, React, tRPC, Tailwind, Prisma and more.
 
-The database is handled through mySQL and Planetscale. 
+The database is handled through mySQL and Planetscale.
 
 Authentication is handled through Clerk.
 
