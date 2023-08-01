@@ -110,6 +110,7 @@ const Resources: NextPage = () => {
                 action={mutate}
                 actionText="Construct"
                 actionInProgress="Constructing ..."
+                considerLand={true}
               />
             )}
           </div>

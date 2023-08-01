@@ -13,21 +13,23 @@ interface IActionButtonProps {
   isLoading: boolean;
   paPlayer: PaPlayer[];
   building?: Building;
-  canAffordToTrain: typeof canAffordToTrain;
   mutate: TMutateType;
   actionText?: string;
   actionInProgress?: string;
   inputAmountRef?: RefObject<HTMLInputElement>;
+  disabled?: boolean;
+  considerLand?: boolean;
 }
 
 const ActionButton: FC<IActionButtonProps> = ({
   isLoading,
   paPlayer,
   building,
-  canAffordToTrain,
   mutate,
   actionText,
   inputAmountRef,
+  disabled,
+  considerLand,
 }) => {
   if (!paPlayer[0] || !building) {
     return null;
@@ -42,7 +44,7 @@ const ActionButton: FC<IActionButtonProps> = ({
         {(shouldNotCheckFieldName ||
           paPlayer[0][building.buildingFieldName] === 0) && (
           <Button
-            disabled={isLoading}
+            disabled={isLoading || disabled}
             onClick={() => {
               if (!paPlayer[0] || !paPlayer[0].id) return;
 
@@ -65,10 +67,11 @@ const ActionButton: FC<IActionButtonProps> = ({
               // Using early returns to avoid nested if statements
               if (
                 !canAffordToTrain(
-                  paPlayer[0],
+                  paPlayer,
                   building.buildingCostCrystal,
                   building.buildingCostTitanium,
                   Number(inputAmountRef?.current?.value),
+                  considerLand,
                 )
               ) {
                 ToastComponent({

@@ -113,31 +113,37 @@ export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
 };
 
 /**
- * Determines if the player can afford to train a certain quantity of units based on the player's resources and the production cost of the units.
- * @param {PaUsers} paPlayer - The player.
- * @param {number} quantity - The quantity of units to be trained.
- * @param {number} costCrystal - The production cost of the unit in crystals.
- * @param {number} costTitanium - The production cost of the unit in titanium.
- * @returns {boolean} - True if the player can afford to train the units, false otherwise.
+ * Checks if a player can afford to train a unit.
+ *
+ * @param {PaPlayer[]} paPlayer - The array of players.
+ * @param {number} costCrystal - The cost of crystal.
+ * @param {number} costTitanium - The cost of titanium.
+ * @param {number} [unitAmount=1] - The amount of units to train.
+ * @param {boolean} [considerLand=false] - Whether to consider land availability.
+ * @returns {boolean} Returns true if the player can afford to train the unit, otherwise false.
  */
 export const canAffordToTrain = (
-  paPlayer: PaPlayer,
+  paPlayer: PaPlayer[],
   costCrystal: number,
   costTitanium: number,
-  quantity?: number,
+  unitAmount: number = 1,
+  considerLand: boolean = false,
 ): boolean => {
-  const trainQuantity = quantity || 1;
-  const crystalCost = trainQuantity * costCrystal;
-  const titaniumCost = trainQuantity * costTitanium;
+  const crystalCost = unitAmount * costCrystal;
+  const titaniumCost = unitAmount * costTitanium;
 
-  // Check if player can afford to produce the requested quantity
+  if (!paPlayer[0]) return false;
+
   if (
-    (costCrystal === 0 || crystalCost <= paPlayer.crystal) &&
-    (costTitanium === 0 || titaniumCost <= paPlayer.metal)
+    (costCrystal === 0 || crystalCost <= paPlayer[0].crystal) &&
+    (costTitanium === 0 || titaniumCost <= paPlayer[0].metal)
   ) {
-    // Check if player has enough resources to produce the requested quantity
+    if (considerLand && unitAmount > paPlayer[0].ui_roids) {
+      return false;
+    }
     return (
-      paPlayer.crystal - crystalCost >= 0 && paPlayer.metal - titaniumCost >= 0
+      paPlayer[0].crystal - crystalCost >= 0 &&
+      paPlayer[0].metal - titaniumCost >= 0
     );
   }
 
