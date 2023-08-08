@@ -19,6 +19,6 @@
     "tailwindcss": "^3.3.2"
   },
   "optionalDependencies": {
-    "@esbuild/linux-x64": "^0.18.11"
+    "@esbuild/linux-x64": "^0.19.0"
   }
 }
