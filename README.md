@@ -46,7 +46,6 @@ To install the required dependencies, simply run the following command in the pr
 ```bash
 npm install
 ```
-
 You now need to retrieve the API keys for Clerk and Planetscale and enter them into .env (you need to rename .env.example to .env)
 
 ## Usage
@@ -57,7 +56,7 @@ To start the development server, run the following command:
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`.
+The application will be available at `http://localhost:3000`
 
 ## Scripts
 
