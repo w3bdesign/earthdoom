@@ -11,14 +11,14 @@
     "check": "astro check"
   },
   "dependencies": {
-    "@astrojs/mdx": "^0.19.7",
-    "@astrojs/rss": "^2.4.3",
-    "@astrojs/sitemap": "^2.0.0",
-    "@astrojs/tailwind": "^4.0.0",  
-    "astro": "^2.8.0",
+    "@astrojs/mdx": "^1.0.0",
+    "@astrojs/rss": "^3.0.0",
+    "@astrojs/sitemap": "^3.0.0",
+    "@astrojs/tailwind": "^5.0.0",  
+    "astro": "^3.0.0",
     "tailwindcss": "^3.3.2"
   },
   "optionalDependencies": {
-    "@esbuild/linux-x64": "^0.18.11"
+    "@esbuild/linux-x64": "^0.19.0"
   }
 }
