@@ -34,7 +34,7 @@
     "react-use": "^17.4.0",
     "superjson": "1.13.3",
     "tw-elements": "^1.0.0-beta3",
-    "zod": "^3.21.4"
+    "zod": "^3.22.3"
   },
   "devDependencies": {
     "@types/eslint": "^8.44.1",
