@@ -29,6 +29,7 @@ The application is designed with a modern, responsive and intuitive user interfa
 - [React Chart.js](https://react-chartjs-2.js.org)
 - [Clerk](https://clerk.com)
 - [Tailwind Elements](https://tailwind-elements.com)
+- [Zod](https://github.com/colinhacks/zod)
 
 ## Table of Contents
 
