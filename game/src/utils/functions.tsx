@@ -1,5 +1,5 @@
 import type { PaPlayer } from "@/components/features/Military/Military";
-import { IProduction } from "@/components/features/Production/types/types";
+import type { IProduction } from "@/components/features/Production/types/types";
 import type { PaUsers } from "@prisma/client";
 
 interface IStringifierProps {
