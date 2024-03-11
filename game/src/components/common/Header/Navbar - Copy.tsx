@@ -5,12 +5,12 @@ const Navbar = () => (
   <div className="flex min-h-[6.875rem] justify-center bg-gray-800 p-6">
     <SignedIn>
       <nav
-        className="relative flex w-full items-center justify-between bg-gray-800 py-2 text-white  dark:bg-neutral-700 dark:text-neutral-300 lg:flex-wrap lg:justify-center"
+        className="relative flex w-full items-center justify-between bg-gray-800 py-2 text-white  lg:flex-wrap lg:justify-center dark:bg-neutral-700 dark:text-neutral-300"
         data-te-navbar-ref
       >
         <div className="px-6">
           <button
-            className="border-0 text-xl leading-none transition-shadow duration-150 ease-in-out dark:hover:text-white dark:focus:text-white lg:hidden"
+            className="border-0 text-xl leading-none transition-shadow duration-150 ease-in-out lg:hidden dark:hover:text-white dark:focus:text-white"
             type="button"
             data-te-collapse-init
             data-te-target="#navbarSupportedContentX"
@@ -43,7 +43,7 @@ const Navbar = () => (
             <ul className="mr-auto flex flex-row" data-te-navbar-nav-ref>
               <li className="static" data-te-nav-item-ref data-te-dropdown-ref>
                 <button
-                  className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold  transition duration-150 ease-in-out hover:text-slate-300  dark:hover:text-white dark:focus:text-white lg:px-2"
+                  className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold  transition duration-150 ease-in-out hover:text-slate-300  lg:px-2 dark:hover:text-white dark:focus:text-white"
                   type="button"
                   id="dropdownMenuButtonX"
                   data-te-dropdown-toggle-ref
