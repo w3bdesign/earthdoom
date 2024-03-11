@@ -1,1 +1,1 @@
-declare module 'tw-elements/plugin.cjs';
+declare module "tw-elements/plugin.cjs";
