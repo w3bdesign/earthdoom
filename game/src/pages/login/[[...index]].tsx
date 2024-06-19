@@ -1,7 +1,8 @@
 import { SignIn, SignedOut } from "@clerk/nextjs";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 import type { NextPage } from "next";
-
 import { Layout } from "@/components/common/Layout";
 
 /**
@@ -10,6 +11,12 @@ import { Layout } from "@/components/common/Layout";
  * @return {JSX.Element} The Login component
  */
 const Login: NextPage = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/addUser");
+  }, []);
+
   return (
     <>
       <Layout>
