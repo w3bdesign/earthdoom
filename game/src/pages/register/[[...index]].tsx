@@ -19,9 +19,10 @@ const Register: NextPage = () => {
             <SignedOut>
               <div className="mt-6 flex h-[55vh] items-center justify-center">
                 <SignUp
-                  path="/register"
+                  //path="/register"
+                  path="/addUser"
                   routing="path"
-                  afterSignUpUrl="/addUser"
+                  //afterSignUpUrl="/addUser"
                 />
               </div>
             </SignedOut>
