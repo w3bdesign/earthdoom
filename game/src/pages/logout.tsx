@@ -1,5 +1,7 @@
 import { SignUpButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
+import { UserButton } from "@clerk/nextjs";
+
 import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
@@ -17,6 +19,17 @@ const Logout: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <p className="mt-12 text-2xl text-white">
+
+
+            Userbutton:
+            <UserButton afterSignOutUrl="/"/>
+
+
+
+
+
+
+
               <SignedIn>
                 <SignUpButton>
                   <Button
