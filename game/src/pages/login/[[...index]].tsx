@@ -14,6 +14,7 @@ const Login: NextPage = () => {
     <>
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
+          Login:
           <SignedOut>
             <div className="mt-6 flex h-[55vh] items-center justify-center">
               <SignIn path="/login" routing="path" afterSignInUrl="/" />
