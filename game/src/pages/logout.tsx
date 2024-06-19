@@ -19,26 +19,8 @@ const Logout: NextPage = () => {
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <p className="mt-12 text-2xl text-white">
-
-
-            Userbutton:
-            <UserButton afterSignOutUrl="/"/>
-
-
-
-
-
-
-
               <SignedIn>
-                <SignUpButton>
-                  <Button
-                    type="button"
-                    className="inline-block rounded bg-primary p-8 pb-2 pt-2.5 text-xl font-medium leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600"
-                  >
-                    Sign out
-                  </Button>
-                </SignUpButton>
+                <UserButton afterSignOutUrl="/" />
               </SignedIn>
               <SignedOut>
                 <SignInButton>
