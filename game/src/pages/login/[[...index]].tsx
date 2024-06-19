@@ -16,7 +16,7 @@ const Login: NextPage = () => {
   useEffect(() => {
     alert("Login test");
     router.push("/addUser");
-  }, []);
+  }, [router]);
 
   return (
     <>
