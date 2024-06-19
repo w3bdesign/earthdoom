@@ -1,5 +1,5 @@
 //import { withClerkMiddleware } from "@clerk/nextjs/server";
-import { authMiddleware } from "@clerk/nextjs";
+// import { authMiddleware } from "@clerk/nextjs";
 //import { NextResponse } from "next/server";
 
 /*
@@ -8,6 +8,7 @@ export default withClerkMiddleware(() => {
 });
 */
 
+/*
 export default authMiddleware({
   // Routes that can be accessed while signed out
   publicRoutes: ["/anyone-can-visit-this-route"],
@@ -15,6 +16,7 @@ export default authMiddleware({
   // no authentication information
   ignoredRoutes: ["/no-auth-in-this-route"],
 });
+*/
 
 export const config = {
   matcher: [

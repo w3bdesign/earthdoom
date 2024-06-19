@@ -28,7 +28,7 @@ const Logout: NextPage = () => {
                 </SignUpButton>
               </SignedIn>
               <SignedOut>
-                <SignInButton redirectUrl="/">
+                <SignInButton>
                   <Button
                     type="button"
                     className="inline-block rounded bg-primary p-8 pb-2 pt-2.5 text-xl font-medium leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600"
