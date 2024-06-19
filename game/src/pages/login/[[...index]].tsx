@@ -14,6 +14,7 @@ const Login: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    alert("Login test");
     router.push("/addUser");
   }, []);
 
@@ -21,12 +22,7 @@ const Login: NextPage = () => {
     <>
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          Login test:
-          <SignedOut>
-            <div className="mt-6 flex h-[55vh] items-center justify-center">
-              <SignIn path="/addUser" routing="path" redirectUrl="/" />
-            </div>
-          </SignedOut>
+          Login redirect
         </div>
       </Layout>
     </>
