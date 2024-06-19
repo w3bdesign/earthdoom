@@ -15,14 +15,12 @@ const Register: NextPage = () => {
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            Register:
             <SignedOut>
               <div className="mt-6 flex h-[55vh] items-center justify-center">
                 <SignUp
-                  //path="/register"
-                  path="/addUser"
+                  path="/register"
                   routing="path"
-                  //afterSignUpUrl="/addUser"
+                  afterSignUpUrl="/addUser"
                 />
               </div>
             </SignedOut>
