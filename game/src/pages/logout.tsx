@@ -1,6 +1,6 @@
-import { SignUpButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
-import { UserButton } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
 
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui";
  * @return {JSX.Element} The JSX element containing the logout button
  */
 const Logout: NextPage = () => {
+  const { signOut } = useClerk();
   return (
     <>
       <Layout>
@@ -20,7 +21,7 @@ const Logout: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <p className="mt-12 text-2xl text-white">
               <SignedIn>
-                <UserButton afterSignOutUrl="/" />
+                <Button onClick={() => signOut()}>Sign out</Button>
               </SignedIn>
               <SignedOut>
                 <SignInButton>
