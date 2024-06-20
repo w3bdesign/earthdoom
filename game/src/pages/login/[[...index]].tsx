@@ -1,5 +1,5 @@
 //import { SignIn, SignedOut } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import type { NextPage } from "next";
@@ -13,9 +13,14 @@ import { Layout } from "@/components/common/Layout";
 const Login: NextPage = () => {
   const router = useRouter();
 
+  // wrapped in `useCallback` to avoid re-creating the function on each render
+  const redirect = useCallback(async () => {
+    return router.push("/addUser");
+  }, [router]);
+
   useEffect(() => {
     alert("Login test");
-    router.push("/addUser");
+    redirect();
   }, [router]);
 
   return (
