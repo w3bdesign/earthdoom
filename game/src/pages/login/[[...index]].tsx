@@ -20,7 +20,7 @@ const Login: NextPage = () => {
 
   useEffect(() => {
     alert("Login test");
-    redirect();
+    void redirect();
   }, [router]);
 
   return (
