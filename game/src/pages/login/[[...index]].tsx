@@ -1,4 +1,4 @@
-import { SignIn, SignedOut } from "@clerk/nextjs";
+//import { SignIn, SignedOut } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
@@ -14,19 +14,15 @@ const Login: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    alert("Login test");
     router.push("/addUser");
-  }, []);
+  }, [router]);
 
   return (
     <>
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          Login test:
-          <SignedOut>
-            <div className="mt-6 flex h-[55vh] items-center justify-center">
-              <SignIn path="/addUser" routing="path" redirectUrl="/" />
-            </div>
-          </SignedOut>
+          Login redirect
         </div>
       </Layout>
     </>
