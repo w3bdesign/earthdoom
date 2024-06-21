@@ -7,46 +7,40 @@ import { useUser } from "@clerk/nextjs";
 import { api } from "@/utils/api";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
-/**
- * Renders the Login component with a sign-in form
- *
- * @return {JSX.Element} The Login component
- */
 const Login: NextPage = () => {
   const router = useRouter();
   const { user } = useUser();
 
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
+  const { data: paPlayer, isLoading } = api.paUsers.getPlayerByNick.useQuery({
     nick: user?.username || "",
   });
 
-  // wrapped in `useCallback` to avoid re-creating the function on each render
-  const addPlayer = useCallback(async () => {
+  const addPlayer = useCallback(() => {
     return router.push("/addUser");
   }, [router]);
 
-  const redirect = useCallback(async () => {
+  const redirect = useCallback(() => {
     return router.push("/");
   }, [router]);
 
   useEffect(() => {
-    if (paPlayer && paPlayer.id) {
-      void addPlayer();
-    } else {
-      void redirect();
+    if (!isLoading) {
+      if (paPlayer && paPlayer.id) {
+        void redirect();
+      } else {
+        void addPlayer();
+      }
     }
-  }, [paPlayer]);
+  }, [paPlayer, isLoading, redirect, addPlayer]);
 
   return (
-    <>
-      <Layout>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="mt-12">
-            <LoadingSpinner />
-          </div>
+    <Layout>
+      <div className="container mb-6 flex flex-col items-center justify-center">
+        <div className="mt-12">
+          <LoadingSpinner />
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 
