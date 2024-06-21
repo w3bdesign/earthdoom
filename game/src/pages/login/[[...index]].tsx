@@ -41,7 +41,9 @@ const Login: NextPage = () => {
     <>
       <Layout>
         <div className="container mb-6 flex flex-col items-center justify-center">
-          <LoadingSpinner />
+          <div className="mt-12">
+            <LoadingSpinner />
+          </div>
         </div>
       </Layout>
     </>
