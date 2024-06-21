@@ -1,10 +1,13 @@
 import { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
-import type { NextPage } from "next";
-import { Layout } from "@/components/common/Layout";
 import { useUser } from "@clerk/nextjs";
-import { api } from "@/utils/api";
+
+import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+
+import { api } from "@/utils/api";
+
+import type { NextPage } from "next";
 
 /**
  * Renders the Login page.
@@ -29,6 +32,9 @@ const Login: NextPage = () => {
     return router.push("/");
   }, [router]);
 
+  // 
+  // TODO: Cleanup this code
+  // 
   useEffect(() => {
     if (isUserLoaded && !isPlayerLoading) {
       if (user) {
