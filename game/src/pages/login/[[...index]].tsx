@@ -1,6 +1,6 @@
 //import { SignIn, SignedOut } from "@clerk/nextjs";
-import { useCallback, useEffect } from "react";
-import { useRouter } from "next/router";
+//import { useCallback, useEffect } from "react";
+//import { useRouter } from "next/router";
 
 import type { NextPage } from "next";
 import { Layout } from "@/components/common/Layout";
