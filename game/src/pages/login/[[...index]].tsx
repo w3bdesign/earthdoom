@@ -55,7 +55,9 @@ const Login: NextPage = () => {
   return (
     <Layout>
       <div className="container mb-6 flex flex-col items-center justify-center">
-        <div className="mt-12">Unexpected state. Please try again.</div>
+        <div className="mt-12">
+          <LoadingSpinner />
+        </div>
       </div>
     </Layout>
   );
