@@ -13,17 +13,21 @@ import { api } from "@/utils/api";
  * @return {JSX.Element} The Login component
  */
 const Login: NextPage = () => {
-  const router = useRouter();
+  
+  //const router = useRouter();
   const { user } = useUser();
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
     nick: user?.username || "",
   });
 
+
   // wrapped in `useCallback` to avoid re-creating the function on each render
+  /*
   const redirect = useCallback(async () => {
     return router.push("/addUser");
   }, [router]);
+  */
 
   /*
   useEffect(() => {
