@@ -6,6 +6,11 @@ import { useUser } from "@clerk/nextjs";
 import { api } from "@/utils/api";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
+/**
+ * Renders the Login page.
+ *
+ * @return {JSX.Element} The Login page component.
+ */
 const Login: NextPage = () => {
   const router = useRouter();
   const { user, isLoaded: isUserLoaded } = useUser();
@@ -32,9 +37,6 @@ const Login: NextPage = () => {
         } else {
           void addPlayer();
         }
-      } else {
-        // User is not logged in, redirect to login page or show login form
-        // For example: router.push("/login");
       }
     }
   }, [user, isUserLoaded, paPlayer, isPlayerLoading, redirect, addPlayer]);
@@ -51,7 +53,6 @@ const Login: NextPage = () => {
     );
   }
 
-  // This part will only be reached if there's an unexpected state
   return (
     <Layout>
       <div className="container mb-6 flex flex-col items-center justify-center">
