@@ -82,8 +82,6 @@ If you'd like to contribute to the development of Earthdoom Game, please follow 
 4. Push your changes to your forked repository.
 5. Open a pull request with a description of the changes you've made.
 
-This project is tested with BrowserStack.
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
