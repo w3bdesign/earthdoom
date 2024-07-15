@@ -7,7 +7,7 @@
 
 ## Earthdoom
 
-![image](https://github.com/user-attachments/assets/4308610a-7b95-4c45-8420-3d247da6750c)
+![image](https://github.com/user-attachments/assets/268ea184-adef-4e12-9207-856e7bb119a5)
 
 Earthdoom is a full-stack web-based strategy game built using Typescript, Next.js, React, tRPC, Tailwind, Prisma and more.
 
