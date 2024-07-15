@@ -1,33 +1,96 @@
 ---
 const features = [
-  { title: "Strategic Gameplay", description: "Build your empire, manage resources, and conquer enemies." },
-  { title: "Advanced Technology", description: "Research and unlock powerful technologies to gain an edge." },
-  { title: "Dynamic Alliances", description: "Form alliances and engage in diplomatic warfare." },
-  { title: "Real-time Battles", description: "Command your forces in intense real-time combat scenarios." },
+  {
+    title: "Strategic Gameplay",
+    description: "Build your empire, manage resources, and conquer enemies.",
+  },
+  {
+    title: "Advanced Technology",
+    description: "Research and unlock powerful technologies to gain an edge.",
+  },
+  {
+    title: "Dynamic Alliances",
+    description: "Form alliances and engage in diplomatic warfare.",
+  },
+  {
+    title: "Real-time Battles",
+    description: "Command your forces in intense real-time combat scenarios.",
+  },
 ];
 ---
 
-<section class="py-16 px-4 max-w-6xl mx-auto">
-  <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">What is Earth Doom?</h2>
-  
+<style>
+  @keyframes scifiSweep {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .feature-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease;
+  }
+
+  .feature-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(0, 163, 255, 0.2),
+      rgba(0, 102, 255, 0.3),
+      rgba(0, 163, 255, 0.2),
+      transparent
+    );
+    transform: translateX(-100%);
+    transition: transform 0.4s;
+  }
+
+  .feature-card:hover::before {
+    animation: scifiSweep 2s forwards;
+  }
+</style>
+
+<section class="py-14 max-w-6xl mx-auto">
+  <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">
+    What is Earth Doom?
+  </h2>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-    {features.map(feature => (
-      <div class="bg-neutral-800 p-6 rounded-lg shadow-lg transition-transform duration-300 hover:scale-105">
-        <h3 class="text-xl font-semibold mb-2">{feature.title}</h3>
-        <p>{feature.description}</p>
-      </div>
-    ))}
+    {
+      features.map((feature) => (
+        <div class="feature-card bg-neutral-800 p-6 rounded-lg shadow-lg">
+          <h3 class="text-xl font-semibold mb-2">{feature.title}</h3>
+          <p>{feature.description}</p>
+        </div>
+      ))
+    }
   </div>
-  
   <p class="mb-6">
-    Earth Doom is an epic war game that plunges you into a relentless fight for survival and dominance. As a leader of your own burgeoning nation, you must carefully build up your forces, gain critical resources, research powerful technologies, and conquer enemy lands - all while defending against those who would conquer you.
+    Earth Doom is an epic war game that plunges you into a relentless fight for
+    survival and dominance. As a leader of your own burgeoning nation, you must
+    carefully build up your forces, gain critical resources, research powerful
+    technologies, and conquer enemy lands - all while defending against those
+    who would conquer you.
   </p>
-  
+
   <p class="mb-6">
-    The key to victory lies in properly balancing and adeptly managing the growth of your empire. Each decision you make can have significant consequences on your nation's future. One wrong move could leave your lands vulnerable or your armies outmatched.
+    The key to victory lies in properly balancing and adeptly managing the
+    growth of your empire. Each decision you make can have significant
+    consequences on your nation's future. One wrong move could leave your lands
+    vulnerable or your armies outmatched.
   </p>
-  
+
   <p>
-    Only the shrewdest and most tactical players will emerge victorious in this competitive real-time strategy arena. Do you have what it takes to dominate the world of Earth Doom?
+    Only the shrewdest and most tactical players will emerge victorious in this
+    competitive real-time strategy arena. Do you have what it takes to dominate
+    the world of Earth Doom?
   </p>
 </section>
