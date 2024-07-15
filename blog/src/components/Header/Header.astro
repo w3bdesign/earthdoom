@@ -3,9 +3,9 @@ import HeaderLink from "./HeaderLink.astro";
 ---
 
 <header class="container">
-  <nav class="flex justify-between items-center py-2">
+  <nav class="flex justify-between items-center pt-4">
     <div class="mx-auto md:mx-0">
-      <img src="/images/logo.png" alt="Earthdoom logo" width="90" />
+      <img class="h-16 w-16" src="/images/logo.png" alt="Earthdoom logo" width="90" />
     </div>
     <div class="hidden sm:block">
       <HeaderLink
@@ -14,12 +14,14 @@ import HeaderLink from "./HeaderLink.astro";
       >
         Home
       </HeaderLink>
-      <!--<HeaderLink
+      <!--
+      <HeaderLink
         class="text-white text-md uppercase mx-4 font-bold hover:after:w-full after:transition-all after:bg-white after:bottom-[-0.45rem] after:block after:m-auto after:h-1 after:ease-in-out after:duration-500 inline-block"
         href="/blog"
       >
         Blog
-      </HeaderLink>-->
+      </HeaderLink>
+      -->
       <HeaderLink
         class="text-white text-md uppercase mx-4 font-bold hover:after:w-full after:transition-all after:bg-white after:bottom-[-0.45rem] after:block after:m-auto after:h-1 after:ease-in-out after:duration-500 inline-block"
         href="/manual"

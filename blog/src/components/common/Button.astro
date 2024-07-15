@@ -1,18 +1,10 @@
 ---
-interface Props {
-  bgColor?: "blue" | "red";
-  hoverColor?: "blue" | "red";
-}
-
-const { bgColor = "blue", hoverColor = "blue" } = Astro.props;
-
-const backgroundColor = bgColor === "blue" ? "bg-blue-600" : "bg-red-600";
-const hoverBackgroundColor =
-  hoverColor === "blue" ? "hover:bg-blue-800" : "hover:bg-red-800";
+const { class: className, ...props } = Astro.props;
 ---
 
 <button
-  class={`ease-in-out duration-300 ${backgroundColor} rounded-lg w-[125px] m-2 px-4 py-2 text-white ${hoverBackgroundColor} focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-75`}
+  class={`px-6 py-3 bg-blue-600 text-white font-semibold rounded-md transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${className}`}
+  {...props}
 >
   <slot />
 </button>
