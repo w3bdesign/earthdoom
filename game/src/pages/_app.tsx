@@ -4,6 +4,7 @@ import {
   SignedOut,
   RedirectToSignIn,
 } from "@clerk/nextjs";
+
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useRouter } from "next/router";
@@ -38,7 +39,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   // If the current route is listed as public, render it directly
   // Otherwise, use Clerk to require authentication
   return (
-    <ClerkProvider signUpFallbackRedirectUrl="/addUser" {...pageProps}>
+    <ClerkProvider 
+
+
+     signInFallbackRedirectUrl="/addUser"
+      signUpFallbackRedirectUrl="/addUser"
+
+
+    
+    {...pageProps}>
       {isPublicPage ? (
         <Component {...pageProps} />
       ) : (
