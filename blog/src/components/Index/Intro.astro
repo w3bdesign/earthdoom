@@ -32,7 +32,6 @@ const features = [
   .feature-card {
     position: relative;
     overflow: hidden;
-    transition: transform 0.4s ease;
   }
 
   .feature-card::before {
@@ -51,32 +50,16 @@ const features = [
       transparent
     );
     transform: translateX(-100%);
-    transition: transform 0.4s;
   }
 
   .feature-card:hover::before {
     animation: scifiSweep 2s forwards;
   }
 
-  .feature-card::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: transparent;
-    pointer-events: none;
-  }
-
-  .feature-card:hover::after {
-    animation: removePointerEvents 0s 2s forwards;
-  }
-
-  @keyframes removePointerEvents {
-    to {
-      pointer-events: auto;
-    }
+  .feature-card:not(:hover)::before {
+    /* Reset the transform when not hovering */
+    transform: translateX(-100%);
+    transition: transform 0s;
   }
 </style>
 
