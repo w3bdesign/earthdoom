@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </SignedIn>
           <SignedOut>
-            <RedirectToSignIn />
+            RedirectToSignIn signInForceRedirectUrl="/login"
           </SignedOut>
         </>
       )}
