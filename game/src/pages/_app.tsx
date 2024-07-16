@@ -2,7 +2,7 @@ import {
   ClerkProvider,
   SignedIn,
   SignedOut,
-  RedirectToSignIn,
+  //RedirectToSignIn,
 } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </SignedIn>
           <SignedOut>
-            RedirectToSignIn signInForceRedirectUrl="/login"
+            RedirectToSignIn
           </SignedOut>
         </>
       )}
