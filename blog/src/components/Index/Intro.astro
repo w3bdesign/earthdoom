@@ -58,8 +58,25 @@ const features = [
     animation: scifiSweep 2s forwards;
   }
 
-  .feature-card:hover::before {
-    animation-play-state: running;
+  .feature-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .feature-card:hover::after {
+    animation: removePointerEvents 0s 2s forwards;
+  }
+
+  @keyframes removePointerEvents {
+    to {
+      pointer-events: auto;
+    }
   }
 </style>
 
