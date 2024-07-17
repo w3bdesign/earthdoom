@@ -3,8 +3,31 @@ const { class: className, ...props } = Astro.props;
 ---
 
 <button
-  class={`w-28 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${className}`}
+  class={`
+    relative overflow-hidden
+    w-32 px-4 py-2
+    bg-gradient-to-r from-blue-600 to-blue-800
+    text-white font-semibold
+    rounded-md
+    shadow-lg shadow-blue-500/30
+    transition-all duration-300
+    hover:shadow-blue-500/50 hover:from-blue-500 hover:to-blue-700
+    focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50
+    group
+    ${className}
+  `}
   {...props}
 >
-  <slot />
+  <span class="relative z-10">
+    <slot />
+  </span>
+  <span
+    class="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+  ></span>
+  <span
+    class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCI+PGNpcmNsZSBjeD0iMTUiIGN5PSIxNSIgcj0iMTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=')] opacity-10"
+  ></span>
+  <span
+    class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-300/10 to-transparent -skew-x-12 opacity-0 group-hover:animate-shine"
+  ></span>
 </button>
