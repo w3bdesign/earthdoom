@@ -26,9 +26,12 @@ const features = [
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
     {
       features.map((feature) => (
-        <div class="bg-neutral-800 p-6 rounded-lg shadow-lg duration-500 ease-in--out [--height:50px] hover:bg-sky-700">
-          <h3 class="text-xl font-semibold mb-2">{feature.title}</h3>
-          <p>{feature.description}</p>
+        <div class="relative bg-neutral-800 p-6 rounded-lg shadow-lg overflow-hidden group">
+          <div class="absolute inset-0 bg-gradient-to-r from-sky-600 to-sky-800 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100" />
+          <div class="relative z-10">
+            <h3 class="text-xl font-semibold mb-2">{feature.title}</h3>
+            <p>{feature.description}</p>
+          </div>
         </div>
       ))
     }
