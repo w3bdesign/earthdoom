@@ -19,49 +19,6 @@ const features = [
 ];
 ---
 
-<style>
-  @keyframes scifiSweep {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
-  }
-
-  .feature-card {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .feature-card::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgba(0, 163, 255, 0.2),
-      rgba(0, 102, 255, 0.3),
-      rgba(0, 163, 255, 0.2),
-      transparent
-    );
-    transform: translateX(-100%);
-  }
-
-  .feature-card:hover::before {
-    animation: scifiSweep 2s forwards;
-  }
-
-  .feature-card:not(:hover)::before {
-    transform: translateX(-100%);
-    transition: transform 0s;
-  }
-</style>
-
 <section class="py-14 max-w-6xl mx-auto">
   <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">
     What is Earth Doom?
@@ -69,7 +26,7 @@ const features = [
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
     {
       features.map((feature) => (
-        <div class="feature-card bg-neutral-800 p-6 rounded-lg shadow-lg">
+        <div class="bg-neutral-800 p-6 rounded-lg shadow-lg duration-500 ease-in--out [--height:50px] hover:bg-sky-700">
           <h3 class="text-xl font-semibold mb-2">{feature.title}</h3>
           <p>{feature.description}</p>
         </div>
