@@ -12,6 +12,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 <html lang="en" class="flex items-center justify-center">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   </head>
   <body class="bg-neutral-900 font-roboto text-white">
     <Header title={SITE_TITLE} />
@@ -22,4 +23,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
     <Footer />
   </body>
 </html>
+
+<style is:global>
+  body {
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+  }
+</style>
 
