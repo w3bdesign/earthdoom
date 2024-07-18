@@ -5,48 +5,43 @@ import HeaderLink from "./HeaderLink.astro";
 <header class="container">
   <nav class="flex justify-between items-center pt-4">
     <div class="mx-auto md:mx-0">
-      <img class="h-16 w-16" src="/images/logo.png" alt="Earthdoom logo" width="90" />
+      <img
+        class="h-16 w-16"
+        src="/images/logo.png"
+        alt="Earthdoom logo"
+        width="90"
+      />
     </div>
     <div class="hidden sm:block">
       <HeaderLink
-        class="text-white text-md uppercase mx-4 font-bold hover:after:w-full after:transition-all after:bg-white after:bottom-[-0.45rem] after:block after:m-auto after:h-1 after:ease-in-out after:duration-500 inline-block"
+        class="text-white text-md uppercase mx-4 font-bold relative after:absolute after:bottom-[-0.45rem] after:left-0 after:w-full after:h-1 after:bg-white after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+        activeClass="after:scale-x-100"
         href="/"
       >
         Home
       </HeaderLink>
-      <!--
       <HeaderLink
-        class="text-white text-md uppercase mx-4 font-bold hover:after:w-full after:transition-all after:bg-white after:bottom-[-0.45rem] after:block after:m-auto after:h-1 after:ease-in-out after:duration-500 inline-block"
-        href="/blog"
-      >
-        Blog
-      </HeaderLink>
-      -->
-      <HeaderLink
-        class="text-white text-md uppercase mx-4 font-bold hover:after:w-full after:transition-all after:bg-white after:bottom-[-0.45rem] after:block after:m-auto after:h-1 after:ease-in-out after:duration-500 inline-block"
+        class="text-white text-md uppercase mx-4 font-bold relative after:absolute after:bottom-[-0.45rem] after:left-0 after:w-full after:h-1 after:bg-white after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+        activeClass="after:scale-x-100"
         href="/manual"
       >
         Manual
       </HeaderLink>
     </div>
   </nav>
-  <!-- This is the responsive menu -->
+  <!-- This is the mobile menu -->
   <div class="sm:hidden">
     <div class="flex justify-center items-center py-4 px-6">
       <HeaderLink
-        class="text-white block text-sm uppercase px-4 font-bold"
+        class="text-white block text-sm uppercase px-4 font-bold relative after:absolute after:bottom-[-0.45rem] after:left-0 after:w-full after:h-1 after:bg-white after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+        activeClass="after:scale-x-100"
         href="/"
       >
         Home
       </HeaderLink>
-      <!--<HeaderLink
-        class="text-white block text-sm uppercase px-4 font-bold"
-        href="/blog"
-      >
-        Blog
-      </HeaderLink>-->
       <HeaderLink
-        class="text-white block text-sm uppercase px-4 font-bold"
+        class="text-white block text-sm uppercase px-4 font-bold relative after:absolute after:bottom-[-0.45rem] after:left-0 after:w-full after:h-1 after:bg-white after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+        activeClass="after:scale-x-100"
         href="/manual"
       >
         Manual
