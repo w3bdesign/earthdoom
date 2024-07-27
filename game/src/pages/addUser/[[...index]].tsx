@@ -21,22 +21,29 @@ const AddUser: NextPage = () => {
   const { mutate } = api.paUsers.createPlayer.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Player created", type: "success" });
-      // Wrap setTimeout in a Promise to allow using await
       await new Promise<void>((resolve) => {
         setTimeout(() => {
           resolve();
         }, 2000);
       });
-      // Make the function async to allow for use of await
       await router.push("/");
     },
   });
 
   useEffect(() => {
-    if (user && user.username) {
-      mutate({ nick: user.username });
-    }
-  }, [mutate, user]);
+    const createPlayer = async () => {
+      if (user && user.id) {
+        const existingPlayer = await api.paUsers.getPlayerByUserId.query({ userId: user.id });
+        if (!existingPlayer) {
+          mutate({ userId: user.id });
+        } else {
+          await router.push("/");
+        }
+      }
+    };
+
+    createPlayer();
+  }, [mutate, user, router]);
 
   return (
     <>
