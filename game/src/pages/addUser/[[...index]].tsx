@@ -33,11 +33,10 @@ const AddUser: NextPage = () => {
   useEffect(() => {
     const createPlayer = async () => {
       if (user && user.id && user.username) {
-        const { data: existingPlayer } =
-          await api.paUsers.getPlayerByNick.useQuery(
-            { nick: user?.username || "" },
-            { enabled: !!user?.username },
-          );
+        const { data: existingPlayer } = api.paUsers.getPlayerByNick.useQuery(
+          { nick: user?.username || "" },
+          { enabled: !!user?.username },
+        );
 
         if (!existingPlayer) {
           mutate({ nick: user?.username });
