@@ -32,10 +32,15 @@ const AddUser: NextPage = () => {
 
   useEffect(() => {
     const createPlayer = async () => {
-      if (user && user.id) {
-        const existingPlayer = await api.paUsers.getPlayerByUserId.query({ userId: user.id });
+      if (user && user.id && user.username) {
+        const { data: existingPlayer } =
+          await api.paUsers.getPlayerByNick.useQuery(
+            { nick: user?.username || "" },
+            { enabled: !!user?.username },
+          );
+
         if (!existingPlayer) {
-          mutate({ userId: user.id });
+          mutate({ nick: user?.username });
         } else {
           await router.push("/");
         }
