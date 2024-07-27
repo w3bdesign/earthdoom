@@ -46,7 +46,9 @@ const AddUser: NextPage = () => {
       }
     };
 
-    createPlayer();
+    createPlayer().then(() => {
+      console.log("done");
+    });
   }, [mutate, user, router]);
 
   return (
