@@ -1,10 +1,13 @@
 import { useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
-import type { NextPage } from "next";
+
 import { Layout } from "@/components/common/Layout";
 import { ToastComponent } from "@/components/ui";
+
 import { api } from "@/utils/api";
+
+import type { NextPage } from "next";
 
 /**
  * Renders a page for creating a player and creates a new player for the logged in user.
