@@ -11,7 +11,7 @@
 
 Earthdoom is a full-stack web-based strategy game built using Typescript, Next.js, React, tRPC, Tailwind, Prisma and more.
 
-The database is handled through mySQL and Planetscale.
+The database is handled through PostgreSQL and Supabase.
 
 Authentication is handled through Clerk.
 
