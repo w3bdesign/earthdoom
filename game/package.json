@@ -13,7 +13,7 @@
     "refresh": "rm -rf node_modules && rm package-lock.json && npm i && npm run format"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.31.4",
+    "@clerk/nextjs": "^5.5.2",
     "@prisma/client": "^5.19.1",
     "@tanstack/react-query": "4.36.1",
     "@tanstack/react-query-devtools": "4.36.1",
