@@ -1,101 +1,37 @@
-# Prisma CLI Cheatsheet
+# EarthDoom Tools
 
-## Database Management
+This directory contains utility tools for the EarthDoom project.
 
-### Initialize Prisma in your project
+## Tools
 
+### Battle Calculator (battle_calc.py)
+A command-line tool for simulating and calculating battle outcomes in EarthDoom. It supports:
+- Unit damage calculations between different unit types (Infantry, Shadows, Goliaths, Hellspawn, Ares)
+- Interactive input for army compositions
+- Detailed battle summaries with damage statistics
+- Rich console output for better readability
+
+### Database Utilities (delete.py)
+Database management utilities for the EarthDoom PostgreSQL database:
+- Clear database tables safely
+- Cascading deletion support
+- Connection management with environment variables
+
+## Usage
+
+### Battle Calculator
+Run the battle calculator to simulate combat outcomes:
+```bash
+python battle_calc.py
 ```
-npx prisma init
+Follow the prompts to input attacker and defender unit counts for each unit type.
+
+### Database Cleanup
+Execute the database cleanup utility:
+```bash
+python delete.py
 ```
+Requires proper database credentials in environment variables (DATABASE_URL).
 
-### Generate Prisma Client
-
-```
-npx prisma generate
-```
-
-### Push schema changes to the database
-
-```
-npx prisma db push
-```
-
-### Pull the database schema
-
-```
-npx prisma db pull
-```
-
-### Create and apply migrations
-
-```
-npx prisma migrate dev --name migration_name
-```
-
-### Apply migrations in production
-
-```
-npx prisma migrate deploy
-```
-
-## Data Management
-
-### Open Prisma Studio (GUI to view and edit data)
-
-```
-npx prisma studio
-```
-
-### Seed the database
-
-```
-npx prisma db seed
-```
-
-## Database Dumps
-
-### Dump the database (MySQL)
-
-```
-npx prisma db execute --file ./dump.sql --schema ./schema.prisma
-```
-
-### Dump the database (PostgreSQL)
-
-```
-pg_dump -O -x -h localhost -U username database_name > dump.sql
-```
-
-## Introspection and Visualization
-
-### Introspect the database and update the schema
-
-```
-npx prisma db pull
-```
-
-### Generate an ERD (Entity Relationship Diagram)
-
-```
-npx prisma generate --schema=./prisma/schema.prisma
-```
-
-## Troubleshooting
-
-### Reset the database (caution: deletes all data)
-
-```
-npx prisma migrate reset
-```
-
-### Format the Prisma schema
-
-```
-npx prisma format
-```
-
-### Validate the Prisma schema
-
-```
-npx prisma validate
-```
+## Additional Resources
+For database administration commands using Prisma, see [prisma_commands.md](prisma_commands.md).
