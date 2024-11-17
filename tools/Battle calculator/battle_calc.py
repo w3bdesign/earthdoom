@@ -10,11 +10,11 @@ UNIT_ORDER = [
     'Reaper',      # 800
     'Shadows',     # 1000
     'Avenger',     # 1400
-    'Astropod',    # 1600
+    'Grabber',    # 1600
     'Cobra',       # 3000
     'Goliaths',    # 5000
     'Hellspawn',   # 5000
-    'LandStalker', # 6000
+    'LuciusStalker', # 6000
     'Ares',        # 7000
 ]
 
@@ -23,11 +23,11 @@ UNIT_SCORES = {
     'Reaper': 800,
     'Shadows': 1000,
     'Avenger': 1400,
-    'Astropod': 1600,
+    'Grabber': 1600,
     'Cobra': 3000,
     'Goliaths': 5000,
     'Hellspawn': 5000,
-    'LandStalker': 6000,
+    'LuciusStalker': 6000,
     'Ares': 7000,
 }
 
@@ -39,7 +39,7 @@ COMBAT_STATS = {
         'Hellspawn': 0.8,
         'Ares': 3.00,
         'Cobra': 0.02,
-        'Astropod': 0.015,
+        'Grabber': 0.015,
         'Reaper': 0.005,
     },
     'Shadows': {
@@ -49,7 +49,7 @@ COMBAT_STATS = {
         'Hellspawn': 0.31,
         'Ares': 2.35,
         'Cobra': 0.005,
-        'Astropod': 0.015,
+        'Grabber': 0.015,
         'Reaper': 0.04,
     },
     'Goliaths': {
@@ -59,17 +59,17 @@ COMBAT_STATS = {
         'Hellspawn': 0.3,
         'Ares': 0.125,
         'Cobra': 0.015,
-        'Astropod': 0.055,
+        'Grabber': 0.055,
         'Reaper': 0.1,
     },
-    'Astropod': {
+    'Grabber': {
         'Infantry': 0.015,
         'Shadows': 0.015,
         'Goliaths': 0.055,
         'Hellspawn': 0.11,
         'Ares': 0.135,
         'Cobra': 0.0,
-        'Astropod': 0.0,
+        'Grabber': 0.0,
         'Reaper': 0.1,
     },
     'Cobra': {
@@ -79,7 +79,7 @@ COMBAT_STATS = {
         'Hellspawn': 0.25,
         'Ares': 1.00,
         'Cobra': 0.0,
-        'Astropod': 0.0,
+        'Grabber': 0.0,
         'Reaper': 0.09,
     },
     'Hellspawn': {
@@ -89,7 +89,7 @@ COMBAT_STATS = {
         'Hellspawn': 0.05,
         'Ares': 0.18,
         'Cobra': 0.25,
-        'Astropod': 0.11,
+        'Grabber': 0.11,
         'Reaper': 0.15,
     },
     'Ares': {
@@ -99,7 +99,7 @@ COMBAT_STATS = {
         'Hellspawn': 0.04,
         'Ares': 0.05,
         'Cobra': 1.00,
-        'Astropod': 0.135,
+        'Grabber': 0.135,
         'Reaper': 0.25,
     },
     'Reaper': {
@@ -109,7 +109,7 @@ COMBAT_STATS = {
         'Hellspawn': 0.15,
         'Ares': 0.25,
         'Cobra': 0.0,
-        'Astropod': 0.0,
+        'Grabber': 0.0,
         'Reaper': 0.0,
     },
     'Avenger': {
@@ -119,22 +119,22 @@ COMBAT_STATS = {
         'Hellspawn': 0.0,
         'Ares': 0.0,
         'Cobra': 0.0,
-        'Astropod': 0.0,
+        'Grabber': 0.0,
         'Reaper': 0.2,
     },
-    'LandStalker': {
+    'LuciusStalker': {
         'Infantry': 0.0,
         'Shadows': 0.07,
         'Goliaths': 0.0,
         'Hellspawn': 0.08,
         'Ares': 0.1,
         'Cobra': 0.0,
-        'Astropod': 0.0,
+        'Grabber': 0.0,
         'Reaper': 0.0,
     }
 }
 
-LAND_CAPTURE_RATE = 0.1  # 10% capture rate per Astropod
+LAND_CAPTURE_RATE = 0.1  # 10% capture rate per Grabber
 
 def get_unit_counts(side):
     units = {}
@@ -243,9 +243,9 @@ def simulate_battle(attacker_units, defender_units):
     return battle_log, total_results
 
 def calculate_land_capture(attacker_units, defender_land):
-    astropods = attacker_units.get('Astropod', 0)
-    if astropods > 0:
-        max_capture = min(astropods * LAND_CAPTURE_RATE, defender_land)
+    Grabbers = attacker_units.get('Grabber', 0)
+    if Grabbers > 0:
+        max_capture = min(Grabbers * LAND_CAPTURE_RATE, defender_land)
         return {
             'metal': round(max_capture * 0.4),
             'crystal': round(max_capture * 0.4),
