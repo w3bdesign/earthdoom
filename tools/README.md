@@ -1,101 +1,26 @@
-# Prisma CLI Cheatsheet
+# EarthDoom Tools
 
-## Database Management
+Collection of utilities and tools for the EarthDoom project, organized by functionality.
 
-### Initialize Prisma in your project
+## Directory Structure
 
-```
-npx prisma init
-```
+### [Battle calculator/](Battle%20calculator/)
+Battle simulation and damage calculation tools
+- Interactive battle outcome calculator
+- Simulates combat between different unit types
+- Provides detailed damage statistics
 
-### Generate Prisma Client
+### [Database tools/](Database%20tools/)
+Database management utilities
+- Safe database cleanup utility
+- Handles PostgreSQL operations with error protection
+- Environment-based configuration
 
-```
-npx prisma generate
-```
+### [Docs/](Docs/)
+Documentation and reference materials
+- Prisma CLI command reference
+- Database administration guides
 
-### Push schema changes to the database
+## Quick Start
 
-```
-npx prisma db push
-```
-
-### Pull the database schema
-
-```
-npx prisma db pull
-```
-
-### Create and apply migrations
-
-```
-npx prisma migrate dev --name migration_name
-```
-
-### Apply migrations in production
-
-```
-npx prisma migrate deploy
-```
-
-## Data Management
-
-### Open Prisma Studio (GUI to view and edit data)
-
-```
-npx prisma studio
-```
-
-### Seed the database
-
-```
-npx prisma db seed
-```
-
-## Database Dumps
-
-### Dump the database (MySQL)
-
-```
-npx prisma db execute --file ./dump.sql --schema ./schema.prisma
-```
-
-### Dump the database (PostgreSQL)
-
-```
-pg_dump -O -x -h localhost -U username database_name > dump.sql
-```
-
-## Introspection and Visualization
-
-### Introspect the database and update the schema
-
-```
-npx prisma db pull
-```
-
-### Generate an ERD (Entity Relationship Diagram)
-
-```
-npx prisma generate --schema=./prisma/schema.prisma
-```
-
-## Troubleshooting
-
-### Reset the database (caution: deletes all data)
-
-```
-npx prisma migrate reset
-```
-
-### Format the Prisma schema
-
-```
-npx prisma format
-```
-
-### Validate the Prisma schema
-
-```
-npx prisma validate
-```
+Each tool directory contains its own README with specific usage instructions and requirements.
