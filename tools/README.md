@@ -1,37 +1,26 @@
 # EarthDoom Tools
 
-This directory contains utility tools for the EarthDoom project.
+Collection of utilities and tools for the EarthDoom project, organized by functionality.
 
-## Tools
+## Directory Structure
 
-### Battle Calculator (battle_calc.py)
-A command-line tool for simulating and calculating battle outcomes in EarthDoom. It supports:
-- Unit damage calculations between different unit types (Infantry, Shadows, Goliaths, Hellspawn, Ares)
-- Interactive input for army compositions
-- Detailed battle summaries with damage statistics
-- Rich console output for better readability
+### [Battle calculator/](Battle%20calculator/)
+Battle simulation and damage calculation tools
+- Interactive battle outcome calculator
+- Simulates combat between different unit types
+- Provides detailed damage statistics
 
-### Database Utilities (delete.py)
-Database management utilities for the EarthDoom PostgreSQL database:
-- Clear database tables safely
-- Cascading deletion support
-- Connection management with environment variables
+### [Database tools/](Database%20tools/)
+Database management utilities
+- Safe database cleanup utility
+- Handles PostgreSQL operations with error protection
+- Environment-based configuration
 
-## Usage
+### [Docs/](Docs/)
+Documentation and reference materials
+- Prisma CLI command reference
+- Database administration guides
 
-### Battle Calculator
-Run the battle calculator to simulate combat outcomes:
-```bash
-python battle_calc.py
-```
-Follow the prompts to input attacker and defender unit counts for each unit type.
+## Quick Start
 
-### Database Cleanup
-Execute the database cleanup utility:
-```bash
-python delete.py
-```
-Requires proper database credentials in environment variables (DATABASE_URL).
-
-## Additional Resources
-For database administration commands using Prisma, see [prisma_commands.md](prisma_commands.md).
+Each tool directory contains its own README with specific usage instructions and requirements.
