@@ -14,7 +14,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.31.5",
+    "@clerk/nextjs": "^4.31.6",
     "@prisma/client": "^5.19.1",
     "@tanstack/react-query": "4.36.1",
     "@tanstack/react-query-devtools": "4.36.1",
@@ -22,9 +22,9 @@
     "@trpc/next": "^10.45.2",
     "@trpc/react-query": "^10.45.2",
     "@trpc/server": "^10.45.2",
-    "chart.js": "^4.4.4",
-    "date-fns": "^4.0.0",
-    "next": "^14.2.7",
+    "chart.js": "^4.4.7",
+    "date-fns": "^4.1.0",
+    "next": "^14.2.18",
     "react": "18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.3.1",
