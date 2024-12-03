@@ -2,8 +2,8 @@ import { mockDeep, mockReset } from 'jest-mock-extended';
 import { type PrismaClient, type PaUsers, type PaConstruct } from '@prisma/client';
 import { z } from 'zod';
 import { type inferProcedureInput } from '@trpc/server';
-import { type AppRouter } from '../../root';
-import { type CreateNextContextOptions } from '@trpc/server/adapters/next';
+import { type AppRouter } from '../../../../server/api/root';
+
 
 const prismaMock = mockDeep<PrismaClient>();
 
@@ -31,7 +31,7 @@ interface PlayerWithConstruction extends PaUsers {
 }
 
 // Mock the entire trpc module
-jest.mock('../../trpc', () => ({
+jest.mock('../../../../server/api/trpc', () => ({
   createTRPCRouter: (routes: Record<string, unknown>) => ({
     createCaller: (ctx: RouterContext) => {
       const router: Record<string, Function> = {};
