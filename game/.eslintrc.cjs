@@ -3,6 +3,12 @@ const path = require("path");
 
 /** @type {import("eslint").Linter.Config} */
 const config = {
+  root: true,
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+  },
   overrides: [
     {
       extends: [
@@ -17,14 +23,22 @@ const config = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: path.join(__dirname, "tsconfig.json"),
-  },
-  plugins: [
-    {
-      name: "@typescript-eslint",
-      rules: require("@typescript-eslint/eslint-plugin").rules,
+    sourceType: "module",
+    ecmaVersion: "latest",
+    ecmaFeatures: {
+      jsx: true,
     },
+  },
+  settings: {
+    "import/resolver": {
+      typescript: {},
+    },
+  },
+  extends: [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
   ],
-  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+  plugins: ["@typescript-eslint"],
   rules: {
     "@typescript-eslint/no-unsafe-member-access": "warn",
     "@typescript-eslint/no-floating-promises": "warn",
