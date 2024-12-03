@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Home from './index';
+import Home from '../../pages/index';
 import type { PaUsers } from '@prisma/client';
 
 // Define the PaPlayer type that extends PaUsers
@@ -27,7 +27,7 @@ jest.mock('@clerk/nextjs', () => ({
 
 // Mock the api
 const mockUseQuery = jest.fn<UseQueryReturn, []>();
-jest.mock('../utils/api', () => ({
+jest.mock('../../utils/api', () => ({
   api: {
     paUsers: {
       getPlayerByNick: {
@@ -38,37 +38,37 @@ jest.mock('../utils/api', () => ({
 }));
 
 // Mock the components
-jest.mock('../components/common/Layout', () => ({
+jest.mock('../../components/common/Layout', () => ({
   Layout: ({ children }: { children: React.ReactNode }) => <div data-testid="layout">{children}</div>
 }));
 
-jest.mock('../components/common/Loader/LoadingSpinner', () => ({
+jest.mock('../../components/common/Loader/LoadingSpinner', () => ({
   __esModule: true,
   default: () => <div data-testid="loading-spinner">Loading...</div>
 }));
 
-jest.mock('../components/ui/tables/UnitsTable', () => ({
+jest.mock('../../components/ui/tables/UnitsTable', () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
     <div data-testid="units-table">Units Table: {paPlayer.nick}</div>
   )
 }));
 
-jest.mock('../components/ui/tables/BDUTable', () => ({
+jest.mock('../../components/ui/tables/BDUTable', () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
     <div data-testid="bdu-table">BDU Table: {paPlayer.nick}</div>
   )
 }));
 
-jest.mock('../components/ui/tables/LandTable', () => ({
+jest.mock('../../components/ui/tables/LandTable', () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
     <div data-testid="land-table">Land Table: {paPlayer.nick}</div>
   )
 }));
 
-jest.mock('../components/ui/tables/FleetTable', () => ({
+jest.mock('../../components/ui/tables/FleetTable', () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
     <div data-testid="fleet-table">Fleet Table: {paPlayer.nick}</div>
