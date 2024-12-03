@@ -8,14 +8,25 @@ interface PaPlayer extends PaUsers {
   [key: string]: number | string | null | undefined;
 }
 
+interface UseUserReturn {
+  isSignedIn: boolean;
+  user: { username: string | null } | null;
+}
+
+interface UseQueryReturn {
+  data: PaPlayer | null | undefined;
+  isLoading: boolean;
+  error?: Error;
+}
+
 // Mock the clerk hook
-const mockUseUser = jest.fn();
+const mockUseUser = jest.fn<UseUserReturn, []>();
 jest.mock('@clerk/nextjs', () => ({
   useUser: () => mockUseUser()
 }));
 
 // Mock the api
-const mockUseQuery = jest.fn();
+const mockUseQuery = jest.fn<UseQueryReturn, []>();
 jest.mock('../utils/api', () => ({
   api: {
     paUsers: {
@@ -266,7 +277,7 @@ describe('Home component', () => {
     
     // Verify API was called with correct parameters
     expect(mockUseQuery).toHaveBeenCalled();
-    const queryResult = mockUseQuery.mock.results[0]?.value;
-    expect(queryResult).toHaveProperty('isLoading');
+    const queryResult = mockUseQuery.mock.results[0]?.value as UseQueryReturn;
+    expect(queryResult.isLoading).toBe(true);
   });
 });
