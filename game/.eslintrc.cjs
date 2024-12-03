@@ -18,7 +18,12 @@ const config = {
   parserOptions: {
     project: path.join(__dirname, "tsconfig.json"),
   },
-  plugins: ["@typescript-eslint"],
+  plugins: [
+    {
+      name: "@typescript-eslint",
+      rules: require("@typescript-eslint/eslint-plugin").rules,
+    },
+  ],
   extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   rules: {
     "@typescript-eslint/no-unsafe-member-access": "warn",
