@@ -15,7 +15,7 @@ const customJestConfig = {
   moduleDirectories: ['node_modules', '<rootDir>/'],
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   transform: {
-    '^.+\\.(ts|tsx|js|jsx|mjs)$': ['ts-jest', {
+    '^.+\\.(ts|tsx|js|jsx)$': ['ts-jest', {
       tsconfig: 'tsconfig.json',
       useESM: true,
     }]
@@ -23,7 +23,7 @@ const customJestConfig = {
   transformIgnorePatterns: [
     '/node_modules/(?!(@prisma|@clerk|superjson|@trpc)/)',
   ],
-  extensionsToTreatAsEsm: ['.ts', '.tsx', '.mjs'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node', 'mjs'],
 };
 
