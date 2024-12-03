@@ -13,8 +13,15 @@ const customJestConfig = {
   },
   moduleDirectories: ['node_modules', '<rootDir>/'],
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
-  automock: false,
-  resetMocks: false,
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov'],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/_*.{js,jsx,ts,tsx}',
+    '!src/**/*.stories.{js,jsx,ts,tsx}'
+  ],
 };
 
 module.exports = createJestConfig(customJestConfig);
