@@ -2,26 +2,21 @@
 import CallToAction from "./CallToAction.astro";
 ---
 
-<main class=" w-full">
+<main class="w-full relative">
   <div
-    class="flex flex-col items-center justify-center h-[620px] lg:h-[750px] bg-cool-space-ship bg-cover"
+    class="h-[25rem] md:h-[30rem] bg-cool-space-ship bg-cover bg-center flex items-center justify-center"
   >
-    <div
-      class="bg-neutral-900 p-4 md:p-8 rounded-lg mx-2 md:mx-0 drop-shadow-lg shadow-lg shadow-slate-700 md:w-3/4 w-[260px]"
-    >
-      <h1
-        class="typewriter-effect text-white text-xl md:text-3xl font-bold mb-8 text-center"
-      >
-        Earth Doom
-      </h1>
-      <p
-        class="text-white text-center text-sm lg:text-xl mb-1 py-2 fade-in-top-second"
-      >
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+      <div class="container">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 typed-out">
+          Earth Doom
+        </h1>
+      </div>
+      <p class="text-xl md:text-2xl mb-4 fade-in-top-second text-left md:text-center">
         Explore the world like never before and conquer your enemies!
       </p>
-      <p
-        class="text-white text-center text-sm lg:text-xl mb-1 py-2 fade-in-top-second"
-      >
+      <p class="text-sm md:text-base mb-8 fade-in-top-third text-left md:text-center">
         I am manually running the game ticker when I am developing and testing
         the game. Please be patient.
       </p>
@@ -31,61 +26,71 @@ import CallToAction from "./CallToAction.astro";
 </main>
 
 <style>
+  .container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .typed-out {
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: 0.05em;
+    padding: 10px;
+    animation:
+      typing 2s steps(20, end),
+      blink-caret 0.75s step-end 8,
+      remove-caret 0s 1.2s forwards;
+    border-right: 0.15em solid #fff;
+  }
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  @keyframes blink-caret {
+    from,
+    to {
+      border-color: transparent;
+    }
+    50% {
+      border-color: #fff;
+    }
+  }
+
+  @keyframes remove-caret {
+    to {
+      border-right: none;
+    }
+  }
+
   .fade-in-top-second {
     opacity: 0;
-    transform: translateY(-40px);
+    transform: translateY(-20px);
     animation: fadeInTop 0.7s ease-in-out forwards;
-    animation-delay: 0.8s;
+    animation-delay: 2s; /* Delay until after typing animation */
+  }
+
+  .fade-in-top-third {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInTop 0.7s ease-in-out forwards;
+    animation-delay: 2.7s; /* Delay until after second paragraph fades in */
   }
 
   @keyframes fadeInTop {
     from {
       opacity: 0;
-      transform: translateY(-40px);
+      transform: translateY(-20px);
     }
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
-
-  .typewriter-effect {
-    overflow: hidden;
-    white-space: nowrap;
-    margin: 0 auto;
-    animation: typing 3.5s steps(44) 1s 1 normal both,
-      blink 0.5s step-end infinite normal;
-  }
-
-  @keyframes blink {
-    from,
-    to {
-      border-right-color: transparent;
-    }
-    50% {
-    }
-  }
 </style>
-
-<script>
-  let text = "Earth Doom";
-  let i = 0;
-
-  const typewriter = () => {
-    let textElement = document.querySelector(
-      ".typewriter-effect"
-    ) as HTMLElement;
-
-    if (textElement) {
-      textElement.innerText = text.slice(0, i++);
-
-      const delay = Math.floor(Math.random() * 250) + 120;
-
-      if (i <= text.length) {
-        setTimeout(typewriter, delay);
-      }
-    }
-  };
-
-  typewriter();
-</script>

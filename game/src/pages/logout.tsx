@@ -1,4 +1,6 @@
-import { SignUpButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
+
+import { useClerk } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
 
@@ -11,6 +13,7 @@ import { Button } from "@/components/ui";
  * @return {JSX.Element} The JSX element containing the logout button
  */
 const Logout: NextPage = () => {
+  const { signOut } = useClerk();
   return (
     <>
       <Layout>
@@ -18,17 +21,10 @@ const Logout: NextPage = () => {
           <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
             <p className="mt-12 text-2xl text-white">
               <SignedIn>
-                <SignUpButton>
-                  <Button
-                    type="button"
-                    className="inline-block rounded bg-primary p-8 pb-2 pt-2.5 text-xl font-medium leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600"
-                  >
-                    Sign out
-                  </Button>
-                </SignUpButton>
+                <Button onClick={() => signOut()}>Sign out</Button>
               </SignedIn>
               <SignedOut>
-                <SignInButton redirectUrl="/">
+                <SignInButton>
                   <Button
                     type="button"
                     className="inline-block rounded bg-primary p-8 pb-2 pt-2.5 text-xl font-medium leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600"

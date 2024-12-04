@@ -1,35 +1,57 @@
-<section
-  class="text-white text-lg md:text-xl my-10 text-left mx-auto"
->
-  <h2 class="text-white text-xl md:text-2xl font-bold mb-8 text-center my-2">
+---
+const features = [
+  {
+    title: "Strategic Gameplay",
+    description: "Build your empire, manage resources, and conquer enemies.",
+  },
+  {
+    title: "Advanced Technology",
+    description: "Research and unlock powerful technologies to gain an edge.",
+  },
+  {
+    title: "Dynamic Alliances",
+    description: "Form alliances and engage in diplomatic warfare.",
+  },
+  {
+    title: "Turn-based Battles",
+    description: "Command your forces in intense turn-based combat scenarios.",
+  },
+];
+---
+
+<section class="py-14 max-w-6xl mx-auto">
+  <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">
     What is Earth Doom?
   </h2>
-  <p class="my-6 mx-2">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+    {
+      features.map((feature) => (
+        <div class="relative bg-neutral-800 p-6 rounded-lg shadow-lg overflow-hidden group">
+          <div class="absolute inset-0 bg-gradient-to-r from-sky-700 to-sky-900 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100 blur-sm" />
+          <div class="relative z-10">
+            <h3 class="text-xl font-semibold mb-2">{feature.title}</h3>
+            <p>{feature.description}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <p class="mb-6">
     Earth Doom is an epic war game that plunges you into a relentless fight for
     survival and dominance. As a leader of your own burgeoning nation, you must
     carefully build up your forces, gain critical resources, research powerful
     technologies, and conquer enemy lands - all while defending against those
-    who would conquer you. The key to victory lies in properly balancing and
-    adeptly managing the growth of your empire. Do you produce more scout units
-    to search for additional resources and lands to conquer? Or do you focus on
-    upgrading your resource production and building a stronger army?
+    who would conquer you.
   </p>
-  <p class="my-6 mx-2">
-    Each decision you make can have significant consequences on your nation's
-    future. One wrong move could leave your lands vulnerable or your armies
-    outmatched. With every minute that passes, your empire gains resources that
-    can be used to construct new buildings, train infantry units, and conduct
-    valuable research to gain access to more advanced units and upgrades. But
-    don't be lulled into a false sense of security - your enemies are also
-    rapidly expanding their power. New threats could emerge at any time to
-    challenge your supremacy.
+  <p class="mb-6">
+    The key to victory lies in properly balancing and adeptly managing the
+    growth of your empire. Each decision you make can have significant
+    consequences on your nation's future. One wrong move could leave your lands
+    vulnerable or your armies outmatched.
   </p>
-  <p class="my-6 mx-2">
+  <p>
     Only the shrewdest and most tactical players will emerge victorious in this
-    competitive real-time strategy arena. Mastery of military tactics, resource
-    optimization, and clever alliances will be required to dominate this digital
-    battlefield. Do you have the strategic vision and leadership to guide your
-    nation to a position of strength and prominence in the increasingly
-    treacherous world of Earth Doom?
+    competitive real-time strategy arena. Do you have what it takes to dominate
+    the world of Earth Doom?
   </p>
 </section>

@@ -3,6 +3,7 @@ import BaseHead from "../components/Header/BaseHead.astro";
 import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer/Footer.astro";
 import ManualContent from "../components/Manual/ManualContent.astro";
+import Stats from "../components/Manual/Stats.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 ---
@@ -11,15 +12,23 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 <html lang="en" class="flex items-center justify-center">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   </head>
-  <body
-    class="bg-neutral-900 container flex flex-col items-center justify-center p-2"
-  >
+  <body class="bg-neutral-900 font-roboto text-white max-w-[95vw]">
     <Header title={SITE_TITLE} />
     <main class="flex flex-col items-center justify-center">
       <ManualContent />
+      <Stats />
     </main>
     <Footer />
   </body>
 </html>
+
+<style is:global>
+  body {
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+  }
+</style>
 
