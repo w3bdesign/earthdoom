@@ -10,13 +10,13 @@ export const paUsersRouter = createTRPCRouter({
   createPlayer: publicProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.paUsers.create({
-        data: {
-          nick: input.nick,
-          construction: { create: {} }, // create the construction field
-        },
-        include: { construction: true }, // include the construction field in the response
-      });
+    return await ctx.prisma.paUsers.create({
+      data: {
+        nick: input.nick,
+        construction: { create: {} }, // create the construction field
+      },
+      include: { construction: true }, // include the construction field in the response
+    });
     }),
 
   getAll: privateProcedure.query(({ ctx }) => {
@@ -79,9 +79,28 @@ export const paUsersRouter = createTRPCRouter({
         return null;
       }
 
+      // If player has no paConstructId, create a new PaConstruct
+      if (!player.paConstructId) {
+        const newConstruct = await ctx.prisma.paConstruct.create({
+          data: {}
+        });
+        
+        // Link the new construct to the player
+        await ctx.prisma.paUsers.update({
+          where: { id: player.id },
+          data: { paConstructId: newConstruct.id }
+        });
+        
+        return { ...newConstruct, ...player, id: player.id };
+      }
+
       const paConstruct = await ctx.prisma.paConstruct.findUnique({
-        where: { id: player.paConstructId || 1 },
+        where: { id: player.paConstructId },
       });
+
+      if (!paConstruct) {
+        throw new Error(`No PaConstruct found for user with ID: ${player.id}`);
+      }
 
       return { ...paConstruct, ...player, id: player.id };
     }),
