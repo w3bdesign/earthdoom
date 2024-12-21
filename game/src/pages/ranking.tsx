@@ -27,7 +27,7 @@ const RankingPage: NextPage = () => {
     nick: user.username,
   });
 
-  const columns: AdvancedTableColumn<PaPlayer>[] = [
+  const columns: AdvancedTableColumn[] = [
     { label: "Nick", accessor: "nick" },
     { label: "Score", accessor: "score" },
     { label: "Size", accessor: "size" },

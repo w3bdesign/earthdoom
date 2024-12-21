@@ -27,18 +27,18 @@ export type TMutateType = UseMutateFunction<
   unknown
 >;
 
-export interface AdvancedTableColumn<T = PaPlayer | Building> {
+export interface AdvancedTableColumn {
   label: string;
-  accessor: string | JSX.Element | ((row: T) => JSX.Element);
+  accessor: string | JSX.Element | ((row: any) => JSX.Element);
   type?: string;
 }
 
-export interface AdvancedDataTableProps<T = PaPlayer | Building> {
+export interface AdvancedDataTableProps {
   isLoading?: boolean;
-  columns: AdvancedTableColumn<T>[];
-  data: T[];
+  columns: AdvancedTableColumn[];
+  data: PaPlayer[];
   caption: string;
-  renderData?: T[];
+  renderData?: Building[];
   action?: TMutateType;
   actionText?: string;
   actionInProgress?: string;
@@ -47,7 +47,6 @@ export interface AdvancedDataTableProps<T = PaPlayer | Building> {
 
 /**
  * Renders an advanced data table component.
- * @template T - The type of data being displayed in the table
  *
  * @param {AdvancedDataTableProps} props - The component props.
  * @param {boolean} props.isLoading - Indicates if the data is currently loading.
@@ -62,7 +61,7 @@ export interface AdvancedDataTableProps<T = PaPlayer | Building> {
  * @return {JSX.Element} The rendered advanced data table.
  */
 
-const AdvancedDataTable = <T extends PaPlayer | Building>({
+const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   isLoading = false,
   columns,
   data,
@@ -72,8 +71,8 @@ const AdvancedDataTable = <T extends PaPlayer | Building>({
   actionText,
   actionInProgress,
   considerLand = false,
-}: AdvancedDataTableProps<T>): JSX.Element => {
-  const dataToMap = renderData || data as T[];
+}: AdvancedDataTableProps): JSX.Element => {
+  const dataToMap = renderData || data;
 
   const inputAmountRefs = useMultipleRefs(columns.length);
 
@@ -84,7 +83,7 @@ const AdvancedDataTable = <T extends PaPlayer | Building>({
       </caption>
       <thead>
         <tr>
-          {columns.map((col: AdvancedTableColumn<T>, index) => (
+          {columns.map((col, index) => (
             <th
               key={index}
               scope="col"
@@ -102,16 +101,16 @@ const AdvancedDataTable = <T extends PaPlayer | Building>({
               key={rowIndex}
               className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
             >
-              {columns.map((col: AdvancedTableColumn<T>, colIndex) => (
+              {columns.map((col, colIndex) => (
                 <td
                   key={colIndex}
                   data-th={col.label}
                   className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t  sm:before:content-none md:h-12 md:px-6 md:text-left"
                 >
-                  {typeof col.accessor === "function" ? (
-                    col.accessor(row)
-                  ) : typeof col.accessor === "string" ? (
+                  {typeof col.accessor === "string" ? (
                     <Stringifier value={row[col.accessor]} />
+                  ) : typeof col.accessor === "function" ? (
+                    col.accessor(row)
                   ) : (
                     col.accessor
                   )}
