@@ -107,13 +107,13 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   data-th={col.label}
                   className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none md:h-12 md:px-6 md:text-left"
                 >
-                  {typeof col.accessor === "string" ? (
-                    <Stringifier value={row[col.accessor]} />
-                  ) : typeof col.accessor === "function" ? (
+                  {typeof col.accessor === "function" ? (
                     col.accessor(row)
-                  ) : (
+                  ) : typeof col.accessor === "string" && col.accessor !== "" ? (
+                    <Stringifier value={row[col.accessor]} />
+                  ) : col.type !== "button" ? (
                     col.accessor
-                  )}
+                  ) : null}
                   {col.type === "inputNumber" && canAffordToTrain ? (
                     <InputNumber
                       canAffordToTrain={canAffordToTrain}
