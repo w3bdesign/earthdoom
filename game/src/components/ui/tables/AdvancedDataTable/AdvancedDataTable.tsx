@@ -27,18 +27,18 @@ export type TMutateType = UseMutateFunction<
   unknown
 >;
 
-export interface AdvancedTableColumn {
+export interface AdvancedTableColumn<T> {
   label: string;
-  accessor: string | JSX.Element;
+  accessor: string | JSX.Element | ((row: T) => JSX.Element);
   type?: string;
 }
 
-export interface AdvancedDataTableProps {
+export interface AdvancedDataTableProps<T extends PaPlayer | Building> {
   isLoading?: boolean;
-  columns: AdvancedTableColumn[];
-  data: PaPlayer[];
+  columns: AdvancedTableColumn<T>[];
+  data: T extends PaPlayer ? PaPlayer[] : Building[];
   caption: string;
-  renderData?: Building[];
+  renderData?: T extends PaPlayer ? never : Building[];
   action?: TMutateType;
   actionText?: string;
   actionInProgress?: string;
@@ -47,6 +47,7 @@ export interface AdvancedDataTableProps {
 
 /**
  * Renders an advanced data table component.
+ * @template T - The type of data being displayed in the table
  *
  * @param {AdvancedDataTableProps} props - The component props.
  * @param {boolean} props.isLoading - Indicates if the data is currently loading.
@@ -61,7 +62,7 @@ export interface AdvancedDataTableProps {
  * @return {JSX.Element} The rendered advanced data table.
  */
 
-const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
+const AdvancedDataTable = <T extends PaPlayer | Building>({
   isLoading = false,
   columns,
   data,
@@ -71,8 +72,8 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   actionText,
   actionInProgress,
   considerLand = false,
-}) => {
-  const dataToMap = renderData || data;
+}: AdvancedDataTableProps<T>): JSX.Element => {
+  const dataToMap = (renderData || data) as T[];
 
   const inputAmountRefs = useMultipleRefs(columns.length);
 
@@ -83,7 +84,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
       </caption>
       <thead>
         <tr>
-          {columns.map((col, index) => (
+          {columns.map((col: AdvancedTableColumn<T>, index: number) => (
             <th
               key={index}
               scope="col"
@@ -96,19 +97,23 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
       </thead>
       <tbody>
         {dataToMap &&
-          dataToMap.map((row, rowIndex) => (
+          dataToMap.map((row: T, rowIndex: number) => (
             <tr
               key={rowIndex}
               className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
             >
-              {columns.map((col, colIndex) => (
+              {columns.map((col: AdvancedTableColumn<T>, colIndex: number) => (
                 <td
                   key={colIndex}
                   data-th={col.label}
                   className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t  sm:before:content-none md:h-12 md:px-6 md:text-left"
                 >
-                  {typeof col.accessor === "string" && (
+                  {typeof col.accessor === "function" ? (
+                    col.accessor(row)
+                  ) : typeof col.accessor === "string" ? (
                     <Stringifier value={row[col.accessor]} />
+                  ) : (
+                    col.accessor
                   )}
                   {col.type === "inputNumber" && canAffordToTrain ? (
                     <InputNumber
@@ -119,7 +124,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   {col.type === "button" && action && actionText ? (
                     <ActionButton
                       isLoading={isLoading}
-                      paPlayer={data}
+                      paPlayer={data as PaPlayer[]}
                       mutate={action}
                       actionText={actionText}
                       actionInProgress={actionInProgress}
@@ -133,7 +138,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   row.buildingId ? (
                     <ActionButton
                       isLoading={isLoading}
-                      paPlayer={data}
+                      paPlayer={data as PaPlayer[]}
                       building={row as Building}
                       mutate={action}
                       actionText={actionText}
