@@ -78,6 +78,14 @@ const Information: React.FC<InformationProps> = ({ paPlayer }) => {
           ) : (
             ""
           )}
+          {paPlayer?.newbie > 0 && (
+            <div
+              className="mb-4 rounded-lg bg-blue-100 px-6 py-5 text-base text-blue-800 md:min-w-[30.625rem]"
+              role="alert"
+            >
+              You are under protection for {paPlayer.newbie} more ticks
+            </div>
+          )}
           {paPlayer && <OverviewTable paPlayer={paPlayer} />}
         </div>
       </div>
