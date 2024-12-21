@@ -1,6 +1,10 @@
 import type { PaPlayer } from "@/components/features/Military/Military";
 import type { IProduction } from "@/components/features/Production/types/types";
-import type { PaUsers } from "@prisma/client";
+import type { PaUsers, PaConstruct } from "@prisma/client";
+
+type PaUserWithConstruct = PaUsers & {
+  construction: PaConstruct | null;
+};
 
 interface IStringifierProps {
   value?: unknown;
@@ -157,12 +161,12 @@ export const canAffordToTrain = (
  * @param {PaUsers} paPlayer - The player object containing asteroid_metal and civilians properties
  * @returns {Object} - The income data object containing labels, datasets and their respective data
  */
-export const renderIncomeData = (paPlayer: PaUsers) => {
+export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const { sats } = paPlayer;
 
   const tax = 20;
-  const extraTitanium = 1;
-  const extraCrystal = 1;
+  const extraTitanium = paPlayer.construction?.c_metal ? 1 : 0;
+  const extraCrystal = paPlayer.construction?.c_crystal ? 1 : 0;
 
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;
