@@ -34,7 +34,16 @@ const RankingPage: NextPage = () => {
     { label: "Rank", accessor: "rank" },
     { 
       label: "Actions", 
-      accessor: (row: PaPlayer) => <RankingActions playerNick={row.nick} newbie={row.newbie} />
+      accessor: (row: PaPlayer) => {
+        if (!paPlayer) return <></>;
+        return (
+          <RankingActions 
+            playerNick={row.nick} 
+            newbie={row.newbie} 
+            currentPlayer={paPlayer}
+          />
+        );
+      }
     },
   ];
 

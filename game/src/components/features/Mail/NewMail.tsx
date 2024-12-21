@@ -1,5 +1,4 @@
-import { useRef, useState } from "react";
-
+import { useRef, useState, useEffect } from "react";
 import { api } from "@/utils/api";
 
 import type { FC, ChangeEvent, FormEvent } from "react";
@@ -11,8 +10,9 @@ export interface PaPlayer extends PaUsers {
   [key: string]: number | string | null;
 }
 
-interface IMilitaryProps {
+interface INewMailProps {
   paPlayer: PaPlayer;
+  recipient?: string;
 }
 
 interface IHandleInputChange {
@@ -22,15 +22,22 @@ interface IHandleInputChange {
 /**
  * Renders a form for sending a mail.
  *
- * @param {IMilitaryProps} paPlayer - The military props.
+ * @param {INewMailProps} props - The component props.
  * @return {FC} The mail form component.
  */
-const NewMail: FC<IMilitaryProps> = () => {
+const NewMail: FC<INewMailProps> = ({ paPlayer, recipient }) => {
   const ctx = api.useContext();
-  const [mailTarget, setMailTarget] = useState("");
+  const [mailTarget, setMailTarget] = useState(recipient || "");
   const [mailContent, setMailContent] = useState("");
   const [mailHeader, setMailHeader] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+
+  // Update mailTarget when recipient prop changes
+  useEffect(() => {
+    if (recipient) {
+      setMailTarget(recipient);
+    }
+  }, [recipient]);
 
   const { mutate: sendMail, isLoading } = api.paMail.sendMail.useMutation({
     onSuccess: async () => {
@@ -80,6 +87,7 @@ const NewMail: FC<IMilitaryProps> = () => {
                 type="text"
                 id="nick"
                 name="attack"
+                value={mailTarget}
                 onChange={handleInputMailTargetChange}
                 className="w-64 rounded-md border border-gray-300 px-3 py-2"
                 required
