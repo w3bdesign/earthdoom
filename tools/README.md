@@ -1,4 +1,4 @@
-# EarthDoom Tools
+# Earth Doom Tools
 
 Collection of utilities and tools for the Earth Doom project, organized by functionality.
 
