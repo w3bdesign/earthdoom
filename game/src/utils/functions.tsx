@@ -177,8 +177,8 @@ export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const { sats } = paPlayer;
 
   const tax = 20;
-  const extraTitanium = paPlayer.c_metal ? 1 : 0;
-  const extraCrystal = paPlayer.c_crystal ? 1 : 0;
+  const extraTitanium = paPlayer.r_immetal ? 1 : 0;
+  const extraCrystal = paPlayer.r_imcrystal ? 1 : 0;
 
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;
