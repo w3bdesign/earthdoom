@@ -184,10 +184,16 @@ export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const metalroid = paPlayer.asteroid_metal;
 
   const incomeCredits = Math.floor((civilians * tax) / 100);
+
+  console.log("incomeCredits", incomeCredits);
+
   const incomeCreditsWithBonus =
     extraCrystal === 1
       ? incomeCredits + Math.floor(incomeCredits * 0.1)
       : incomeCredits;
+
+  // const incomeCreditsWithBonus = incomeCredits;
+
   const incomeTitanium =
     metalroid * 60 + (extraTitanium === 1 ? Math.floor(metalroid * 0.1) : 0);
   const incomeEnergy = sats * 45;
