@@ -27,18 +27,18 @@ export type TMutateType = UseMutateFunction<
   unknown
 >;
 
-export interface AdvancedTableColumn<T> {
+export interface AdvancedTableColumn<T = PaPlayer | Building> {
   label: string;
   accessor: string | JSX.Element | ((row: T) => JSX.Element);
   type?: string;
 }
 
-export interface AdvancedDataTableProps<T extends PaPlayer | Building> {
+export interface AdvancedDataTableProps<T = PaPlayer | Building> {
   isLoading?: boolean;
   columns: AdvancedTableColumn<T>[];
-  data: T extends PaPlayer ? PaPlayer[] : Building[];
+  data: T[];
   caption: string;
-  renderData?: T extends PaPlayer ? never : Building[];
+  renderData?: T[];
   action?: TMutateType;
   actionText?: string;
   actionInProgress?: string;
@@ -73,7 +73,7 @@ const AdvancedDataTable = <T extends PaPlayer | Building>({
   actionInProgress,
   considerLand = false,
 }: AdvancedDataTableProps<T>): JSX.Element => {
-  const dataToMap = (renderData || data) as T[];
+  const dataToMap = renderData || data as T[];
 
   const inputAmountRefs = useMultipleRefs(columns.length);
 
@@ -84,7 +84,7 @@ const AdvancedDataTable = <T extends PaPlayer | Building>({
       </caption>
       <thead>
         <tr>
-          {columns.map((col: AdvancedTableColumn<T>, index: number) => (
+          {columns.map((col: AdvancedTableColumn<T>, index) => (
             <th
               key={index}
               scope="col"
@@ -97,12 +97,12 @@ const AdvancedDataTable = <T extends PaPlayer | Building>({
       </thead>
       <tbody>
         {dataToMap &&
-          dataToMap.map((row: T, rowIndex: number) => (
+          dataToMap.map((row, rowIndex) => (
             <tr
               key={rowIndex}
               className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
             >
-              {columns.map((col: AdvancedTableColumn<T>, colIndex: number) => (
+              {columns.map((col: AdvancedTableColumn<T>, colIndex) => (
                 <td
                   key={colIndex}
                   data-th={col.label}
@@ -121,31 +121,30 @@ const AdvancedDataTable = <T extends PaPlayer | Building>({
                       ref={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
-                  {col.type === "button" && action && actionText ? (
-                    <ActionButton
-                      isLoading={isLoading}
-                      paPlayer={data as PaPlayer[]}
-                      mutate={action}
-                      actionText={actionText}
-                      actionInProgress={actionInProgress}
-                      inputAmountRef={inputAmountRefs[rowIndex]}
-                      considerLand={considerLand}
-                    />
-                  ) : null}
-                  {typeof col.accessor !== "string" &&
-                  actionText &&
-                  action &&
-                  row.buildingId ? (
-                    <ActionButton
-                      isLoading={isLoading}
-                      paPlayer={data as PaPlayer[]}
-                      building={row as Building}
-                      mutate={action}
-                      actionText={actionText}
-                      actionInProgress={actionInProgress}
-                      inputAmountRef={inputAmountRefs[rowIndex]}
-                      considerLand={considerLand}
-                    />
+                  {/* Only render action buttons when we have all required props */}
+                  {col.type === "button" && action && actionText && data ? (
+                    row.buildingId ? (
+                      <ActionButton
+                        isLoading={isLoading}
+                        paPlayer={data as PaPlayer[]}
+                        building={row as Building}
+                        mutate={action}
+                        actionText={actionText}
+                        actionInProgress={actionInProgress}
+                        inputAmountRef={inputAmountRefs[rowIndex]}
+                        considerLand={considerLand}
+                      />
+                    ) : (
+                      <ActionButton
+                        isLoading={isLoading}
+                        paPlayer={data as PaPlayer[]}
+                        mutate={action}
+                        actionText={actionText}
+                        actionInProgress={actionInProgress}
+                        inputAmountRef={inputAmountRefs[rowIndex]}
+                        considerLand={considerLand}
+                      />
+                    )
                   ) : null}
                 </td>
               ))}
