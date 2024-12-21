@@ -1,6 +1,6 @@
 # EarthDoom Tools
 
-Collection of utilities and tools for the EarthDoom project, organized by functionality.
+Collection of utilities and tools for the Earth Doom project, organized by functionality.
 
 ## Directory Structure
 
