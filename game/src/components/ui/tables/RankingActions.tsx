@@ -38,7 +38,7 @@ const RankingActions: FC<RankingActionsProps> = ({ playerNick, newbie = 0, curre
     return (
       <div className="flex items-center justify-center">
         <button
-          onClick={() => router.push(`/mail?to=${playerNick}`)}
+        onClick={() => router.push(`/mail?nick=${playerNick}`)}
           className="group relative rounded-md bg-blue-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-blue-600"
           title="Send Mail"
         >
@@ -54,7 +54,7 @@ const RankingActions: FC<RankingActionsProps> = ({ playerNick, newbie = 0, curre
   return (
     <div className="flex items-center justify-center gap-2">
       <button
-        onClick={() => router.push(`/mail?to=${playerNick}`)}
+        onClick={() => router.push(`/mail?nick=${playerNick}`)}
         className="group relative rounded-md bg-blue-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-blue-600"
         title="Send Mail"
       >
