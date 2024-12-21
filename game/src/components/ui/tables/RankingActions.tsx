@@ -6,7 +6,7 @@ import { useUser } from "@clerk/nextjs";
 
 interface RankingActionsProps {
   playerNick: string;
-  newbie?: number;
+  newbie: number;
   currentPlayer: PaPlayer;
 }
 

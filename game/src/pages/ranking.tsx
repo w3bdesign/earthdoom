@@ -8,6 +8,7 @@ import { Layout } from "@/components/common/Layout";
 import { AdvancedDataTable } from "@/components/ui";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import RankingActions from "@/components/ui/tables/RankingActions";
+import { Building } from "@/components/features/Construct/types/types";
 
 /**
  * Renders the Ranking page component, which displays the player ranking table.
@@ -27,22 +28,27 @@ const RankingPage: NextPage = () => {
     nick: user.username,
   });
 
-  const columns: AdvancedTableColumn<PaPlayer>[] = [
+  const columns: AdvancedTableColumn[] = [
     { label: "Nick", accessor: "nick" },
     { label: "Score", accessor: "score" },
     { label: "Size", accessor: "size" },
     { label: "Rank", accessor: "rank" },
     { 
       label: "Actions", 
-      accessor: (row: PaPlayer) => {
+      accessor: (row: PaPlayer | Building) => {
         if (!paPlayer) return <></>;
-        return (
-          <RankingActions 
-            playerNick={row.nick} 
-            newbie={row.newbie} 
-            currentPlayer={paPlayer}
-          />
-        );
+        // Type guard to ensure we have a PaPlayer with required properties
+        if ('nick' in row && typeof row.nick === 'string') {
+          const playerRow = row as PaPlayer;
+          return (
+            <RankingActions 
+              playerNick={playerRow.nick}
+              newbie={typeof playerRow.newbie === 'number' ? playerRow.newbie : 0}
+              currentPlayer={paPlayer}
+            />
+          );
+        }
+        return <></>;
       }
     },
   ];

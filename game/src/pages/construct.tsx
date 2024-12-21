@@ -1,11 +1,11 @@
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
+import type { AdvancedTableColumn } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
 
 import { api } from "@/utils/api";
-
 import { Layout } from "@/components/common/Layout";
-import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
+import { AdvancedDataTable, ToastComponent } from "@/components/ui";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 
@@ -37,12 +37,12 @@ const Construction: NextPage = () => {
     },
   });
 
-  const columns = [
+  const columns: AdvancedTableColumn[] = [
     { label: "Name", accessor: "buildingName" },
     { label: "Description", accessor: "buildingDescription" },
     { label: "ETA", accessor: "buildingETA" },
     { label: "Cost", accessor: "buildingCost" },
-    { label: "Action", accessor: <Button />, type: "button" },
+    { label: "Action", accessor: "", type: "button" },
   ];
 
   const caption = "Construction";
@@ -67,7 +67,7 @@ const Construction: NextPage = () => {
                 <AdvancedDataTable
                   isLoading={isLoading}
                   columns={columns}
-                  data={[paPlayer]}
+                  data={[]}
                   caption={caption}
                   renderData={BUILDINGS}
                   action={mutate}
