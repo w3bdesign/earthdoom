@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/nextjs";
+
 import type { NextPage } from "next";
-import type { Building } from "@/components/features/Construct/types/types";
 import type { AdvancedTableColumn } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
 
 import { api } from "@/utils/api";

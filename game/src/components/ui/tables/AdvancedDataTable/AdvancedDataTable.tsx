@@ -29,7 +29,7 @@ export type TMutateType = UseMutateFunction<
 
 export interface AdvancedTableColumn {
   label: string;
-  accessor: string | JSX.Element | ((row: any) => JSX.Element);
+  accessor: string | JSX.Element | ((row: PaPlayer | Building) => JSX.Element);
   type?: string;
 }
 
@@ -105,7 +105,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                 <td
                   key={colIndex}
                   data-th={col.label}
-                  className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t  sm:before:content-none md:h-12 md:px-6 md:text-left"
+                  className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none md:h-12 md:px-6 md:text-left"
                 >
                   {typeof col.accessor === "string" ? (
                     <Stringifier value={row[col.accessor]} />
