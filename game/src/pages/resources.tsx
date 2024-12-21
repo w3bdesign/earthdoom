@@ -95,7 +95,7 @@ const Resources: NextPage = () => {
             )}
             {paPlayer && paPlayer?.ui_roids > 0 && (
               <div className="mx-auto mt-4 w-[20.625rem] rounded bg-white py-4 shadow md:w-[47.125rem]">
-                <h1 className="py-4 text-center text-2xl ">
+                <h1 className="py-4 text-center text-2xl">
                   Undeveloped land: {paPlayer?.ui_roids}
                 </h1>
               </div>

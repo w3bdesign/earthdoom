@@ -29,7 +29,7 @@ export type TMutateType = UseMutateFunction<
 
 export interface AdvancedTableColumn {
   label: string;
-  accessor: string | JSX.Element;
+  accessor: string | JSX.Element | ((row: PaPlayer | Building) => JSX.Element);
   type?: string;
 }
 
@@ -71,7 +71,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   actionText,
   actionInProgress,
   considerLand = false,
-}) => {
+}: AdvancedDataTableProps): JSX.Element => {
   const dataToMap = renderData || data;
 
   const inputAmountRefs = useMultipleRefs(columns.length);
@@ -105,42 +105,45 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                 <td
                   key={colIndex}
                   data-th={col.label}
-                  className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t  sm:before:content-none md:h-12 md:px-6 md:text-left"
+                  className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none md:h-12 md:px-6 md:text-left"
                 >
-                  {typeof col.accessor === "string" && (
+                  {typeof col.accessor === "function" ? (
+                    col.accessor(row)
+                  ) : typeof col.accessor === "string" && col.accessor !== "" ? (
                     <Stringifier value={row[col.accessor]} />
-                  )}
+                  ) : col.type !== "button" ? (
+                    col.accessor
+                  ) : null}
                   {col.type === "inputNumber" && canAffordToTrain ? (
                     <InputNumber
                       canAffordToTrain={canAffordToTrain}
                       ref={inputAmountRefs[rowIndex]}
                     />
                   ) : null}
-                  {col.type === "button" && action && actionText ? (
-                    <ActionButton
-                      isLoading={isLoading}
-                      paPlayer={data}
-                      mutate={action}
-                      actionText={actionText}
-                      actionInProgress={actionInProgress}
-                      inputAmountRef={inputAmountRefs[rowIndex]}
-                      considerLand={considerLand}
-                    />
-                  ) : null}
-                  {typeof col.accessor !== "string" &&
-                  actionText &&
-                  action &&
-                  row.buildingId ? (
-                    <ActionButton
-                      isLoading={isLoading}
-                      paPlayer={data}
-                      building={row as Building}
-                      mutate={action}
-                      actionText={actionText}
-                      actionInProgress={actionInProgress}
-                      inputAmountRef={inputAmountRefs[rowIndex]}
-                      considerLand={considerLand}
-                    />
+                  {/* Only render action buttons when we have all required props */}
+                  {col.type === "button" && action && actionText && data ? (
+                    row.buildingId ? (
+                      <ActionButton
+                        isLoading={isLoading}
+                        paPlayer={data as PaPlayer[]}
+                        building={row as Building}
+                        mutate={action}
+                        actionText={actionText}
+                        actionInProgress={actionInProgress}
+                        inputAmountRef={inputAmountRefs[rowIndex]}
+                        considerLand={considerLand}
+                      />
+                    ) : (
+                      <ActionButton
+                        isLoading={isLoading}
+                        paPlayer={data as PaPlayer[]}
+                        mutate={action}
+                        actionText={actionText}
+                        actionInProgress={actionInProgress}
+                        inputAmountRef={inputAmountRefs[rowIndex]}
+                        considerLand={considerLand}
+                      />
+                    )
                   ) : null}
                 </td>
               ))}

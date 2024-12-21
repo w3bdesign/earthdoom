@@ -2,6 +2,22 @@ import type { PaPlayer } from "@/components/features/Military/Military";
 import type { IProduction } from "@/components/features/Production/types/types";
 import type { PaUsers } from "@prisma/client";
 
+// Extended type that includes construction fields directly
+type PaUserWithConstruct = PaUsers & {
+  c_crystal: number;
+  c_metal: number;
+  c_airport: number;
+  c_abase: number;
+  c_wstation: number;
+  c_amp1: number;
+  c_amp2: number;
+  c_warfactory: number;
+  c_destfact: number;
+  c_scorpfact: number;
+  c_energy: number;
+  c_odg: number;
+};
+
 interface IStringifierProps {
   value?: unknown;
 }
@@ -157,21 +173,27 @@ export const canAffordToTrain = (
  * @param {PaUsers} paPlayer - The player object containing asteroid_metal and civilians properties
  * @returns {Object} - The income data object containing labels, datasets and their respective data
  */
-export const renderIncomeData = (paPlayer: PaUsers) => {
+export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const { sats } = paPlayer;
 
   const tax = 20;
-  const extraTitanium = 1;
-  const extraCrystal = 1;
+  const extraTitanium = paPlayer.r_immetal ? 1 : 0;
+  const extraCrystal = paPlayer.r_imcrystal ? 1 : 0;
 
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;
 
   const incomeCredits = Math.floor((civilians * tax) / 100);
+
+  console.log("incomeCredits", incomeCredits);
+
   const incomeCreditsWithBonus =
     extraCrystal === 1
       ? incomeCredits + Math.floor(incomeCredits * 0.1)
       : incomeCredits;
+
+  // const incomeCreditsWithBonus = incomeCredits;
+
   const incomeTitanium =
     metalroid * 60 + (extraTitanium === 1 ? Math.floor(metalroid * 0.1) : 0);
   const incomeEnergy = sats * 45;
