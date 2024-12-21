@@ -1,9 +1,21 @@
 import type { PaPlayer } from "@/components/features/Military/Military";
 import type { IProduction } from "@/components/features/Production/types/types";
-import type { PaUsers, PaConstruct } from "@prisma/client";
+import type { PaUsers } from "@prisma/client";
 
+// Extended type that includes construction fields directly
 type PaUserWithConstruct = PaUsers & {
-  construction: PaConstruct | null;
+  c_crystal: number;
+  c_metal: number;
+  c_airport: number;
+  c_abase: number;
+  c_wstation: number;
+  c_amp1: number;
+  c_amp2: number;
+  c_warfactory: number;
+  c_destfact: number;
+  c_scorpfact: number;
+  c_energy: number;
+  c_odg: number;
 };
 
 interface IStringifierProps {
@@ -165,8 +177,8 @@ export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const { sats } = paPlayer;
 
   const tax = 20;
-  const extraTitanium = paPlayer.construction?.c_metal ? 1 : 0;
-  const extraCrystal = paPlayer.construction?.c_crystal ? 1 : 0;
+  const extraTitanium = paPlayer.c_metal ? 1 : 0;
+  const extraCrystal = paPlayer.c_crystal ? 1 : 0;
 
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;

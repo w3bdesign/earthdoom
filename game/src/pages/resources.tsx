@@ -1,6 +1,23 @@
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
+import type { PaUsers } from "@prisma/client";
+
+// Extended type that includes construction fields directly
+type PaUserWithConstruct = PaUsers & {
+  c_crystal: number;
+  c_metal: number;
+  c_airport: number;
+  c_abase: number;
+  c_wstation: number;
+  c_amp1: number;
+  c_amp2: number;
+  c_warfactory: number;
+  c_destfact: number;
+  c_scorpfact: number;
+  c_energy: number;
+  c_odg: number;
+};
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
