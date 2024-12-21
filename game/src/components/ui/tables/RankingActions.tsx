@@ -1,12 +1,15 @@
 import type { FC } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
-
 interface RankingActionsProps {
   playerNick: string;
+  newbie?: number;
 }
 
-const RankingActions: FC<RankingActionsProps> = ({ playerNick }) => {
+// TODO: Set this to true for production
+const ENABLE_NEWBIE_PROTECTION = false;
+
+const RankingActions: FC<RankingActionsProps> = ({ playerNick, newbie = 0 }) => {
   const router = useRouter();
   const { user } = useUser();
 
@@ -14,6 +17,8 @@ const RankingActions: FC<RankingActionsProps> = ({ playerNick }) => {
   if (user?.username === playerNick) {
     return null;
   }
+
+  const isProtected = ENABLE_NEWBIE_PROTECTION && newbie > 0;
 
   return (
     <div className="flex items-center justify-center gap-2">
@@ -23,27 +28,30 @@ const RankingActions: FC<RankingActionsProps> = ({ playerNick }) => {
         title="Send Mail"
       >
         <span className="absolute -top-8 left-1/2 hidden -translate-x-1/2 transform whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white group-hover:block">
-          Send mail to this player
+          Write a message to this player
         </span>
         📧
       </button>
       <button
-        onClick={() => router.push(`/military?attack=${playerNick}`)}
-        className="group relative rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600"
+        onClick={() => router.push(`/military?target=${playerNick}&action=attack`)}
+        className="group relative rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-50"
         title="Attack"
+        disabled={isProtected}
       >
         <span className="absolute -top-8 left-1/2 hidden -translate-x-1/2 transform whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white group-hover:block">
-          Attack this player
+          {isProtected 
+            ? `Player is protected for ${newbie} more ticks`
+            : "Send your troops to attack this player"}
         </span>
         ⚔️
       </button>
       <button
-        onClick={() => router.push(`/military?defend=${playerNick}`)}
+        onClick={() => router.push(`/military?target=${playerNick}&action=defend`)}
         className="group relative rounded-md bg-green-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-green-600"
         title="Defend"
       >
         <span className="absolute -top-8 left-1/2 hidden -translate-x-1/2 transform whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white group-hover:block">
-          Send reinforcements to this player
+          Send your troops to defend this player
         </span>
         🛡️
       </button>
