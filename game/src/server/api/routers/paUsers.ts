@@ -56,6 +56,7 @@ export const paUsersRouter = createTRPCRouter({
           score: true,
           rank: true,
           nick: true,
+          newbie: true,
         },
       });
     }),
