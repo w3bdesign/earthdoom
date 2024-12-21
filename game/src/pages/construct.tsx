@@ -67,7 +67,7 @@ const Construction: NextPage = () => {
                 <AdvancedDataTable
                   isLoading={isLoading}
                   columns={columns}
-                  data={[]}
+                  data={[paPlayer]}
                   caption={caption}
                   renderData={BUILDINGS}
                   action={mutate}
