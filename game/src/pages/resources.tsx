@@ -1,7 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
-import type { PaUsers } from "@prisma/client";
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
