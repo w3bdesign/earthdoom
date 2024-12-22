@@ -16,8 +16,8 @@
   "dependencies": {
     "@clerk/nextjs": "^4.31.6",
     "@prisma/client": "^5.22.0",
-    "@tanstack/react-query": "4.36.1",
-    "@tanstack/react-query-devtools": "4.36.1",
+    "@tanstack/react-query": "5.62.8",
+    "@tanstack/react-query-devtools": "5.62.8",
     "@trpc/client": "^10.45.2",
     "@trpc/next": "^10.45.2",
     "@trpc/react-query": "^10.45.2",
