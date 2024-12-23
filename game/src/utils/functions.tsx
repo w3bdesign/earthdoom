@@ -180,15 +180,33 @@ export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const extraTitanium = paPlayer.r_immetal ? 1 : 0;
   const extraCrystal = paPlayer.r_imcrystal ? 1 : 0;
 
+  console.log("Extra crystal:", extraCrystal)
+
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;
 
   const incomeCredits = Math.floor((civilians * tax) / 100);
 
+  const incomeCreditsWithTest =
+  extraCrystal === 1
+    ? incomeCredits + Math.floor(incomeCredits * 0.1)
+    : incomeCredits;
+
+    console.log("Extra crystal bonus:", incomeCreditsWithTest)
+
+
+
+
+  /*
+
   const incomeCreditsWithBonus =
     extraCrystal === 1
       ? incomeCredits + Math.floor(incomeCredits * 0.1)
       : incomeCredits;
+
+      */
+
+  const incomeCreditsWithBonus = incomeCredits;
 
   const incomeTitanium =
     metalroid * 60 + (extraTitanium === 1 ? Math.floor(metalroid * 0.1) : 0);
