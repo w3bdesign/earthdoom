@@ -1,6 +1,6 @@
 ![Version](https://img.shields.io/badge/version-0.4.8-blue)
 ![React](https://img.shields.io/badge/React-18.3.1-success)
-![Next.js](https://img.shields.io/badge/Next.js-14.2.4-success)
+![Next.js](https://img.shields.io/badge/Next.js-15.2.3-success)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.1.6-success) 
 
 ## This game is under active development and may have bugs
