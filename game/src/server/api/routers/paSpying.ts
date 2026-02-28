@@ -4,11 +4,17 @@ import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 
 import { calculateLand } from "@/utils/functions";
 
+/** Allowed dynamic field names for spying/energy on PaUsers */
+const spyingFields = [
+  "ui_roids",
+  "sats",
+] as const;
+
 export const paSpyingRouter = createTRPCRouter({
   // TODO Add support for more spying options
   spyingInitiate: privateProcedure
     .input(z.object({ Userid: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingFieldName: z.enum(spyingFields) }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingETA: z.number() }))
