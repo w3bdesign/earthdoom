@@ -12,7 +12,7 @@ export interface PaPlayer extends PaUsers {
 
 interface INewMailProps {
   paPlayer: PaPlayer;
-  recipient?: string;
+  recipient: string;
 }
 
 interface IHandleInputChange {
@@ -27,17 +27,9 @@ interface IHandleInputChange {
  */
 const NewMail: FC<INewMailProps> = ({ paPlayer, recipient }) => {
   const ctx = api.useContext();
-  const [mailTarget, setMailTarget] = useState(recipient || "");
   const [mailContent, setMailContent] = useState("");
   const [mailHeader, setMailHeader] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
-
-  // Update mailTarget when recipient prop changes
-  useEffect(() => {
-    if (recipient) {
-      setMailTarget(recipient);
-    }
-  }, [recipient]);
 
   const { mutate: sendMail, isLoading } = api.paMail.sendMail.useMutation({
     onSuccess: async () => {
@@ -49,10 +41,6 @@ const NewMail: FC<INewMailProps> = ({ paPlayer, recipient }) => {
       ToastComponent({ message: "Error ...", type: "error" });
     },
   });
-
-  const handleInputMailTargetChange: IHandleInputChange = (event) => {
-    setMailTarget(event.target.value);
-  };
 
   const handleInputMailContentChange: IHandleInputChange = (event) => {
     setMailContent(event.target.value);
@@ -67,7 +55,7 @@ const NewMail: FC<INewMailProps> = ({ paPlayer, recipient }) => {
     formRef.current?.reset();
 
     sendMail({
-      nick: mailTarget,
+      nick: recipient,
       news: mailContent,
       header: mailHeader,
     });
@@ -81,16 +69,14 @@ const NewMail: FC<INewMailProps> = ({ paPlayer, recipient }) => {
             <h2 className="py-4 text-center text-xl font-bold">Mail</h2>
             <div className="flex flex-col items-center justify-center">
               <label className="text-md py-4" htmlFor="nick">
-                Nick:
+                To:
               </label>
               <input
                 type="text"
                 id="nick"
-                name="attack"
-                value={mailTarget}
-                onChange={handleInputMailTargetChange}
-                className="w-64 rounded-md border border-gray-300 px-3 py-2"
-                required
+                value={recipient}
+                readOnly
+                className="w-64 rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-600"
               />
               <label className="text-md py-4" htmlFor="title">
                 Title:

@@ -20,6 +20,7 @@ import NewMail from "@/components/features/Mail/NewMail";
 const Mail: NextPage = () => {
   const ctx = api.useContext();
   const router = useRouter();
+  const recipientNick = router.query.nick as string | undefined;
   let hasUnseenEmail = false;
 
   const { user, isSignedIn } = useUser();
@@ -85,12 +86,14 @@ const Mail: NextPage = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <h2 className="mt-6 py-4 text-center text-2xl font-bold text-white">
-                Send New Mail
-              </h2>
-              {paPlayer && <NewMail paPlayer={paPlayer} recipient={router.query.nick as string} />}
-            </div>
+            {recipientNick && paPlayer && (
+              <div>
+                <h2 className="mt-6 py-4 text-center text-2xl font-bold text-white">
+                  Send Mail to {recipientNick}
+                </h2>
+                <NewMail paPlayer={paPlayer} recipient={recipientNick} />
+              </div>
+            )}
           </div>
         </div>
       </Layout>
