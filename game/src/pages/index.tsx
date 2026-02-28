@@ -16,13 +16,14 @@ import { useUser } from "@clerk/nextjs";
 const Home = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) {
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    { nick: user?.username ?? "" },
+    { enabled: !!isSignedIn && !!user?.username }
+  );
+
+  if (!isSignedIn || !user?.username) {
     return null;
   }
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: user.username,
-  });
 
   if (!paPlayer) {
     return (
@@ -39,18 +40,10 @@ const Home = () => {
       <div className="container mb-6 flex flex-col items-center justify-center">
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
           <div className="relative sm:mx-auto">
-            {paPlayer ? (
-              <>
-                <UnitsTable paPlayer={paPlayer} />
-                <BDUTable paPlayer={paPlayer} />
-                <LandTable paPlayer={paPlayer} />
-                <FleetStatus paPlayer={paPlayer} />
-              </>
-            ) : (
-              <div className="py-6">
-                <LoadingSpinner />
-              </div>
-            )}
+            <UnitsTable paPlayer={paPlayer} />
+            <BDUTable paPlayer={paPlayer} />
+            <LandTable paPlayer={paPlayer} />
+            <FleetStatus paPlayer={paPlayer} />
           </div>
         </div>
       </div>
