@@ -69,25 +69,19 @@ export const paUsersRouter = createTRPCRouter({
     }),
 
   getAll: privateProcedure.query(async ({ ctx }) => {
-    // Get all users ordered by score descending
-    const users = await ctx.prisma.paUsers.findMany({
-      orderBy: {
-        score: "desc",
-      },
+    // Batch-update all ranks in a single query using ROW_NUMBER()
+    await ctx.prisma.$executeRaw`
+      UPDATE "PaUsers" SET rank = ranked.new_rank
+      FROM (
+        SELECT id, ROW_NUMBER() OVER (ORDER BY score DESC) AS new_rank
+        FROM "PaUsers"
+      ) AS ranked
+      WHERE "PaUsers".id = ranked.id
+    `;
+
+    return await ctx.prisma.paUsers.findMany({
+      orderBy: { rank: "asc" },
     });
-
-    // Update ranks based on score order
-    const updatedUsers = await Promise.all(
-      users.map(async (user, index) => {
-        const updatedUser = await ctx.prisma.paUsers.update({
-          where: { id: user.id },
-          data: { rank: index + 1 }, // rank starts at 1
-        });
-        return updatedUser;
-      })
-    );
-
-    return updatedUsers;
   }),
   getResourceOverview: privateProcedure
     .input(z.object({ nick: z.string() }))
