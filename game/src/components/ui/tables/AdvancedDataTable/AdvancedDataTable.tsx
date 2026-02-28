@@ -11,21 +11,11 @@ import { useMultipleRefs } from "@/utils/hooks";
 
 type MutationData = unknown;
 
-export type TMutateType = UseMutateFunction<
-  MutationData,
-  unknown,
-  {
-    Userid: number;
-    buildingFieldName: string;
-    buildingNeedsFieldName?: number;
-    buildingETA: number;
-    buildingFieldNameETA?: number | string;
-    buildingCostCrystal: number;
-    buildingCostTitanium: number;
-    unitAmount?: number;
-  },
-  unknown
->;
+// Server-side Zod schemas enforce valid field names via z.enum() whitelists.
+// This type is intentionally permissive so the shared UI component can work
+// with different mutation signatures (research, construct, production, spying).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TMutateType = UseMutateFunction<MutationData, unknown, any, unknown>;
 
 export interface AdvancedTableColumn {
   label: string;

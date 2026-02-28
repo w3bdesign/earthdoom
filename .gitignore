@@ -1,3 +1,10 @@
 
 game/prisma/docs/index.html
 game/prisma/docs/styles/main.css
+
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.pyc

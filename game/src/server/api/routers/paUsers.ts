@@ -1,44 +1,87 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 import {
   createTRPCRouter,
   privateProcedure,
-  publicProcedure,
 } from "@/server/api/trpc";
 
+/** Allowed dynamic field names for research on PaUsers */
+const researchFields = [
+  "r_imcrystal",
+  "r_immetal",
+  "r_energy",
+  "r_aaircraft",
+  "r_tbeam",
+  "r_uscan",
+  "r_oscan",
+  "r_odg",
+] as const;
+
+/** Allowed dynamic field names for unit production on PaUsers */
+const productionFields = [
+  "p_infinitys",
+  "p_wraiths",
+  "p_cobras",
+  "p_warfrigs",
+  "p_astropods",
+  "p_destroyers",
+  "p_rcannons",
+  "p_avengers",
+  "p_lstalkers",
+  "p_scorpions",
+  "p_missiles",
+] as const;
+
+/** Allowed dynamic ETA field names for unit production on PaUsers */
+const productionETAFields = [
+  "p_infinitys_eta",
+  "p_wraiths_eta",
+  "p_cobras_eta",
+  "p_warfrigs_eta",
+  "p_astropods_eta",
+  "p_destroyers_eta",
+  "p_rcannons_eta",
+  "p_avengers_eta",
+  "p_lstalkers_eta",
+  "p_scorpions_eta",
+  "p_missiles_eta",
+] as const;
+
 export const paUsersRouter = createTRPCRouter({
-  createPlayer: publicProcedure
+  createPlayer: privateProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(async ({ ctx, input }) => {
-    return await ctx.prisma.paUsers.create({
-      data: {
-        nick: input.nick,
-        construction: { create: {} }, // create the construction field
-      },
-      include: { construction: true }, // include the construction field in the response
-    });
+      if (input.nick !== ctx.username) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Nick must match your authenticated username",
+        });
+      }
+
+      return await ctx.prisma.paUsers.create({
+        data: {
+          nick: input.nick,
+          construction: { create: {} },
+        },
+        include: { construction: true },
+      });
     }),
 
   getAll: privateProcedure.query(async ({ ctx }) => {
-    // Get all users ordered by score descending
-    const users = await ctx.prisma.paUsers.findMany({
-      orderBy: {
-        score: "desc",
-      },
+    // Batch-update all ranks in a single query using ROW_NUMBER()
+    await ctx.prisma.$executeRaw`
+      UPDATE "PaUsers" SET rank = ranked.new_rank
+      FROM (
+        SELECT id, ROW_NUMBER() OVER (ORDER BY score DESC) AS new_rank
+        FROM "PaUsers"
+      ) AS ranked
+      WHERE "PaUsers".id = ranked.id
+    `;
+
+    return await ctx.prisma.paUsers.findMany({
+      orderBy: { rank: "asc" },
     });
-
-    // Update ranks based on score order
-    const updatedUsers = await Promise.all(
-      users.map(async (user, index) => {
-        const updatedUser = await ctx.prisma.paUsers.update({
-          where: { id: user.id },
-          data: { rank: index + 1 }, // rank starts at 1
-        });
-        return updatedUser;
-      })
-    );
-
-    return updatedUsers;
   }),
   getResourceOverview: privateProcedure
     .input(z.object({ nick: z.string() }))
@@ -79,45 +122,34 @@ export const paUsersRouter = createTRPCRouter({
   getPlayerByNick: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
-      const user = await ctx.prisma.paUsers.findUnique({
+      // Single query: fetch the player with their construction relation
+      const result = await ctx.prisma.paUsers.findUnique({
         where: { nick: input.nick },
-        select: { id: true, tag: true, construction: true },
+        include: { construction: true },
       });
 
-      const player = await ctx.prisma.paUsers.findUnique({
-        where: {
-          id: user?.id,
-        },
-      });
-
-      if (!player) {
+      if (!result) {
         return null;
       }
 
-      // If player has no paConstructId, create a new PaConstruct
-      if (!player.paConstructId) {
+      // Destructure out the nested relation to flatten
+      const { construction, ...player } = result;
+
+      // If player has no paConstructId, create a new PaConstruct and link it
+      if (!player.paConstructId || !construction) {
         const newConstruct = await ctx.prisma.paConstruct.create({
           data: {}
         });
-        
-        // Link the new construct to the player
+
         await ctx.prisma.paUsers.update({
           where: { id: player.id },
           data: { paConstructId: newConstruct.id }
         });
-        
+
         return { ...newConstruct, ...player, id: player.id };
       }
 
-      const paConstruct = await ctx.prisma.paConstruct.findUnique({
-        where: { id: player.paConstructId },
-      });
-
-      if (!paConstruct) {
-        throw new Error(`No PaConstruct found for user with ID: ${player.id}`);
-      }
-
-      return { ...paConstruct, ...player, id: player.id };
+      return { ...construction, ...player, id: player.id };
     }),
   getFriendlies: privateProcedure
     .input(z.object({ nick: z.string() }))
@@ -233,11 +265,9 @@ export const paUsersRouter = createTRPCRouter({
     }),
 
   researchBuilding: privateProcedure
-    .input(z.object({ Userid: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingFieldName: z.enum(researchFields) }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingETA: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
@@ -248,10 +278,17 @@ export const paUsersRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
+      const player = await ctx.prisma.paUsers.findUnique({
+        where: { nick: ctx.username ?? "" },
+        select: { id: true },
+      });
+
+      if (!player) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Player not found" });
+      }
+
       return await ctx.prisma.paUsers.update({
-        where: {
-          id: input.Userid,
-        },
+        where: { id: player.id },
         data: {
           [buildingFieldName]: buildingETA,
           crystal: { decrement: buildingCostCrystal },
@@ -263,9 +300,8 @@ export const paUsersRouter = createTRPCRouter({
   // TODO Combine constructBuilding, produceUnit and researchBuilding into one?
 
   produceUnit: privateProcedure
-    .input(z.object({ Userid: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
-    .input(z.object({ buildingFieldNameETA: z.string() }))
+    .input(z.object({ buildingFieldName: z.enum(productionFields) }))
+    .input(z.object({ buildingFieldNameETA: z.enum(productionETAFields) }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ unitAmount: z.number() }))
@@ -280,10 +316,17 @@ export const paUsersRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
+      const player = await ctx.prisma.paUsers.findUnique({
+        where: { nick: ctx.username ?? "" },
+        select: { id: true },
+      });
+
+      if (!player) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Player not found" });
+      }
+
       const data = await ctx.prisma.paUsers.update({
-        where: {
-          id: input.Userid,
-        },
+        where: { id: player.id },
         data: {
           [buildingFieldName]: {
             increment: unitAmount,

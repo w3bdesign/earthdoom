@@ -119,8 +119,8 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
                 return;
               }
               mutate({
-                Userid: Number(paPlayer.id),
-                buildingFieldName: resource.buildingFieldName,
+                buildingFieldName:
+                  resource.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
                 buildingCostCrystal: resource.buildingCostCrystal,
                 buildingCostTitanium: resource.buildingCostTitanium,
                 unitAmount: Number(spyingAmountRef?.current?.value),
