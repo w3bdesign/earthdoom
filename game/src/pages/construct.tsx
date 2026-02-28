@@ -44,6 +44,10 @@ const Construction: NextPage = () => {
 
   const caption = "Construction";
 
+  if (!isSignedIn || !user?.username) {
+    return null;
+  }
+
   if (!paPlayer) {
     return (
       <Layout>
