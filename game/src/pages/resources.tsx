@@ -22,11 +22,10 @@ const Resources: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
-  if (!isSignedIn || !user.username) return <LoadingSpinner />;
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: user.username,
-  });
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    { nick: user?.username ?? "" },
+    { enabled: !!isSignedIn && !!user?.username }
+  );
 
   const { mutate, isLoading } = api.paConstruct.developLand.useMutation({
     onSuccess: async () => {
