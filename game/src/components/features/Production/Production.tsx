@@ -46,6 +46,38 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     return null;
   }
 
+  // Check if the player can afford at least one unit
+  const canAffordOne = canAffordToTrain(
+    [paPlayer],
+    production.buildingCostCrystal,
+    production.buildingCostTitanium,
+    1,
+  );
+
+  const isDisabled = isLoading || !canAffordOne;
+
+  // Build tooltip for disabled state
+  const getTooltip = (): string | undefined => {
+    if (isLoading) return "Training in progress...";
+    if (!canAffordOne) {
+      const parts: string[] = [];
+      if (production.buildingCostCrystal > 0 && paPlayer.crystal < production.buildingCostCrystal) {
+        parts.push(
+          `Need ${production.buildingCostCrystal} credits (have ${paPlayer.crystal})`,
+        );
+      }
+      if (production.buildingCostTitanium > 0 && paPlayer.metal < production.buildingCostTitanium) {
+        parts.push(
+          `Need ${production.buildingCostTitanium} titanium (have ${paPlayer.metal})`,
+        );
+      }
+      return parts.length > 0 ? parts.join(". ") : "You cannot afford this";
+    }
+    return undefined;
+  };
+
+  const tooltip = getTooltip();
+
   return (
     <tr
       key={production.buildingName}
@@ -104,47 +136,50 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
         {isLoading && <div className="mb-1">Starting ...</div>}
 
         {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
-          <Button
-            onClick={() => {
-              if (!paPlayer || !paPlayer.id) {
-                return;
-              }
-              if (Number(unitAmountRef?.current?.value) === 0) {
-                ToastComponent({
-                  message: "Needs to be more than 0",
-                  type: "error",
-                });
-                return;
-              }
+          <div title={tooltip} className="inline-block">
+            <Button
+              disabled={isDisabled}
+              onClick={() => {
+                if (!paPlayer || !paPlayer.id) {
+                  return;
+                }
+                if (Number(unitAmountRef?.current?.value) === 0) {
+                  ToastComponent({
+                    message: "Needs to be more than 0",
+                    type: "error",
+                  });
+                  return;
+                }
 
-              if (
-                !canAffordToTrain(
-                  [paPlayer],
-                  production.buildingCostCrystal,
-                  production.buildingCostTitanium,
-                  Number(unitAmountRef?.current?.value),
-                )
-              ) {
-                ToastComponent({
-                  message: "You can not afford this",
-                  type: "error",
+                if (
+                  !canAffordToTrain(
+                    [paPlayer],
+                    production.buildingCostCrystal,
+                    production.buildingCostTitanium,
+                    Number(unitAmountRef?.current?.value),
+                  )
+                ) {
+                  ToastComponent({
+                    message: "You can not afford this",
+                    type: "error",
+                  });
+                  return;
+                }
+                mutate({
+                  buildingFieldName:
+                    production.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
+                  buildingFieldNameETA:
+                    production.buildingFieldNameETA as Parameters<typeof mutate>[0]["buildingFieldNameETA"],
+                  buildingCostCrystal: production.buildingCostCrystal,
+                  buildingCostTitanium: production.buildingCostTitanium,
+                  unitAmount: Number(unitAmountRef?.current?.value),
+                  buildingETA: production.buildingETA,
                 });
-                return;
-              }
-              mutate({
-                buildingFieldName:
-                  production.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
-                buildingFieldNameETA:
-                  production.buildingFieldNameETA as Parameters<typeof mutate>[0]["buildingFieldNameETA"],
-                buildingCostCrystal: production.buildingCostCrystal,
-                buildingCostTitanium: production.buildingCostTitanium,
-                unitAmount: Number(unitAmountRef?.current?.value),
-                buildingETA: production.buildingETA,
-              });
-            }}
-          >
-            Train
-          </Button>
+              }}
+            >
+              Train
+            </Button>
+          </div>
         )}
         {Number(paPlayer[production.buildingFieldName]) >= 1 &&
           `ETA ${Number(paPlayer[production.buildingFieldNameETA])} ticks`}
