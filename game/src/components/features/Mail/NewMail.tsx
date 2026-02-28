@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { api } from "@/utils/api";
 
 import type { FC, ChangeEvent, FormEvent } from "react";
