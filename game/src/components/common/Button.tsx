@@ -27,7 +27,7 @@ export const Button: React.FC<IButtonProps> = ({
     ? "focus:bg-primary-600"
     : "focus:bg-danger-600";
 
-  const classNames = `disabled:opacity-50 inline-block rounded p-8 w-32 pb-2 pt-2.5 text-sm leading-normal text-white transition duration-150 ease-in-out ${extraClasses} ${bgColor} ${hoverBgColor} ${focusBgColor}`;
+  const classNames = `disabled:opacity-50 disabled:cursor-not-allowed inline-block rounded p-8 w-32 pb-2 pt-2.5 text-sm leading-normal text-white transition duration-150 ease-in-out ${extraClasses} ${bgColor} ${hoverBgColor} ${focusBgColor}`;
 
   return (
     <button disabled={disabled} className={classNames} {...rest}>
