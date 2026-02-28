@@ -1,9 +1,9 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 import {
   createTRPCRouter,
   privateProcedure,
-  publicProcedure,
 } from "@/server/api/trpc";
 
 /** Allowed dynamic field names for research on PaUsers */
@@ -49,16 +49,23 @@ const productionETAFields = [
 ] as const;
 
 export const paUsersRouter = createTRPCRouter({
-  createPlayer: publicProcedure
+  createPlayer: privateProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(async ({ ctx, input }) => {
-    return await ctx.prisma.paUsers.create({
-      data: {
-        nick: input.nick,
-        construction: { create: {} }, // create the construction field
-      },
-      include: { construction: true }, // include the construction field in the response
-    });
+      if (input.nick !== ctx.username) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Nick must match your authenticated username",
+        });
+      }
+
+      return await ctx.prisma.paUsers.create({
+        data: {
+          nick: input.nick,
+          construction: { create: {} },
+        },
+        include: { construction: true },
+      });
     }),
 
   getAll: privateProcedure.query(async ({ ctx }) => {
