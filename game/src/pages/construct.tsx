@@ -18,13 +18,10 @@ const Construction: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) {
-    return null;
-  }
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: user.username,
-  });
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    { nick: user?.username ?? "" },
+    { enabled: !!isSignedIn && !!user?.username }
+  );
 
   const { mutate, isLoading } = api.paConstruct.constructBuilding.useMutation({
     onSuccess: async () => {
