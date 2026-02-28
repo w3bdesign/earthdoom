@@ -237,7 +237,6 @@ export const paUsersRouter = createTRPCRouter({
     .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
     .input(z.object({ buildingETA: z.number() }))
 
     .mutation(async ({ ctx, input }) => {
