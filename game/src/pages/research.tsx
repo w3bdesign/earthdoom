@@ -22,13 +22,10 @@ const ResearchPage: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) {
-    return null;
-  }
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: user.username,
-  });
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    { nick: user?.username ?? "" },
+    { enabled: !!isSignedIn && !!user?.username }
+  );
 
   const { mutate, isLoading } = api.paUsers.researchBuilding.useMutation({
     onSuccess: async () => {
@@ -56,6 +53,10 @@ const ResearchPage: NextPage = () => {
   ];
 
   const caption = "Research";
+
+  if (!isSignedIn || !user?.username) {
+    return null;
+  }
 
   if (!paPlayer) {
     return (
