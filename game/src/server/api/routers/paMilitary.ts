@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 
@@ -20,9 +21,11 @@ export const paMilitaryRouter = createTRPCRouter({
         select: { id: true },
       });
 
-      // TODO Show an error if user is not found
       if (!user) {
-        return;
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Target player "${target}" not found`,
+        });
       }
 
       const data = await ctx.prisma.paUsers.update({
