@@ -55,6 +55,10 @@ const Spying: NextPage = () => {
 
   const caption = "Spying";
 
+  if (!isSignedIn || !user?.username) {
+    return <LoadingSpinner />;
+  }
+
   if (!paPlayer) {
     return (
       <Layout>
