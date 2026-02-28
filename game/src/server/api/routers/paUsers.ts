@@ -123,17 +123,20 @@ export const paUsersRouter = createTRPCRouter({
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
       // Single query: fetch the player with their construction relation
-      const player = await ctx.prisma.paUsers.findUnique({
+      const result = await ctx.prisma.paUsers.findUnique({
         where: { nick: input.nick },
         include: { construction: true },
       });
 
-      if (!player) {
+      if (!result) {
         return null;
       }
 
+      // Destructure out the nested relation to flatten
+      const { construction, ...player } = result;
+
       // If player has no paConstructId, create a new PaConstruct and link it
-      if (!player.paConstructId || !player.construction) {
+      if (!player.paConstructId || !construction) {
         const newConstruct = await ctx.prisma.paConstruct.create({
           data: {}
         });
@@ -146,7 +149,7 @@ export const paUsersRouter = createTRPCRouter({
         return { ...newConstruct, ...player, id: player.id };
       }
 
-      return { ...player.construction, ...player, id: player.id };
+      return { ...construction, ...player, id: player.id };
     }),
   getFriendlies: privateProcedure
     .input(z.object({ nick: z.string() }))
