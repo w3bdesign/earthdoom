@@ -119,7 +119,6 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
                 return;
               }
               mutate({
-                Userid: Number(paPlayer.id),
                 buildingFieldName:
                   resource.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
                 buildingCostCrystal: resource.buildingCostCrystal,

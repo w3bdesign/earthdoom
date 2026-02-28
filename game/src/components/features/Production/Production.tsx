@@ -132,7 +132,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
                 return;
               }
               mutate({
-                Userid: Number(paPlayer.id),
                 buildingFieldName:
                   production.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
                 buildingFieldNameETA:
