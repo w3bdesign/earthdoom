@@ -38,60 +38,97 @@ const ActionButton: FC<IActionButtonProps> = ({
   const shouldNotCheckFieldName =
     building.needsFieldName === 0 || building.needsFieldName === "undefined";
 
+  // Check if the player can afford at least one unit of this building/unit
+  const canAffordOne = canAffordToTrain(
+    paPlayer,
+    building.buildingCostCrystal,
+    building.buildingCostTitanium,
+    1,
+    considerLand,
+  );
+
+  const isDisabled = isLoading || disabled || !canAffordOne;
+
+  // Build tooltip message for disabled state
+  const getTooltip = (): string | undefined => {
+    if (isLoading) return "Action in progress...";
+    if (!canAffordOne) {
+      const player = paPlayer[0];
+      if (!player) return "Cannot afford this";
+      const parts: string[] = [];
+      if (building.buildingCostCrystal > 0 && player.crystal < building.buildingCostCrystal) {
+        parts.push(
+          `Need ${building.buildingCostCrystal} credits (have ${player.crystal})`,
+        );
+      }
+      if (building.buildingCostTitanium > 0 && player.metal < building.buildingCostTitanium) {
+        parts.push(
+          `Need ${building.buildingCostTitanium} titanium (have ${player.metal})`,
+        );
+      }
+      return parts.length > 0 ? parts.join(". ") : "You cannot afford this";
+    }
+    return undefined;
+  };
+
+  const tooltip = getTooltip();
+
   return (
     <>
       <td className="flex items-center px-8 text-base text-black transition duration-300 before:text-black first:border-l-0 sm:table-cell sm:before:content-none md:h-12 md:px-0">
         {(shouldNotCheckFieldName ||
           paPlayer[0][building.buildingFieldName] === 0) && (
-          <Button
-            disabled={isLoading || disabled}
-            onClick={() => {
-              if (!paPlayer[0] || !paPlayer[0].id) return;
+          <div title={tooltip} className="inline-block">
+            <Button
+              disabled={isDisabled}
+              onClick={() => {
+                if (!paPlayer[0] || !paPlayer[0].id) return;
 
-              // Using a single condition to check for multiple values
-              const hasInputField =
-                Number(building.hasInputField) === 1 ||
-                building.hasInputField !== "undefined";
+                // Using a single condition to check for multiple values
+                const hasInputField =
+                  Number(building.hasInputField) === 1 ||
+                  building.hasInputField !== "undefined";
 
-              if (
-                hasInputField &&
-                Number(inputAmountRef?.current?.value) === 0
-              ) {
-                ToastComponent({
-                  message: "Quantity needs to be more than 0",
-                  type: "error",
+                if (
+                  hasInputField &&
+                  Number(inputAmountRef?.current?.value) === 0
+                ) {
+                  ToastComponent({
+                    message: "Quantity needs to be more than 0",
+                    type: "error",
+                  });
+                  return;
+                }
+
+                // Using early returns to avoid nested if statements
+                if (
+                  !canAffordToTrain(
+                    paPlayer,
+                    building.buildingCostCrystal,
+                    building.buildingCostTitanium,
+                    Number(inputAmountRef?.current?.value),
+                    considerLand,
+                  )
+                ) {
+                  ToastComponent({
+                    message: "You can not afford this",
+                    type: "error",
+                  });
+                  return;
+                }
+
+                mutate({
+                  buildingFieldName: building.buildingFieldName,
+                  buildingETA: building.buildingETA,
+                  buildingCostCrystal: building.buildingCostCrystal,
+                  buildingCostTitanium: building.buildingCostTitanium,
+                  unitAmount: Number(inputAmountRef?.current?.value),
                 });
-                return;
-              }
-
-              // Using early returns to avoid nested if statements
-              if (
-                !canAffordToTrain(
-                  paPlayer,
-                  building.buildingCostCrystal,
-                  building.buildingCostTitanium,
-                  Number(inputAmountRef?.current?.value),
-                  considerLand,
-                )
-              ) {
-                ToastComponent({
-                  message: "You can not afford this",
-                  type: "error",
-                });
-                return;
-              }
-
-              mutate({
-                buildingFieldName: building.buildingFieldName,
-                buildingETA: building.buildingETA,
-                buildingCostCrystal: building.buildingCostCrystal,
-                buildingCostTitanium: building.buildingCostTitanium,
-                unitAmount: Number(inputAmountRef?.current?.value),
-              });
-            }}
-          >
-            {actionText}
-          </Button>
+              }}
+            >
+              {actionText}
+            </Button>
+          </div>
         )}
         {paPlayer[0] &&
           building &&
