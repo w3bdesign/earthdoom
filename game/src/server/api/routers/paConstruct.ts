@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 
@@ -26,7 +27,6 @@ const developLandFields = [
 
 export const paConstructRouter = createTRPCRouter({
   constructBuilding: privateProcedure
-    .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingFieldName: z.enum(constructFields) }))
@@ -39,15 +39,25 @@ export const paConstructRouter = createTRPCRouter({
         buildingETA,
       } = input;
 
+      const player = await ctx.prisma.paUsers.findUnique({
+        where: { nick: ctx.username ?? "" },
+        select: { id: true },
+      });
+
+      if (!player) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Player not found" });
+      }
+
       // Fetch the associated PaConstruct for the user
       const paConstruct = await ctx.prisma.paUsers
-        .findUnique({ where: { id: input.Userid } })
+        .findUnique({ where: { id: player.id } })
         .construction();
 
       if (!paConstruct) {
-        throw new Error(
-          `No PaConstruct found for user with ID: ${input.Userid}`,
-        );
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No PaConstruct found for player`,
+        });
       }
 
       // Update the PaConstruct
@@ -63,7 +73,7 @@ export const paConstructRouter = createTRPCRouter({
       // Update the PaUsers
       return await ctx.prisma.paUsers.update({
         where: {
-          id: input.Userid,
+          id: player.id,
         },
         data: {
           crystal: { decrement: buildingCostCrystal },
@@ -103,7 +113,6 @@ export const paConstructRouter = createTRPCRouter({
     }),*/
 
   developLand: privateProcedure
-    .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingFieldName: z.enum(developLandFields) }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
@@ -111,29 +120,29 @@ export const paConstructRouter = createTRPCRouter({
     .input(z.object({ unitAmount: z.number().optional() }))
 
     .mutation(async ({ ctx, input }) => {
-      const { Userid, buildingFieldName, buildingCostCrystal, unitAmount } =
+      const { buildingFieldName, buildingCostCrystal, unitAmount } =
         input;
 
       const unitAmountDefault = unitAmount || 0;
 
-      // Fetch the current user data
+      // Fetch the current user data from auth context
       const currentUser = await ctx.prisma.paUsers.findUnique({
-        where: { id: Userid },
+        where: { nick: ctx.username ?? "" },
       });
 
       // Check if user exists
       if (!currentUser) {
-        throw new Error("User does not exist");
+        throw new TRPCError({ code: "NOT_FOUND", message: "Player not found" });
       }
 
       // Check if user has enough ui_roids
       if (currentUser.ui_roids < unitAmountDefault) {
-        throw new Error("Not enough land");
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Not enough land" });
       }
 
       return await ctx.prisma.paUsers.update({
         where: {
-          id: Userid,
+          id: currentUser.id,
         },
         data: {
           [buildingFieldName]: {
