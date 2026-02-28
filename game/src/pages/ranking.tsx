@@ -18,15 +18,18 @@ import { Building } from "@/components/features/Construct/types/types";
 const RankingPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) {
+  const { data: paRanking } = api.paUsers.getAll.useQuery(undefined, {
+    enabled: !!isSignedIn && !!user?.username,
+  });
+
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    { nick: user?.username ?? "" },
+    { enabled: !!isSignedIn && !!user?.username }
+  );
+
+  if (!isSignedIn || !user?.username) {
     return null;
   }
-
-  const { data: paRanking } = api.paUsers.getAll.useQuery();
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: user.username,
-  });
 
   const columns: AdvancedTableColumn[] = [
     { label: "Nick", accessor: "nick" },

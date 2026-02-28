@@ -19,15 +19,12 @@ const Spying: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn, isLoaded } = useUser();
 
-  let uiRoids = 0;
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    { nick: user?.username ?? "" },
+    { enabled: !!isSignedIn && !!user?.username }
+  );
 
-  if (!isSignedIn || !user.username) return <LoadingSpinner />;
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: user.username,
-  });
-
-  uiRoids = paPlayer?.ui_roids || 0;
+  const uiRoids = paPlayer?.ui_roids || 0;
 
   const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async (data) => {
@@ -57,6 +54,10 @@ const Spying: NextPage = () => {
   ];
 
   const caption = "Spying";
+
+  if (!isSignedIn || !user?.username) {
+    return <LoadingSpinner />;
+  }
 
   if (!paPlayer) {
     return (

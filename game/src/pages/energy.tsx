@@ -20,13 +20,10 @@ const Energy: NextPage = () => {
   const ctx = api.useContext();
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) {
-    return null;
-  }
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: user.username,
-  });
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    { nick: user?.username ?? "" },
+    { enabled: !!isSignedIn && !!user?.username }
+  );
 
   const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async () => {
@@ -50,7 +47,7 @@ const Energy: NextPage = () => {
 
   const caption = "Energy";
 
-  if (!paPlayer || !isSignedIn || !user.username) {
+  if (!isSignedIn || !user?.username || !paPlayer) {
     return (
       <Layout>
         <div className="mt-12">

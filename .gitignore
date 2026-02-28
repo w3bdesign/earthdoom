@@ -8,3 +8,4 @@ game/prisma/docs/styles/main.css
 # Python
 __pycache__/
 *.pyc
+/game/plans
