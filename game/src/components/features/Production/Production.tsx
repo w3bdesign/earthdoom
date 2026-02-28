@@ -133,8 +133,10 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
               }
               mutate({
                 Userid: Number(paPlayer.id),
-                buildingFieldName: production.buildingFieldName,
-                buildingFieldNameETA: production.buildingFieldNameETA,
+                buildingFieldName:
+                  production.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
+                buildingFieldNameETA:
+                  production.buildingFieldNameETA as Parameters<typeof mutate>[0]["buildingFieldNameETA"],
                 buildingCostCrystal: production.buildingCostCrystal,
                 buildingCostTitanium: production.buildingCostTitanium,
                 unitAmount: Number(unitAmountRef?.current?.value),
