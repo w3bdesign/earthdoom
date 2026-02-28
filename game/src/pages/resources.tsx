@@ -61,6 +61,10 @@ const Resources: NextPage = () => {
 
   const hasNoUndevelopedLand = paPlayer?.ui_roids === 0;
 
+  if (!isSignedIn || !user?.username) {
+    return <LoadingSpinner />;
+  }
+
   if (!paPlayer) {
     return (
       <Layout>
