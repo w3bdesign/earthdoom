@@ -6,6 +6,48 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 
+/** Allowed dynamic field names for research on PaUsers */
+const researchFields = [
+  "r_imcrystal",
+  "r_immetal",
+  "r_energy",
+  "r_aaircraft",
+  "r_tbeam",
+  "r_uscan",
+  "r_oscan",
+  "r_odg",
+] as const;
+
+/** Allowed dynamic field names for unit production on PaUsers */
+const productionFields = [
+  "p_infinitys",
+  "p_wraiths",
+  "p_cobras",
+  "p_warfrigs",
+  "p_astropods",
+  "p_destroyers",
+  "p_rcannons",
+  "p_avengers",
+  "p_lstalkers",
+  "p_scorpions",
+  "p_missiles",
+] as const;
+
+/** Allowed dynamic ETA field names for unit production on PaUsers */
+const productionETAFields = [
+  "p_infinitys_eta",
+  "p_wraiths_eta",
+  "p_cobras_eta",
+  "p_warfrigs_eta",
+  "p_astropods_eta",
+  "p_destroyers_eta",
+  "p_rcannons_eta",
+  "p_avengers_eta",
+  "p_lstalkers_eta",
+  "p_scorpions_eta",
+  "p_missiles_eta",
+] as const;
+
 export const paUsersRouter = createTRPCRouter({
   createPlayer: publicProcedure
     .input(z.object({ nick: z.string() }))
@@ -234,7 +276,7 @@ export const paUsersRouter = createTRPCRouter({
 
   researchBuilding: privateProcedure
     .input(z.object({ Userid: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingFieldName: z.enum(researchFields) }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingETA: z.number() }))
@@ -263,8 +305,8 @@ export const paUsersRouter = createTRPCRouter({
 
   produceUnit: privateProcedure
     .input(z.object({ Userid: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
-    .input(z.object({ buildingFieldNameETA: z.string() }))
+    .input(z.object({ buildingFieldName: z.enum(productionFields) }))
+    .input(z.object({ buildingFieldNameETA: z.enum(productionETAFields) }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ unitAmount: z.number() }))
