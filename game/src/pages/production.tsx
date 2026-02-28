@@ -24,13 +24,14 @@ import { renderMessage } from "@/utils/functions";
 const ProductionPage: NextPage = () => {
   const { user, isSignedIn } = useUser();
 
-  if (!isSignedIn || !user.username) {
+  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
+    { nick: user?.username ?? "" },
+    { enabled: !!isSignedIn && !!user?.username }
+  );
+
+  if (!isSignedIn || !user?.username) {
     return null;
   }
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery({
-    nick: user.username,
-  });
 
   const renderBarracksMessage = (paPlayer: PaPlayer) => {
     if (
