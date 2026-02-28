@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import type { FC } from "react";
 import type { Building } from "@/components/features/Construct/types/types";
-import type { PaPlayer } from "@/components/features/Military/Military";
+import type { PaPlayerBase } from "@/types/player";
 import type { TMutateType } from "./AdvancedDataTable";
 
 import Button from "../../../common/Button";
@@ -11,7 +11,7 @@ import { canAffordToTrain } from "@/utils/functions";
 
 interface IActionButtonProps {
   isLoading: boolean;
-  paPlayer: PaPlayer[];
+  paPlayer: PaPlayerBase[];
   building?: Building;
   mutate: TMutateType;
   actionText?: string;

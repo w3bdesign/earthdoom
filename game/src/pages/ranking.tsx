@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
-import type { PaPlayer } from "@/components/features/Military/Military";
+import type { PaPlayerBase } from "@/types/player";
 import type { AdvancedTableColumn } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
 
 import { api } from "@/utils/api";
@@ -36,15 +36,15 @@ const RankingPage: NextPage = () => {
     { label: "Score", accessor: "score" },
     { label: "Size", accessor: "size" },
     { label: "Rank", accessor: "rank" },
-    { 
-      label: "Actions", 
-      accessor: (row: PaPlayer | Building) => {
+    {
+      label: "Actions",
+      accessor: (row: PaPlayerBase | Building) => {
         if (!paPlayer) return <></>;
-        // Type guard to ensure we have a PaPlayer with required properties
+        // Type guard to ensure we have a PaPlayerBase with required properties
         if ('nick' in row && typeof row.nick === 'string') {
-          const playerRow = row as PaPlayer;
+          const playerRow = row as PaPlayerBase;
           return (
-            <RankingActions 
+            <RankingActions
               playerNick={playerRow.nick}
               newbie={typeof playerRow.newbie === 'number' ? playerRow.newbie : 0}
               currentPlayer={paPlayer}
@@ -76,7 +76,7 @@ const RankingPage: NextPage = () => {
             {paPlayer && (
               <AdvancedDataTable
                 columns={columns}
-                data={paRanking}
+                data={paRanking as PaPlayerBase[]}
                 caption={caption}
               />
             )}

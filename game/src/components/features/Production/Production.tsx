@@ -5,7 +5,7 @@ import { Button, ToastComponent } from "@/components/ui";
 
 import type { FC } from "react";
 import type { IProduction } from "./types/types";
-import type { PaPlayer } from "../Military/Military";
+import type { PaPlayer } from "@/types/player";
 
 import { PRODUCTION } from "./constants/PRODUCTION";
 

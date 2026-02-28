@@ -14,12 +14,14 @@ const spyingFields = [
 export const paSpyingRouter = createTRPCRouter({
   // TODO Add support for more spying options
   spyingInitiate: privateProcedure
-    .input(z.object({ buildingFieldName: z.enum(spyingFields) }))
-    .input(z.object({ buildingCostCrystal: z.number() }))
-    .input(z.object({ buildingCostTitanium: z.number() }))
-    .input(z.object({ buildingETA: z.number() }))
-    .input(z.object({ unitAmount: z.number().optional() }))
-    .input(z.object({ spyingType: z.enum(["land"]).optional() })) // TODO Add more types and make it required
+    .input(z.object({
+      buildingFieldName: z.enum(spyingFields),
+      buildingCostCrystal: z.number(),
+      buildingCostTitanium: z.number(),
+      buildingETA: z.number(),
+      unitAmount: z.number().optional(),
+      spyingType: z.enum(["land"]).optional(), // TODO Add more types and make it required
+    }))
 
     .mutation(async ({ ctx, input }) => {
       const { buildingFieldName, buildingCostCrystal, unitAmount } =

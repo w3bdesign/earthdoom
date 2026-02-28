@@ -1,7 +1,7 @@
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
 import type { FC } from "react";
-import type { PaPlayer } from "@/components/features/Military/Military";
+import type { PaPlayer, PaPlayerBase } from "@/types/player";
 import type { Building } from "@/components/features/Construct/types/types";
 import type { UseMutateFunction } from "@tanstack/react-query";
 
@@ -19,14 +19,14 @@ export type TMutateType = UseMutateFunction<MutationData, unknown, any, unknown>
 
 export interface AdvancedTableColumn {
   label: string;
-  accessor: string | JSX.Element | ((row: PaPlayer | Building) => JSX.Element);
+  accessor: string | JSX.Element | ((row: PaPlayerBase | Building) => JSX.Element);
   type?: string;
 }
 
 export interface AdvancedDataTableProps {
   isLoading?: boolean;
   columns: AdvancedTableColumn[];
-  data: PaPlayer[];
+  data: PaPlayerBase[];
   caption: string;
   renderData?: Building[];
   action?: TMutateType;
@@ -115,7 +115,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                     row.buildingId ? (
                       <ActionButton
                         isLoading={isLoading}
-                        paPlayer={data as PaPlayer[]}
+                        paPlayer={data as PaPlayerBase[]}
                         building={row as Building}
                         mutate={action}
                         actionText={actionText}
@@ -126,7 +126,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                     ) : (
                       <ActionButton
                         isLoading={isLoading}
-                        paPlayer={data as PaPlayer[]}
+                        paPlayer={data as PaPlayerBase[]}
                         mutate={action}
                         actionText={actionText}
                         actionInProgress={actionInProgress}

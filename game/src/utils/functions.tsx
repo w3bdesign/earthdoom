@@ -1,22 +1,5 @@
-import type { PaPlayer } from "@/components/features/Military/Military";
+import type { PaPlayer, PaPlayerBase, PaUserWithConstruct } from "@/types/player";
 import type { IProduction } from "@/components/features/Production/types/types";
-import type { PaUsers } from "@prisma/client";
-
-// Extended type that includes construction fields directly
-type PaUserWithConstruct = PaUsers & {
-  c_crystal: number;
-  c_metal: number;
-  c_airport: number;
-  c_abase: number;
-  c_wstation: number;
-  c_amp1: number;
-  c_amp2: number;
-  c_warfactory: number;
-  c_destfact: number;
-  c_scorpfact: number;
-  c_energy: number;
-  c_odg: number;
-};
 
 interface IStringifierProps {
   value?: unknown;
@@ -114,7 +97,7 @@ export const Stringifier = ({ value }: IStringifierProps) => {
  * @param {IProduction} production - The production cost of the unit.
  * @returns {number} - The maximum number of units that can be trained.
  */
-export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
+export const maximumToTrain = (paPlayer: PaPlayerBase, production: IProduction) => {
   const maxValues = [];
   maxValues.push(Math.floor(paPlayer.crystal / production.buildingCostCrystal));
   if (production.buildingCostTitanium !== 0) {
@@ -139,7 +122,7 @@ export const maximumToTrain = (paPlayer: PaPlayer, production: IProduction) => {
  * @returns {boolean} Returns true if the player can afford to train the unit, otherwise false.
  */
 export const canAffordToTrain = (
-  paPlayer: PaPlayer[],
+  paPlayer: PaPlayerBase[],
   costCrystal: number,
   costTitanium: number,
   unitAmount: number,
@@ -231,7 +214,7 @@ export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
  * @param {PaUsers} paPlayer - The PaUsers object to calculate the ship count for.
  * @returns {number} The total count of ships for the given PaUsers object.
  */
-export const getShipCount = (paPlayer: PaPlayer) => {
+export const getShipCount = (paPlayer: PaPlayerBase) => {
   const shipProperties = [
     "astropods",
     "infinitys",
