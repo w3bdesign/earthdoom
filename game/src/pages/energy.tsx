@@ -47,7 +47,7 @@ const Energy: NextPage = () => {
 
   const caption = "Energy";
 
-  if (!paPlayer || !isSignedIn || !user.username) {
+  if (!isSignedIn || !user?.username || !paPlayer) {
     return (
       <Layout>
         <div className="mt-12">
