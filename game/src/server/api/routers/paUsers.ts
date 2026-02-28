@@ -122,45 +122,31 @@ export const paUsersRouter = createTRPCRouter({
   getPlayerByNick: privateProcedure
     .input(z.object({ nick: z.string() }))
     .query(async ({ ctx, input }) => {
-      const user = await ctx.prisma.paUsers.findUnique({
-        where: { nick: input.nick },
-        select: { id: true, tag: true, construction: true },
-      });
-
+      // Single query: fetch the player with their construction relation
       const player = await ctx.prisma.paUsers.findUnique({
-        where: {
-          id: user?.id,
-        },
+        where: { nick: input.nick },
+        include: { construction: true },
       });
 
       if (!player) {
         return null;
       }
 
-      // If player has no paConstructId, create a new PaConstruct
-      if (!player.paConstructId) {
+      // If player has no paConstructId, create a new PaConstruct and link it
+      if (!player.paConstructId || !player.construction) {
         const newConstruct = await ctx.prisma.paConstruct.create({
           data: {}
         });
-        
-        // Link the new construct to the player
+
         await ctx.prisma.paUsers.update({
           where: { id: player.id },
           data: { paConstructId: newConstruct.id }
         });
-        
+
         return { ...newConstruct, ...player, id: player.id };
       }
 
-      const paConstruct = await ctx.prisma.paConstruct.findUnique({
-        where: { id: player.paConstructId },
-      });
-
-      if (!paConstruct) {
-        throw new Error(`No PaConstruct found for user with ID: ${player.id}`);
-      }
-
-      return { ...paConstruct, ...player, id: player.id };
+      return { ...player.construction, ...player, id: player.id };
     }),
   getFriendlies: privateProcedure
     .input(z.object({ nick: z.string() }))
