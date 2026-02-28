@@ -265,10 +265,12 @@ export const paUsersRouter = createTRPCRouter({
     }),
 
   researchBuilding: privateProcedure
-    .input(z.object({ buildingFieldName: z.enum(researchFields) }))
-    .input(z.object({ buildingCostCrystal: z.number() }))
-    .input(z.object({ buildingCostTitanium: z.number() }))
-    .input(z.object({ buildingETA: z.number() }))
+    .input(z.object({
+      buildingFieldName: z.enum(researchFields),
+      buildingCostCrystal: z.number(),
+      buildingCostTitanium: z.number(),
+      buildingETA: z.number(),
+    }))
 
     .mutation(async ({ ctx, input }) => {
       const {
@@ -300,12 +302,14 @@ export const paUsersRouter = createTRPCRouter({
   // TODO Combine constructBuilding, produceUnit and researchBuilding into one?
 
   produceUnit: privateProcedure
-    .input(z.object({ buildingFieldName: z.enum(productionFields) }))
-    .input(z.object({ buildingFieldNameETA: z.enum(productionETAFields) }))
-    .input(z.object({ buildingCostCrystal: z.number() }))
-    .input(z.object({ buildingCostTitanium: z.number() }))
-    .input(z.object({ unitAmount: z.number() }))
-    .input(z.object({ buildingETA: z.number() }))
+    .input(z.object({
+      buildingFieldName: z.enum(productionFields),
+      buildingFieldNameETA: z.enum(productionETAFields),
+      buildingCostCrystal: z.number(),
+      buildingCostTitanium: z.number(),
+      unitAmount: z.number(),
+      buildingETA: z.number(),
+    }))
     .mutation(async ({ ctx, input }) => {
       const {
         buildingFieldName,

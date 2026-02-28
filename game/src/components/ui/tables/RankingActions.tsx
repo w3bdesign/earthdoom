@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { PaPlayer } from "@/components/features/Military/Military";
+import type { PaPlayerBase } from "@/types/player";
 
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
@@ -7,7 +7,7 @@ import { useUser } from "@clerk/nextjs";
 interface RankingActionsProps {
   playerNick: string;
   newbie: number;
-  currentPlayer: PaPlayer;
+  currentPlayer: PaPlayerBase;
 }
 
 // TODO: Set this to true for production

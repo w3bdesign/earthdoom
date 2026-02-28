@@ -9,9 +9,11 @@ export const paNewsRouter = createTRPCRouter({
   }),
 
   addNews: privateProcedure
-    .input(z.object({ sentTo: z.number() }))
-    .input(z.object({ news: z.string() }))
-    .input(z.object({ header: z.string() }))
+    .input(z.object({
+      sentTo: z.number(),
+      news: z.string(),
+      header: z.string(),
+    }))
     .mutation(async ({ ctx, input }) => {
       const news = await ctx.prisma.paNews.create({
         data: {

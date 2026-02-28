@@ -1,4 +1,5 @@
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
 
@@ -35,7 +36,10 @@ export const paMailRouter = createTRPCRouter({
       });
 
       if (!user) {
-        return;
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Player "${input.nick}" not found`,
+        });
       }
 
       const mail = await ctx.prisma.paMail.findMany({
@@ -49,9 +53,11 @@ export const paMailRouter = createTRPCRouter({
     }),
 
   sendMail: privateProcedure
-    .input(z.object({ nick: z.string() }))
-    .input(z.object({ news: z.string() }))
-    .input(z.object({ header: z.string() }))
+    .input(z.object({
+      nick: z.string(),
+      news: z.string(),
+      header: z.string(),
+    }))
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
         where: { nick: input.nick },
@@ -59,12 +65,15 @@ export const paMailRouter = createTRPCRouter({
       });
 
       if (!user) {
-        return;
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Recipient "${input.nick}" not found`,
+        });
       }
 
       const mail = await ctx.prisma.paMail.create({
         data: {
-          time: Math.floor(Date.now() / 1000), // get current time as a Unix timestamp
+          time: Math.floor(Date.now() / 1000),
           sentTo: user.id,
           news: input.news,
           header: input.header,

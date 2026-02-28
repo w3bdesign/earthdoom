@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
-import type { PaPlayer } from "@/components/features/Military/Military";
+import type { PaPlayer } from "@/types/player";
 
 import { api } from "@/utils/api";
 import { renderMessage } from "@/utils/functions";

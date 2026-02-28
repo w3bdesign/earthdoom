@@ -3,13 +3,11 @@ import { useState } from "react";
 import { api } from "@/utils/api";
 
 import type { FC, ChangeEvent } from "react";
-import type { PaUsers } from "@prisma/client";
+import type { PaPlayer } from "@/types/player";
 
 import { Button, ToastComponent } from "@/components/ui";
 
-export interface PaPlayer extends PaUsers {
-  [key: string]: number | string | null;
-}
+export type { PaPlayer } from "@/types/player";
 
 interface IMilitaryProps {
   paPlayer: PaPlayer;
@@ -105,6 +103,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     paPlayer["scorpions"];
 
   const energyCost = 9 * shipCount;
+  const canAffordAttack = paPlayer.energy >= energyCost && energyCost > 0;
 
   const shouldShowRetreatButton =
     !allFleetsAtHome && shipCount > 0 && paPlayer.war > 0;
@@ -149,42 +148,51 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
                 onChange={handleInputAttackChange}
                 className="w-64 rounded-md border border-gray-300 px-3 py-2"
               />
-              <Button
-                disabled={isLoading}
-                onClick={(event) => {
-                  event.preventDefault();
-                  if (!attackValue.trim().length) {
-                    ToastComponent({
-                      message: "You need to enter a target",
-                      type: "error",
-                    });
-                    return;
-                  }
-                  if (paPlayer.energy < energyCost) {
-                    ToastComponent({
-                      message: "You need more energy to attack",
-                      type: "error",
-                    });
-                    return;
-                  }
-                  if (!areTroopsAvailable) {
-                    ToastComponent({
-                      message: "Troops are not available",
-                      type: "error",
-                    });
-                    return;
-                  }
-                  militaryAction({
-                    Userid: paPlayer.id,
-                    target: attackValue,
-                    energyCost: energyCost,
-                    mode: "attack",
-                  });
-                }}
-                extraClasses="w-32 mt-4"
+              <div
+                title={
+                  !canAffordAttack
+                    ? `Need ${energyCost} energy (have ${paPlayer.energy})`
+                    : undefined
+                }
+                className="inline-block"
               >
-                Attack
-              </Button>
+                <Button
+                  disabled={isLoading || !canAffordAttack}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    if (!attackValue.trim().length) {
+                      ToastComponent({
+                        message: "You need to enter a target",
+                        type: "error",
+                      });
+                      return;
+                    }
+                    if (paPlayer.energy < energyCost) {
+                      ToastComponent({
+                        message: "You need more energy to attack",
+                        type: "error",
+                      });
+                      return;
+                    }
+                    if (!areTroopsAvailable) {
+                      ToastComponent({
+                        message: "Troops are not available",
+                        type: "error",
+                      });
+                      return;
+                    }
+                    militaryAction({
+                      Userid: paPlayer.id,
+                      target: attackValue,
+                      energyCost: energyCost,
+                      mode: "attack",
+                    });
+                  }}
+                  extraClasses="w-32 mt-4"
+                >
+                  Attack
+                </Button>
+              </div>
             </div>
             <h2 className="py-4 text-center text-xl font-bold">Defend:</h2>
             <form className="mt-4 flex flex-col items-center justify-center">

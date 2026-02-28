@@ -27,10 +27,12 @@ const developLandFields = [
 
 export const paConstructRouter = createTRPCRouter({
   constructBuilding: privateProcedure
-    .input(z.object({ buildingCostCrystal: z.number() }))
-    .input(z.object({ buildingCostTitanium: z.number() }))
-    .input(z.object({ buildingFieldName: z.enum(constructFields) }))
-    .input(z.object({ buildingETA: z.number() }))
+    .input(z.object({
+      buildingCostCrystal: z.number(),
+      buildingCostTitanium: z.number(),
+      buildingFieldName: z.enum(constructFields),
+      buildingETA: z.number(),
+    }))
     .mutation(async ({ ctx, input }) => {
       const {
         buildingFieldName,
@@ -113,11 +115,13 @@ export const paConstructRouter = createTRPCRouter({
     }),*/
 
   developLand: privateProcedure
-    .input(z.object({ buildingFieldName: z.enum(developLandFields) }))
-    .input(z.object({ buildingCostCrystal: z.number() }))
-    .input(z.object({ buildingCostTitanium: z.number() }))
-    .input(z.object({ buildingETA: z.number() }))
-    .input(z.object({ unitAmount: z.number().optional() }))
+    .input(z.object({
+      buildingFieldName: z.enum(developLandFields),
+      buildingCostCrystal: z.number(),
+      buildingCostTitanium: z.number(),
+      buildingETA: z.number(),
+      unitAmount: z.number().optional(),
+    }))
 
     .mutation(async ({ ctx, input }) => {
       const { buildingFieldName, buildingCostCrystal, unitAmount } =

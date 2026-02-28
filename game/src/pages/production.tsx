@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/nextjs";
 
 import type { NextPage } from "next";
-import type { PaPlayer } from "@/components/features/Military/Military";
+import type { PaPlayer } from "@/types/player";
 
 import { Layout } from "@/components/common/Layout";
 import Production from "@/components/features/Production/Production";
