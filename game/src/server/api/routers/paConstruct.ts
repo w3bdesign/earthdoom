@@ -2,12 +2,34 @@ import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 
+/** Allowed dynamic field names for construction on PaConstruct */
+const constructFields = [
+  "c_crystal",
+  "c_metal",
+  "c_airport",
+  "c_abase",
+  "c_wstation",
+  "c_amp1",
+  "c_amp2",
+  "c_warfactory",
+  "c_destfact",
+  "c_scorpfact",
+  "c_energy",
+  "c_odg",
+] as const;
+
+/** Allowed dynamic field names for land development on PaUsers */
+const developLandFields = [
+  "asteroid_crystal",
+  "asteroid_metal",
+] as const;
+
 export const paConstructRouter = createTRPCRouter({
   constructBuilding: privateProcedure
     .input(z.object({ Userid: z.number() }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingFieldName: z.enum(constructFields) }))
     .input(z.object({ buildingETA: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const {
@@ -82,7 +104,7 @@ export const paConstructRouter = createTRPCRouter({
 
   developLand: privateProcedure
     .input(z.object({ Userid: z.number() }))
-    .input(z.object({ buildingFieldName: z.string() }))
+    .input(z.object({ buildingFieldName: z.enum(developLandFields) }))
     .input(z.object({ buildingCostCrystal: z.number() }))
     .input(z.object({ buildingCostTitanium: z.number() }))
     .input(z.object({ buildingETA: z.number() }))
