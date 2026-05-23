@@ -18,7 +18,7 @@ interface BuildingRowProps {
   production: IProduction;
 }
 
-export interface ConstructProps {
+interface ConstructProps {
   paPlayer: PaPlayer;
 }
 
