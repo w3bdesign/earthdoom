@@ -132,13 +132,15 @@ describe('ActionButton', () => {
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
-  it('shows toast error when player cannot afford the amount', () => {
-    const poorPlayer = createMockPaPlayer({ crystal: 50, metal: 30 });
+  it('shows toast error when player cannot afford the amount requested', () => {
+    // Player can afford 1 unit (crystal: 500 >= 100, metal: 300 >= 50) so button is enabled,
+    // but cannot afford 10 units (1000 crystal needed, 500 titanium needed)
+    const limitedPlayer = createMockPaPlayer({ crystal: 500, metal: 300 });
     const building = createBuilding({ hasInputField: 1, buildingCostCrystal: 100, buildingCostTitanium: 50 });
-    const inputRef = { current: { value: '5' } } as React.RefObject<HTMLInputElement>;
+    const inputRef = { current: { value: '10' } } as React.RefObject<HTMLInputElement>;
     render(
       <table><tbody><tr>
-        <ActionButton {...defaultProps} paPlayer={[poorPlayer]} building={building} inputAmountRef={inputRef} />
+        <ActionButton {...defaultProps} paPlayer={[limitedPlayer]} building={building} inputAmountRef={inputRef} />
       </tr></tbody></table>
     );
     fireEvent.click(screen.getByRole('button', { name: 'Build' }));

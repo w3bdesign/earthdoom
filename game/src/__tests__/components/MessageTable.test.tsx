@@ -34,11 +34,13 @@ describe('MessageTable', () => {
   });
 
   it('renders a table with correct headers', () => {
-    render(<MessageTable {...defaultProps} />);
-    expect(screen.getByText('Time')).toBeInTheDocument();
-    expect(screen.getByText('Title')).toBeInTheDocument();
-    expect(screen.getByText('Content')).toBeInTheDocument();
-    expect(screen.getByText('Delete')).toBeInTheDocument();
+    const { container } = render(<MessageTable {...defaultProps} />);
+    const headers = container.querySelectorAll('th');
+    const headerTexts = Array.from(headers).map((h) => h.textContent?.trim());
+    expect(headerTexts).toContain('Time');
+    expect(headerTexts).toContain('Title');
+    expect(headerTexts).toContain('Content');
+    expect(headerTexts).toContain('Delete');
   });
 
   it('renders custom timeColumnLabel', () => {
