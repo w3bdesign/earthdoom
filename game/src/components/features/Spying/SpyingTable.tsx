@@ -65,6 +65,18 @@ const buildSpyingPayload = (resource: Building, amount: number) => ({
 const getMaximumToSearch = (crystal: PaPlayer["crystal"]): number =>
   Math.floor(Number(crystal) / 500);
 
+const getInputAmount = (ref: React.RefObject<HTMLInputElement>): number =>
+  Number(ref.current?.value) || 0;
+
+const canSpy = (
+  paPlayer: PaPlayer,
+  resource: Building,
+  amount: number,
+): boolean =>
+  Boolean(paPlayer.id) &&
+  validateAmount(amount) &&
+  validateAffordability(paPlayer, resource, amount);
+
 const SpyingAmountInput: FC<{
   inputRef: React.RefObject<HTMLInputElement>;
   defaultValue: number;
@@ -109,15 +121,8 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const maximumToSearch = getMaximumToSearch(paPlayer.crystal);
 
   const handleSpyClick = () => {
-    const amount = Number(spyingAmountRef.current?.value ?? 0);
-
-    if (
-      !paPlayer.id ||
-      !validateAmount(amount) ||
-      !validateAffordability(paPlayer, resource, amount)
-    )
-      return;
-
+    const amount = getInputAmount(spyingAmountRef);
+    if (!canSpy(paPlayer, resource, amount)) return;
     mutate(
       buildSpyingPayload(resource, amount) as Parameters<typeof mutate>[0],
     );
