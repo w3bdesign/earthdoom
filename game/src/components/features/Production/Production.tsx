@@ -46,42 +46,27 @@ function buildProductionTooltip(
   return parts.length > 0 ? parts.join(". ") : "You cannot afford this";
 }
 
-/** Validate inputs and trigger the mutation */
-function handleTrainClick(
+/** Validate inputs and return parsed amount, or null if invalid */
+function validateTrainInput(
   paPlayer: PaPlayer,
   production: IProduction,
   unitAmountRef: RefObject<HTMLInputElement>,
-  mutate: (input: {
-    buildingFieldName: string;
-    buildingFieldNameETA: string;
-    buildingCostCrystal: number;
-    buildingCostTitanium: number;
-    unitAmount: number;
-    buildingETA: number;
-  }) => void,
-): void {
-  if (!paPlayer?.id) return;
+): number | null {
+  if (!paPlayer?.id) return null;
 
   const amount = Number(unitAmountRef?.current?.value) || 0;
 
   if (amount === 0) {
     ToastComponent({ message: "Needs to be more than 0", type: "error" });
-    return;
+    return null;
   }
 
   if (!canAffordToTrain([paPlayer], production.buildingCostCrystal, production.buildingCostTitanium, amount)) {
     ToastComponent({ message: "You can not afford this", type: "error" });
-    return;
+    return null;
   }
 
-  mutate({
-    buildingFieldName: production.buildingFieldName,
-    buildingFieldNameETA: production.buildingFieldNameETA,
-    buildingCostCrystal: production.buildingCostCrystal,
-    buildingCostTitanium: production.buildingCostTitanium,
-    unitAmount: amount,
-    buildingETA: production.buildingETA,
-  });
+  return amount;
 }
 
 /** Determine the ETA cell value */
@@ -139,6 +124,22 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const isIdle = paPlayer[production.buildingFieldName] === 0 && !isLoading;
   const productionStatus = getProductionStatus(paPlayer, production);
 
+  const handleTrain = () => {
+    const amount = validateTrainInput(paPlayer, production, unitAmountRef);
+    if (amount === null) return;
+
+    mutate({
+      buildingFieldName:
+        production.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
+      buildingFieldNameETA:
+        production.buildingFieldNameETA as Parameters<typeof mutate>[0]["buildingFieldNameETA"],
+      buildingCostCrystal: production.buildingCostCrystal,
+      buildingCostTitanium: production.buildingCostTitanium,
+      unitAmount: amount,
+      buildingETA: production.buildingETA,
+    });
+  };
+
   return (
     <tr
       key={production.buildingName}
@@ -181,7 +182,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
           <div title={tooltip} className="inline-block">
             <Button
               disabled={isDisabled}
-              onClick={() => handleTrainClick(paPlayer, production, unitAmountRef, mutate)}
+              onClick={handleTrain}
             >
               Train
             </Button>
