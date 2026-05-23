@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 
@@ -9,8 +9,19 @@ import { api } from "@/utils/api";
 
 import type { NextPage } from "next";
 
+const LoadingLayout = () => (
+  <Layout>
+    <div className="container mb-6 flex flex-col items-center justify-center">
+      <div className="mt-12">
+        <LoadingSpinner />
+      </div>
+    </div>
+  </Layout>
+);
+
 /**
  * Renders the Login page.
+ * Redirects authenticated users to the home page or addUser page.
  *
  * @return {JSX.Element} The Login page component.
  */
@@ -24,50 +35,17 @@ const Login: NextPage = () => {
       { enabled: !!user?.username },
     );
 
-  const addPlayer = useCallback(() => {
-    return router.push("/addUser");
-  }, [router]);
+  const isReady = isUserLoaded && !isPlayerLoading;
+  const hasExistingPlayer = !!(paPlayer && paPlayer.id);
 
-  const redirect = useCallback(() => {
-    return router.push("/");
-  }, [router]);
-
-  // 
-  // TODO: Cleanup this code
-  // 
   useEffect(() => {
-    if (isUserLoaded && !isPlayerLoading) {
-      if (user) {
-        if (paPlayer && paPlayer.id) {
-          void redirect();
-        } else {
-          void addPlayer();
-        }
-      }
-    }
-  }, [user, isUserLoaded, paPlayer, isPlayerLoading, redirect, addPlayer]);
+    if (!isReady || !user) return;
 
-  if (!isUserLoaded || isPlayerLoading) {
-    return (
-      <Layout>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="mt-12">
-            <LoadingSpinner />
-          </div>
-        </div>
-      </Layout>
-    );
-  }
+    const destination = hasExistingPlayer ? "/" : "/addUser";
+    void router.push(destination);
+  }, [user, isReady, hasExistingPlayer, router]);
 
-  return (
-    <Layout>
-      <div className="container mb-6 flex flex-col items-center justify-center">
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
-      </div>
-    </Layout>
-  );
+  return <LoadingLayout />;
 };
 
 export default Login;
