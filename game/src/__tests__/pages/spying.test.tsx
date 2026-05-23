@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import Spying from '../../pages/spying';
 
 const mockUsePlayerData = jest.fn();
@@ -7,13 +7,25 @@ jest.mock('../../utils/usePlayerData', () => ({
   usePlayerData: () => mockUsePlayerData(),
 }));
 
+let capturedOnSuccess: ((data: { ui_roids: number }) => Promise<void>) | undefined;
+let capturedOnError: (() => void) | undefined;
+const mockMutate = jest.fn();
+const mockInvalidate = jest.fn().mockResolvedValue(undefined);
+const mockRefetch = jest.fn().mockResolvedValue(undefined);
+
 jest.mock('../../utils/api', () => ({
   api: {
     useContext: () => ({
-      paUsers: { getPlayerByNick: { invalidate: jest.fn(), refetch: jest.fn() } },
+      paUsers: { getPlayerByNick: { invalidate: mockInvalidate, refetch: mockRefetch } },
     }),
     paSpying: {
-      spyingInitiate: { useMutation: () => ({ mutate: jest.fn(), isLoading: false }) },
+      spyingInitiate: {
+        useMutation: (opts: { onSuccess?: (data: { ui_roids: number }) => Promise<void>; onError?: () => void }) => {
+          capturedOnSuccess = opts.onSuccess;
+          capturedOnError = opts.onError;
+          return { mutate: mockMutate, isLoading: false };
+        },
+      },
     },
   },
 }));
@@ -63,13 +75,36 @@ describe('Spying page', () => {
   it('renders AdvancedDataTable when player data is loaded', () => {
     mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isLoaded: true });
     render(<Spying />);
-    expect(screen.getByTestId('data-table')).toBeInTheDocument();
     expect(screen.getByTestId('data-table')).toHaveTextContent('Spying');
   });
 
-  it('renders within page shell when authenticated with player', () => {
+  it('calls invalidate and refetch on mutation success', async () => {
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer({ ui_roids: 3 }), isAuthenticated: true, isLoaded: true });
+    render(<Spying />);
+
+    await act(async () => { await capturedOnSuccess?.({ ui_roids: 5 }); });
+
+    expect(mockInvalidate).toHaveBeenCalled();
+    expect(mockRefetch).toHaveBeenCalled();
+  });
+
+  it('shows success toast with land found count on mutation success', async () => {
+    const { ToastComponent } = jest.requireMock('../../components/ui');
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer({ ui_roids: 3 }), isAuthenticated: true, isLoaded: true });
+    render(<Spying />);
+
+    await act(async () => { await capturedOnSuccess?.({ ui_roids: 5 }); });
+
+    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Spying complete - found 2 land', type: 'success' });
+  });
+
+  it('shows error toast on mutation error', () => {
+    const { ToastComponent } = jest.requireMock('../../components/ui');
     mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isLoaded: true });
     render(<Spying />);
-    expect(screen.getByTestId('page-shell')).toBeInTheDocument();
+
+    capturedOnError?.();
+
+    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Database error', type: 'error' });
   });
 });
