@@ -3,7 +3,7 @@ import { useRef } from "react";
 
 import { Button, ToastComponent } from "@/components/ui";
 
-import type { FC } from "react";
+import type { FC, RefObject } from "react";
 import type { IProduction } from "./types/types";
 import type { PaPlayer } from "@/types/player";
 
@@ -21,6 +21,86 @@ interface BuildingRowProps {
 export interface ConstructProps {
   paPlayer: PaPlayer;
 }
+
+/** Build a tooltip string explaining why the button is disabled */
+function buildProductionTooltip(
+  isLoading: boolean,
+  canAffordOne: boolean,
+  paPlayer: PaPlayer,
+  production: IProduction,
+): string | undefined {
+  if (isLoading) return "Training in progress...";
+  if (canAffordOne) return undefined;
+
+  const parts: string[] = [];
+  if (production.buildingCostCrystal > 0 && paPlayer.crystal < production.buildingCostCrystal) {
+    parts.push(
+      `Need ${production.buildingCostCrystal} credits (have ${paPlayer.crystal})`,
+    );
+  }
+  if (production.buildingCostTitanium > 0 && paPlayer.metal < production.buildingCostTitanium) {
+    parts.push(
+      `Need ${production.buildingCostTitanium} titanium (have ${paPlayer.metal})`,
+    );
+  }
+  return parts.length > 0 ? parts.join(". ") : "You cannot afford this";
+}
+
+/** Validate inputs and trigger the mutation */
+function handleTrainClick(
+  paPlayer: PaPlayer,
+  production: IProduction,
+  unitAmountRef: RefObject<HTMLInputElement>,
+  mutate: (input: {
+    buildingFieldName: string;
+    buildingFieldNameETA: string;
+    buildingCostCrystal: number;
+    buildingCostTitanium: number;
+    unitAmount: number;
+    buildingETA: number;
+  }) => void,
+): void {
+  if (!paPlayer?.id) return;
+
+  const amount = Number(unitAmountRef?.current?.value) || 0;
+
+  if (amount === 0) {
+    ToastComponent({ message: "Needs to be more than 0", type: "error" });
+    return;
+  }
+
+  if (!canAffordToTrain([paPlayer], production.buildingCostCrystal, production.buildingCostTitanium, amount)) {
+    ToastComponent({ message: "You can not afford this", type: "error" });
+    return;
+  }
+
+  mutate({
+    buildingFieldName: production.buildingFieldName,
+    buildingFieldNameETA: production.buildingFieldNameETA,
+    buildingCostCrystal: production.buildingCostCrystal,
+    buildingCostTitanium: production.buildingCostTitanium,
+    unitAmount: amount,
+    buildingETA: production.buildingETA,
+  });
+}
+
+/** Determine the ETA cell value */
+function getETADisplay(paPlayer: PaPlayer, production: IProduction): number {
+  if (Number(paPlayer[production.buildingFieldName]) >= 1) {
+    return paPlayer[production.buildingFieldNameETA] as number;
+  }
+  return production.buildingETA;
+}
+
+/** Determine the status text for a production field already in progress */
+function getProductionStatus(paPlayer: PaPlayer, production: IProduction): string | null {
+  const fieldValue = Number(paPlayer[production.buildingFieldName]);
+  if (fieldValue >= 1) return `ETA ${Number(paPlayer[production.buildingFieldNameETA])} ticks`;
+  return null;
+}
+
+const TD_CLASS =
+  "flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none md:h-12";
 
 const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const ctx = api.useContext();
@@ -46,7 +126,6 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     return null;
   }
 
-  // Check if the player can afford at least one unit
   const canAffordOne = canAffordToTrain(
     [paPlayer],
     production.buildingCostCrystal,
@@ -55,62 +134,29 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   );
 
   const isDisabled = isLoading || !canAffordOne;
-
-  // Build tooltip for disabled state
-  const getTooltip = (): string | undefined => {
-    if (isLoading) return "Training in progress...";
-    if (!canAffordOne) {
-      const parts: string[] = [];
-      if (production.buildingCostCrystal > 0 && paPlayer.crystal < production.buildingCostCrystal) {
-        parts.push(
-          `Need ${production.buildingCostCrystal} credits (have ${paPlayer.crystal})`,
-        );
-      }
-      if (production.buildingCostTitanium > 0 && paPlayer.metal < production.buildingCostTitanium) {
-        parts.push(
-          `Need ${production.buildingCostTitanium} titanium (have ${paPlayer.metal})`,
-        );
-      }
-      return parts.length > 0 ? parts.join(". ") : "You cannot afford this";
-    }
-    return undefined;
-  };
-
-  const tooltip = getTooltip();
+  const tooltip = buildProductionTooltip(isLoading, canAffordOne, paPlayer, production);
+  const fieldValue = Number(paPlayer[production.buildingFieldName]);
+  const isIdle = paPlayer[production.buildingFieldName] === 0 && !isLoading;
+  const productionStatus = getProductionStatus(paPlayer, production);
 
   return (
     <tr
       key={production.buildingName}
       className="block border-b bg-white last:border-b-0 sm:table-row sm:border-none"
     >
-      <td
-        data-th="Name"
-        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
-      >
+      <td data-th="Name" className={TD_CLASS}>
         {production.buildingName}
       </td>
-      <td
-        data-th="Info"
-        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
-      >
+      <td data-th="Info" className={TD_CLASS}>
         <span className="w-[12.5rem]">{production.buildingDescription}</span>
       </td>
-      <td
-        data-th="ETA"
-        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
-      >
-        {Number(paPlayer[production.buildingFieldName]) >= 1
-          ? paPlayer[production.buildingFieldNameETA]
-          : production.buildingETA}
+      <td data-th="ETA" className={TD_CLASS}>
+        {getETADisplay(paPlayer, production)}
       </td>
-      <td
-        data-th="Production"
-        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none md:h-12"
-      >
-        {Number(paPlayer[production.buildingFieldName]) > 0 &&
-          paPlayer[production.buildingFieldName]}
+      <td data-th="Production" className={TD_CLASS}>
+        {fieldValue > 0 && paPlayer[production.buildingFieldName]}
         {isLoading && "Starting ..."}
-        {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
+        {isIdle && (
           <input
             type="number"
             aria-label="Amount"
@@ -123,66 +169,25 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
           />
         )}
       </td>
-      <td
-        data-th="Cost"
-        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell  sm:border-l sm:border-t sm:before:content-none md:h-12"
-      >
+      <td data-th="Cost" className={TD_CLASS}>
         {production.buildingCost}
       </td>
       <td
         data-th="Build"
-        className="flex items-center px-6 py-2 text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t  sm:before:content-none md:h-12 md:w-[8rem] md:px-4"
+        className={`${TD_CLASS} md:w-[8rem] md:px-4`}
       >
         {isLoading && <div className="mb-1">Starting ...</div>}
-
-        {paPlayer[production.buildingFieldName] === 0 && !isLoading && (
+        {isIdle && (
           <div title={tooltip} className="inline-block">
             <Button
               disabled={isDisabled}
-              onClick={() => {
-                if (!paPlayer || !paPlayer.id) {
-                  return;
-                }
-                if (Number(unitAmountRef?.current?.value) === 0) {
-                  ToastComponent({
-                    message: "Needs to be more than 0",
-                    type: "error",
-                  });
-                  return;
-                }
-
-                if (
-                  !canAffordToTrain(
-                    [paPlayer],
-                    production.buildingCostCrystal,
-                    production.buildingCostTitanium,
-                    Number(unitAmountRef?.current?.value),
-                  )
-                ) {
-                  ToastComponent({
-                    message: "You can not afford this",
-                    type: "error",
-                  });
-                  return;
-                }
-                mutate({
-                  buildingFieldName:
-                    production.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
-                  buildingFieldNameETA:
-                    production.buildingFieldNameETA as Parameters<typeof mutate>[0]["buildingFieldNameETA"],
-                  buildingCostCrystal: production.buildingCostCrystal,
-                  buildingCostTitanium: production.buildingCostTitanium,
-                  unitAmount: Number(unitAmountRef?.current?.value),
-                  buildingETA: production.buildingETA,
-                });
-              }}
+              onClick={() => handleTrainClick(paPlayer, production, unitAmountRef, mutate)}
             >
               Train
             </Button>
           </div>
         )}
-        {Number(paPlayer[production.buildingFieldName]) >= 1 &&
-          `ETA ${Number(paPlayer[production.buildingFieldNameETA])} ticks`}
+        {productionStatus}
       </td>
     </tr>
   );
