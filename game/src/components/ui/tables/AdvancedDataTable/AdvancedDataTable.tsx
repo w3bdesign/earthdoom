@@ -1,7 +1,7 @@
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
 import type { FC, RefObject } from "react";
-import type { PaPlayer, PaPlayerBase } from "@/types/player";
+import type { PaPlayerBase } from "@/types/player";
 import type { Building } from "@/components/features/Construct/types/types";
 
 import ActionButton from "./ActionButton";
