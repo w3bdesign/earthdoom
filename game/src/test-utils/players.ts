@@ -1,4 +1,4 @@
-import type { PaUsers } from '@prisma/client';
+import type { PaUsers, PaConstruct } from '@prisma/client';
 import type { PaPlayer } from '@/types/player';
 
 /**
@@ -90,6 +90,39 @@ export const createMockPaUser = (overrides: Partial<PaUsers> = {}): PaUsers => (
   newbie: 100,
   paConstructId: null,
   ...overrides,
+});
+
+/**
+ * Creates a complete mock PaConstruct object with all fields zeroed.
+ * Use overrides to customize specific fields for your test case.
+ */
+export const createMockConstruct = (overrides: Partial<PaConstruct> = {}): PaConstruct => ({
+  id: 1,
+  c_crystal: 0,
+  c_metal: 0,
+  c_airport: 0,
+  c_abase: 0,
+  c_wstation: 0,
+  c_amp1: 0,
+  c_amp2: 0,
+  c_warfactory: 0,
+  c_destfact: 0,
+  c_scorpfact: 0,
+  c_energy: 0,
+  c_odg: 0,
+  ...overrides,
+});
+
+/**
+ * Creates a mock PaUsers with an attached construction object.
+ * Useful for tests that need the full player-with-construction shape.
+ */
+export const createMockPlayerWithConstruction = (
+  userOverrides: Partial<PaUsers> = {},
+  constructOverrides: Partial<PaConstruct> = {},
+): PaUsers & { construction: PaConstruct } => ({
+  ...createMockPaUser(userOverrides),
+  construction: createMockConstruct(constructOverrides),
 });
 
 /**
