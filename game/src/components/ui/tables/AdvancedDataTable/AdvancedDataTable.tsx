@@ -1,6 +1,6 @@
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
-import type { FC } from "react";
+import type { FC, RefObject } from "react";
 import type { PaPlayer, PaPlayerBase } from "@/types/player";
 import type { Building } from "@/components/features/Construct/types/types";
 import type { UseMutateFunction } from "@tanstack/react-query";
@@ -14,12 +14,19 @@ type MutationData = unknown;
 // Server-side Zod schemas enforce valid field names via z.enum() whitelists.
 // This type is intentionally permissive so the shared UI component can work
 // with different mutation signatures (research, construct, production, spying).
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type TMutateType = UseMutateFunction<MutationData, unknown, any, unknown>;
+export type TMutateType = UseMutateFunction<
+  MutationData,
+  unknown,
+  any,
+  unknown
+>;
 
 export interface AdvancedTableColumn {
   label: string;
-  accessor: string | JSX.Element | ((row: PaPlayerBase | Building) => JSX.Element);
+  accessor:
+    | string
+    | JSX.Element
+    | ((row: PaPlayerBase | Building) => JSX.Element);
   type?: string;
 }
 
@@ -34,6 +41,70 @@ export interface AdvancedDataTableProps {
   actionInProgress?: string;
   considerLand?: boolean;
 }
+
+/** Renders the accessor content for a table cell */
+const CellAccessorContent: FC<{
+  col: AdvancedTableColumn;
+  row: PaPlayerBase | Building;
+}> = ({ col, row }) => {
+  if (typeof col.accessor === "function") {
+    return <>{col.accessor(row)}</>;
+  }
+  if (typeof col.accessor === "string" && col.accessor !== "") {
+    return <Stringifier value={row[col.accessor]} />;
+  }
+  if (col.type !== "button") {
+    return <>{col.accessor}</>;
+  }
+  return null;
+};
+
+/** Renders the input number field when applicable */
+const CellInputNumber: FC<{
+  col: AdvancedTableColumn;
+  inputRef: RefObject<HTMLInputElement> | undefined;
+}> = ({ col, inputRef }) => {
+  if (col.type !== "inputNumber" || !canAffordToTrain) return null;
+  return <InputNumber canAffordToTrain={canAffordToTrain} ref={inputRef} />;
+};
+
+/** Renders the action button when applicable */
+const CellActionButton: FC<{
+  col: AdvancedTableColumn;
+  row: PaPlayerBase | Building;
+  isLoading: boolean;
+  data: PaPlayerBase[];
+  action?: TMutateType;
+  actionText?: string;
+  actionInProgress?: string;
+  inputRef: RefObject<HTMLInputElement> | undefined;
+  considerLand: boolean;
+}> = ({
+  col,
+  row,
+  isLoading,
+  data,
+  action,
+  actionText,
+  actionInProgress,
+  inputRef,
+  considerLand,
+}) => {
+  if (col.type !== "button" || !action || !actionText || !data) return null;
+
+  return (
+    <ActionButton
+      isLoading={isLoading}
+      paPlayer={data}
+      building={row.buildingId ? (row as Building) : undefined}
+      mutate={action}
+      actionText={actionText}
+      actionInProgress={actionInProgress}
+      inputAmountRef={inputRef}
+      considerLand={considerLand}
+    />
+  );
+};
 
 /**
  * Renders an advanced data table component.
@@ -97,44 +168,22 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                   data-th={col.label}
                   className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none md:h-12 md:px-6 md:text-left"
                 >
-                  {typeof col.accessor === "function" ? (
-                    col.accessor(row)
-                  ) : typeof col.accessor === "string" && col.accessor !== "" ? (
-                    <Stringifier value={row[col.accessor]} />
-                  ) : col.type !== "button" ? (
-                    col.accessor
-                  ) : null}
-                  {col.type === "inputNumber" && canAffordToTrain ? (
-                    <InputNumber
-                      canAffordToTrain={canAffordToTrain}
-                      ref={inputAmountRefs[rowIndex]}
-                    />
-                  ) : null}
-                  {/* Only render action buttons when we have all required props */}
-                  {col.type === "button" && action && actionText && data ? (
-                    row.buildingId ? (
-                      <ActionButton
-                        isLoading={isLoading}
-                        paPlayer={data as PaPlayerBase[]}
-                        building={row as Building}
-                        mutate={action}
-                        actionText={actionText}
-                        actionInProgress={actionInProgress}
-                        inputAmountRef={inputAmountRefs[rowIndex]}
-                        considerLand={considerLand}
-                      />
-                    ) : (
-                      <ActionButton
-                        isLoading={isLoading}
-                        paPlayer={data as PaPlayerBase[]}
-                        mutate={action}
-                        actionText={actionText}
-                        actionInProgress={actionInProgress}
-                        inputAmountRef={inputAmountRefs[rowIndex]}
-                        considerLand={considerLand}
-                      />
-                    )
-                  ) : null}
+                  <CellAccessorContent col={col} row={row} />
+                  <CellInputNumber
+                    col={col}
+                    inputRef={inputAmountRefs[rowIndex]}
+                  />
+                  <CellActionButton
+                    col={col}
+                    row={row}
+                    isLoading={isLoading}
+                    data={data}
+                    action={action}
+                    actionText={actionText}
+                    actionInProgress={actionInProgress}
+                    inputRef={inputAmountRefs[rowIndex]}
+                    considerLand={considerLand}
+                  />
                 </td>
               ))}
             </tr>
