@@ -109,11 +109,14 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const maximumToSearch = getMaximumToSearch(paPlayer.crystal);
 
   const handleSpyClick = () => {
-    if (!paPlayer?.id) return;
+    const amount = Number(spyingAmountRef.current?.value ?? 0);
 
-    const amount = Number(spyingAmountRef?.current?.value);
-    if (!validateAmount(amount)) return;
-    if (!validateAffordability(paPlayer, resource, amount)) return;
+    if (
+      !paPlayer.id ||
+      !validateAmount(amount) ||
+      !validateAffordability(paPlayer, resource, amount)
+    )
+      return;
 
     mutate(
       buildSpyingPayload(resource, amount) as Parameters<typeof mutate>[0],
