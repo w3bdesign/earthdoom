@@ -18,16 +18,10 @@ const showError = (message: string) => {
   ToastComponent({ message, type: "error" });
 };
 
-/**
- * Renders a page for creating a player and creates a new player for the logged in user.
- *
- * @return {JSX.Element} The page component for creating a player.
- */
-const AddUser: NextPage = () => {
-  const { user } = useUser();
+const useCreatePlayerMutation = () => {
   const router = useRouter();
 
-  const { mutate } = api.paUsers.createPlayer.useMutation({
+  return api.paUsers.createPlayer.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Player created", type: "success" });
       await delay(REDIRECT_DELAY_MS);
@@ -38,6 +32,23 @@ const AddUser: NextPage = () => {
       showError("Error creating player");
     },
   });
+};
+
+const isUserReady = (user: { id?: string; username?: string | null } | null | undefined): user is { id: string; username: string } =>
+  !!(user?.id && user?.username);
+
+const getStatusMessage = (isLoading: boolean): string =>
+  isLoading ? "Checking existing player..." : "Creating player...";
+
+/**
+ * Renders a page for creating a player and creates a new player for the logged in user.
+ *
+ * @return {JSX.Element} The page component for creating a player.
+ */
+const AddUser: NextPage = () => {
+  const { user } = useUser();
+  const router = useRouter();
+  const { mutate } = useCreatePlayerMutation();
 
   const { data: existingPlayer, isLoading } =
     api.paUsers.getPlayerByNick.useQuery(
@@ -46,13 +57,11 @@ const AddUser: NextPage = () => {
     );
 
   const createPlayer = useCallback(async () => {
-    if (!user?.id || !user.username) return;
-
+    if (!isUserReady(user)) return;
     if (existingPlayer) {
       await router.push("/");
       return;
     }
-
     if (!isLoading) {
       mutate({ nick: user.username });
     }
@@ -65,16 +74,14 @@ const AddUser: NextPage = () => {
     });
   }, [createPlayer]);
 
-  const statusMessage = isLoading
-    ? "Checking existing player..."
-    : "Creating player...";
-
   return (
     <Layout>
       <div className="container mb-6 flex flex-col items-center justify-center text-white">
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
           <h1 className="text-center text-2xl">Create player</h1>
-          <div className="relative py-4 sm:mx-auto">{statusMessage}</div>
+          <div className="relative py-4 sm:mx-auto">
+            {getStatusMessage(isLoading)}
+          </div>
         </div>
       </div>
     </Layout>
