@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import PageShell from '../../components/common/PageShell';
-import { createMockPaPlayer } from '../fixtures/players';
+import { createMockPaPlayer } from '../../test-utils/players';
 
 jest.mock('../../components/common/Layout', () => ({
   Layout: ({ children }: { children: React.ReactNode }) => (
