@@ -23,6 +23,8 @@ jobs:
 
       - name: Run tests
         run: npx jest --coverage
+        env:
+          DATABASE_URL: "postgresql://test:test@localhost:5432/test"
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
