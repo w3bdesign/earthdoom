@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import Navbar from '../../../../components/common/Header/Navbar';
 
 // Mock @clerk/nextjs
