@@ -17,6 +17,137 @@ interface IHandleInputChange {
   (event: ChangeEvent<HTMLInputElement>): void;
 }
 
+/** Calculate the total ship count for the player */
+function calculateShipCount(paPlayer: PaPlayer): number {
+  return (
+    paPlayer["astropods"] +
+    paPlayer["infinitys"] +
+    paPlayer["wraiths"] +
+    paPlayer["warfrigs"] +
+    paPlayer["destroyers"] +
+    paPlayer["scorpions"]
+  );
+}
+
+/** Validate that a target value is not empty; show toast on failure */
+function validateTarget(target: string): boolean {
+  if (!target.trim().length) {
+    ToastComponent({ message: "You need to enter a target", type: "error" });
+    return false;
+  }
+  return true;
+}
+
+/** Validate that troops are available; show toast on failure */
+function validateTroopsAvailable(areTroopsAvailable: boolean): boolean {
+  if (!areTroopsAvailable) {
+    ToastComponent({ message: "Troops are not available", type: "error" });
+    return false;
+  }
+  return true;
+}
+
+/** Validate that the player has enough energy; show toast on failure */
+function validateEnergy(currentEnergy: number, cost: number): boolean {
+  if (currentEnergy < cost) {
+    ToastComponent({ message: "You need more energy to attack", type: "error" });
+    return false;
+  }
+  return true;
+}
+
+/** Retreat section sub-component */
+const RetreatSection: FC<{
+  isLoading: boolean;
+  onRetreat: () => void;
+}> = ({ isLoading, onRetreat }) => (
+  <div className="mb-4 flex flex-col items-center justify-center rounded bg-white px-8 py-5 shadow md:w-[44.563rem]">
+    <h2 className="py-4 text-center text-xl font-bold">Retreat troops:</h2>
+    <Button
+      extraClasses="mt-4 mb-4"
+      disabled={isLoading}
+      onClick={(event) => {
+        event.preventDefault();
+        onRetreat();
+      }}
+    >
+      Retreat
+    </Button>
+  </div>
+);
+
+/** Attack form sub-component */
+const AttackForm: FC<{
+  isLoading: boolean;
+  canAffordAttack: boolean;
+  energyCost: number;
+  playerEnergy: number;
+  onInputChange: IHandleInputChange;
+  onAttack: () => void;
+}> = ({ isLoading, canAffordAttack, energyCost, playerEnergy, onInputChange, onAttack }) => (
+  <>
+    <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
+    <div className="mt-4 flex flex-col items-center justify-center">
+      <span className="text-md mb-2">Country nick:</span>
+      <input
+        type="text"
+        name="attack"
+        onChange={onInputChange}
+        className="w-64 rounded-md border border-gray-300 px-3 py-2"
+      />
+      <div
+        title={
+          !canAffordAttack
+            ? `Need ${energyCost} energy (have ${playerEnergy})`
+            : undefined
+        }
+        className="inline-block"
+      >
+        <Button
+          disabled={isLoading || !canAffordAttack}
+          onClick={(event) => {
+            event.preventDefault();
+            onAttack();
+          }}
+          extraClasses="w-32 mt-4"
+        >
+          Attack
+        </Button>
+      </div>
+    </div>
+  </>
+);
+
+/** Defend form sub-component */
+const DefendForm: FC<{
+  isLoading: boolean;
+  onInputChange: IHandleInputChange;
+  onDefend: () => void;
+}> = ({ isLoading, onInputChange, onDefend }) => (
+  <>
+    <h2 className="py-4 text-center text-xl font-bold">Defend:</h2>
+    <form className="mt-4 flex flex-col items-center justify-center">
+      <span className="text-md mb-2">Country nick:</span>
+      <input
+        type="text"
+        name="defend"
+        onChange={onInputChange}
+        className="w-64 rounded-md border border-gray-300 px-3 py-2"
+      />
+      <Button
+        disabled={isLoading}
+        extraClasses="w-32 mt-4"
+        onClick={(event) => {
+          event.preventDefault();
+          onDefend();
+        }}
+      >
+        Defend
+      </Button>
+    </form>
+  </>
+);
+
 const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const ctx = api.useContext();
 
@@ -92,149 +223,68 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     setDefValue(event.target.value);
   };
 
-  const allFleetsAtHome = paPlayer && paPlayer.war === 0 && paPlayer.def === 0;
-
-  const shipCount =
-    paPlayer["astropods"] +
-    paPlayer["infinitys"] +
-    paPlayer["wraiths"] +
-    paPlayer["warfrigs"] +
-    paPlayer["destroyers"] +
-    paPlayer["scorpions"];
-
+  const allFleetsAtHome = paPlayer.war === 0 && paPlayer.def === 0;
+  const shipCount = calculateShipCount(paPlayer);
   const energyCost = 9 * shipCount;
   const canAffordAttack = paPlayer.energy >= energyCost && energyCost > 0;
 
   const shouldShowRetreatButton =
     !allFleetsAtHome && shipCount > 0 && paPlayer.war > 0;
 
+  const handleAttack = () => {
+    if (!validateTarget(attackValue)) return;
+    if (!validateEnergy(paPlayer.energy, energyCost)) return;
+    if (!validateTroopsAvailable(areTroopsAvailable)) return;
+    militaryAction({
+      Userid: paPlayer.id,
+      target: attackValue,
+      energyCost: energyCost,
+      mode: "attack",
+    });
+  };
+
+  const handleDefend = () => {
+    if (!validateTarget(defValue)) return;
+    if (!validateTroopsAvailable(areTroopsAvailable)) return;
+    militaryAction({
+      Userid: paPlayer.id,
+      target: defValue,
+      mode: "defend",
+    });
+  };
+
+  const handleRetreat = () => {
+    retreatTroops({ Userid: paPlayer.id });
+  };
+
   return (
     <div className="flex flex-col items-center justify-center py-5">
       <div className="w-full">
         {shouldShowRetreatButton && (
-          <>
-            <div className="mb-4 flex flex-col items-center justify-center rounded bg-white px-8 py-5 shadow md:w-[44.563rem]">
-              <h2 className="py-4 text-center text-xl font-bold">
-                Retreat troops:
-              </h2>
-              <Button
-                extraClasses="mt-4 mb-4"
-                disabled={isLoading}
-                onClick={(event) => {
-                  event.preventDefault();
-                  retreatTroops({
-                    Userid: paPlayer.id,
-                  });
-                }}
-              >
-                Retreat
-              </Button>
-            </div>
-          </>
+          <RetreatSection isLoading={isLoading} onRetreat={handleRetreat} />
         )}
-        {allFleetsAtHome && shipCount > 0 ? (
+        {allFleetsAtHome && shipCount > 0 && (
           <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
             <h2 className="py-4 text-center text-xl font-bold">
               Cost to attack: {energyCost} energy
               <br />
               (defending is free)
             </h2>
-            <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
-            <div className="mt-4 flex flex-col items-center justify-center">
-              <span className="text-md mb-2">Country nick:</span>
-              <input
-                type="text"
-                name="attack"
-                onChange={handleInputAttackChange}
-                className="w-64 rounded-md border border-gray-300 px-3 py-2"
-              />
-              <div
-                title={
-                  !canAffordAttack
-                    ? `Need ${energyCost} energy (have ${paPlayer.energy})`
-                    : undefined
-                }
-                className="inline-block"
-              >
-                <Button
-                  disabled={isLoading || !canAffordAttack}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    if (!attackValue.trim().length) {
-                      ToastComponent({
-                        message: "You need to enter a target",
-                        type: "error",
-                      });
-                      return;
-                    }
-                    if (paPlayer.energy < energyCost) {
-                      ToastComponent({
-                        message: "You need more energy to attack",
-                        type: "error",
-                      });
-                      return;
-                    }
-                    if (!areTroopsAvailable) {
-                      ToastComponent({
-                        message: "Troops are not available",
-                        type: "error",
-                      });
-                      return;
-                    }
-                    militaryAction({
-                      Userid: paPlayer.id,
-                      target: attackValue,
-                      energyCost: energyCost,
-                      mode: "attack",
-                    });
-                  }}
-                  extraClasses="w-32 mt-4"
-                >
-                  Attack
-                </Button>
-              </div>
-            </div>
-            <h2 className="py-4 text-center text-xl font-bold">Defend:</h2>
-            <form className="mt-4 flex flex-col items-center justify-center">
-              <span className="text-md mb-2">Country nick:</span>
-              <input
-                type="text"
-                name="defend"
-                onChange={handleInputDefChange}
-                className="w-64 rounded-md border border-gray-300 px-3 py-2"
-              />
-              <Button
-                disabled={isLoading}
-                extraClasses="w-32 mt-4"
-                onClick={(event) => {
-                  event.preventDefault();
-                  if (!defValue.trim().length) {
-                    ToastComponent({
-                      message: "You need to enter a target",
-                      type: "error",
-                    });
-                    return;
-                  }
-                  if (!areTroopsAvailable) {
-                    ToastComponent({
-                      message: "Troops are not available",
-                      type: "error",
-                    });
-                    return;
-                  }
-                  militaryAction({
-                    Userid: paPlayer.id,
-                    target: defValue,
-
-                    mode: "defend",
-                  });
-                }}
-              >
-                Defend
-              </Button>
-            </form>
+            <AttackForm
+              isLoading={isLoading}
+              canAffordAttack={canAffordAttack}
+              energyCost={energyCost}
+              playerEnergy={paPlayer.energy}
+              onInputChange={handleInputAttackChange}
+              onAttack={handleAttack}
+            />
+            <DefendForm
+              isLoading={isLoading}
+              onInputChange={handleInputDefChange}
+              onDefend={handleDefend}
+            />
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );
