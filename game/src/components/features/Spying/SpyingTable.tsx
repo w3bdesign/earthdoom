@@ -108,7 +108,6 @@ const useSpyingMutation = () => {
   });
 };
 
-// fallow-ignore-next-line complexity
 const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const { isLoaded } = useUser();
   const spyingAmountRef = useRef<HTMLInputElement>(null);
