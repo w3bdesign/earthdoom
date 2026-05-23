@@ -27,7 +27,7 @@ jest.mock('@clerk/nextjs', () => ({
 
 const mockUseQuery = jest.fn<UseQueryReturn, []>();
 const mockMutate = jest.fn();
-const mockUseMutation = jest.fn<UseMutationReturn, []>(() => ({
+const mockUseMutation = jest.fn<UseMutationReturn, [unknown]>(() => ({
   mutate: mockMutate,
 }));
 
@@ -38,7 +38,7 @@ jest.mock('../../utils/api', () => ({
         useQuery: (...args: unknown[]) => mockUseQuery(...(args as [])),
       },
       createPlayer: {
-        useMutation: (opts: { onSuccess?: () => void; onError?: (error: Error) => void }) => mockUseMutation(opts as never),
+        useMutation: (opts: unknown) => mockUseMutation(opts),
       },
     },
   },
