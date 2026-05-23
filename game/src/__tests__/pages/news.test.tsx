@@ -82,77 +82,61 @@ jest.mock('../../utils/functions', () => ({
   },
 }));
 
+/** Set up mocks for an authenticated user with news data */
+function setupWithNews(newsData: unknown) {
+  mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
+  mockGetAllNewsByUserId.mockReturnValue({ data: newsData, isLoading: false });
+  mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
+}
+
+/** Set up mocks for an unauthenticated/loading scenario */
+function setupUnauthenticated(user: unknown, newsReturn: { data: unknown; isLoading: boolean }) {
+  mockUseUser.mockReturnValue(user);
+  mockGetAllNewsByUserId.mockReturnValue(newsReturn);
+  mockGetPlayerByNick.mockReturnValue({ data: null });
+}
+
 describe('News page', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('returns null when not signed in', () => {
-    mockUseUser.mockReturnValue({ user: null, isSignedIn: false });
-    mockGetAllNewsByUserId.mockReturnValue({ data: null, isLoading: false });
-    mockGetPlayerByNick.mockReturnValue({ data: null });
-
+    setupUnauthenticated({ user: null, isSignedIn: false }, { data: null, isLoading: false });
     const { container } = render(<News />);
     expect(container.innerHTML).toBe('');
   });
 
   it('returns null when signed in but no username', () => {
-    mockUseUser.mockReturnValue({ user: { username: null }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({ data: null, isLoading: false });
-    mockGetPlayerByNick.mockReturnValue({ data: null });
-
+    setupUnauthenticated({ user: { username: null }, isSignedIn: true }, { data: null, isLoading: false });
     const { container } = render(<News />);
     expect(container.innerHTML).toBe('');
   });
 
   it('renders loading spinner when data not available', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({ data: null, isLoading: true });
-    mockGetPlayerByNick.mockReturnValue({ data: null });
-
+    setupUnauthenticated({ user: { username: 'TestUser' }, isSignedIn: true }, { data: null, isLoading: true });
     render(<News />);
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
   it('renders "No news to report" when news array is empty', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({ data: { news: [] }, isLoading: false });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-
+    setupWithNews({ news: [] });
     render(<News />);
     expect(screen.getByText('No news to report')).toBeInTheDocument();
   });
 
   it('renders news table when news exist', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({
-      data: { news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] },
-      isLoading: false,
-    });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-
+    setupWithNews({ news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] });
     render(<News />);
     expect(screen.getByTestId('news-table')).toBeInTheDocument();
   });
 
   it('renders Delete All button when news exist', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({
-      data: { news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] },
-      isLoading: false,
-    });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-
+    setupWithNews({ news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] });
     render(<News />);
     expect(screen.getByText('Delete All')).toBeInTheDocument();
   });
 
   it('calls deleteAllNews when Delete All is clicked', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({
-      data: { news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] },
-      isLoading: false,
-    });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-
+    setupWithNews({ news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] });
     render(<News />);
     fireEvent.click(screen.getByText('Delete All'));
     expect(mockDeleteAllNews).toHaveBeenCalledWith({ nick: 'TestUser' });
@@ -160,13 +144,7 @@ describe('News page', () => {
 
   it('calls ToastComponent with success on mutation success', async () => {
     const { ToastComponent } = jest.requireMock('../../components/ui');
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({
-      data: { news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] },
-      isLoading: false,
-    });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-
+    setupWithNews({ news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] });
     render(<News />);
 
     await act(async () => {
@@ -178,13 +156,7 @@ describe('News page', () => {
 
   it('calls ToastComponent with error on mutation error', () => {
     const { ToastComponent } = jest.requireMock('../../components/ui');
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({
-      data: { news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] },
-      isLoading: false,
-    });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-
+    setupWithNews({ news: [{ id: 1, news: 'Test news', time: 1000000, userId: 1, seen: 0 }] });
     render(<News />);
     capturedOnError?.();
 
@@ -200,13 +172,7 @@ describe('News page', () => {
       land: { gained: 3 },
     });
 
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetAllNewsByUserId.mockReturnValue({
-      data: { news: [{ id: 1, news: combatReport, time: 1000000, userId: 1, seen: 0 }] },
-      isLoading: false,
-    });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-
+    setupWithNews({ news: [{ id: 1, news: combatReport, time: 1000000, userId: 1, seen: 0 }] });
     render(<News />);
     expect(screen.getByTestId('combat-report')).toBeInTheDocument();
   });

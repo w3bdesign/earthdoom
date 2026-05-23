@@ -42,23 +42,31 @@ jest.mock('../../components/ui', () => ({
   ),
 }));
 
+/** Set up mocks for authenticated user with player data */
+function setupAuthenticatedUser(incomingData: { data: unknown; isLoading: boolean }) {
+  mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
+  mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
+  mockGetContinentIncoming.mockReturnValue(incomingData);
+}
+
+/** Set up mocks for unauthenticated or missing data scenarios */
+function setupUnauthenticated(user: unknown) {
+  mockUseUser.mockReturnValue(user);
+  mockGetPlayerByNick.mockReturnValue({ data: null });
+  mockGetContinentIncoming.mockReturnValue({ data: null, isLoading: false });
+}
+
 describe('ContNews page', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('returns null when not signed in', () => {
-    mockUseUser.mockReturnValue({ user: null, isSignedIn: false });
-    mockGetPlayerByNick.mockReturnValue({ data: null });
-    mockGetContinentIncoming.mockReturnValue({ data: null, isLoading: false });
-
+    setupUnauthenticated({ user: null, isSignedIn: false });
     const { container } = render(<ContNews />);
     expect(container.innerHTML).toBe('');
   });
 
   it('returns null when signed in but no username', () => {
-    mockUseUser.mockReturnValue({ user: { username: null }, isSignedIn: true });
-    mockGetPlayerByNick.mockReturnValue({ data: null });
-    mockGetContinentIncoming.mockReturnValue({ data: null, isLoading: false });
-
+    setupUnauthenticated({ user: { username: null }, isSignedIn: true });
     const { container } = render(<ContNews />);
     expect(container.innerHTML).toBe('');
   });
@@ -67,50 +75,37 @@ describe('ContNews page', () => {
     mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
     mockGetPlayerByNick.mockReturnValue({ data: null });
     mockGetContinentIncoming.mockReturnValue({ data: null, isLoading: false });
-
     const { container } = render(<ContNews />);
     expect(container.innerHTML).toBe('');
   });
 
   it('renders RenderIncoming with no data when news is empty', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-    mockGetContinentIncoming.mockReturnValue({ data: null, isLoading: false });
-
+    setupAuthenticatedUser({ data: null, isLoading: false });
     render(<ContNews />);
     expect(screen.getByTestId('render-incoming')).toBeInTheDocument();
     expect(screen.getByText('No data')).toBeInTheDocument();
   });
 
   it('renders RenderIncoming with hostile data', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-    mockGetContinentIncoming.mockReturnValue({
+    setupAuthenticatedUser({
       data: { hostiles: 'Enemy incoming!', friendly: null },
       isLoading: false,
     });
-
     render(<ContNews />);
     expect(screen.getByText('Enemy incoming!')).toBeInTheDocument();
   });
 
   it('renders RenderIncoming with friendly data', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-    mockGetContinentIncoming.mockReturnValue({
+    setupAuthenticatedUser({
       data: { hostiles: null, friendly: 'Ally defending!' },
       isLoading: false,
     });
-
     render(<ContNews />);
     expect(screen.getByText('Ally defending!')).toBeInTheDocument();
   });
 
   it('renders loading state', () => {
-    mockUseUser.mockReturnValue({ user: { username: 'TestUser' }, isSignedIn: true });
-    mockGetPlayerByNick.mockReturnValue({ data: createMockPaPlayer() });
-    mockGetContinentIncoming.mockReturnValue({ data: null, isLoading: true });
-
+    setupAuthenticatedUser({ data: null, isLoading: true });
     render(<ContNews />);
     expect(screen.getByText('Loading')).toBeInTheDocument();
   });

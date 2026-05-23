@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import RankingPage from '../../pages/ranking';
+import { createMockPaPlayer } from '../../test-utils/players';
 
 const mockUsePlayerData = jest.fn();
 jest.mock('../../utils/usePlayerData', () => ({
@@ -58,14 +59,16 @@ jest.mock('../../components/ui/tables/RankingActions', () => ({
   default: ({ playerNick }: { playerNick: string }) => <div data-testid="ranking-actions">{playerNick}</div>,
 }));
 
-const createPlayer = (overrides = {}) => ({
-  id: 1, nick: 'Test', crystal: 5000, metal: 3000, energy: 1000,
-  r_energy: 0, ui_roids: 3, score: 100, size: 10, rank: 1, tag: '',
-  newbie: 100, c_airport: 0, c_crystal: 0, c_metal: 0, c_abase: 0,
-  c_wstation: 0, c_amp1: 0, c_amp2: 0, c_warfactory: 0, c_destfact: 0,
-  c_scorpfact: 0, c_energy: 0, c_odg: 0, r_imcrystal: 0, r_immetal: 0,
-  ...overrides,
-});
+/** Set up authenticated user with player data and optional rankings */
+function setupAuthenticated(rankings: unknown[] | null = null) {
+  mockUsePlayerData.mockReturnValue({
+    paPlayer: createMockPaPlayer(),
+    isAuthenticated: true,
+    isSignedIn: true,
+    user: { username: 'Test' },
+  });
+  mockGetAll.mockReturnValue({ data: rankings, isLoading: rankings === null });
+}
 
 describe('Ranking page', () => {
   beforeEach(() => {
@@ -86,33 +89,25 @@ describe('Ranking page', () => {
   });
 
   it('renders AdvancedDataTable when player and ranking data are loaded', () => {
-    const rankings = [createPlayer(), createPlayer({ id: 2, nick: 'Player2' })];
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isSignedIn: true, user: { username: 'Test' } });
-    mockGetAll.mockReturnValue({ data: rankings, isLoading: false });
+    setupAuthenticated([createMockPaPlayer(), createMockPaPlayer({ id: 2, nick: 'Player2' })]);
     render(<RankingPage />);
     expect(screen.getByTestId('data-table')).toHaveTextContent('Player ranking');
   });
 
   it('renders RankingActions for each player row', () => {
-    const rankings = [createPlayer({ nick: 'Enemy' })];
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isSignedIn: true, user: { username: 'Test' } });
-    mockGetAll.mockReturnValue({ data: rankings, isLoading: false });
+    setupAuthenticated([createMockPaPlayer({ nick: 'Enemy' })]);
     render(<RankingPage />);
     expect(screen.getByTestId('ranking-actions')).toHaveTextContent('Enemy');
   });
 
   it('does not render table when ranking data is null', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isSignedIn: true, user: { username: 'Test' } });
-    mockGetAll.mockReturnValue({ data: null, isLoading: true });
+    setupAuthenticated(null);
     render(<RankingPage />);
     expect(screen.queryByTestId('data-table')).not.toBeInTheDocument();
   });
 
   it('renders empty fragment when paPlayer is null in accessor', () => {
-    const rankings = [createPlayer({ nick: 'Enemy' })];
-    // paPlayer is set but we test that the accessor handles the case
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isSignedIn: true, user: { username: 'Test' } });
-    mockGetAll.mockReturnValue({ data: rankings, isLoading: false });
+    setupAuthenticated([createMockPaPlayer({ nick: 'Enemy' })]);
     render(<RankingPage />);
     // If the accessor renders, we should see ranking-actions
     expect(screen.getByTestId('ranking-actions')).toBeInTheDocument();
