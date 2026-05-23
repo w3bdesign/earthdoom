@@ -142,7 +142,7 @@ describe('FleetTable', () => {
     expect(screen.getByText('Returning ... ETA 3')).toBeInTheDocument();
   });
 
-  it('renders "Attacking" message with ETA when attacking', () => {
+  it('renders "Attacking" message with calculated ETA when wareta >= 5', () => {
     mockGetAttackedPlayer.mockReturnValue({
       data: { nick: 'EnemyPlayer', id: 42 },
       isLoading: false,
@@ -153,7 +153,7 @@ describe('FleetTable', () => {
     render(<FleetTable paPlayer={player} />);
 
     expect(
-      screen.getByText('Attacking EnemyPlayer #42 (ETA: 3 ticks)')
+      screen.getByText('Attacking EnemyPlayer #42   (ETA: 3 ticks)')
     ).toBeInTheDocument();
   });
 
@@ -168,11 +168,11 @@ describe('FleetTable', () => {
     render(<FleetTable paPlayer={player} />);
 
     expect(
-      screen.getByText('Attacking EnemyPlayer #42 (ETA: 0 ticks)')
+      screen.getByText('Attacking EnemyPlayer #42   (ETA: 0 ticks)')
     ).toBeInTheDocument();
   });
 
-  it('renders "Defending" message with ETA when defending', () => {
+  it('renders "Defending" message with calculated ETA when wareta >= 5', () => {
     mockGetAttackedPlayer.mockReturnValue({ data: null, isLoading: false });
     mockGetDefendedPlayer.mockReturnValue({
       data: { nick: 'AllyPlayer', id: 7 },
@@ -183,7 +183,7 @@ describe('FleetTable', () => {
     render(<FleetTable paPlayer={player} />);
 
     expect(
-      screen.getByText('Defending AllyPlayer #7 (ETA: 5 ticks)')
+      screen.getByText('Defending AllyPlayer #7   (ETA: 5 ticks)')
     ).toBeInTheDocument();
   });
 
@@ -198,7 +198,7 @@ describe('FleetTable', () => {
     render(<FleetTable paPlayer={player} />);
 
     expect(
-      screen.getByText('Defending AllyPlayer #7 (ETA: 0 ticks)')
+      screen.getByText('Defending AllyPlayer #7   (ETA: 0 ticks)')
     ).toBeInTheDocument();
   });
 
@@ -209,6 +209,27 @@ describe('FleetTable', () => {
     const player = createMockPlayer();
     render(<FleetTable paPlayer={player} />);
 
+    expect(screen.getByText('Fleet status')).toBeInTheDocument();
+  });
+
+  it('renders loading spinner when data is loading', () => {
+    mockGetAttackedPlayer.mockReturnValue({ data: null, isLoading: true });
+    mockGetDefendedPlayer.mockReturnValue({ data: null, isLoading: false });
+
+    const player = createMockPlayer({ war: 5 });
+    render(<FleetTable paPlayer={player} />);
+
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+  });
+
+  it('renders empty string when war > 0 but no attack target loaded', () => {
+    mockGetAttackedPlayer.mockReturnValue({ data: null, isLoading: false });
+    mockGetDefendedPlayer.mockReturnValue({ data: null, isLoading: false });
+
+    const player = createMockPlayer({ war: 5, def: 0 });
+    render(<FleetTable paPlayer={player} />);
+
+    // Should not crash, renders empty status
     expect(screen.getByText('Fleet status')).toBeInTheDocument();
   });
 });
