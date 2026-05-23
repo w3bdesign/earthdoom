@@ -79,6 +79,7 @@ describe('Home component', () => {
   beforeEach(() => {
     mockUseUser.mockClear();
     mockUseQuery.mockClear();
+    mockUseQuery.mockReturnValue({ data: null, isLoading: false });
   });
 
   it('renders null when user is not signed in', () => {
