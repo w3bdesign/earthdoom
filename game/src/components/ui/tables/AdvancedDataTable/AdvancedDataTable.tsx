@@ -3,25 +3,32 @@ import { Stringifier, canAffordToTrain } from "@/utils/functions";
 import type { FC, RefObject } from "react";
 import type { PaPlayer, PaPlayerBase } from "@/types/player";
 import type { Building } from "@/components/features/Construct/types/types";
-import type { UseMutateFunction } from "@tanstack/react-query";
 
 import ActionButton from "./ActionButton";
 import InputNumber from "./InputNumber";
 import { useMultipleRefs } from "@/utils/hooks";
 
-type MutationData = unknown;
+/** Base shape shared by all mutations that AdvancedDataTable can trigger */
+export interface BaseMutationVariables {
+  buildingFieldName: string;
+  buildingETA: number;
+  buildingCostCrystal: number;
+  buildingCostTitanium: number;
+  unitAmount?: number;
+  buildingFieldNameETA?: string;
+  spyingType?: string;
+}
 
-// Server-side Zod schemas enforce valid field names via z.enum() whitelists.
-// This type is intentionally permissive so the shared UI component can work
-// with different mutation signatures (research, construct, production, spying).
-type MutationVariables = Record<string, unknown>;
-
-export type TMutateType = UseMutateFunction<
-  MutationData,
-  unknown,
-  MutationVariables,
-  unknown
->;
+/**
+ * A callable type for mutation functions passed to AdvancedDataTable.
+ * Each page's strongly-typed mutate function narrows buildingFieldName
+ * to specific string literals via Zod schemas; this shared component
+ * only constructs calls using the base shape. We use a callable interface
+ * to express "accepts at least BaseMutationVariables" without contravariance issues.
+ */
+export interface TMutateType {
+  (variables: BaseMutationVariables): void;
+}
 
 export interface AdvancedTableColumn {
   label: string;
