@@ -161,23 +161,23 @@ describe('Navbar component', () => {
   });
 
   it('useClickAway callback collapses the menu', () => {
-    render(<Navbar />);
+    const { container } = render(<Navbar />);
     const mainMenuButton = screen.getByText('Main menu').closest('button') as HTMLElement;
 
     // Open the menu
     fireEvent.click(mainMenuButton);
     expect(mainMenuButton).toHaveAttribute('aria-expanded', 'true');
 
-    // Simulate click away by calling the callback
+    // Simulate click away by calling the callback wrapped in act
     const clickAwayCallback = mockUseClickAway.mock.calls[0][1] as () => void;
-    clickAwayCallback();
+    act(() => {
+      clickAwayCallback();
+    });
 
-    // Re-render to see the state change - need to trigger re-render
-    // Since React state updates are batched, we use act implicitly via fireEvent
-    // The callback sets expanded to false, but we need a re-render trigger
-    // Let's verify by checking the DOM after a second render
-    const { container } = render(<Navbar />);
+    // Menu should now be collapsed
+    expect(mainMenuButton).toHaveAttribute('aria-expanded', 'false');
     const dropdown = container.querySelector('[aria-labelledby="dropdownMenuButtonX"]');
     expect(dropdown).toHaveClass('invisible');
+    expect(dropdown).toHaveClass('opacity-0');
   });
 });
