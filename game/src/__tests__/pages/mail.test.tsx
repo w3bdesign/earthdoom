@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import Mail from '../../pages/mail';
 
 const mockUsePlayerData = jest.fn();
@@ -7,17 +7,27 @@ jest.mock('../../utils/usePlayerData', () => ({
   usePlayerData: () => mockUsePlayerData(),
 }));
 
-const mockGetAllMail = jest.fn();
+let capturedMarkSeenOnSuccess: (() => Promise<void>) | undefined;
+let capturedMarkSeenOnError: (() => void) | undefined;
 const mockMarkAsSeen = jest.fn();
+const mockGetAllMail = jest.fn();
+const mockInvalidate = jest.fn().mockResolvedValue(undefined);
+const mockRefetch = jest.fn().mockResolvedValue(undefined);
 
 jest.mock('../../utils/api', () => ({
   api: {
     useContext: () => ({
-      paMail: { getAllMailByNick: { invalidate: jest.fn(), refetch: jest.fn() } },
+      paMail: { getAllMailByNick: { invalidate: mockInvalidate, refetch: mockRefetch } },
     }),
     paMail: {
       getAllMailByNick: { useQuery: () => mockGetAllMail() },
-      markAsSeen: { useMutation: () => ({ mutate: mockMarkAsSeen, isLoading: false }) },
+      markAsSeen: {
+        useMutation: (opts: { onSuccess?: () => Promise<void>; onError?: () => void }) => {
+          capturedMarkSeenOnSuccess = opts.onSuccess;
+          capturedMarkSeenOnError = opts.onError;
+          return { mutate: mockMarkAsSeen, isLoading: false };
+        },
+      },
     },
   },
 }));
@@ -106,5 +116,48 @@ describe('Mail page', () => {
     mockGetAllMail.mockReturnValue({ data: { mail: [{ id: 1, seen: 1, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] }, isLoading: false });
     render(<Mail />);
     expect(screen.queryByText('Mark all as seen')).not.toBeInTheDocument();
+  });
+
+  it('calls markAsSeen when "Mark all as seen" button is clicked', () => {
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
+    mockGetAllMail.mockReturnValue({ data: { mail: [{ id: 1, seen: 0, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] }, isLoading: false });
+    render(<Mail />);
+
+    fireEvent.click(screen.getByText('Mark all as seen'));
+
+    expect(mockMarkAsSeen).toHaveBeenCalledWith({ sentTo: 1 });
+  });
+
+  it('calls invalidate and refetch on markAsSeen success', async () => {
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
+    mockGetAllMail.mockReturnValue({ data: { mail: [] }, isLoading: false });
+    render(<Mail />);
+
+    await act(async () => { await capturedMarkSeenOnSuccess?.(); });
+
+    expect(mockInvalidate).toHaveBeenCalled();
+    expect(mockRefetch).toHaveBeenCalled();
+  });
+
+  it('shows success toast on markAsSeen success', async () => {
+    const { ToastComponent } = jest.requireMock('../../components/ui');
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
+    mockGetAllMail.mockReturnValue({ data: { mail: [] }, isLoading: false });
+    render(<Mail />);
+
+    await act(async () => { await capturedMarkSeenOnSuccess?.(); });
+
+    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Mail marked as seen', type: 'success' });
+  });
+
+  it('shows error toast on markAsSeen error', () => {
+    const { ToastComponent } = jest.requireMock('../../components/ui');
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
+    mockGetAllMail.mockReturnValue({ data: { mail: [] }, isLoading: false });
+    render(<Mail />);
+
+    capturedMarkSeenOnError?.();
+
+    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Database error', type: 'error' });
   });
 });

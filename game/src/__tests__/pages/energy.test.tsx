@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import Energy from '../../pages/energy';
 
 const mockUsePlayerData = jest.fn();
@@ -7,16 +7,25 @@ jest.mock('../../utils/usePlayerData', () => ({
   usePlayerData: () => mockUsePlayerData(),
 }));
 
+let capturedOnSuccess: (() => Promise<void>) | undefined;
+let capturedOnError: (() => void) | undefined;
 const mockMutate = jest.fn();
-const mockUseMutation = jest.fn(() => ({ mutate: mockMutate, isLoading: false }));
+const mockInvalidate = jest.fn().mockResolvedValue(undefined);
+const mockRefetch = jest.fn().mockResolvedValue(undefined);
 
 jest.mock('../../utils/api', () => ({
   api: {
     useContext: () => ({
-      paUsers: { getPlayerByNick: { invalidate: jest.fn(), refetch: jest.fn() } },
+      paUsers: { getPlayerByNick: { invalidate: mockInvalidate, refetch: mockRefetch } },
     }),
     paSpying: {
-      spyingInitiate: { useMutation: () => mockUseMutation() },
+      spyingInitiate: {
+        useMutation: (opts: { onSuccess?: () => Promise<void>; onError?: () => void }) => {
+          capturedOnSuccess = opts.onSuccess;
+          capturedOnError = opts.onError;
+          return { mutate: mockMutate, isLoading: false };
+        },
+      },
     },
   },
 }));
@@ -58,9 +67,7 @@ const createPlayer = (overrides = {}) => ({
 });
 
 describe('Energy page', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => jest.clearAllMocks());
 
   it('renders not-authenticated when user is not logged in', () => {
     mockUsePlayerData.mockReturnValue({ paPlayer: null, isAuthenticated: false, isLoaded: true });
@@ -77,7 +84,6 @@ describe('Energy page', () => {
   it('renders energy message when r_energy is 0', () => {
     mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer({ r_energy: 0 }), isAuthenticated: true, isLoaded: true });
     render(<Energy />);
-    expect(screen.getByTestId('render-message')).toBeInTheDocument();
     expect(screen.getByTestId('render-message')).toHaveTextContent('Energy');
   });
 
@@ -90,7 +96,6 @@ describe('Energy page', () => {
   it('renders AdvancedDataTable when r_energy is 1', () => {
     mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer({ r_energy: 1 }), isAuthenticated: true, isLoaded: true });
     render(<Energy />);
-    expect(screen.getByTestId('data-table')).toBeInTheDocument();
     expect(screen.getByTestId('data-table')).toHaveTextContent('Energy');
   });
 
@@ -98,5 +103,35 @@ describe('Energy page', () => {
     mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer({ r_energy: 0 }), isAuthenticated: true, isLoaded: true });
     render(<Energy />);
     expect(screen.queryByTestId('data-table')).not.toBeInTheDocument();
+  });
+
+  it('calls invalidate and refetch on mutation success', async () => {
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer({ r_energy: 1 }), isAuthenticated: true, isLoaded: true });
+    render(<Energy />);
+
+    await act(async () => { await capturedOnSuccess?.(); });
+
+    expect(mockInvalidate).toHaveBeenCalled();
+    expect(mockRefetch).toHaveBeenCalled();
+  });
+
+  it('shows success toast on mutation success', async () => {
+    const { ToastComponent } = jest.requireMock('../../components/ui');
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer({ r_energy: 1 }), isAuthenticated: true, isLoaded: true });
+    render(<Energy />);
+
+    await act(async () => { await capturedOnSuccess?.(); });
+
+    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Construction started', type: 'success' });
+  });
+
+  it('shows error toast on mutation error', () => {
+    const { ToastComponent } = jest.requireMock('../../components/ui');
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer({ r_energy: 1 }), isAuthenticated: true, isLoaded: true });
+    render(<Energy />);
+
+    capturedOnError?.();
+
+    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Database error', type: 'error' });
   });
 });

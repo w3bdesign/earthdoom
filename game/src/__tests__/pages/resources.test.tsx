@@ -1,61 +1,42 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import Resources from '../../pages/resources';
-import type { PaUsers } from '@prisma/client';
 
-interface UseUserReturn {
-  isSignedIn: boolean;
-  isLoaded: boolean;
-  user: { username: string | null } | null;
-}
-
-interface UseMutationReturn {
-  mutate: jest.Mock;
-  isLoading: boolean;
-}
-
-interface UseQueryReturn {
-  data: PaUsers | null | undefined;
-  isLoading: boolean;
-}
-
-const mockUseUser = jest.fn<UseUserReturn, []>();
-const mockUseQuery = jest.fn<UseQueryReturn, []>();
-const mockUseMutation = jest.fn<UseMutationReturn, []>();
-const mockInvalidate = jest.fn();
-const mockRefetch = jest.fn();
-
-jest.mock('@clerk/nextjs', () => ({
-  useUser: () => mockUseUser(),
+const mockUsePlayerData = jest.fn();
+jest.mock('../../utils/usePlayerData', () => ({
+  usePlayerData: () => mockUsePlayerData(),
 }));
+
+let capturedOnSuccess: (() => Promise<void>) | undefined;
+let capturedOnError: (() => void) | undefined;
+const mockMutate = jest.fn();
+const mockInvalidate = jest.fn().mockResolvedValue(undefined);
+const mockRefetch = jest.fn().mockResolvedValue(undefined);
 
 jest.mock('../../utils/api', () => ({
   api: {
     useContext: () => ({
-      paUsers: {
-        getPlayerByNick: {
-          invalidate: mockInvalidate,
-          refetch: mockRefetch,
-        },
-      },
+      paUsers: { getPlayerByNick: { invalidate: mockInvalidate, refetch: mockRefetch } },
     }),
-    paUsers: {
-      getPlayerByNick: {
-        useQuery: () => mockUseQuery(),
-      },
-    },
     paConstruct: {
       developLand: {
-        useMutation: () => mockUseMutation(),
+        useMutation: (opts: { onSuccess?: () => Promise<void>; onError?: () => void }) => {
+          capturedOnSuccess = opts.onSuccess;
+          capturedOnError = opts.onError;
+          return { mutate: mockMutate, isLoading: false };
+        },
       },
     },
   },
 }));
 
-jest.mock('../../components/common/Layout', () => ({
-  Layout: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="layout">{children}</div>
-  ),
+jest.mock('../../components/common/PageShell', () => ({
+  __esModule: true,
+  default: ({ isAuthenticated, paPlayer, children, showSpinnerOnUnauthenticated }: { isAuthenticated: boolean; paPlayer: unknown; children: React.ReactNode; showSpinnerOnUnauthenticated?: boolean }) => {
+    if (!isAuthenticated) return showSpinnerOnUnauthenticated ? <div data-testid="loading-spinner" /> : <div data-testid="not-authenticated" />;
+    if (!paPlayer) return <div data-testid="loading" />;
+    return <div data-testid="page-shell">{children}</div>;
+  },
 }));
 
 jest.mock('../../components/common/Loader/LoadingSpinner', () => ({
@@ -82,159 +63,104 @@ jest.mock('../../components/features/Resources/constants/RESOURCE', () => ({
   RESOURCE: [],
 }));
 
-const createMockPlayer = (overrides: Partial<PaUsers> = {}): PaUsers => ({
-  id: 1,
-  nick: 'TestPlayer',
-  crystal: 5000,
-  metal: 3000,
-  energy: 1000,
-  r_energy: 0,
-  sats: 0,
-  infinitys: 0,
-  wraiths: 0,
-  warfrigs: 0,
-  destroyers: 0,
-  scorpions: 0,
-  astropods: 0,
-  cobras: 0,
-  infinitys_base: 0,
-  wraiths_base: 0,
-  warfrigs_base: 0,
-  destroyers_base: 0,
-  scorpions_base: 0,
-  astropods_base: 0,
-  cobras_base: 0,
-  p_scorpions: 0,
-  p_scorpions_eta: 0,
-  p_cobras: 0,
-  p_cobras_eta: 0,
-  missiles: 0,
-  score: 100,
-  asteroids: 10,
-  asteroid_crystal: 5,
-  asteroid_metal: 5,
-  ui_roids: 3,
-  war: 0,
-  def: 0,
-  wareta: 0,
-  defeta: 0,
-  r_imcrystal: 0,
-  r_immetal: 0,
-  r_iafs: 0,
-  r_aaircraft: 0,
-  r_tbeam: 0,
-  r_uscan: 0,
-  r_oscan: 0,
-  p_infinitys: 0,
-  p_infinitys_eta: 0,
-  p_wraiths: 0,
-  p_wraiths_eta: 0,
-  p_warfrigs: 0,
-  p_warfrigs_eta: 0,
-  p_destroyers: 0,
-  p_destroyers_eta: 0,
-  p_missiles: 0,
-  p_missiles_eta: 0,
-  timer: 0,
-  size: 10,
-  p_astropods: 0,
-  p_astropods_eta: 0,
-  tag: '',
-  rank: 1,
-  rcannons: 0,
-  p_rcannons: 0,
-  p_rcannons_eta: 0,
-  avengers: 0,
-  p_avengers: 0,
-  p_avengers_eta: 0,
-  lstalkers: 0,
-  p_lstalkers: 0,
-  p_lstalkers_eta: 0,
-  r_odg: 0,
-  sleep: 0,
-  lastsleep: 0,
-  closed: 0,
-  x: 1,
-  y: 1,
-  commander: 0,
-  galname: 'No name',
-  galpic: '125x125earthdoom1.gif',
-  motd: 0,
-  vote: '',
-  civilians: 1000,
-  tax: 20,
-  credits: 5000,
-  newbie: 100,
-  paConstructId: null,
+const createPlayer = (overrides = {}) => ({
+  id: 1, nick: 'Test', crystal: 5000, metal: 3000, energy: 1000,
+  r_energy: 0, ui_roids: 3, asteroid_crystal: 5, asteroid_metal: 5,
+  sats: 0, war: 0, def: 0, wareta: 0, defeta: 0, score: 100,
+  size: 10, rank: 1, tag: '', civilians: 1000, tax: 20, credits: 5000,
+  c_crystal: 0, c_metal: 0, c_airport: 0, c_abase: 0, c_wstation: 0,
+  c_amp1: 0, c_amp2: 0, c_warfactory: 0, c_destfact: 0, c_scorpfact: 0,
+  c_energy: 0, c_odg: 0, r_imcrystal: 0, r_immetal: 0,
   ...overrides,
 });
 
 describe('Resources page', () => {
-  beforeEach(() => {
-    mockUseUser.mockClear();
-    mockUseQuery.mockClear();
-    mockUseMutation.mockClear();
-    mockUseMutation.mockReturnValue({ mutate: jest.fn(), isLoading: false });
-  });
+  beforeEach(() => jest.clearAllMocks());
 
-  it('renders loading spinner when user is not signed in', () => {
-    mockUseUser.mockReturnValue({ isSignedIn: false, isLoaded: true, user: null });
-    mockUseQuery.mockReturnValue({ data: null, isLoading: false });
-
+  it('renders spinner when user is not authenticated', () => {
+    mockUsePlayerData.mockReturnValue({ paPlayer: null, isAuthenticated: false, isLoaded: true });
     render(<Resources />);
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
-  it('renders loading spinner when player data is not yet loaded', () => {
-    mockUseUser.mockReturnValue({ isSignedIn: true, isLoaded: true, user: { username: 'TestPlayer' } });
-    mockUseQuery.mockReturnValue({ data: null, isLoading: true });
-
+  it('renders loading when player data is null', () => {
+    mockUsePlayerData.mockReturnValue({ paPlayer: null, isAuthenticated: true, isLoaded: true });
     render(<Resources />);
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 
   it('renders "No land, no income" when player has no land', () => {
-    mockUseUser.mockReturnValue({ isSignedIn: true, isLoaded: true, user: { username: 'TestPlayer' } });
-    const player = createMockPlayer({ ui_roids: 0, asteroid_crystal: 0, asteroid_metal: 0 });
-    mockUseQuery.mockReturnValue({ data: player, isLoading: false });
-
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer({ ui_roids: 0, asteroid_crystal: 0, asteroid_metal: 0 }),
+      isAuthenticated: true, isLoaded: true,
+    });
     render(<Resources />);
     expect(screen.getByText('No land, no income.')).toBeInTheDocument();
   });
 
-  it('renders BarGraph when player has land', () => {
-    mockUseUser.mockReturnValue({ isSignedIn: true, isLoaded: true, user: { username: 'TestPlayer' } });
-    const player = createMockPlayer({ ui_roids: 3, asteroid_crystal: 5, asteroid_metal: 5 });
-    mockUseQuery.mockReturnValue({ data: player, isLoading: false });
-
+  it('renders BarGraph when player has developed land', () => {
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer({ ui_roids: 0, asteroid_crystal: 5, asteroid_metal: 5 }),
+      isAuthenticated: true, isLoaded: true,
+    });
     render(<Resources />);
     expect(screen.getByTestId('bar-graph')).toBeInTheDocument();
   });
 
   it('renders undeveloped land count when ui_roids > 0', () => {
-    mockUseUser.mockReturnValue({ isSignedIn: true, isLoaded: true, user: { username: 'TestPlayer' } });
-    const player = createMockPlayer({ ui_roids: 7, asteroid_crystal: 5, asteroid_metal: 5 });
-    mockUseQuery.mockReturnValue({ data: player, isLoading: false });
-
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer({ ui_roids: 7, asteroid_crystal: 5, asteroid_metal: 5 }),
+      isAuthenticated: true, isLoaded: true,
+    });
     render(<Resources />);
     expect(screen.getByText('Undeveloped land: 7')).toBeInTheDocument();
   });
 
   it('renders "no land to develop" when ui_roids is 0 but has other land', () => {
-    mockUseUser.mockReturnValue({ isSignedIn: true, isLoaded: true, user: { username: 'TestPlayer' } });
-    const player = createMockPlayer({ ui_roids: 0, asteroid_crystal: 5, asteroid_metal: 5 });
-    mockUseQuery.mockReturnValue({ data: player, isLoading: false });
-
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer({ ui_roids: 0, asteroid_crystal: 5, asteroid_metal: 5 }),
+      isAuthenticated: true, isLoaded: true,
+    });
     render(<Resources />);
     expect(screen.getByText('You have no land to develop')).toBeInTheDocument();
   });
 
   it('renders AdvancedDataTable when ui_roids > 0', () => {
-    mockUseUser.mockReturnValue({ isSignedIn: true, isLoaded: true, user: { username: 'TestPlayer' } });
-    const player = createMockPlayer({ ui_roids: 5, asteroid_crystal: 5, asteroid_metal: 5 });
-    mockUseQuery.mockReturnValue({ data: player, isLoading: false });
-
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer({ ui_roids: 5 }),
+      isAuthenticated: true, isLoaded: true,
+    });
     render(<Resources />);
     expect(screen.getByTestId('advanced-data-table')).toBeInTheDocument();
+  });
+
+  it('calls invalidate and refetch on mutation success', async () => {
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isLoaded: true });
+    render(<Resources />);
+
+    await act(async () => { await capturedOnSuccess?.(); });
+
+    expect(mockInvalidate).toHaveBeenCalled();
+    expect(mockRefetch).toHaveBeenCalled();
+  });
+
+  it('shows success toast on mutation success', async () => {
+    const { ToastComponent } = jest.requireMock('../../components/ui');
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isLoaded: true });
+    render(<Resources />);
+
+    await act(async () => { await capturedOnSuccess?.(); });
+
+    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Resource initiated', type: 'success' });
+  });
+
+  it('shows error toast on mutation error', () => {
+    const { ToastComponent } = jest.requireMock('../../components/ui');
+    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, isLoaded: true });
+    render(<Resources />);
+
+    capturedOnError?.();
+
+    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Database error', type: 'error' });
   });
 });
