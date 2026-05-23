@@ -1,13 +1,19 @@
-import { useUser } from "@clerk/nextjs";
-
 import type { NextPage } from "next";
 import type { AdvancedTableColumn } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
 
 import { api } from "@/utils/api";
-import { Layout } from "@/components/common/Layout";
+import { usePlayerData } from "@/utils/usePlayerData";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import PageShell from "@/components/common/PageShell";
+
+const columns: AdvancedTableColumn[] = [
+  { label: "Name", accessor: "buildingName" },
+  { label: "Description", accessor: "buildingDescription" },
+  { label: "ETA", accessor: "buildingETA" },
+  { label: "Cost", accessor: "buildingCost" },
+  { label: "Action", accessor: <Button />, type: "button" },
+];
 
 /**
  * A page component that displays a table of buildings a user can construct.
@@ -16,12 +22,7 @@ import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
  */
 const Construction: NextPage = () => {
   const ctx = api.useContext();
-  const { user, isSignedIn } = useUser();
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
-    { nick: user?.username ?? "" },
-    { enabled: !!isSignedIn && !!user?.username }
-  );
+  const { paPlayer, isAuthenticated } = usePlayerData();
 
   const { mutate, isLoading } = api.paConstruct.constructBuilding.useMutation({
     onSuccess: async () => {
@@ -34,53 +35,27 @@ const Construction: NextPage = () => {
     },
   });
 
-  const columns: AdvancedTableColumn[] = [
-    { label: "Name", accessor: "buildingName" },
-    { label: "Description", accessor: "buildingDescription" },
-    { label: "ETA", accessor: "buildingETA" },
-    { label: "Cost", accessor: "buildingCost" },
-    { label: "Action", accessor: <Button />, type: "button" },
-  ];
-
-  const caption = "Construction";
-
-  if (!isSignedIn || !user?.username) {
-    return null;
-  }
-
-  if (!paPlayer) {
-    return (
-      <Layout>
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
-      </Layout>
-    );
-  }
-
   return (
-    <>
-      <Layout paPlayer={paPlayer}>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
-            <div className="relative sm:mx-auto">
-              {paPlayer && (
-                <AdvancedDataTable
-                  isLoading={isLoading}
-                  columns={columns}
-                  data={[paPlayer]}
-                  caption={caption}
-                  renderData={BUILDINGS}
-                  action={mutate}
-                  actionText="Construct"
-                  actionInProgress="Constructing ..."
-                />
-              )}
-            </div>
+    <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer}>
+      <div className="container mb-6 flex flex-col items-center justify-center">
+        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
+          <div className="relative sm:mx-auto">
+            {paPlayer && (
+              <AdvancedDataTable
+                isLoading={isLoading}
+                columns={columns}
+                data={[paPlayer]}
+                caption="Construction"
+                renderData={BUILDINGS}
+                action={mutate}
+                actionText="Construct"
+                actionInProgress="Constructing ..."
+              />
+            )}
           </div>
         </div>
-      </Layout>
-    </>
+      </div>
+    </PageShell>
   );
 };
 

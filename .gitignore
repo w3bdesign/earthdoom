@@ -9,3 +9,4 @@ game/prisma/docs/styles/main.css
 __pycache__/
 *.pyc
 /game/plans
+game/TODO.md

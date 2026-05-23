@@ -1,14 +1,13 @@
-import { useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
 import type { PaPlayerBase } from "@/types/player";
 import type { AdvancedTableColumn } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
+import type { Building } from "@/components/features/Construct/types/types";
 
 import { api } from "@/utils/api";
-import { Layout } from "@/components/common/Layout";
+import { usePlayerData } from "@/utils/usePlayerData";
 import { AdvancedDataTable } from "@/components/ui";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import RankingActions from "@/components/ui/tables/RankingActions";
-import { Building } from "@/components/features/Construct/types/types";
+import PageShell from "@/components/common/PageShell";
 
 /**
  * Renders the Ranking page component, which displays the player ranking table.
@@ -16,20 +15,11 @@ import { Building } from "@/components/features/Construct/types/types";
  * @return {JSX.Element} The RankingPage component to be rendered.
  */
 const RankingPage: NextPage = () => {
-  const { user, isSignedIn } = useUser();
+  const { paPlayer, isAuthenticated, isSignedIn, user } = usePlayerData();
 
   const { data: paRanking } = api.paUsers.getAll.useQuery(undefined, {
     enabled: !!isSignedIn && !!user?.username,
   });
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
-    { nick: user?.username ?? "" },
-    { enabled: !!isSignedIn && !!user?.username }
-  );
-
-  if (!isSignedIn || !user?.username) {
-    return null;
-  }
 
   const columns: AdvancedTableColumn[] = [
     { label: "Nick", accessor: "nick" },
@@ -40,7 +30,6 @@ const RankingPage: NextPage = () => {
       label: "Actions",
       accessor: (row: PaPlayerBase | Building) => {
         if (!paPlayer) return <></>;
-        // Type guard to ensure we have a PaPlayerBase with required properties
         if ('nick' in row && typeof row.nick === 'string') {
           const playerRow = row as PaPlayerBase;
           return (
@@ -56,34 +45,20 @@ const RankingPage: NextPage = () => {
     },
   ];
 
-  const caption = `Player ranking`;
-
-  if (!paPlayer || !paRanking) {
-    return (
-      <Layout>
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
-      </Layout>
-    );
-  }
-
   return (
-    <>
-      <Layout paPlayer={paPlayer}>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            {paPlayer && (
-              <AdvancedDataTable
-                columns={columns}
-                data={paRanking as PaPlayerBase[]}
-                caption={caption}
-              />
-            )}
-          </div>
+    <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer}>
+      <div className="container mb-6 flex flex-col items-center justify-center">
+        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
+          {paPlayer && paRanking && (
+            <AdvancedDataTable
+              columns={columns}
+              data={paRanking as PaPlayerBase[]}
+              caption="Player ranking"
+            />
+          )}
         </div>
-      </Layout>
-    </>
+      </div>
+    </PageShell>
   );
 };
 
