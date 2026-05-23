@@ -1,12 +1,12 @@
 import React from "react";
 
-import { Button, ToastComponent } from "@/components/ui";
+import { ToastComponent } from "@/components/ui";
+import MessageTable from "@/components/ui/tables/MessageTable";
 
 import type { FC } from "react";
 import type { PaNews } from "@prisma/client";
 
 import { api } from "@/utils/api";
-import { format } from "date-fns";
 
 interface INewsTableProps {
   isDeletingAll: boolean;
@@ -32,75 +32,22 @@ const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
     ({ header }) => header === "Combat report",
   );
 
-  if (isOnlyCombatReport)
+  if (isOnlyCombatReport) {
     return (
       <h2 className="py-4 text-right text-xl font-bold">
         No general news to display
       </h2>
     );
+  }
 
   return (
-    <>
-      <table className="min-w-full text-left text-sm font-light">
-        <thead className="border-b font-medium dark:border-neutral-500">
-          <tr>
-            <th
-              scope="col"
-              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-            >
-              Time
-            </th>
-            <th
-              scope="col"
-              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-            >
-              Title
-            </th>
-            <th
-              scope="col"
-              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-            >
-              Content
-            </th>
-            <th
-              scope="col"
-              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-            >
-              Delete
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {news?.map(
-            (news) =>
-              news.header !== "Combat report" && (
-                <tr key={news.id} className="border-b dark:border-neutral-500">
-                  <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                    {format(new Date(news.time * 1000), "dd/MM-yyyy HH:mm:ss")}
-                  </td>
-                  <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                    {news.header}
-                  </td>
-                  <td className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                    {news.news}
-                  </td>
-                  <td className="flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-                    <Button
-                      disabled={isDeleting || isDeletingAll}
-                      variant="danger"
-                      onClick={() => {
-                        deleteSingleNews({ id: news.id });
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ),
-          )}
-        </tbody>
-      </table>
-    </>
+    <MessageTable
+      items={news}
+      timeColumnLabel="Time"
+      isDeleting={isDeleting || isDeletingAll}
+      onDelete={(id) => deleteSingleNews({ id })}
+      filterRow={(item) => item.header !== "Combat report"}
+    />
   );
 };
 

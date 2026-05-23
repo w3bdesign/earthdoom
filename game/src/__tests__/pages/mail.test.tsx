@@ -71,6 +71,12 @@ const createPlayer = (overrides = {}) => ({
   ...overrides,
 });
 
+/** Set up mocks for an authenticated user with mail data */
+function setupWithMail(mailData: unknown) {
+  mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
+  mockGetAllMail.mockReturnValue({ data: mailData, isLoading: false });
+}
+
 describe('Mail page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -91,46 +97,38 @@ describe('Mail page', () => {
   });
 
   it('renders mail table when data is loaded', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
-    mockGetAllMail.mockReturnValue({ data: { mail: [{ id: 1, seen: 1, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] }, isLoading: false });
+    setupWithMail({ mail: [{ id: 1, seen: 1, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] });
     render(<Mail />);
     expect(screen.getByTestId('mail-table')).toBeInTheDocument();
   });
 
   it('renders "Received Mail" heading', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
-    mockGetAllMail.mockReturnValue({ data: { mail: [] }, isLoading: false });
+    setupWithMail({ mail: [] });
     render(<Mail />);
     expect(screen.getByText('Received Mail')).toBeInTheDocument();
   });
 
   it('renders "Mark all as seen" button when there are unseen emails', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
-    mockGetAllMail.mockReturnValue({ data: { mail: [{ id: 1, seen: 0, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] }, isLoading: false });
+    setupWithMail({ mail: [{ id: 1, seen: 0, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] });
     render(<Mail />);
     expect(screen.getByText('Mark all as seen')).toBeInTheDocument();
   });
 
   it('does not render "Mark all as seen" button when all emails are seen', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
-    mockGetAllMail.mockReturnValue({ data: { mail: [{ id: 1, seen: 1, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] }, isLoading: false });
+    setupWithMail({ mail: [{ id: 1, seen: 1, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] });
     render(<Mail />);
     expect(screen.queryByText('Mark all as seen')).not.toBeInTheDocument();
   });
 
   it('calls markAsSeen when "Mark all as seen" button is clicked', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
-    mockGetAllMail.mockReturnValue({ data: { mail: [{ id: 1, seen: 0, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] }, isLoading: false });
+    setupWithMail({ mail: [{ id: 1, seen: 0, news: 'Hello', header: 'Test', sentTo: 1, time: 0 }] });
     render(<Mail />);
-
     fireEvent.click(screen.getByText('Mark all as seen'));
-
     expect(mockMarkAsSeen).toHaveBeenCalledWith({ sentTo: 1 });
   });
 
   it('calls invalidate and refetch on markAsSeen success', async () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
-    mockGetAllMail.mockReturnValue({ data: { mail: [] }, isLoading: false });
+    setupWithMail({ mail: [] });
     render(<Mail />);
 
     await act(async () => { await capturedMarkSeenOnSuccess?.(); });
@@ -141,8 +139,7 @@ describe('Mail page', () => {
 
   it('shows success toast on markAsSeen success', async () => {
     const { ToastComponent } = jest.requireMock('../../components/ui');
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
-    mockGetAllMail.mockReturnValue({ data: { mail: [] }, isLoading: false });
+    setupWithMail({ mail: [] });
     render(<Mail />);
 
     await act(async () => { await capturedMarkSeenOnSuccess?.(); });
@@ -152,8 +149,7 @@ describe('Mail page', () => {
 
   it('shows error toast on markAsSeen error', () => {
     const { ToastComponent } = jest.requireMock('../../components/ui');
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true, user: { username: 'Test' } });
-    mockGetAllMail.mockReturnValue({ data: { mail: [] }, isLoading: false });
+    setupWithMail({ mail: [] });
     render(<Mail />);
 
     capturedMarkSeenOnError?.();

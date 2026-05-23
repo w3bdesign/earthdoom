@@ -9,6 +9,37 @@ import { api } from "@/utils/api";
 
 import type { NextPage } from "next";
 
+const REDIRECT_DELAY_MS = 2000;
+
+const delay = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+const showError = (message: string) => {
+  ToastComponent({ message, type: "error" });
+};
+
+const useCreatePlayerMutation = () => {
+  const router = useRouter();
+
+  return api.paUsers.createPlayer.useMutation({
+    onSuccess: async () => {
+      ToastComponent({ message: "Player created", type: "success" });
+      await delay(REDIRECT_DELAY_MS);
+      await router.push("/");
+    },
+    onError: (error) => {
+      console.error("Error creating player:", error);
+      showError("Error creating player");
+    },
+  });
+};
+
+const isUserReady = (user: { id?: string; username?: string | null } | null | undefined): user is { id: string; username: string } =>
+  !!(user?.id && user?.username);
+
+const getStatusMessage = (isLoading: boolean): string =>
+  isLoading ? "Checking existing player..." : "Creating player...";
+
 /**
  * Renders a page for creating a player and creates a new player for the logged in user.
  *
@@ -17,22 +48,7 @@ import type { NextPage } from "next";
 const AddUser: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
-
-  const { mutate } = api.paUsers.createPlayer.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Player created", type: "success" });
-      await new Promise<void>((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, 2000);
-      });
-      await router.push("/");
-    },
-    onError: (error) => {
-      console.error("Error creating player:", error);
-      ToastComponent({ message: "Error creating player", type: "error" });
-    },
-  });
+  const { mutate } = useCreatePlayerMutation();
 
   const { data: existingPlayer, isLoading } =
     api.paUsers.getPlayerByNick.useQuery(
@@ -41,19 +57,20 @@ const AddUser: NextPage = () => {
     );
 
   const createPlayer = useCallback(async () => {
-    if (user && user.id && user.username) {
-      if (!existingPlayer && !isLoading) {
-        mutate({ nick: user.username });
-      } else if (existingPlayer) {
-        await router.push("/");
-      }
+    if (!isUserReady(user)) return;
+    if (existingPlayer) {
+      await router.push("/");
+      return;
+    }
+    if (!isLoading) {
+      mutate({ nick: user.username });
     }
   }, [user, existingPlayer, isLoading, mutate, router]);
 
   useEffect(() => {
     createPlayer().catch((error) => {
       console.error("Error in createPlayer:", error);
-      ToastComponent({ message: "Error creating player", type: "error" });
+      showError("Error creating player");
     });
   }, [createPlayer]);
 
@@ -63,7 +80,7 @@ const AddUser: NextPage = () => {
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
           <h1 className="text-center text-2xl">Create player</h1>
           <div className="relative py-4 sm:mx-auto">
-            {isLoading ? "Checking existing player..." : "Creating player..."}
+            {getStatusMessage(isLoading)}
           </div>
         </div>
       </div>

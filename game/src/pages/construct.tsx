@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import type { AdvancedTableColumn } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
+import type { AdvancedTableColumn, TMutateType } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
 
 import { api } from "@/utils/api";
 import { usePlayerData } from "@/utils/usePlayerData";
@@ -47,7 +47,7 @@ const Construction: NextPage = () => {
                 data={[paPlayer]}
                 caption="Construction"
                 renderData={BUILDINGS}
-                action={mutate}
+                action={mutate as unknown as TMutateType}
                 actionText="Construct"
                 actionInProgress="Constructing ..."
               />

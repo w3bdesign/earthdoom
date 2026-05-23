@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import type { PaPlayer } from "@/types/player";
+import type { TMutateType } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
 
 import { api } from "@/utils/api";
 import { usePlayerData } from "@/utils/usePlayerData";
@@ -63,7 +64,7 @@ const Energy: NextPage = () => {
               data={[paPlayer]}
               caption="Energy"
               renderData={ENERGY}
-              action={mutate}
+              action={mutate as unknown as TMutateType}
               actionText="Construct"
               actionInProgress="Constructing ..."
             />

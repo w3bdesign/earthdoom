@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Button from '../../../components/common/Button';
+import Button, { Button as NamedButton } from '../../../components/common/Button';
 
 describe('Button component', () => {
   it('renders with default props', () => {
@@ -108,5 +108,20 @@ describe('Button component', () => {
     expect(className).toContain('disabled:opacity-50');
     expect(className).toContain('hover:bg-primary-600');
     expect(className).toContain('focus:bg-primary-600');
+  });
+
+  it('named export renders the same as default export', () => {
+    render(<NamedButton>Named Export</NamedButton>);
+    const button = screen.getByRole('button', { name: /named export/i });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveClass('bg-primary');
+  });
+
+  it('danger variant applies correct hover and focus classes', () => {
+    render(<Button variant="danger">Danger Hover</Button>);
+    const button = screen.getByRole('button', { name: /danger hover/i });
+    const className = button.className;
+    expect(className).toContain('hover:bg-danger-600');
+    expect(className).toContain('focus:bg-danger-600');
   });
 });

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 
@@ -9,65 +9,46 @@ import { api } from "@/utils/api";
 
 import type { NextPage } from "next";
 
+const LoadingLayout = () => (
+  <Layout>
+    <div className="container mb-6 flex flex-col items-center justify-center">
+      <div className="mt-12">
+        <LoadingSpinner />
+      </div>
+    </div>
+  </Layout>
+);
+
+const getRedirectDestination = (hasExistingPlayer: boolean): string =>
+  hasExistingPlayer ? "/" : "/addUser";
+
+const usePlayerQuery = (username: string | null | undefined) =>
+  api.paUsers.getPlayerByNick.useQuery(
+    { nick: username || "" },
+    { enabled: !!username },
+  );
+
 /**
  * Renders the Login page.
+ * Redirects authenticated users to the home page or addUser page.
  *
  * @return {JSX.Element} The Login page component.
  */
+// fallow-ignore-next-line complexity
 const Login: NextPage = () => {
   const router = useRouter();
   const { user, isLoaded: isUserLoaded } = useUser();
+  const { data: paPlayer, isLoading: isPlayerLoading } = usePlayerQuery(user?.username);
 
-  const { data: paPlayer, isLoading: isPlayerLoading } =
-    api.paUsers.getPlayerByNick.useQuery(
-      { nick: user?.username || "" },
-      { enabled: !!user?.username },
-    );
+  const isReady = isUserLoaded && !isPlayerLoading;
+  const hasExistingPlayer = !!(paPlayer?.id);
 
-  const addPlayer = useCallback(() => {
-    return router.push("/addUser");
-  }, [router]);
-
-  const redirect = useCallback(() => {
-    return router.push("/");
-  }, [router]);
-
-  // 
-  // TODO: Cleanup this code
-  // 
   useEffect(() => {
-    if (isUserLoaded && !isPlayerLoading) {
-      if (user) {
-        if (paPlayer && paPlayer.id) {
-          void redirect();
-        } else {
-          void addPlayer();
-        }
-      }
-    }
-  }, [user, isUserLoaded, paPlayer, isPlayerLoading, redirect, addPlayer]);
+    if (!isReady || !user) return;
+    void router.push(getRedirectDestination(hasExistingPlayer));
+  }, [user, isReady, hasExistingPlayer, router]);
 
-  if (!isUserLoaded || isPlayerLoading) {
-    return (
-      <Layout>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="mt-12">
-            <LoadingSpinner />
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
-  return (
-    <Layout>
-      <div className="container mb-6 flex flex-col items-center justify-center">
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
-      </div>
-    </Layout>
-  );
+  return <LoadingLayout />;
 };
 
 export default Login;

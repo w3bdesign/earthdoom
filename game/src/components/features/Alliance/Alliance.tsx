@@ -13,6 +13,17 @@ interface IAllianceProps {
   paTag: PaTag[];
 }
 
+const showSuccess = (message: string) => {
+  ToastComponent({ message, type: "success" });
+};
+
+const showError = (message: string) => {
+  ToastComponent({ message, type: "error" });
+};
+
+const findLeaderTag = (paTag: PaTag[], nick: string): PaTag | undefined =>
+  paTag.find((tag) => tag.leader === nick);
+
 /**
  * Renders a form for creating, joining, and leaving an alliance.
  * @param {Object} props - The component props.
@@ -26,57 +37,82 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const createAllianceRef = useRef<HTMLInputElement>(null);
   const joinAllianceRef = useRef<HTMLInputElement>(null);
 
-  const isLeader =
-    paTag.find((tag: PaTag) => tag.leader === paPlayer.nick) !== undefined;
+  const leaderTag = findLeaderTag(paTag, paPlayer.nick);
+  const isLeader = leaderTag !== undefined;
+  const alliancePassword = leaderTag?.password ?? null;
 
-  const player = paPlayer.nick;
-  const allianceTag = paTag.find(
-    (tag: { leader: string }) => tag.leader === player,
-  );
-  const alliancePassword = allianceTag ? allianceTag.password : null;
+  const invalidateAndRefetch = async () => {
+    await ctx.paTag.getAll.invalidate();
+    await ctx.paTag.getAll.refetch();
+    await ctx.paUsers.getPlayerByNick.invalidate();
+    await ctx.paUsers.getPlayerByNick.refetch();
+  };
 
   const { mutate: createAlliance, isLoading: isCreateAllianceLoading } =
     api.paTag.createAlliance.useMutation({
       onSuccess: async () => {
-        ToastComponent({ message: "Alliance created", type: "success" });
-        await ctx.paTag.getAll.invalidate();
-        await ctx.paTag.getAll.refetch();
-        await ctx.paUsers.getPlayerByNick.invalidate();
-        await ctx.paUsers.getPlayerByNick.refetch();
+        showSuccess("Alliance created");
+        await invalidateAndRefetch();
       },
       onError: () => {
-        ToastComponent({ message: "Database error", type: "error" });
+        showError("Database error");
       },
     });
+
   const { mutate: joinAlliance, isLoading: isJoinAllianceLoading } =
     api.paTag.joinAlliance.useMutation({
       onSuccess: async (result: string) => {
         if (result === "Wrong password") {
-          ToastComponent({ message: result, type: "error" });
+          showError(result);
           return;
         }
-        ToastComponent({ message: "Alliance joined", type: "success" });
-        await ctx.paTag.getAll.invalidate();
-        await ctx.paTag.getAll.refetch();
-        await ctx.paUsers.getPlayerByNick.invalidate();
-        await ctx.paUsers.getPlayerByNick.refetch();
+        showSuccess("Alliance joined");
+        await invalidateAndRefetch();
       },
       onError: () => {
-        ToastComponent({ message: "Database error", type: "error" });
+        showError("Database error");
       },
     });
 
   const { mutate: leaveAlliance, isLoading: isLeaveAllianceLoading } =
     api.paTag.leaveAlliance.useMutation({
       onSuccess: async () => {
-        ToastComponent({ message: "Alliance left", type: "success" });
+        showSuccess("Alliance left");
         await ctx.paUsers.getPlayerByNick.invalidate();
         await ctx.paUsers.getPlayerByNick.refetch();
       },
       onError: () => {
-        ToastComponent({ message: "Database error", type: "error" });
+        showError("Database error");
       },
     });
+
+  const isAnyMutationLoading =
+    isCreateAllianceLoading || isLeaveAllianceLoading || isJoinAllianceLoading;
+
+  const handleCreate = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    const value = createAllianceRef?.current?.value;
+    if (!value) {
+      showError("You need to type something");
+      return;
+    }
+    createAlliance({ Userid: paPlayer.id, tagName: value });
+  };
+
+  const handleLeave = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    leaveAlliance({ Userid: paPlayer.id });
+  };
+
+  const handleJoin = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    const value = joinAllianceRef?.current?.value;
+    if (!value) {
+      showError("You need to type something");
+      return;
+    }
+    joinAlliance({ Userid: paPlayer.id, tagPassword: value });
+  };
 
   return (
     <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
@@ -85,131 +121,38 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
           <div className="flex flex-col items-center justify-center">
             <div className="flex w-[20.625rem] items-center justify-center rounded bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:w-[44.563rem] dark:bg-neutral-700">
               <form>
-                <h2 className="mb-4 text-center text-2xl font-bold text-black">
-                  Alliance{" "}
-                  {paPlayer.tag && (
-                    <>
-                      - {isLeader ? "leader" : "member"} of {paPlayer.tag}
-                    </>
-                  )}
-                </h2>
-                {isLeader && paPlayer.tag && (
-                  <div className="relative mt-2 w-64">
-                    <h2 className="mb-4 text-center text-2xl font-bold text-black">
-                      Password: {alliancePassword}
-                    </h2>
-                  </div>
-                )}
+                <AllianceHeader
+                  paPlayer={paPlayer}
+                  isLeader={isLeader}
+                  alliancePassword={alliancePassword}
+                />
                 {!paPlayer.tag && (
-                  <>
-                    <div className="relative mt-2 w-64">
-                      <input
-                        type="text"
-                        className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                        id="exampleInputEmail1"
-                        aria-describedby="emailHelp"
-                        pattern="[A-Za-z]+"
-                        title="Please enter letters only"
-                        ref={createAllianceRef}
-                      />
-                      <label
-                        htmlFor="exampleInputEmail1"
-                        className="mb-2 block py-2 text-sm font-bold text-gray-500"
-                      >
-                        Create alliance
-                      </label>
-                    </div>
-                    <div className="flex items-center justify-center">
-                      <Button
-                        extraClasses="mb-4"
-                        disabled={
-                          isCreateAllianceLoading ||
-                          isLeaveAllianceLoading ||
-                          isJoinAllianceLoading
-                        }
-                        onClick={(event: { preventDefault: () => void }) => {
-                          event.preventDefault();
-                          if (!createAllianceRef?.current?.value) {
-                            ToastComponent({
-                              message: "You need to type something",
-                              type: "error",
-                            });
-                            return;
-                          }
-                          createAlliance({
-                            Userid: paPlayer.id,
-                            tagName: createAllianceRef.current.value,
-                          });
-                        }}
-                      >
-                        Create
-                      </Button>
-                    </div>
-                  </>
+                  <AllianceInput
+                    label="Create alliance"
+                    inputRef={createAllianceRef}
+                    buttonText="Create"
+                    disabled={isAnyMutationLoading}
+                    onClick={handleCreate}
+                  />
                 )}
                 {paPlayer.tag && (
                   <div className="flex items-center justify-center">
                     <Button
-                      disabled={
-                        isCreateAllianceLoading ||
-                        isLeaveAllianceLoading ||
-                        isJoinAllianceLoading
-                      }
+                      disabled={isAnyMutationLoading}
                       extraClasses="mb-4"
-                      onClick={(event: { preventDefault: () => void }) => {
-                        event.preventDefault();
-                        leaveAlliance({
-                          Userid: paPlayer.id,
-                        });
-                      }}
+                      onClick={handleLeave}
                     >
                       Leave
                     </Button>
                   </div>
                 )}
-                <div className="relative mt-2 w-64">
-                  <input
-                    type="text"
-                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    pattern="[A-Za-z]+"
-                    title="Please enter letters only"
-                    ref={joinAllianceRef}
-                  />
-                  <label
-                    htmlFor="exampleInputEmail1"
-                    className="mb-2 block py-2 text-sm font-bold text-gray-500"
-                  >
-                    Join alliance
-                  </label>
-                </div>
-                <div className="flex items-center justify-center">
-                  <Button
-                    extraClasses="mb-4"
-                    disabled={
-                      isCreateAllianceLoading ||
-                      isLeaveAllianceLoading ||
-                      isJoinAllianceLoading
-                    }
-                    onClick={(event: { preventDefault: () => void }) => {
-                      event.preventDefault();
-                      if (!joinAllianceRef?.current?.value) {
-                        ToastComponent({
-                          message: "You need to type something",
-                          type: "error",
-                        });
-                        return;
-                      }
-                      joinAlliance({
-                        Userid: paPlayer.id,
-                        tagPassword: joinAllianceRef.current.value,
-                      });
-                    }}
-                  >
-                    Join
-                  </Button>
-                </div>
+                <AllianceInput
+                  label="Join alliance"
+                  inputRef={joinAllianceRef}
+                  buttonText="Join"
+                  disabled={isAnyMutationLoading}
+                  onClick={handleJoin}
+                />
               </form>
             </div>
           </div>
@@ -218,5 +161,68 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     </div>
   );
 };
+
+/** Displays the alliance header with role and password info */
+const AllianceHeader: FC<{
+  paPlayer: PaUsers;
+  isLeader: boolean;
+  alliancePassword: string | null;
+}> = ({ paPlayer, isLeader, alliancePassword }) => (
+  <>
+    <h2 className="mb-4 text-center text-2xl font-bold text-black">
+      Alliance{" "}
+      {paPlayer.tag && (
+        <>
+          - {isLeader ? "leader" : "member"} of {paPlayer.tag}
+        </>
+      )}
+    </h2>
+    {isLeader && paPlayer.tag && (
+      <div className="relative mt-2 w-64">
+        <h2 className="mb-4 text-center text-2xl font-bold text-black">
+          Password: {alliancePassword}
+        </h2>
+      </div>
+    )}
+  </>
+);
+
+/** Reusable alliance input field with label and action button */
+const AllianceInput: FC<{
+  label: string;
+  inputRef: React.RefObject<HTMLInputElement>;
+  buttonText: string;
+  disabled: boolean;
+  onClick: (event: { preventDefault: () => void }) => void;
+}> = ({ label, inputRef, buttonText, disabled, onClick }) => (
+  <>
+    <div className="relative mt-2 w-64">
+      <input
+        type="text"
+        className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+        id={`alliance-${label.toLowerCase().replace(' ', '-')}`}
+        aria-describedby="emailHelp"
+        pattern="[A-Za-z]+"
+        title="Please enter letters only"
+        ref={inputRef}
+      />
+      <label
+        htmlFor={`alliance-${label.toLowerCase().replace(' ', '-')}`}
+        className="mb-2 block py-2 text-sm font-bold text-gray-500"
+      >
+        {label}
+      </label>
+    </div>
+    <div className="flex items-center justify-center">
+      <Button
+        extraClasses="mb-4"
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {buttonText}
+      </Button>
+    </div>
+  </>
+);
 
 export default Alliance;
