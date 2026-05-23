@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import type { TMutateType } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
 
 import { api } from "@/utils/api";
 import { usePlayerData } from "@/utils/usePlayerData";
@@ -55,7 +56,7 @@ const Spying: NextPage = () => {
               data={[paPlayer]}
               caption="Spying"
               renderData={SPYING}
-              action={mutate}
+              action={mutate as unknown as TMutateType}
               actionText="Spy"
             />
           )}
