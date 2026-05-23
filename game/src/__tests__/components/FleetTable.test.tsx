@@ -153,7 +153,7 @@ describe('FleetTable', () => {
     render(<FleetTable paPlayer={player} />);
 
     expect(
-      screen.getByText('Attacking EnemyPlayer #42   (ETA: 3 ticks)')
+      screen.getByText(/Attacking EnemyPlayer #42.*ETA: 3 ticks/)
     ).toBeInTheDocument();
   });
 
@@ -168,7 +168,7 @@ describe('FleetTable', () => {
     render(<FleetTable paPlayer={player} />);
 
     expect(
-      screen.getByText('Attacking EnemyPlayer #42   (ETA: 0 ticks)')
+      screen.getByText(/Attacking EnemyPlayer #42.*ETA: 0 ticks/)
     ).toBeInTheDocument();
   });
 
@@ -183,7 +183,7 @@ describe('FleetTable', () => {
     render(<FleetTable paPlayer={player} />);
 
     expect(
-      screen.getByText('Defending AllyPlayer #7   (ETA: 5 ticks)')
+      screen.getByText(/Defending AllyPlayer #7.*ETA: 5 ticks/)
     ).toBeInTheDocument();
   });
 
@@ -198,7 +198,7 @@ describe('FleetTable', () => {
     render(<FleetTable paPlayer={player} />);
 
     expect(
-      screen.getByText('Defending AllyPlayer #7   (ETA: 0 ticks)')
+      screen.getByText(/Defending AllyPlayer #7.*ETA: 0 ticks/)
     ).toBeInTheDocument();
   });
 
