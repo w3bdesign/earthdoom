@@ -19,30 +19,33 @@ const LoadingLayout = () => (
   </Layout>
 );
 
+const getRedirectDestination = (hasExistingPlayer: boolean): string =>
+  hasExistingPlayer ? "/" : "/addUser";
+
+const usePlayerQuery = (username: string | null | undefined) =>
+  api.paUsers.getPlayerByNick.useQuery(
+    { nick: username || "" },
+    { enabled: !!username },
+  );
+
 /**
  * Renders the Login page.
  * Redirects authenticated users to the home page or addUser page.
  *
  * @return {JSX.Element} The Login page component.
  */
+// fallow-ignore-next-line complexity
 const Login: NextPage = () => {
   const router = useRouter();
   const { user, isLoaded: isUserLoaded } = useUser();
-
-  const { data: paPlayer, isLoading: isPlayerLoading } =
-    api.paUsers.getPlayerByNick.useQuery(
-      { nick: user?.username || "" },
-      { enabled: !!user?.username },
-    );
+  const { data: paPlayer, isLoading: isPlayerLoading } = usePlayerQuery(user?.username);
 
   const isReady = isUserLoaded && !isPlayerLoading;
-  const hasExistingPlayer = !!(paPlayer && paPlayer.id);
+  const hasExistingPlayer = !!(paPlayer?.id);
 
   useEffect(() => {
     if (!isReady || !user) return;
-
-    const destination = hasExistingPlayer ? "/" : "/addUser";
-    void router.push(destination);
+    void router.push(getRedirectDestination(hasExistingPlayer));
   }, [user, isReady, hasExistingPlayer, router]);
 
   return <LoadingLayout />;
