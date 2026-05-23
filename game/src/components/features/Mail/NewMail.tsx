@@ -6,7 +6,7 @@ import type { PaUsers } from "@prisma/client";
 
 import { Button, ToastComponent } from "@/components/ui";
 
-export interface PaPlayer extends PaUsers {
+interface PaPlayer extends PaUsers {
   [key: string]: number | string | null;
 }
 
