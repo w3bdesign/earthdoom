@@ -9,6 +9,15 @@ import { api } from "@/utils/api";
 
 import type { NextPage } from "next";
 
+const REDIRECT_DELAY_MS = 2000;
+
+const delay = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+const showError = (message: string) => {
+  ToastComponent({ message, type: "error" });
+};
+
 /**
  * Renders a page for creating a player and creates a new player for the logged in user.
  *
@@ -21,16 +30,12 @@ const AddUser: NextPage = () => {
   const { mutate } = api.paUsers.createPlayer.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Player created", type: "success" });
-      await new Promise<void>((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, 2000);
-      });
+      await delay(REDIRECT_DELAY_MS);
       await router.push("/");
     },
     onError: (error) => {
       console.error("Error creating player:", error);
-      ToastComponent({ message: "Error creating player", type: "error" });
+      showError("Error creating player");
     },
   });
 
@@ -41,7 +46,8 @@ const AddUser: NextPage = () => {
     );
 
   const createPlayer = useCallback(async () => {
-    if (!user?.id || !user.username) return;
+    const hasCredentials = user?.id && user.username;
+    if (!hasCredentials) return;
 
     if (existingPlayer) {
       await router.push("/");
@@ -56,18 +62,20 @@ const AddUser: NextPage = () => {
   useEffect(() => {
     createPlayer().catch((error) => {
       console.error("Error in createPlayer:", error);
-      ToastComponent({ message: "Error creating player", type: "error" });
+      showError("Error creating player");
     });
   }, [createPlayer]);
+
+  const statusMessage = isLoading
+    ? "Checking existing player..."
+    : "Creating player...";
 
   return (
     <Layout>
       <div className="container mb-6 flex flex-col items-center justify-center text-white">
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
           <h1 className="text-center text-2xl">Create player</h1>
-          <div className="relative py-4 sm:mx-auto">
-            {isLoading ? "Checking existing player..." : "Creating player..."}
-          </div>
+          <div className="relative py-4 sm:mx-auto">{statusMessage}</div>
         </div>
       </div>
     </Layout>
