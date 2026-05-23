@@ -1,15 +1,31 @@
-import { useUser } from "@clerk/nextjs";
-
 import type { NextPage } from "next";
 import type { PaPlayer } from "@/types/player";
 
 import { api } from "@/utils/api";
+import { usePlayerData } from "@/utils/usePlayerData";
 import { renderMessage } from "@/utils/functions";
-
-import { Layout } from "@/components/common/Layout";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
-import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
+import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
+import PageShell from "@/components/common/PageShell";
+
+const columns = [
+  { label: "Name", accessor: "buildingName" },
+  { label: "Description", accessor: "buildingDescription" },
+  { label: "ETA", accessor: "buildingETA" },
+  { label: "Amount", accessor: "ui_roids", type: "inputNumber" },
+  { label: "Cost", accessor: "buildingCost" },
+  { label: "Action", accessor: <Button />, type: "button" },
+];
+
+const renderEnergyMessage = (paPlayer: PaPlayer) => {
+  if (paPlayer.r_energy === 0 || paPlayer.r_energy > 1) {
+    return renderMessage({
+      title: "Energy",
+      message: "You need to research power plants before you can build them",
+    });
+  }
+  return null;
+};
 
 /**
  * A page component that renders the Energy page.
@@ -18,12 +34,7 @@ import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
  */
 const Energy: NextPage = () => {
   const ctx = api.useContext();
-  const { user, isSignedIn } = useUser();
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
-    { nick: user?.username ?? "" },
-    { enabled: !!isSignedIn && !!user?.username }
-  );
+  const { paPlayer, isAuthenticated } = usePlayerData();
 
   const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async () => {
@@ -36,63 +47,30 @@ const Energy: NextPage = () => {
     },
   });
 
-  const columns = [
-    { label: "Name", accessor: "buildingName" },
-    { label: "Description", accessor: "buildingDescription" },
-    { label: "ETA", accessor: "buildingETA" },
-    { label: "Amount", accessor: "ui_roids", type: "inputNumber" },
-    { label: "Cost", accessor: "buildingCost" },
-    { label: "Action", accessor: <Button />, type: "button" },
-  ];
-
-  const caption = "Energy";
-
-  if (!isSignedIn || !user?.username || !paPlayer) {
-    return (
-      <Layout>
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
-      </Layout>
-    );
-  }
-
-  const renderEnergyMessage = (paPlayer: PaPlayer) => {
-    if (paPlayer && (paPlayer.r_energy === 0 || paPlayer.r_energy > 1)) {
-      return renderMessage({
-        title: "Energy",
-        message: "You need to research power plants before you can build them",
-      });
-    }
-    return null;
-  };
-
   return (
-    <>
-      <Layout paPlayer={paPlayer}>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div
-            className={`relative flex flex-col justify-center overflow-hidden bg-neutral-900 ${
-              paPlayer.r_energy === 1 ? "md:w-[63rem]" : ""
-            }`}
-          >
-            {renderEnergyMessage(paPlayer)}
-            {paPlayer && paPlayer.r_energy === 1 && (
-              <AdvancedDataTable
-                isLoading={isLoading}
-                columns={columns}
-                data={[paPlayer]}
-                caption={caption}
-                renderData={ENERGY}
-                action={mutate}
-                actionText="Construct"
-                actionInProgress="Constructing ..."
-              />
-            )}
-          </div>
+    <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer}>
+      <div className="container mb-6 flex flex-col items-center justify-center">
+        <div
+          className={`relative flex flex-col justify-center overflow-hidden bg-neutral-900 ${
+            paPlayer?.r_energy === 1 ? "md:w-[63rem]" : ""
+          }`}
+        >
+          {paPlayer && renderEnergyMessage(paPlayer)}
+          {paPlayer && paPlayer.r_energy === 1 && (
+            <AdvancedDataTable
+              isLoading={isLoading}
+              columns={columns}
+              data={[paPlayer]}
+              caption="Energy"
+              renderData={ENERGY}
+              action={mutate}
+              actionText="Construct"
+              actionInProgress="Constructing ..."
+            />
+          )}
         </div>
-      </Layout>
-    </>
+      </div>
+    </PageShell>
   );
 };
 

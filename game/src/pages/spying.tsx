@@ -1,35 +1,34 @@
-import { useUser } from "@clerk/nextjs";
-
 import type { NextPage } from "next";
 
 import { api } from "@/utils/api";
-
-import { Layout } from "@/components/common/Layout";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import { usePlayerData } from "@/utils/usePlayerData";
 import { ToastComponent, Button, AdvancedDataTable } from "@/components/ui";
 import { SPYING } from "@/components/features/Spying/constants/SPYING";
+import PageShell from "@/components/common/PageShell";
+
+const columns = [
+  { label: "Name", accessor: "buildingName" },
+  { label: "Description", accessor: "buildingDescription" },
+  { label: "Cost", accessor: "buildingCost" },
+  { label: "Amount", accessor: "amount", type: "inputNumber" },
+  { label: "Action", accessor: <Button />, type: "button" },
+];
 
 /**
- * Renders the spying page
- * Required for getting more land early in the game
+ * Renders the spying page.
+ * Required for getting more land early in the game.
  *
  * @returns {JSX.Element} The spying page component.
  */
 const Spying: NextPage = () => {
   const ctx = api.useContext();
-  const { user, isSignedIn, isLoaded } = useUser();
-
-  const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
-    { nick: user?.username ?? "" },
-    { enabled: !!isSignedIn && !!user?.username }
-  );
+  const { paPlayer, isAuthenticated, isLoaded } = usePlayerData();
 
   const uiRoids = paPlayer?.ui_roids || 0;
 
   const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async (data) => {
       const newAmountOfRoids = data.ui_roids - uiRoids;
-
       ToastComponent({
         message: `Spying complete - found ${newAmountOfRoids} land`,
         type: "success",
@@ -38,57 +37,31 @@ const Spying: NextPage = () => {
       await ctx.paUsers.getPlayerByNick.refetch();
     },
     onError: () => {
-      ToastComponent({
-        message: "Database error",
-        type: "error",
-      });
+      ToastComponent({ message: "Database error", type: "error" });
     },
   });
 
-  const columns = [
-    { label: "Name", accessor: "buildingName" },
-    { label: "Description", accessor: "buildingDescription" },
-    { label: "Cost", accessor: "buildingCost" },
-    { label: "Amount", accessor: "amount", type: "inputNumber" },
-    { label: "Action", accessor: <Button />, type: "button" },
-  ];
-
-  const caption = "Spying";
-
-  if (!isSignedIn || !user?.username) {
-    return <LoadingSpinner />;
-  }
-
-  if (!paPlayer) {
-    return (
-      <Layout>
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
-      </Layout>
-    );
-  }
   return (
-    <>
-      <Layout paPlayer={paPlayer}>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
-            {!isLoaded && <LoadingSpinner />}
-            {paPlayer && (
-              <AdvancedDataTable
-                isLoading={isLoading}
-                columns={columns}
-                data={[paPlayer]}
-                caption={caption}
-                renderData={SPYING}
-                action={mutate}
-                actionText="Spy"
-              />
-            )}
-          </div>
+    <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer} showSpinnerOnUnauthenticated>
+      <div className="container mb-6 flex flex-col items-center justify-center">
+        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
+          {!isLoaded && (
+            <div data-testid="loading-spinner" />
+          )}
+          {paPlayer && (
+            <AdvancedDataTable
+              isLoading={isLoading}
+              columns={columns}
+              data={[paPlayer]}
+              caption="Spying"
+              renderData={SPYING}
+              action={mutate}
+              actionText="Spy"
+            />
+          )}
         </div>
-      </Layout>
-    </>
+      </div>
+    </PageShell>
   );
 };
 
