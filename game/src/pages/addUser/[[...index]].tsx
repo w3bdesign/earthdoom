@@ -46,8 +46,7 @@ const AddUser: NextPage = () => {
     );
 
   const createPlayer = useCallback(async () => {
-    const hasCredentials = user?.id && user.username;
-    if (!hasCredentials) return;
+    if (!user?.id || !user.username) return;
 
     if (existingPlayer) {
       await router.push("/");

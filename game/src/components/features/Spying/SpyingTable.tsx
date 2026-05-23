@@ -21,6 +21,36 @@ interface SpyingProps {
   paPlayer: PaPlayer;
 }
 
+const showError = (message: string) => {
+  ToastComponent({ message, type: "error" });
+};
+
+const validateAmount = (amount: number): boolean => {
+  if (amount === 0) {
+    showError("You need to enter a quantity more than 0");
+    return false;
+  }
+  return true;
+};
+
+const validateAffordability = (
+  paPlayer: PaPlayer,
+  resource: Building,
+  amount: number,
+): boolean => {
+  const canAfford = canAffordToTrain(
+    [paPlayer],
+    resource.buildingCostCrystal,
+    resource.buildingCostTitanium,
+    amount,
+  );
+  if (!canAfford) {
+    showError("You can not afford this");
+    return false;
+  }
+  return true;
+};
+
 const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const ctx = api.useContext();
   const { isLoaded } = useUser();
@@ -36,10 +66,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
       await ctx.paUsers.getPlayerByNick.refetch();
     },
     onError: () => {
-      ToastComponent({
-        message: "Database error",
-        type: "error",
-      });
+      showError("Database error");
     },
   });
 
@@ -48,51 +75,24 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   }
 
   const numberCrystal = Number(paPlayer.crystal);
-
   const maximumToSearch = Math.floor(numberCrystal / 500);
 
   const getSpyingAmount = (): number =>
     Number(spyingAmountRef?.current?.value);
 
-  const validateSpyingRequest = (): boolean => {
-    if (!paPlayer?.id) return false;
+  const handleSpyClick = () => {
+    if (!paPlayer?.id) return;
 
     const amount = getSpyingAmount();
-    if (amount === 0) {
-      ToastComponent({
-        message: "You need to enter a quantity more than 0",
-        type: "error",
-      });
-      return false;
-    }
-
-    if (
-      !canAffordToTrain(
-        [paPlayer],
-        resource.buildingCostCrystal,
-        resource.buildingCostTitanium,
-        amount,
-      )
-    ) {
-      ToastComponent({
-        message: "You can not afford this",
-        type: "error",
-      });
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSpyClick = () => {
-    if (!validateSpyingRequest()) return;
+    if (!validateAmount(amount)) return;
+    if (!validateAffordability(paPlayer, resource, amount)) return;
 
     mutate({
       buildingFieldName:
         resource.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
       buildingCostCrystal: resource.buildingCostCrystal,
       buildingCostTitanium: resource.buildingCostTitanium,
-      unitAmount: getSpyingAmount(),
+      unitAmount: amount,
       buildingETA: 0,
     });
   };
@@ -120,18 +120,16 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
       >
         {isLoading && "Starting ..."}
         {!isLoading && (
-          <>
-            <input
-              type="number"
-              aria-label="Amount"
-              className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-              id="exampleFormControlInput1"
-              placeholder="Amount"
-              ref={spyingAmountRef}
-              defaultValue={maximumToSearch}
-              min="0"
-            />
-          </>
+          <input
+            type="number"
+            aria-label="Amount"
+            className="border-1 peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+            id="exampleFormControlInput1"
+            placeholder="Amount"
+            ref={spyingAmountRef}
+            defaultValue={maximumToSearch}
+            min="0"
+          />
         )}
       </td>
       <td

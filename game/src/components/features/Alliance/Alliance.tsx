@@ -13,6 +13,17 @@ interface IAllianceProps {
   paTag: PaTag[];
 }
 
+const showSuccess = (message: string) => {
+  ToastComponent({ message, type: "success" });
+};
+
+const showError = (message: string) => {
+  ToastComponent({ message, type: "error" });
+};
+
+const findLeaderTag = (paTag: PaTag[], nick: string): PaTag | undefined =>
+  paTag.find((tag) => tag.leader === nick);
+
 /**
  * Renders a form for creating, joining, and leaving an alliance.
  * @param {Object} props - The component props.
@@ -26,13 +37,9 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const createAllianceRef = useRef<HTMLInputElement>(null);
   const joinAllianceRef = useRef<HTMLInputElement>(null);
 
-  const isLeader =
-    paTag.find((tag: PaTag) => tag.leader === paPlayer.nick) !== undefined;
-
-  const allianceTag = paTag.find(
-    (tag: { leader: string }) => tag.leader === paPlayer.nick,
-  );
-  const alliancePassword = allianceTag ? allianceTag.password : null;
+  const leaderTag = findLeaderTag(paTag, paPlayer.nick);
+  const isLeader = leaderTag !== undefined;
+  const alliancePassword = leaderTag?.password ?? null;
 
   const invalidateAndRefetch = async () => {
     await ctx.paTag.getAll.invalidate();
@@ -44,11 +51,11 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
   const { mutate: createAlliance, isLoading: isCreateAllianceLoading } =
     api.paTag.createAlliance.useMutation({
       onSuccess: async () => {
-        ToastComponent({ message: "Alliance created", type: "success" });
+        showSuccess("Alliance created");
         await invalidateAndRefetch();
       },
       onError: () => {
-        ToastComponent({ message: "Database error", type: "error" });
+        showError("Database error");
       },
     });
 
@@ -56,26 +63,26 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     api.paTag.joinAlliance.useMutation({
       onSuccess: async (result: string) => {
         if (result === "Wrong password") {
-          ToastComponent({ message: result, type: "error" });
+          showError(result);
           return;
         }
-        ToastComponent({ message: "Alliance joined", type: "success" });
+        showSuccess("Alliance joined");
         await invalidateAndRefetch();
       },
       onError: () => {
-        ToastComponent({ message: "Database error", type: "error" });
+        showError("Database error");
       },
     });
 
   const { mutate: leaveAlliance, isLoading: isLeaveAllianceLoading } =
     api.paTag.leaveAlliance.useMutation({
       onSuccess: async () => {
-        ToastComponent({ message: "Alliance left", type: "success" });
+        showSuccess("Alliance left");
         await ctx.paUsers.getPlayerByNick.invalidate();
         await ctx.paUsers.getPlayerByNick.refetch();
       },
       onError: () => {
-        ToastComponent({ message: "Database error", type: "error" });
+        showError("Database error");
       },
     });
 
@@ -84,11 +91,12 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
 
   const handleCreate = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    if (!createAllianceRef?.current?.value) {
-      ToastComponent({ message: "You need to type something", type: "error" });
+    const value = createAllianceRef?.current?.value;
+    if (!value) {
+      showError("You need to type something");
       return;
     }
-    createAlliance({ Userid: paPlayer.id, tagName: createAllianceRef.current.value });
+    createAlliance({ Userid: paPlayer.id, tagName: value });
   };
 
   const handleLeave = (event: { preventDefault: () => void }) => {
@@ -98,11 +106,12 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
 
   const handleJoin = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    if (!joinAllianceRef?.current?.value) {
-      ToastComponent({ message: "You need to type something", type: "error" });
+    const value = joinAllianceRef?.current?.value;
+    if (!value) {
+      showError("You need to type something");
       return;
     }
-    joinAlliance({ Userid: paPlayer.id, tagPassword: joinAllianceRef.current.value });
+    joinAlliance({ Userid: paPlayer.id, tagPassword: value });
   };
 
   return (
