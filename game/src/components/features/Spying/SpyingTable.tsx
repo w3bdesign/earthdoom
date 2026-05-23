@@ -51,6 +51,52 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
 
   const maximumToSearch = Math.floor(numberCrystal / 500);
 
+  const getSpyingAmount = (): number =>
+    Number(spyingAmountRef?.current?.value);
+
+  const validateSpyingRequest = (): boolean => {
+    if (!paPlayer?.id) return false;
+
+    const amount = getSpyingAmount();
+    if (amount === 0) {
+      ToastComponent({
+        message: "You need to enter a quantity more than 0",
+        type: "error",
+      });
+      return false;
+    }
+
+    if (
+      !canAffordToTrain(
+        [paPlayer],
+        resource.buildingCostCrystal,
+        resource.buildingCostTitanium,
+        amount,
+      )
+    ) {
+      ToastComponent({
+        message: "You can not afford this",
+        type: "error",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSpyClick = () => {
+    if (!validateSpyingRequest()) return;
+
+    mutate({
+      buildingFieldName:
+        resource.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
+      buildingCostCrystal: resource.buildingCostCrystal,
+      buildingCostTitanium: resource.buildingCostTitanium,
+      unitAmount: getSpyingAmount(),
+      buildingETA: 0,
+    });
+  };
+
   return (
     <tr
       key={resource.buildingName}
@@ -94,40 +140,7 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
       >
         {isLoading && "Starting ..."}
         {!isLoading && (
-          <Button
-            onClick={() => {
-              if (!paPlayer || !paPlayer.id) return;
-              if (Number(spyingAmountRef?.current?.value) === 0) {
-                ToastComponent({
-                  message: "You need to enter a quantity more than 0",
-                  type: "error",
-                });
-                return;
-              }
-              if (
-                !canAffordToTrain(
-                  [paPlayer],
-                  resource.buildingCostCrystal,
-                  resource.buildingCostTitanium,
-                  Number(spyingAmountRef?.current?.value),
-                )
-              ) {
-                ToastComponent({
-                  message: "You can not afford this",
-                  type: "error",
-                });
-                return;
-              }
-              mutate({
-                buildingFieldName:
-                  resource.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
-                buildingCostCrystal: resource.buildingCostCrystal,
-                buildingCostTitanium: resource.buildingCostTitanium,
-                unitAmount: Number(spyingAmountRef?.current?.value),
-                buildingETA: 0,
-              });
-            }}
-          >
+          <Button onClick={handleSpyClick}>
             Spy
           </Button>
         )}
