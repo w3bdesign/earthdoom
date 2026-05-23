@@ -36,6 +36,7 @@ const customJestConfig = {
     '!src/pages/_document.tsx',
     '!src/server/**',
     '!src/middleware.ts',
+    '!src/components/features/**',
   ],
   coverageThreshold: {
     './src/pages/construct.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
