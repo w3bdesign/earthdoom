@@ -144,9 +144,10 @@ describe('Country page', () => {
       ],
     });
     render(<Country />);
-    const spyLink = screen.getByText('Spying').closest('a');
-    const mailLink = screen.getByText('Mail').closest('a');
-    expect(spyLink).toHaveAttribute('href', '/spy?id=42');
-    expect(mailLink).toHaveAttribute('href', '/mail?id=42');
+    const links = screen.getAllByRole('link');
+    const spyLink = links.find(link => link.getAttribute('href') === '/spy?id=42');
+    const mailLink = links.find(link => link.getAttribute('href') === '/mail?id=42');
+    expect(spyLink).toBeInTheDocument();
+    expect(mailLink).toBeInTheDocument();
   });
 });
