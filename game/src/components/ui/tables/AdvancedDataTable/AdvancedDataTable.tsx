@@ -39,7 +39,7 @@ export interface AdvancedTableColumn {
   type?: string;
 }
 
-export interface AdvancedDataTableProps {
+interface AdvancedDataTableProps {
   isLoading?: boolean;
   columns: AdvancedTableColumn[];
   data: PaPlayerBase[];
