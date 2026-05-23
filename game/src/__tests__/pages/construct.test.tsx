@@ -158,11 +158,16 @@ const createMockPlayer = (overrides: Partial<PaUsers> = {}): PaUsers => ({
 });
 
 describe('Construction page', () => {
+  let capturedMutationOpts: { onSuccess?: () => Promise<void>; onError?: () => void } = {};
+
   beforeEach(() => {
     mockUseUser.mockClear();
     mockUseQuery.mockClear();
     mockUseMutation.mockClear();
-    mockUseMutation.mockReturnValue({ mutate: jest.fn(), isLoading: false });
+    mockUseMutation.mockImplementation((opts) => {
+      capturedMutationOpts = opts as typeof capturedMutationOpts;
+      return { mutate: jest.fn(), isLoading: false };
+    });
   });
 
   it('returns null when user is not signed in', () => {
