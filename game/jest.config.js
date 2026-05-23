@@ -47,6 +47,18 @@ const customJestConfig = {
     './src/pages/resources.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
     './src/pages/spying.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
     './src/components/ui/tables/FleetTable.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/ui/tables/DataTable.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/ui/tables/UnitsTable.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/ui/tables/LandTable.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/ui/tables/BDUTable.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/ui/notifications/RenderIncoming.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/common/Loader/LoadingSpinner.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/common/Header/OverviewTable.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/common/Layout/Footer.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/utils/hooks.ts': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/utils/functions.tsx': { branches: 80, functions: 90, lines: 90, statements: 90 },
+    './src/components/common/PageShell.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
+    './src/components/common/Button.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
   },
 };
 
