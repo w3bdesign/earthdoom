@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/w3bdesign/earthdoom/graph/badge.svg?token=4jZSGuo520)](https://codecov.io/gh/w3bdesign/earthdoom)
 ![Version](https://img.shields.io/badge/version-0.4.9-blue)
 ![React](https://img.shields.io/badge/React-18.3.1-success)
 ![Next.js](https://img.shields.io/badge/Next.js-15.2.3-success)
