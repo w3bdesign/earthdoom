@@ -12,10 +12,12 @@ jest.mock('../../components/ui/notifications/ToastComponent', () => ({
 import ToastComponent from '../../components/ui/notifications/ToastComponent';
 const mockToast = ToastComponent as jest.Mock;
 
-describe('ActionButton', () => {
-  const mockMutate = jest.fn();
+// --- Shared Fixtures & Helpers ---
 
-  const createBuilding = (overrides: Partial<Building> = {}): Building => ({
+const mockMutate = jest.fn();
+
+function createBuilding(overrides: Partial<Building> = {}): Building {
+  return {
     buildingId: 1,
     buildingName: 'Test Building',
     buildingDescription: 'A test building',
@@ -27,224 +29,195 @@ describe('ActionButton', () => {
     needsFieldName: 0,
     hasInputField: 'undefined',
     ...overrides,
-  });
-
-  const defaultPlayer = createMockPaPlayer({ crystal: 5000, metal: 3000 });
-  const defaultBuilding = createBuilding();
-
-  const defaultProps = {
-    isLoading: false,
-    paPlayer: [defaultPlayer],
-    building: defaultBuilding,
-    mutate: mockMutate,
-    actionText: 'Build',
   };
+}
 
+const defaultPlayer = createMockPaPlayer({ crystal: 5000, metal: 3000 });
+const defaultBuilding = createBuilding();
+
+const defaultProps = {
+  isLoading: false,
+  paPlayer: [defaultPlayer],
+  building: defaultBuilding,
+  mutate: mockMutate,
+  actionText: 'Build',
+};
+
+function renderInTable(ui: React.ReactElement) {
+  return render(
+    <table><tbody><tr>{ui}</tr></tbody></table>
+  );
+}
+
+// --- Tests ---
+
+describe('ActionButton', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders null when player is undefined', () => {
-    const { container } = render(
-      <table><tbody><tr>
+  describe('null rendering', () => {
+    it('renders null when player is undefined', () => {
+      const { container } = renderInTable(
         <ActionButton {...defaultProps} paPlayer={[]} />
-      </tr></tbody></table>
-    );
-    expect(container.querySelector('td')).toBeNull();
-  });
+      );
+      expect(container.querySelector('td')).toBeNull();
+    });
 
-  it('renders null when building is undefined', () => {
-    const { container } = render(
-      <table><tbody><tr>
+    it('renders null when building is undefined', () => {
+      const { container } = renderInTable(
         <ActionButton {...defaultProps} building={undefined} />
-      </tr></tbody></table>
-    );
-    expect(container.querySelector('td')).toBeNull();
+      );
+      expect(container.querySelector('td')).toBeNull();
+    });
   });
 
-  it('renders a Build button when player can afford it', () => {
-    render(
-      <table><tbody><tr>
-        <ActionButton {...defaultProps} />
-      </tr></tbody></table>
-    );
-    expect(screen.getByRole('button', { name: 'Build' })).toBeInTheDocument();
+  describe('button rendering', () => {
+    it('renders a Build button when player can afford it', () => {
+      renderInTable(<ActionButton {...defaultProps} />);
+      expect(screen.getByRole('button', { name: 'Build' })).toBeInTheDocument();
+    });
+
+    it('uses actionText prop for button label', () => {
+      renderInTable(<ActionButton {...defaultProps} actionText="Train" />);
+      expect(screen.getByRole('button', { name: 'Train' })).toBeInTheDocument();
+    });
+
+    it('shows button when needsFieldName is 0 (skip field name check)', () => {
+      const building = createBuilding({ needsFieldName: 0 });
+      renderInTable(<ActionButton {...defaultProps} building={building} />);
+      expect(screen.getByRole('button', { name: 'Build' })).toBeInTheDocument();
+    });
+
+    it('shows button when building field value is 0 and needsFieldName is set', () => {
+      const building = createBuilding({ needsFieldName: 1, buildingFieldName: 'c_crystal' });
+      const player = createMockPaPlayer({ crystal: 5000, metal: 3000, c_crystal: 0 });
+      renderInTable(
+        <ActionButton {...defaultProps} paPlayer={[player]} building={building} />
+      );
+      expect(screen.getByRole('button', { name: 'Build' })).toBeInTheDocument();
+    });
   });
 
-  it('disables button when isLoading is true', () => {
-    render(
-      <table><tbody><tr>
-        <ActionButton {...defaultProps} isLoading={true} />
-      </tr></tbody></table>
-    );
-    expect(screen.getByRole('button', { name: 'Build' })).toBeDisabled();
-  });
+  describe('disabled states', () => {
+    it('disables button when isLoading is true', () => {
+      renderInTable(<ActionButton {...defaultProps} isLoading={true} />);
+      expect(screen.getByRole('button', { name: 'Build' })).toBeDisabled();
+    });
 
-  it('disables button when disabled prop is true', () => {
-    render(
-      <table><tbody><tr>
-        <ActionButton {...defaultProps} disabled={true} />
-      </tr></tbody></table>
-    );
-    expect(screen.getByRole('button', { name: 'Build' })).toBeDisabled();
-  });
+    it('disables button when disabled prop is true', () => {
+      renderInTable(<ActionButton {...defaultProps} disabled={true} />);
+      expect(screen.getByRole('button', { name: 'Build' })).toBeDisabled();
+    });
 
-  it('disables button when player cannot afford the building', () => {
-    const poorPlayer = createMockPaPlayer({ crystal: 0, metal: 0 });
-    render(
-      <table><tbody><tr>
+    it('disables button when player cannot afford the building', () => {
+      const poorPlayer = createMockPaPlayer({ crystal: 0, metal: 0 });
+      renderInTable(
         <ActionButton {...defaultProps} paPlayer={[poorPlayer]} />
-      </tr></tbody></table>
-    );
-    expect(screen.getByRole('button', { name: 'Build' })).toBeDisabled();
-  });
-
-  it('calls mutate with correct parameters when clicked', () => {
-    const building = createBuilding({ hasInputField: 'undefined', needsFieldName: 0 });
-    render(
-      <table><tbody><tr>
-        <ActionButton {...defaultProps} building={building} />
-      </tr></tbody></table>
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'Build' }));
-    expect(mockMutate).toHaveBeenCalledWith({
-      buildingFieldName: 'c_crystal',
-      buildingETA: 3,
-      buildingCostCrystal: 100,
-      buildingCostTitanium: 50,
-      unitAmount: 0,
+      );
+      expect(screen.getByRole('button', { name: 'Build' })).toBeDisabled();
     });
   });
 
-  it('shows toast error when hasInputField and amount is 0', () => {
-    const building = createBuilding({ hasInputField: 1 });
-    const inputRef = React.createRef<HTMLInputElement>();
-    render(
-      <table><tbody><tr>
+  describe('click behavior', () => {
+    it('calls mutate with correct parameters when clicked', () => {
+      const building = createBuilding({ hasInputField: 'undefined', needsFieldName: 0 });
+      renderInTable(<ActionButton {...defaultProps} building={building} />);
+      fireEvent.click(screen.getByRole('button', { name: 'Build' }));
+      expect(mockMutate).toHaveBeenCalledWith({
+        buildingFieldName: 'c_crystal',
+        buildingETA: 3,
+        buildingCostCrystal: 100,
+        buildingCostTitanium: 50,
+        unitAmount: 0,
+      });
+    });
+
+    it('shows toast error when hasInputField and amount is 0', () => {
+      const building = createBuilding({ hasInputField: 1 });
+      const inputRef = React.createRef<HTMLInputElement>();
+      renderInTable(
         <ActionButton {...defaultProps} building={building} inputAmountRef={inputRef} />
-      </tr></tbody></table>
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'Build' }));
-    expect(mockToast).toHaveBeenCalledWith({
-      message: 'Quantity needs to be more than 0',
-      type: 'error',
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Build' }));
+      expect(mockToast).toHaveBeenCalledWith({
+        message: 'Quantity needs to be more than 0',
+        type: 'error',
+      });
+      expect(mockMutate).not.toHaveBeenCalled();
     });
-    expect(mockMutate).not.toHaveBeenCalled();
-  });
 
-  it('shows toast error when player cannot afford the amount requested', () => {
-    // Player can afford 1 unit (crystal: 500 >= 100, metal: 300 >= 50) so button is enabled,
-    // but cannot afford 10 units (1000 crystal needed, 500 titanium needed)
-    const limitedPlayer = createMockPaPlayer({ crystal: 500, metal: 300 });
-    const building = createBuilding({ hasInputField: 1, buildingCostCrystal: 100, buildingCostTitanium: 50 });
-    const inputRef = { current: { value: '10' } } as React.RefObject<HTMLInputElement>;
-    render(
-      <table><tbody><tr>
+    it('shows toast error when player cannot afford the amount requested', () => {
+      const limitedPlayer = createMockPaPlayer({ crystal: 500, metal: 300 });
+      const building = createBuilding({ hasInputField: 1, buildingCostCrystal: 100, buildingCostTitanium: 50 });
+      const inputRef = { current: { value: '10' } } as React.RefObject<HTMLInputElement>;
+      renderInTable(
         <ActionButton {...defaultProps} paPlayer={[limitedPlayer]} building={building} inputAmountRef={inputRef} />
-      </tr></tbody></table>
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'Build' }));
-    expect(mockToast).toHaveBeenCalledWith({
-      message: 'You can not afford this',
-      type: 'error',
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Build' }));
+      expect(mockToast).toHaveBeenCalledWith({
+        message: 'You can not afford this',
+        type: 'error',
+      });
+      expect(mockMutate).not.toHaveBeenCalled();
     });
-    expect(mockMutate).not.toHaveBeenCalled();
   });
 
-  it('shows status text when building is in progress', () => {
-    const building = createBuilding({ needsFieldName: 1, buildingFieldName: 'c_crystal' });
-    const player = createMockPaPlayer({ crystal: 5000, metal: 3000, c_crystal: 5 });
-    render(
-      <table><tbody><tr>
+  describe('building progress status', () => {
+    it('shows status text when building is in progress', () => {
+      const building = createBuilding({ needsFieldName: 1, buildingFieldName: 'c_crystal' });
+      const player = createMockPaPlayer({ crystal: 5000, metal: 3000, c_crystal: 5 });
+      renderInTable(
         <ActionButton {...defaultProps} paPlayer={[player]} building={building} />
-      </tr></tbody></table>
-    );
-    expect(screen.getByText('5 ticks left')).toBeInTheDocument();
-  });
+      );
+      expect(screen.getByText('5 ticks left')).toBeInTheDocument();
+    });
 
-  it('shows "Done" when building field value is 1', () => {
-    const building = createBuilding({ needsFieldName: 1, buildingFieldName: 'c_crystal' });
-    const player = createMockPaPlayer({ crystal: 5000, metal: 3000, c_crystal: 1 });
-    render(
-      <table><tbody><tr>
+    it('shows "Done" when building field value is 1', () => {
+      const building = createBuilding({ needsFieldName: 1, buildingFieldName: 'c_crystal' });
+      const player = createMockPaPlayer({ crystal: 5000, metal: 3000, c_crystal: 1 });
+      renderInTable(
         <ActionButton {...defaultProps} paPlayer={[player]} building={building} />
-      </tr></tbody></table>
-    );
-    expect(screen.getByText('Done')).toBeInTheDocument();
-  });
+      );
+      expect(screen.getByText('Done')).toBeInTheDocument();
+    });
 
-  it('shows button when needsFieldName is 0 (skip field name check)', () => {
-    const building = createBuilding({ needsFieldName: 0 });
-    render(
-      <table><tbody><tr>
-        <ActionButton {...defaultProps} building={building} />
-      </tr></tbody></table>
-    );
-    expect(screen.getByRole('button', { name: 'Build' })).toBeInTheDocument();
-  });
-
-  it('shows button when building field value is 0 and needsFieldName is set', () => {
-    const building = createBuilding({ needsFieldName: 1, buildingFieldName: 'c_crystal' });
-    const player = createMockPaPlayer({ crystal: 5000, metal: 3000, c_crystal: 0 });
-    render(
-      <table><tbody><tr>
+    it('hides button when building is already in progress and needsFieldName is set', () => {
+      const building = createBuilding({ needsFieldName: 1, buildingFieldName: 'c_crystal' });
+      const player = createMockPaPlayer({ crystal: 5000, metal: 3000, c_crystal: 3 });
+      renderInTable(
         <ActionButton {...defaultProps} paPlayer={[player]} building={building} />
-      </tr></tbody></table>
-    );
-    expect(screen.getByRole('button', { name: 'Build' })).toBeInTheDocument();
+      );
+      expect(screen.queryByRole('button', { name: 'Build' })).not.toBeInTheDocument();
+    });
   });
 
-  it('hides button when building is already in progress and needsFieldName is set', () => {
-    const building = createBuilding({ needsFieldName: 1, buildingFieldName: 'c_crystal' });
-    const player = createMockPaPlayer({ crystal: 5000, metal: 3000, c_crystal: 3 });
-    render(
-      <table><tbody><tr>
-        <ActionButton {...defaultProps} paPlayer={[player]} building={building} />
-      </tr></tbody></table>
-    );
-    expect(screen.queryByRole('button', { name: 'Build' })).not.toBeInTheDocument();
-  });
-
-  it('renders tooltip when player cannot afford building', () => {
-    const poorPlayer = createMockPaPlayer({ crystal: 10, metal: 5 });
-    const building = createBuilding({ buildingCostCrystal: 100, buildingCostTitanium: 50 });
-    const { container } = render(
-      <table><tbody><tr>
+  describe('tooltip behavior', () => {
+    it('renders tooltip when player cannot afford building', () => {
+      const poorPlayer = createMockPaPlayer({ crystal: 10, metal: 5 });
+      const building = createBuilding({ buildingCostCrystal: 100, buildingCostTitanium: 50 });
+      const { container } = renderInTable(
         <ActionButton {...defaultProps} paPlayer={[poorPlayer]} building={building} />
-      </tr></tbody></table>
-    );
-    const tooltipDiv = container.querySelector('[title]');
-    expect(tooltipDiv).toBeInTheDocument();
-    expect(tooltipDiv?.getAttribute('title')).toContain('Need');
-  });
+      );
+      const tooltipDiv = container.querySelector('[title]');
+      expect(tooltipDiv).toBeInTheDocument();
+      expect(tooltipDiv?.getAttribute('title')).toContain('Need');
+    });
 
-  it('renders tooltip with "Action in progress..." when isLoading', () => {
-    const { container } = render(
-      <table><tbody><tr>
+    it('renders tooltip with "Action in progress..." when isLoading', () => {
+      const { container } = renderInTable(
         <ActionButton {...defaultProps} isLoading={true} />
-      </tr></tbody></table>
-    );
-    const tooltipDiv = container.querySelector('[title]');
-    expect(tooltipDiv?.getAttribute('title')).toBe('Action in progress...');
-  });
+      );
+      const tooltipDiv = container.querySelector('[title]');
+      expect(tooltipDiv?.getAttribute('title')).toBe('Action in progress...');
+    });
 
-  it('renders no tooltip when player can afford building and not loading', () => {
-    const { container } = render(
-      <table><tbody><tr>
+    it('renders no tooltip when player can afford building and not loading', () => {
+      const { container } = renderInTable(
         <ActionButton {...defaultProps} />
-      </tr></tbody></table>
-    );
-    const tooltipDiv = container.querySelector('[title]');
-    // title should be undefined/empty when affordable
-    expect(tooltipDiv?.getAttribute('title')).toBeFalsy();
-  });
-
-  it('uses actionText prop for button label', () => {
-    render(
-      <table><tbody><tr>
-        <ActionButton {...defaultProps} actionText="Train" />
-      </tr></tbody></table>
-    );
-    expect(screen.getByRole('button', { name: 'Train' })).toBeInTheDocument();
+      );
+      const tooltipDiv = container.querySelector('[title]');
+      expect(tooltipDiv?.getAttribute('title')).toBeFalsy();
+    });
   });
 });
