@@ -41,12 +41,15 @@ const AddUser: NextPage = () => {
     );
 
   const createPlayer = useCallback(async () => {
-    if (user && user.id && user.username) {
-      if (!existingPlayer && !isLoading) {
-        mutate({ nick: user.username });
-      } else if (existingPlayer) {
-        await router.push("/");
-      }
+    if (!user?.id || !user.username) return;
+
+    if (existingPlayer) {
+      await router.push("/");
+      return;
+    }
+
+    if (!isLoading) {
+      mutate({ nick: user.username });
     }
   }, [user, existingPlayer, isLoading, mutate, router]);
 
