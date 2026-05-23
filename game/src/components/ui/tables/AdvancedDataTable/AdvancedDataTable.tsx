@@ -14,10 +14,12 @@ type MutationData = unknown;
 // Server-side Zod schemas enforce valid field names via z.enum() whitelists.
 // This type is intentionally permissive so the shared UI component can work
 // with different mutation signatures (research, construct, production, spying).
+type MutationVariables = Record<string, unknown>;
+
 export type TMutateType = UseMutateFunction<
   MutationData,
   unknown,
-  any,
+  MutationVariables,
   unknown
 >;
 
