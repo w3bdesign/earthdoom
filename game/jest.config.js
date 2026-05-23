@@ -25,6 +25,18 @@ const customJestConfig = {
   ],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node', 'mjs'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/__mocks__/**',
+    '!src/**/__tests__/**',
+    '!src/env.mjs',
+    '!src/pages/api/**',
+    '!src/pages/_app.tsx',
+    '!src/pages/_document.tsx',
+    '!src/server/**',
+    '!src/middleware.ts',
+  ],
   coverageThreshold: {
     './src/pages/construct.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
     './src/pages/energy.tsx': { branches: 90, functions: 90, lines: 90, statements: 90 },
