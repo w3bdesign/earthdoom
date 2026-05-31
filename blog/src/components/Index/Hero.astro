@@ -6,7 +6,7 @@ import CallToAction from "./CallToAction.astro";
   <div
     class="h-[25rem] md:h-[30rem] bg-cool-space-ship bg-cover bg-center flex items-center justify-center"
   >
-    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/65"></div>
     <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
       <div class="container">
         <h1 class="text-4xl md:text-6xl font-bold mb-6 typed-out">
@@ -88,6 +88,20 @@ import CallToAction from "./CallToAction.astro";
       opacity: 0;
       transform: translateY(-20px);
     }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-cta {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.7s ease-out forwards;
+    animation-delay: 3.2s;
+  }
+
+  @keyframes fadeInUp {
     to {
       opacity: 1;
       transform: translateY(0);

@@ -9,11 +9,13 @@ jest.mock('@clerk/nextjs', () => ({
 
 // Mock next/link
 jest.mock('next/link', () => {
-  return ({ children, href, target, ...props }: { children: React.ReactNode; href: string; target?: string; [key: string]: unknown }) => (
+  const MockLink = ({ children, href, target, ...props }: { children: React.ReactNode; href: string; target?: string; [key: string]: unknown }) => (
     <a href={href} target={target} {...props}>
       {children}
     </a>
   );
+  MockLink.displayName = 'MockLink';
+  return MockLink;
 });
 
 // Mock react-use useClickAway
@@ -169,9 +171,11 @@ describe('Navbar component', () => {
     expect(mainMenuButton).toHaveAttribute('aria-expanded', 'true');
 
     // Simulate click away by calling the callback wrapped in act
-    const clickAwayCallback = mockUseClickAway.mock.calls[0][1] as () => void;
+    const clickAwayCallback = mockUseClickAway.mock.calls[0]?.[1] as (() => void) | undefined;
     act(() => {
-      clickAwayCallback();
+      if (clickAwayCallback) {
+        clickAwayCallback();
+      }
     });
 
     // Menu should now be collapsed
