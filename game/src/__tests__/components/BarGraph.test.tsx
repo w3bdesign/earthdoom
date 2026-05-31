@@ -41,15 +41,18 @@ describe('BarChart', () => {
   it('passes data to the Bar component', () => {
     const { getByTestId } = render(<BarChart chartData={mockChartData} />);
     const chart = getByTestId('bar-chart');
-    const passedData = JSON.parse(chart.getAttribute('data-data') || '{}');
+    const passedData = JSON.parse(chart.getAttribute('data-data') || '{}') as ChartData;
     expect(passedData.labels).toEqual(['Titanium', 'Credits', 'Energy']);
-    expect(passedData.datasets[0].data).toEqual([600, 200, 225]);
+    expect(passedData.datasets[0]?.data).toEqual([600, 200, 225]);
   });
 
   it('passes options with title "Income"', () => {
     const { getByTestId } = render(<BarChart chartData={mockChartData} />);
     const chart = getByTestId('bar-chart');
-    const passedOptions = JSON.parse(chart.getAttribute('data-options') || '{}');
+    const passedOptions = JSON.parse(chart.getAttribute('data-options') || '{}') as {
+      plugins: { title: { text: string; display: boolean } };
+      responsive: boolean;
+    };
     expect(passedOptions.plugins.title.text).toBe('Income');
     expect(passedOptions.plugins.title.display).toBe(true);
   });
@@ -57,7 +60,9 @@ describe('BarChart', () => {
   it('sets responsive to true in options', () => {
     const { getByTestId } = render(<BarChart chartData={mockChartData} />);
     const chart = getByTestId('bar-chart');
-    const passedOptions = JSON.parse(chart.getAttribute('data-options') || '{}');
+    const passedOptions = JSON.parse(chart.getAttribute('data-options') || '{}') as {
+      responsive: boolean;
+    };
     expect(passedOptions.responsive).toBe(true);
   });
 
@@ -76,7 +81,7 @@ describe('BarChart', () => {
     };
     const { getByTestId } = render(<BarChart chartData={customData} />);
     const chart = getByTestId('bar-chart');
-    const passedData = JSON.parse(chart.getAttribute('data-data') || '{}');
+    const passedData = JSON.parse(chart.getAttribute('data-data') || '{}') as ChartData;
     expect(passedData.labels).toEqual(['A', 'B']);
   });
 });
