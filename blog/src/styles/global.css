@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source "../**/*.{astro,html,js,jsx,md,mdx,ts,tsx,vue}";
+
 @theme {
   --background-image-space-ship: url("/images/spaceship.jpg");
   --background-image-large-space-ship: url("/images/spaceship.png");
@@ -29,7 +31,6 @@ body {
   padding: 10px;
   max-width: 90vw;
   text-align: left;
-  background-color: #fff;
   word-wrap: break-word;
   overflow-wrap: break-word;
   line-height: 1.5;
