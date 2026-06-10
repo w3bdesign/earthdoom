@@ -21,7 +21,7 @@ This is not "a few package updates" - this is a **complete stack upgrade** with 
 
 ---
 
-## Top 2 Recommendations (Updated)
+## Top 2 Recommendations
 
 ---
 
@@ -42,6 +42,7 @@ Given the scale of breaking changes, **starting fresh with modern versions** tak
 ```
 Frontend: React 19 + React Router 7 + TanStack Query v5
 Backend: Hono + @hono/trpc-server (tRPC v11) + Prisma 7
+Database: Cloudflare D1 (SQLite) or Prisma Postgres
 Auth: Clerk v7 (client SDK)
 Validation: Zod v4
 Testing: Vitest + Testing Library
@@ -69,43 +70,145 @@ cd earthdoom-v2
 # Backend
 npm create hono@latest server -- --template cloudflare-workers
 cd server
-npm i @hono/trpc-server @trpc/server@11 zod@4 @prisma/client@7
+npm i @hono/trpc-server @trpc/server@11 zod@4
+npm i @prisma/client@7 @prisma/adapter-d1
 npm i -D prisma@7
 ```
 
-**Day 2-3: Copy and adapt tRPC routers**
-```bash
-# Copy Prisma
-cp -r ../game/prisma .
-npx prisma generate
+**Day 2: Set up Prisma with Cloudflare D1**
 
-# Copy routers
-cp -r ../game/src/server/api/routers ./src/
+You have two database options:
+
+**Option A: Cloudflare D1 (Serverless SQLite - FREE)**
+```bash
+# Create D1 database
+npx wrangler d1 create earthdoom-db
+
+# Initialize Prisma
+npx prisma init
 ```
 
+Add to `wrangler.toml`:
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "earthdoom-db"
+database_id = "<your-database-id-from-create-command>"
+```
+
+Update `prisma/schema.prisma`:
+```prisma
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Copy your existing models from ../game/prisma/schema.prisma
+model PaUsers {
+  id               Int          @id @default(autoincrement())
+  nick             String       @unique
+  crystal          Int          @default(0)
+  // ... rest of your schema
+}
+```
+
+**Option B: Prisma Postgres (Managed, Zero Cold Start)**
+```bash
+# Initialize with Prisma Postgres
+npx prisma@latest init --db
+
+# Install Accelerate extension
+npm i @prisma/extension-accelerate
+```
+
+Create `.dev.vars`:
+```
+DATABASE_URL="your_prisma_postgres_url"
+```
+
+**Day 3: Set up Prisma helper and migrate**
+
+Create `src/lib/prisma.ts`:
 ```ts
-// server/src/index.ts
+// For Cloudflare D1
+import { PrismaClient } from '@prisma/client/edge'
+import { PrismaD1 } from '@prisma/adapter-d1'
+
+export const getPrisma = (db: D1Database) => {
+  const adapter = new PrismaD1(db)
+  return new PrismaClient({ adapter })
+}
+
+// Or for Prisma Postgres
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
+
+export const getPrisma = (databaseUrl: string) => {
+  return new PrismaClient({
+    datasourceUrl: databaseUrl,
+  }).$extends(withAccelerate())
+}
+```
+
+Copy your existing schema and run migrations:
+```bash
+# Copy schema
+cp ../game/prisma/schema.prisma ./prisma/schema.prisma
+
+# For D1: Generate and apply migrations
+npx wrangler d1 migrations create earthdoom-db initial_schema
+# Copy SQL from prisma/migrations to the created file
+npx wrangler d1 migrations apply earthdoom-db --local
+
+# For Prisma Postgres
+npx prisma migrate dev
+```
+
+**Day 4: Set up Hono with tRPC**
+
+Create `src/index.ts`:
+```ts
 import { Hono } from 'hono'
 import { trpcServer } from '@hono/trpc-server'
 import { appRouter } from './api/root'
-import { createTRPCContext } from './api/trpc'
+import { getPrisma } from './lib/prisma'
 
-const app = new Hono()
+type Bindings = {
+  DB: D1Database // For D1
+  // DATABASE_URL: string // For Prisma Postgres
+}
+
+const app = new Hono<{ Bindings: Bindings }>()
 
 app.use('/api/trpc/*', trpcServer({
   router: appRouter,
-  createContext: createTRPCContext,
+  createContext: (opts, c) => {
+    // For D1
+    const prisma = getPrisma(c.env.DB)
+    
+    // For Prisma Postgres
+    // const prisma = getPrisma(c.env.DATABASE_URL)
+    
+    return { prisma }
+  },
 }))
 
 export default app
 ```
 
-**Day 4: Update Zod schemas for v4**
-```ts
-// Zod v4 breaking changes:
-// - .transform() now requires explicit typing
-// - Some coercion behavior changed
+Copy your tRPC routers:
+```bash
+cp -r ../game/src/server/api/routers ./src/api/
+cp ../game/src/server/api/root.ts ./src/api/
+cp ../game/src/server/api/trpc.ts ./src/api/
 ```
+
+Update imports in copied files to work with new structure.
 
 **Day 5: Deploy backend**
 ```bash
@@ -160,7 +263,9 @@ function App() {
           <Routes>
             <Route path="/" element={<IndexPage />} />
             <Route path="/alliance" element={<AlliancePage />} />
-            {/* Map from src/pages/* to routes */}
+            <Route path="/construct" element={<ConstructPage />} />
+            <Route path="/military" element={<MilitaryPage />} />
+            {/* Map all routes from src/pages/* */}
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
@@ -176,6 +281,24 @@ import { createTRPCReact } from '@trpc/react-query'
 import type { AppRouter } from '../../server/src/api/root'
 
 export const trpc = createTRPCReact<AppRouter>()
+
+// src/main.tsx - wrap with trpc provider
+import { trpc } from './utils/trpc'
+import { httpBatchLink } from '@trpc/client'
+
+const trpcClient = trpc.createClient({
+  links: [
+    httpBatchLink({
+      url: 'https://your-worker.workers.dev/api/trpc',
+    }),
+  ],
+})
+
+root.render(
+  <trpc.Provider client={trpcClient} queryClient={queryClient}>
+    <App />
+  </trpc.Provider>
+)
 ```
 
 #### Week 3: Testing & Polish (Days 11-15)
@@ -183,6 +306,20 @@ export const trpc = createTRPCReact<AppRouter>()
 **Day 11-12: Migrate tests to Vitest**
 ```bash
 npm i -D vitest @testing-library/react@16 @testing-library/jest-dom
+```
+
+Create `vitest.config.ts`:
+```ts
+import { defineConfig } from 'vitest/config'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+  },
+})
 ```
 
 Update test files:
@@ -195,6 +332,7 @@ import { describe, it, expect } from 'vitest'  // New
 - Test all game mechanics
 - Test authentication flows
 - Test API endpoints
+- Run full test suite: `npm test`
 
 **Day 15: Deploy**
 ```bash
@@ -202,7 +340,7 @@ import { describe, it, expect } from 'vitest'  // New
 npm run build
 vercel deploy
 
-# Already deployed backend on Day 5
+# Backend already deployed on Day 5
 ```
 
 ### Breaking Changes You Avoid
@@ -215,7 +353,7 @@ By starting fresh, you **skip debugging**:
 5. TypeScript 6 stricter types
 6. Clerk 7 auth API changes
 7. Prisma 7 query changes
-8. Jest → Vitest migration anyway
+8. Jest → Vitest migration
 
 ### Estimated Effort
 
@@ -297,7 +435,7 @@ npm run build  # Watch it fail
 ✅ **Pros:**
 - Keep Next.js familiarity
 - Keep file-based routing
-- Don't rewrite tests
+- Don't rewrite tests (but still need updates)
 
 ---
 
@@ -312,6 +450,29 @@ npm run build  # Watch it fail
 | **Long-term Maintenance** | Modern baseline | Continuous upgrades |
 | **Addresses Security** | ✅ Complete | ⚠️ Partial |
 | **Breaking Changes** | Avoid | Must fix 10+ |
+| **Database Options** | D1 (free) or Postgres | Same as current |
+
+---
+
+## ❓ What About Vue/Nuxt?
+
+**Short answer: Not recommended**
+
+### Why Vue/Nuxt Would Add Work
+
+- ❌ Rewrite ALL 73 React component tests
+- ❌ Rewrite ALL components (React → Vue SFC)
+- ❌ Learn new framework patterns
+- ❌ Additional 2-3 weeks on top of migration
+
+**Timeline: 4-6 weeks vs 2-3 weeks with React**
+
+### When Vue WOULD Make Sense
+- Starting from scratch
+- Team already knows Vue
+- Personal preference for Vue API
+
+**Recommendation: Stick with React** - preserve your investment in 73 tests and working components.
 
 ---
 
@@ -321,6 +482,7 @@ Given that you're facing a **complete stack rewrite anyway**, might as well:
 - ✅ Start with latest versions
 - ✅ Avoid Next.js entirely  
 - ✅ Get lighter, faster architecture
+- ✅ Use Cloudflare D1 (free serverless DB)
 - ✅ Spend time building features, not debugging upgrades
 
 **Option 2 (in-place upgrade) takes the same time but leaves you with technical debt.**
@@ -330,13 +492,40 @@ Given that you're facing a **complete stack rewrite anyway**, might as well:
 ## Next Steps
 
 ### Ready to migrate to Hono?
-1. Create repos: `earthdoom-server` and `earthdoom-client`
-2. Start with backend (critical game logic)
-3. Test API with Postman/Thunder Client
-4. Build frontend incrementally
 
-### Resources
+1. **Create new repos:**
+   ```bash
+   mkdir earthdoom-v2
+   cd earthdoom-v2
+   ```
+
+2. **Start with backend** (game logic is critical):
+   - Set up Hono + tRPC
+   - Configure Cloudflare D1 or Prisma Postgres
+   - Copy routers and test with Postman
+
+3. **Build frontend incrementally**:
+   - Set up Vite + React 19
+   - Copy components one route at a time
+   - Test as you go
+
+4. **Deploy early and often**:
+   - Backend to Cloudflare Workers
+   - Frontend to Vercel
+
+---
+
+## Resources
+
+### Migration Guides
 - [Hono Documentation](https://hono.dev)
 - [tRPC v11 Migration](https://trpc.io/docs/migrate-from-v10-to-v11)
 - [React 19 Upgrade Guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)
-- [Tailwind v4 Alpha Docs](https://tailwindcss.com/docs/v4-beta)
+- [Tailwind v4 Docs](https://tailwindcss.com/docs/v4-beta)
+- [Cloudflare D1 with Prisma](https://developers.cloudflare.com/d1/tutorials/d1-and-prisma-orm/)
+- [Prisma Postgres Guide](https://www.prisma.io/docs/orm/overview/databases/prisma-postgres)
+
+### Community
+- [Hono Discord](https://discord.gg/hono)
+- [tRPC Discord](https://trpc.io/discord)
+- [Cloudflare Developers Discord](https://discord.gg/cloudflaredev)
