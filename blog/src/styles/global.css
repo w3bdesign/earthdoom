@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  --background-image-space-ship: url("/images/spaceship.jpg");
+  --background-image-large-space-ship: url("/images/spaceship.png");
+  --background-image-cool-space-ship: url("/images/new-spaceship.jpg");
+}
+
+@layer utilities {
+  .bg-space-ship {
+    background-image: var(--background-image-space-ship);
+  }
+  .bg-large-space-ship {
+    background-image: var(--background-image-large-space-ship);
+  }
+  .bg-cool-space-ship {
+    background-image: var(--background-image-cool-space-ship);
+  }
+}
+
 /*
   The CSS in this style tag is based off of Bear Blog's default CSS.
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
@@ -8,7 +26,7 @@
 body {
   font-family: Verdana, sans-serif;
   margin: auto;
-  padding: 10px;  
+  padding: 10px;
   max-width: 90vw;
   text-align: left;
   background-color: #fff;
@@ -67,4 +85,3 @@ blockquote {
   margin: 0px;
   font-style: italic;
 }
-
