@@ -4,8 +4,7 @@ import type { PaUsers, PaConstruct } from "@prisma/client";
  * A flattened player object returned by `getPlayerByNick`.
  * Merges PaUsers fields with PaConstruct fields (excluding PaConstruct's own `id` and relation array).
  */
-export type PaUserWithConstruct = PaUsers &
-  Omit<PaConstruct, "id" | "PaUsers">;
+export type PaUserWithConstruct = PaUsers & Omit<PaConstruct, "id" | "PaUsers">;
 
 /**
  * Extended player type that allows dynamic string-key access.

@@ -1,5 +1,8 @@
 import type { NextPage } from "next";
-import type { AdvancedTableColumn, TMutateType } from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
+import type {
+  AdvancedTableColumn,
+  TMutateType,
+} from "@/components/ui/tables/AdvancedDataTable/AdvancedDataTable";
 
 import { api } from "@/utils/api";
 import { usePlayerData } from "@/utils/usePlayerData";

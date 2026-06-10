@@ -1,13 +1,15 @@
-import type { PaUsers, PaConstruct } from '@prisma/client';
-import type { PaPlayer } from '@/types/player';
+import type { PaUsers, PaConstruct } from "@prisma/client";
+import type { PaPlayer } from "@/types/player";
 
 /**
  * Creates a complete mock PaUsers object with sensible defaults.
  * Use overrides to customize specific fields for your test case.
  */
-export const createMockPaUser = (overrides: Partial<PaUsers> = {}): PaUsers => ({
+export const createMockPaUser = (
+  overrides: Partial<PaUsers> = {},
+): PaUsers => ({
   id: 1,
-  nick: 'TestPlayer',
+  nick: "TestPlayer",
   crystal: 5000,
   metal: 3000,
   energy: 1000,
@@ -62,7 +64,7 @@ export const createMockPaUser = (overrides: Partial<PaUsers> = {}): PaUsers => (
   size: 10,
   p_astropods: 0,
   p_astropods_eta: 0,
-  tag: '',
+  tag: "",
   rank: 1,
   rcannons: 0,
   p_rcannons: 0,
@@ -80,10 +82,10 @@ export const createMockPaUser = (overrides: Partial<PaUsers> = {}): PaUsers => (
   x: 1,
   y: 1,
   commander: 0,
-  galname: 'No name',
-  galpic: '125x125earthdoom1.gif',
+  galname: "No name",
+  galpic: "125x125earthdoom1.gif",
   motd: 0,
-  vote: '',
+  vote: "",
   civilians: 1000,
   tax: 20,
   credits: 5000,
@@ -96,7 +98,9 @@ export const createMockPaUser = (overrides: Partial<PaUsers> = {}): PaUsers => (
  * Creates a complete mock PaConstruct object with all fields zeroed.
  * Use overrides to customize specific fields for your test case.
  */
-export const createMockConstruct = (overrides: Partial<PaConstruct> = {}): PaConstruct => ({
+export const createMockConstruct = (
+  overrides: Partial<PaConstruct> = {},
+): PaConstruct => ({
   id: 1,
   c_crystal: 0,
   c_metal: 0,
@@ -129,7 +133,9 @@ export const createMockPlayerWithConstruction = (
  * Creates a complete mock PaPlayer object (PaUsers + PaConstruct fields).
  * Use for components that require the full PaPlayer/PaUserWithConstruct type.
  */
-export const createMockPaPlayer = (overrides: Partial<PaPlayer> = {}): PaPlayer => ({
+export const createMockPaPlayer = (
+  overrides: Partial<PaPlayer> = {},
+): PaPlayer => ({
   ...createMockPaUser(),
   c_crystal: 0,
   c_metal: 0,

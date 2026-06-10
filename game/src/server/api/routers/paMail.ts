@@ -53,11 +53,13 @@ export const paMailRouter = createTRPCRouter({
     }),
 
   sendMail: privateProcedure
-    .input(z.object({
-      nick: z.string(),
-      news: z.string(),
-      header: z.string(),
-    }))
+    .input(
+      z.object({
+        nick: z.string(),
+        news: z.string(),
+        header: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.paUsers.findUnique({
         where: { nick: input.nick },

@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen, act } from '@testing-library/react';
-import Construction from '../../pages/construct';
+import React from "react";
+import { render, screen, act } from "@testing-library/react";
+import Construction from "../../pages/construct";
 
 const mockUsePlayerData = jest.fn();
-jest.mock('../../utils/usePlayerData', () => ({
+jest.mock("../../utils/usePlayerData", () => ({
   usePlayerData: () => mockUsePlayerData(),
 }));
 
@@ -13,14 +13,19 @@ const mockMutate = jest.fn();
 const mockInvalidate = jest.fn().mockResolvedValue(undefined);
 const mockRefetch = jest.fn().mockResolvedValue(undefined);
 
-jest.mock('../../utils/api', () => ({
+jest.mock("../../utils/api", () => ({
   api: {
     useContext: () => ({
-      paUsers: { getPlayerByNick: { invalidate: mockInvalidate, refetch: mockRefetch } },
+      paUsers: {
+        getPlayerByNick: { invalidate: mockInvalidate, refetch: mockRefetch },
+      },
     }),
     paConstruct: {
       constructBuilding: {
-        useMutation: (opts: { onSuccess?: () => Promise<void>; onError?: () => void }) => {
+        useMutation: (opts: {
+          onSuccess?: () => Promise<void>;
+          onError?: () => void;
+        }) => {
           capturedOnSuccess = opts.onSuccess;
           capturedOnError = opts.onError;
           return { mutate: mockMutate, isLoading: false };
@@ -30,58 +35,100 @@ jest.mock('../../utils/api', () => ({
   },
 }));
 
-jest.mock('../../components/common/PageShell', () => ({
+jest.mock("../../components/common/PageShell", () => ({
   __esModule: true,
-  default: ({ isAuthenticated, paPlayer, children }: { isAuthenticated: boolean; paPlayer: unknown; children: React.ReactNode }) => {
+  default: ({
+    isAuthenticated,
+    paPlayer,
+    children,
+  }: {
+    isAuthenticated: boolean;
+    paPlayer: unknown;
+    children: React.ReactNode;
+  }) => {
     if (!isAuthenticated) return <div data-testid="not-authenticated" />;
     if (!paPlayer) return <div data-testid="loading" />;
     return <div data-testid="page-shell">{children}</div>;
   },
 }));
 
-jest.mock('../../components/ui', () => ({
+jest.mock("../../components/ui", () => ({
   Button: () => <button>Button</button>,
-  AdvancedDataTable: ({ caption }: { caption: string }) => <div data-testid="data-table">{caption}</div>,
+  AdvancedDataTable: ({ caption }: { caption: string }) => (
+    <div data-testid="data-table">{caption}</div>
+  ),
   ToastComponent: jest.fn(),
 }));
 
-jest.mock('../../components/features/Construct/constants/BUILDINGS', () => ({
+jest.mock("../../components/features/Construct/constants/BUILDINGS", () => ({
   BUILDINGS: [],
 }));
 
 const createPlayer = (overrides = {}) => ({
-  id: 1, nick: 'Test', crystal: 5000, metal: 3000, energy: 1000,
-  r_energy: 0, ui_roids: 3, score: 100, size: 10, rank: 1, tag: '',
-  c_airport: 0, c_crystal: 0, c_metal: 0, c_abase: 0, c_wstation: 0,
-  c_amp1: 0, c_amp2: 0, c_warfactory: 0, c_destfact: 0, c_scorpfact: 0,
-  c_energy: 0, c_odg: 0, r_imcrystal: 0, r_immetal: 0,
+  id: 1,
+  nick: "Test",
+  crystal: 5000,
+  metal: 3000,
+  energy: 1000,
+  r_energy: 0,
+  ui_roids: 3,
+  score: 100,
+  size: 10,
+  rank: 1,
+  tag: "",
+  c_airport: 0,
+  c_crystal: 0,
+  c_metal: 0,
+  c_abase: 0,
+  c_wstation: 0,
+  c_amp1: 0,
+  c_amp2: 0,
+  c_warfactory: 0,
+  c_destfact: 0,
+  c_scorpfact: 0,
+  c_energy: 0,
+  c_odg: 0,
+  r_imcrystal: 0,
+  r_immetal: 0,
   ...overrides,
 });
 
-describe('Construction page', () => {
+describe("Construction page", () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('renders not-authenticated when user is not logged in', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: null, isAuthenticated: false });
+  it("renders not-authenticated when user is not logged in", () => {
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: null,
+      isAuthenticated: false,
+    });
     render(<Construction />);
-    expect(screen.getByTestId('not-authenticated')).toBeInTheDocument();
+    expect(screen.getByTestId("not-authenticated")).toBeInTheDocument();
   });
 
-  it('renders loading when player data is null', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: null, isAuthenticated: true });
+  it("renders loading when player data is null", () => {
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: null,
+      isAuthenticated: true,
+    });
     render(<Construction />);
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
+    expect(screen.getByTestId("loading")).toBeInTheDocument();
   });
 
-  it('renders AdvancedDataTable when player data is loaded', () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true });
+  it("renders AdvancedDataTable when player data is loaded", () => {
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer(),
+      isAuthenticated: true,
+    });
     render(<Construction />);
-    expect(screen.getByTestId('data-table')).toBeInTheDocument();
-    expect(screen.getByTestId('data-table')).toHaveTextContent('Construction');
+    expect(screen.getByTestId("data-table")).toBeInTheDocument();
+    expect(screen.getByTestId("data-table")).toHaveTextContent("Construction");
   });
 
-  it('calls invalidate and refetch on mutation success', async () => {
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true });
+  it("calls invalidate and refetch on mutation success", async () => {
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer(),
+      isAuthenticated: true,
+    });
     render(<Construction />);
 
     await act(async () => {
@@ -92,25 +139,37 @@ describe('Construction page', () => {
     expect(mockRefetch).toHaveBeenCalled();
   });
 
-  it('calls ToastComponent with error on mutation error', () => {
-    const { ToastComponent } = jest.requireMock('../../components/ui');
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true });
+  it("calls ToastComponent with error on mutation error", () => {
+    const { ToastComponent } = jest.requireMock("../../components/ui");
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer(),
+      isAuthenticated: true,
+    });
     render(<Construction />);
 
     capturedOnError?.();
 
-    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Database error', type: 'error' });
+    expect(ToastComponent).toHaveBeenCalledWith({
+      message: "Database error",
+      type: "error",
+    });
   });
 
-  it('calls ToastComponent with success on mutation success', async () => {
-    const { ToastComponent } = jest.requireMock('../../components/ui');
-    mockUsePlayerData.mockReturnValue({ paPlayer: createPlayer(), isAuthenticated: true });
+  it("calls ToastComponent with success on mutation success", async () => {
+    const { ToastComponent } = jest.requireMock("../../components/ui");
+    mockUsePlayerData.mockReturnValue({
+      paPlayer: createPlayer(),
+      isAuthenticated: true,
+    });
     render(<Construction />);
 
     await act(async () => {
       await capturedOnSuccess?.();
     });
 
-    expect(ToastComponent).toHaveBeenCalledWith({ message: 'Building started', type: 'success' });
+    expect(ToastComponent).toHaveBeenCalledWith({
+      message: "Building started",
+      type: "success",
+    });
   });
 });

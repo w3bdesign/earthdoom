@@ -20,19 +20,18 @@ const constructFields = [
 ] as const;
 
 /** Allowed dynamic field names for land development on PaUsers */
-const developLandFields = [
-  "asteroid_crystal",
-  "asteroid_metal",
-] as const;
+const developLandFields = ["asteroid_crystal", "asteroid_metal"] as const;
 
 export const paConstructRouter = createTRPCRouter({
   constructBuilding: privateProcedure
-    .input(z.object({
-      buildingCostCrystal: z.number(),
-      buildingCostTitanium: z.number(),
-      buildingFieldName: z.enum(constructFields),
-      buildingETA: z.number(),
-    }))
+    .input(
+      z.object({
+        buildingCostCrystal: z.number(),
+        buildingCostTitanium: z.number(),
+        buildingFieldName: z.enum(constructFields),
+        buildingETA: z.number(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const {
         buildingFieldName,
@@ -115,17 +114,18 @@ export const paConstructRouter = createTRPCRouter({
     }),*/
 
   developLand: privateProcedure
-    .input(z.object({
-      buildingFieldName: z.enum(developLandFields),
-      buildingCostCrystal: z.number(),
-      buildingCostTitanium: z.number(),
-      buildingETA: z.number(),
-      unitAmount: z.number().optional(),
-    }))
+    .input(
+      z.object({
+        buildingFieldName: z.enum(developLandFields),
+        buildingCostCrystal: z.number(),
+        buildingCostTitanium: z.number(),
+        buildingETA: z.number(),
+        unitAmount: z.number().optional(),
+      }),
+    )
 
     .mutation(async ({ ctx, input }) => {
-      const { buildingFieldName, buildingCostCrystal, unitAmount } =
-        input;
+      const { buildingFieldName, buildingCostCrystal, unitAmount } = input;
 
       const unitAmountDefault = unitAmount || 0;
 
@@ -141,7 +141,10 @@ export const paConstructRouter = createTRPCRouter({
 
       // Check if user has enough ui_roids
       if (currentUser.ui_roids < unitAmountDefault) {
-        throw new TRPCError({ code: "BAD_REQUEST", message: "Not enough land" });
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Not enough land",
+        });
       }
 
       return await ctx.prisma.paUsers.update({

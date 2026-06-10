@@ -200,25 +200,21 @@ const AllianceInput: FC<{
       <input
         type="text"
         className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-        id={`alliance-${label.toLowerCase().replace(' ', '-')}`}
+        id={`alliance-${label.toLowerCase().replace(" ", "-")}`}
         aria-describedby="emailHelp"
         pattern="[A-Za-z]+"
         title="Please enter letters only"
         ref={inputRef}
       />
       <label
-        htmlFor={`alliance-${label.toLowerCase().replace(' ', '-')}`}
+        htmlFor={`alliance-${label.toLowerCase().replace(" ", "-")}`}
         className="mb-2 block py-2 text-sm font-bold text-gray-500"
       >
         {label}
       </label>
     </div>
     <div className="flex items-center justify-center">
-      <Button
-        extraClasses="mb-4"
-        disabled={disabled}
-        onClick={onClick}
-      >
+      <Button extraClasses="mb-4" disabled={disabled} onClick={onClick}>
         {buttonText}
       </Button>
     </div>

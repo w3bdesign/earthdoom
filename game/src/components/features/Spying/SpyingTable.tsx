@@ -139,14 +139,21 @@ const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
         <span className="w-[12.5rem]">{resource.buildingDescription}</span>
       </td>
       <td data-th="Production" className={CELL_CLASS}>
-        {isLoading
-          ? "Starting ..."
-          : <SpyingAmountInput inputRef={spyingAmountRef} defaultValue={maximumToSearch} />}
+        {isLoading ? (
+          "Starting ..."
+        ) : (
+          <SpyingAmountInput
+            inputRef={spyingAmountRef}
+            defaultValue={maximumToSearch}
+          />
+        )}
       </td>
       <td data-th="Build" className={CELL_CLASS}>
-        {isLoading
-          ? "Starting ..."
-          : <Button onClick={handleSpyClick}>Spy</Button>}
+        {isLoading ? (
+          "Starting ..."
+        ) : (
+          <Button onClick={handleSpyClick}>Spy</Button>
+        )}
       </td>
     </tr>
   );
@@ -159,25 +166,25 @@ const SpyingTable: FC<SpyingProps> = ({ paPlayer }) => {
         <tr>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Name
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Description
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Amount
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Spy
           </th>

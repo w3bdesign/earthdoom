@@ -43,12 +43,14 @@ const Spying: NextPage = () => {
   });
 
   return (
-    <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer} showSpinnerOnUnauthenticated>
+    <PageShell
+      isAuthenticated={isAuthenticated}
+      paPlayer={paPlayer}
+      showSpinnerOnUnauthenticated
+    >
       <div className="container mb-6 flex flex-col items-center justify-center">
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
-          {!isLoaded && (
-            <div data-testid="loading-spinner" />
-          )}
+          {!isLoaded && <div data-testid="loading-spinner" />}
           {paPlayer && (
             <AdvancedDataTable
               isLoading={isLoading}

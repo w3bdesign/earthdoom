@@ -32,12 +32,18 @@ function buildTooltip(
   if (canAffordOne) return undefined;
 
   const parts: string[] = [];
-  if (building.buildingCostCrystal > 0 && player.crystal < building.buildingCostCrystal) {
+  if (
+    building.buildingCostCrystal > 0 &&
+    player.crystal < building.buildingCostCrystal
+  ) {
     parts.push(
       `Need ${building.buildingCostCrystal} credits (have ${player.crystal})`,
     );
   }
-  if (building.buildingCostTitanium > 0 && player.metal < building.buildingCostTitanium) {
+  if (
+    building.buildingCostTitanium > 0 &&
+    player.metal < building.buildingCostTitanium
+  ) {
     parts.push(
       `Need ${building.buildingCostTitanium} titanium (have ${player.metal})`,
     );
@@ -47,7 +53,9 @@ function buildTooltip(
 
 /** Determine if the building's field name check should be skipped */
 function shouldSkipFieldNameCheck(building: Building): boolean {
-  return building.needsFieldName === 0 || building.needsFieldName === "undefined";
+  return (
+    building.needsFieldName === 0 || building.needsFieldName === "undefined"
+  );
 }
 
 /** Get the numeric value from the input ref, defaulting to 0 */
@@ -56,7 +64,10 @@ function getInputAmount(inputAmountRef?: RefObject<HTMLInputElement>): number {
 }
 
 /** Determine the status text for in-progress or completed buildings */
-function getStatusText(player: PaPlayerBase, building: Building): string | null {
+function getStatusText(
+  player: PaPlayerBase,
+  building: Building,
+): string | null {
   const fieldValue = Number(player[building.buildingFieldName]);
   if (fieldValue >= 2) return `${fieldValue} ticks left`;
   if (fieldValue === 1) return "Done";
@@ -81,11 +92,22 @@ function handleActionClick(
   const amount = getInputAmount(inputAmountRef);
 
   if (hasInputField && amount === 0) {
-    ToastComponent({ message: "Quantity needs to be more than 0", type: "error" });
+    ToastComponent({
+      message: "Quantity needs to be more than 0",
+      type: "error",
+    });
     return;
   }
 
-  if (!canAffordToTrain(paPlayer, building.buildingCostCrystal, building.buildingCostTitanium, amount, considerLand)) {
+  if (
+    !canAffordToTrain(
+      paPlayer,
+      building.buildingCostCrystal,
+      building.buildingCostTitanium,
+      amount,
+      considerLand,
+    )
+  ) {
     ToastComponent({ message: "You can not afford this", type: "error" });
     return;
   }
@@ -127,8 +149,11 @@ const ActionButton: FC<IActionButtonProps> = ({
   const isDisabled = isLoading || disabled || !canAffordOne;
   const tooltip = buildTooltip(isLoading, canAffordOne, player, building);
 
-  const showButton = skipFieldNameCheck || player[building.buildingFieldName] === 0;
-  const statusText = !skipFieldNameCheck ? getStatusText(player, building) : null;
+  const showButton =
+    skipFieldNameCheck || player[building.buildingFieldName] === 0;
+  const statusText = !skipFieldNameCheck
+    ? getStatusText(player, building)
+    : null;
 
   return (
     <>
@@ -138,7 +163,13 @@ const ActionButton: FC<IActionButtonProps> = ({
             <Button
               disabled={isDisabled}
               onClick={() =>
-                handleActionClick(paPlayer, building, inputAmountRef, considerLand, mutate)
+                handleActionClick(
+                  paPlayer,
+                  building,
+                  inputAmountRef,
+                  considerLand,
+                  mutate,
+                )
               }
             >
               {actionText}

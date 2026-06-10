@@ -25,7 +25,7 @@ const Navbar = () => {
       className="flex min-h-[6.875rem] justify-center bg-gray-800 p-6"
     >
       <SignedIn>
-        <nav className="relative flex w-full items-center justify-between bg-gray-800 py-2 text-white  lg:flex-wrap lg:justify-center dark:bg-neutral-700 dark:text-neutral-300">
+        <nav className="relative flex w-full items-center justify-between bg-gray-800 py-2 text-white lg:flex-wrap lg:justify-center dark:bg-neutral-700 dark:text-neutral-300">
           <div className="px-6">
             <button
               className="border-0 text-xl leading-none transition-shadow duration-150 ease-in-out lg:hidden dark:hover:text-white dark:focus:text-white"
@@ -58,7 +58,7 @@ const Navbar = () => {
               <ul className="mr-auto flex flex-row">
                 <li className="static">
                   <button
-                    className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold  transition duration-150 ease-in-out hover:text-slate-300  lg:px-2 dark:hover:text-white dark:focus:text-white"
+                    className="flex items-center whitespace-nowrap py-2 pr-2 text-lg font-bold transition duration-150 ease-in-out hover:text-slate-300 lg:px-2 dark:hover:text-white dark:focus:text-white"
                     type="button"
                     id="dropdownMenuButtonX"
                     aria-expanded={expanded}

@@ -40,19 +40,23 @@ const Resources: NextPage = () => {
   });
 
   return (
-    <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer} showSpinnerOnUnauthenticated>
+    <PageShell
+      isAuthenticated={isAuthenticated}
+      paPlayer={paPlayer}
+      showSpinnerOnUnauthenticated
+    >
       <div className="container mb-6 flex flex-col items-center justify-center">
         <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
           {!isLoaded && <LoadingSpinner />}
-          {paPlayer && (
-            <IncomeSection paPlayer={paPlayer} />
-          )}
+          {paPlayer && <IncomeSection paPlayer={paPlayer} />}
           {paPlayer && paPlayer.ui_roids === 0 && (
             <UndevelopedLandMessage message="You have no land to develop" />
           )}
           {paPlayer && paPlayer.ui_roids > 0 && (
             <>
-              <UndevelopedLandMessage message={`Undeveloped land: ${paPlayer.ui_roids}`} />
+              <UndevelopedLandMessage
+                message={`Undeveloped land: ${paPlayer.ui_roids}`}
+              />
               <AdvancedDataTable
                 isLoading={isLoading}
                 columns={columns}
@@ -73,7 +77,11 @@ const Resources: NextPage = () => {
 };
 
 /** Displays income bar graph or "no land" message */
-const IncomeSection = ({ paPlayer }: { paPlayer: Parameters<typeof renderIncomeData>[0] }) => {
+const IncomeSection = ({
+  paPlayer,
+}: {
+  paPlayer: Parameters<typeof renderIncomeData>[0];
+}) => {
   const hasNoLand =
     paPlayer.ui_roids === 0 &&
     paPlayer.asteroid_crystal === 0 &&
@@ -82,7 +90,9 @@ const IncomeSection = ({ paPlayer }: { paPlayer: Parameters<typeof renderIncomeD
   return (
     <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[47.125rem]">
       {hasNoLand ? (
-        <h2 className="p-4 text-center text-2xl font-bold">No land, no income.</h2>
+        <h2 className="p-4 text-center text-2xl font-bold">
+          No land, no income.
+        </h2>
       ) : (
         <BarGraph chartData={renderIncomeData(paPlayer)} />
       )}

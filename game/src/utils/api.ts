@@ -54,7 +54,7 @@ export const api = createTRPCNext<AppRouter>({
             refetchInterval: 1000 * 60, // Refetch every 60 seconds
             refetchIntervalInBackground: true, // Keep fetching even when tab is in background
             staleTime: 1000 * 30, // Consider data fresh for 30 seconds
-            cacheTime: 1000 * 60 * 2, // Keep cached data for 2 minutes
+            gcTime: 1000 * 60 * 2, // Keep cached data for 2 minutes (formerly cacheTime)
           },
         },
       },
