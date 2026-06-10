@@ -41,7 +41,14 @@ const ContinentNavigation: FC<{
   </div>
 );
 
-const TABLE_HEADERS = ["Location", "Tag", "Nick", "Score", "Spying", "Mail"] as const;
+const TABLE_HEADERS = [
+  "Location",
+  "Tag",
+  "Nick",
+  "Score",
+  "Spying",
+  "Mail",
+] as const;
 
 /** Table header row */
 const CountryTableHeader: FC = () => (

@@ -31,7 +31,7 @@ const NewMail: FC<INewMailProps> = ({ paPlayer, recipient }) => {
   const [mailHeader, setMailHeader] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { mutate: sendMail, isLoading } = api.paMail.sendMail.useMutation({
+  const { mutate: sendMail, isPending: isLoading } = api.paMail.sendMail.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Mail sent!", type: "success" });
       await ctx.paMail.getAllMailByNick.invalidate();

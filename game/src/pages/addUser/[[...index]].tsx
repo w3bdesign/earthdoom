@@ -34,8 +34,9 @@ const useCreatePlayerMutation = () => {
   });
 };
 
-const isUserReady = (user: { id?: string; username?: string | null } | null | undefined): user is { id: string; username: string } =>
-  !!(user?.id && user?.username);
+const isUserReady = (
+  user: { id?: string; username?: string | null } | null | undefined,
+): user is { id: string; username: string } => !!(user?.id && user?.username);
 
 const getStatusMessage = (isLoading: boolean): string =>
   isLoading ? "Checking existing player..." : "Creating player...";

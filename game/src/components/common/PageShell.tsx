@@ -40,11 +40,7 @@ const PageShell: FC<PageShellProps> = ({
     );
   }
 
-  return (
-    <Layout paPlayer={paPlayer}>
-      {children}
-    </Layout>
-  );
+  return <Layout paPlayer={paPlayer}>{children}</Layout>;
 };
 
 export default PageShell;

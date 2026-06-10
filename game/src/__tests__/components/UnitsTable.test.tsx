@@ -1,10 +1,10 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import UnitsTable from '../../components/ui/tables/UnitsTable';
-import { createMockPaPlayer } from '../../test-utils/players';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import UnitsTable from "../../components/ui/tables/UnitsTable";
+import { createMockPaPlayer } from "../../test-utils/players";
 
-describe('UnitsTable', () => {
-  it('renders the caption with total ship count', () => {
+describe("UnitsTable", () => {
+  it("renders the caption with total ship count", () => {
     const player = createMockPaPlayer({
       astropods: 10,
       infinitys: 5,
@@ -14,10 +14,10 @@ describe('UnitsTable', () => {
       scorpions: 4,
     });
     render(<UnitsTable paPlayer={player} />);
-    expect(screen.getByText('Units (25 total)')).toBeInTheDocument();
+    expect(screen.getByText("Units (25 total)")).toBeInTheDocument();
   });
 
-  it('renders caption with 0 total when no ships', () => {
+  it("renders caption with 0 total when no ships", () => {
     const player = createMockPaPlayer({
       astropods: 0,
       infinitys: 0,
@@ -27,21 +27,21 @@ describe('UnitsTable', () => {
       scorpions: 0,
     });
     render(<UnitsTable paPlayer={player} />);
-    expect(screen.getByText('Units (0 total)')).toBeInTheDocument();
+    expect(screen.getByText("Units (0 total)")).toBeInTheDocument();
   });
 
-  it('renders all unit column headers', () => {
+  it("renders all unit column headers", () => {
     const player = createMockPaPlayer();
     render(<UnitsTable paPlayer={player} />);
-    expect(screen.getByText('Astropods')).toBeInTheDocument();
-    expect(screen.getByText('Infinitys')).toBeInTheDocument();
-    expect(screen.getByText('Wraiths')).toBeInTheDocument();
-    expect(screen.getByText('Warfrigs')).toBeInTheDocument();
-    expect(screen.getByText('Destroyers')).toBeInTheDocument();
-    expect(screen.getByText('Scorpions')).toBeInTheDocument();
+    expect(screen.getByText("Astropods")).toBeInTheDocument();
+    expect(screen.getByText("Infinitys")).toBeInTheDocument();
+    expect(screen.getByText("Wraiths")).toBeInTheDocument();
+    expect(screen.getByText("Warfrigs")).toBeInTheDocument();
+    expect(screen.getByText("Destroyers")).toBeInTheDocument();
+    expect(screen.getByText("Scorpions")).toBeInTheDocument();
   });
 
-  it('renders unit count values', () => {
+  it("renders unit count values", () => {
     const player = createMockPaPlayer({
       astropods: 15,
       infinitys: 8,
@@ -51,17 +51,17 @@ describe('UnitsTable', () => {
       scorpions: 9,
     });
     render(<UnitsTable paPlayer={player} />);
-    expect(screen.getByText('15')).toBeInTheDocument();
-    expect(screen.getByText('8')).toBeInTheDocument();
-    expect(screen.getByText('6')).toBeInTheDocument();
-    expect(screen.getByText('4')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.getByText('9')).toBeInTheDocument();
+    expect(screen.getByText("15")).toBeInTheDocument();
+    expect(screen.getByText("8")).toBeInTheDocument();
+    expect(screen.getByText("6")).toBeInTheDocument();
+    expect(screen.getByText("4")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("9")).toBeInTheDocument();
   });
 
-  it('renders a table element', () => {
+  it("renders a table element", () => {
     const player = createMockPaPlayer();
     const { container } = render(<UnitsTable paPlayer={player} />);
-    expect(container.querySelector('table')).toBeInTheDocument();
+    expect(container.querySelector("table")).toBeInTheDocument();
   });
 });

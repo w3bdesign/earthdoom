@@ -38,10 +38,12 @@ const usePlayerQuery = (username: string | null | undefined) =>
 const Login: NextPage = () => {
   const router = useRouter();
   const { user, isLoaded: isUserLoaded } = useUser();
-  const { data: paPlayer, isLoading: isPlayerLoading } = usePlayerQuery(user?.username);
+  const { data: paPlayer, isLoading: isPlayerLoading } = usePlayerQuery(
+    user?.username,
+  );
 
   const isReady = isUserLoaded && !isPlayerLoading;
-  const hasExistingPlayer = !!(paPlayer?.id);
+  const hasExistingPlayer = !!paPlayer?.id;
 
   useEffect(() => {
     if (!isReady || !user) return;

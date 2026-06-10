@@ -30,18 +30,20 @@ const RankingPage: NextPage = () => {
       label: "Actions",
       accessor: (row: PaPlayerBase | Building) => {
         if (!paPlayer) return <></>;
-        if ('nick' in row && typeof row.nick === 'string') {
+        if ("nick" in row && typeof row.nick === "string") {
           const playerRow = row as PaPlayerBase;
           return (
             <RankingActions
               playerNick={playerRow.nick}
-              newbie={typeof playerRow.newbie === 'number' ? playerRow.newbie : 0}
+              newbie={
+                typeof playerRow.newbie === "number" ? playerRow.newbie : 0
+              }
               currentPlayer={paPlayer}
             />
           );
         }
         return <></>;
-      }
+      },
     },
   ];
 

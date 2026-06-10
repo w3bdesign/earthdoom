@@ -1,11 +1,11 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import AdvancedDataTable from '../../components/ui/tables/AdvancedDataTable/AdvancedDataTable';
-import { createMockPaPlayer } from '../../test-utils/players';
-import type { AdvancedTableColumn } from '../../components/ui/tables/AdvancedDataTable/AdvancedDataTable';
-import type { Building } from '../../components/features/Construct/types/types';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import AdvancedDataTable from "../../components/ui/tables/AdvancedDataTable/AdvancedDataTable";
+import { createMockPaPlayer } from "../../test-utils/players";
+import type { AdvancedTableColumn } from "../../components/ui/tables/AdvancedDataTable/AdvancedDataTable";
+import type { Building } from "../../components/features/Construct/types/types";
 
-jest.mock('../../components/ui/notifications/ToastComponent', () => ({
+jest.mock("../../components/ui/notifications/ToastComponent", () => ({
   __esModule: true,
   default: jest.fn(),
 }));
@@ -15,113 +15,114 @@ jest.mock('../../components/ui/notifications/ToastComponent', () => ({
 const defaultPlayer = createMockPaPlayer({ crystal: 5000, metal: 3000 });
 
 const defaultColumns: AdvancedTableColumn[] = [
-  { label: 'Name', accessor: 'nick' },
-  { label: 'Crystal', accessor: 'crystal' },
-  { label: 'Metal', accessor: 'metal' },
+  { label: "Name", accessor: "nick" },
+  { label: "Crystal", accessor: "crystal" },
+  { label: "Metal", accessor: "metal" },
 ];
 
 const defaultProps = {
   columns: defaultColumns,
   data: [defaultPlayer],
-  caption: 'Test Table',
+  caption: "Test Table",
 };
 
 function createBuildingFixture(overrides: Partial<Building> = {}): Building {
   return {
     buildingId: 1,
-    buildingName: 'Test Building',
-    buildingDescription: 'A test',
-    buildingFieldName: 'c_crystal',
+    buildingName: "Test Building",
+    buildingDescription: "A test",
+    buildingFieldName: "c_crystal",
     buildingETA: 3,
-    buildingCost: '100 credits',
+    buildingCost: "100 credits",
     buildingCostCrystal: 100,
     buildingCostTitanium: 50,
     needsFieldName: 0,
-    hasInputField: 'undefined',
+    hasInputField: "undefined",
     ...overrides,
   };
 }
 
 // --- Tests ---
 
-describe('AdvancedDataTable - rendering structure', () => {
-  it('renders the table caption', () => {
+describe("AdvancedDataTable - rendering structure", () => {
+  it("renders the table caption", () => {
     render(<AdvancedDataTable {...defaultProps} />);
-    expect(screen.getByText('Test Table')).toBeInTheDocument();
+    expect(screen.getByText("Test Table")).toBeInTheDocument();
   });
 
-  it('renders column headers', () => {
+  it("renders column headers", () => {
     render(<AdvancedDataTable {...defaultProps} />);
-    expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Crystal')).toBeInTheDocument();
-    expect(screen.getByText('Metal')).toBeInTheDocument();
+    expect(screen.getByText("Name")).toBeInTheDocument();
+    expect(screen.getByText("Crystal")).toBeInTheDocument();
+    expect(screen.getByText("Metal")).toBeInTheDocument();
   });
 
-  it('renders proper table structure', () => {
+  it("renders proper table structure", () => {
     const { container } = render(<AdvancedDataTable {...defaultProps} />);
-    expect(container.querySelector('table')).toBeInTheDocument();
-    expect(container.querySelector('thead')).toBeInTheDocument();
-    expect(container.querySelector('tbody')).toBeInTheDocument();
-    expect(container.querySelector('caption')).toBeInTheDocument();
+    expect(container.querySelector("table")).toBeInTheDocument();
+    expect(container.querySelector("thead")).toBeInTheDocument();
+    expect(container.querySelector("tbody")).toBeInTheDocument();
+    expect(container.querySelector("caption")).toBeInTheDocument();
   });
 
-  it('renders correct number of columns in header', () => {
+  it("renders correct number of columns in header", () => {
     const { container } = render(<AdvancedDataTable {...defaultProps} />);
-    const thElements = container.querySelectorAll('th');
+    const thElements = container.querySelectorAll("th");
     expect(thElements).toHaveLength(3);
   });
 
-  it('renders correct number of cells per row', () => {
+  it("renders correct number of cells per row", () => {
     const { container } = render(<AdvancedDataTable {...defaultProps} />);
-    const rows = container.querySelectorAll('tbody tr');
+    const rows = container.querySelectorAll("tbody tr");
     expect(rows).toHaveLength(1);
-    const cells = rows[0]?.querySelectorAll('td');
+    const cells = rows[0]?.querySelectorAll("td");
     expect(cells).toHaveLength(3);
   });
 
-  it('renders data-th attributes on td elements', () => {
+  it("renders data-th attributes on td elements", () => {
     const { container } = render(<AdvancedDataTable {...defaultProps} />);
-    const tds = container.querySelectorAll('td');
-    expect(tds[0]).toHaveAttribute('data-th', 'Name');
-    expect(tds[1]).toHaveAttribute('data-th', 'Crystal');
-    expect(tds[2]).toHaveAttribute('data-th', 'Metal');
+    const tds = container.querySelectorAll("td");
+    expect(tds[0]).toHaveAttribute("data-th", "Name");
+    expect(tds[1]).toHaveAttribute("data-th", "Crystal");
+    expect(tds[2]).toHaveAttribute("data-th", "Metal");
   });
 
-  it('renders empty tbody when data is empty', () => {
+  it("renders empty tbody when data is empty", () => {
     const { container } = render(
-      <AdvancedDataTable columns={defaultColumns} data={[]} caption="Empty" />
+      <AdvancedDataTable columns={defaultColumns} data={[]} caption="Empty" />,
     );
-    const tbody = container.querySelector('tbody');
+    const tbody = container.querySelector("tbody");
     expect(tbody).toBeInTheDocument();
     expect(tbody?.children.length).toBe(0);
   });
 });
 
-describe('AdvancedDataTable - data rendering', () => {
-  it('renders data from the data prop using string accessors', () => {
+describe("AdvancedDataTable - data rendering", () => {
+  it("renders data from the data prop using string accessors", () => {
     render(<AdvancedDataTable {...defaultProps} />);
-    expect(screen.getByText('TestPlayer')).toBeInTheDocument();
-    expect(screen.getByText('5000')).toBeInTheDocument();
-    expect(screen.getByText('3000')).toBeInTheDocument();
+    expect(screen.getByText("TestPlayer")).toBeInTheDocument();
+    expect(screen.getByText("5000")).toBeInTheDocument();
+    expect(screen.getByText("3000")).toBeInTheDocument();
   });
 
-  it('renders multiple rows with multiple data entries', () => {
-    const player1 = createMockPaPlayer({ nick: 'Player1', crystal: 100 });
-    const player2 = createMockPaPlayer({ nick: 'Player2', crystal: 200 });
-    render(
-      <AdvancedDataTable {...defaultProps} data={[player1, player2]} />
-    );
-    expect(screen.getByText('Player1')).toBeInTheDocument();
-    expect(screen.getByText('Player2')).toBeInTheDocument();
+  it("renders multiple rows with multiple data entries", () => {
+    const player1 = createMockPaPlayer({ nick: "Player1", crystal: 100 });
+    const player2 = createMockPaPlayer({ nick: "Player2", crystal: 200 });
+    render(<AdvancedDataTable {...defaultProps} data={[player1, player2]} />);
+    expect(screen.getByText("Player1")).toBeInTheDocument();
+    expect(screen.getByText("Player2")).toBeInTheDocument();
   });
 
-  it('uses renderData instead of data when provided', () => {
+  it("uses renderData instead of data when provided", () => {
     const renderData: Building[] = [
-      createBuildingFixture({ buildingName: 'Crystal Mine', buildingCost: '100 credits' }),
+      createBuildingFixture({
+        buildingName: "Crystal Mine",
+        buildingCost: "100 credits",
+      }),
     ];
     const columns: AdvancedTableColumn[] = [
-      { label: 'Building', accessor: 'buildingName' },
-      { label: 'Cost', accessor: 'buildingCost' },
+      { label: "Building", accessor: "buildingName" },
+      { label: "Cost", accessor: "buildingCost" },
     ];
     render(
       <AdvancedDataTable
@@ -129,58 +130,72 @@ describe('AdvancedDataTable - data rendering', () => {
         data={[defaultPlayer]}
         caption="Buildings"
         renderData={renderData}
-      />
+      />,
     );
-    expect(screen.getByText('Crystal Mine')).toBeInTheDocument();
-    expect(screen.getByText('100 credits')).toBeInTheDocument();
+    expect(screen.getByText("Crystal Mine")).toBeInTheDocument();
+    expect(screen.getByText("100 credits")).toBeInTheDocument();
   });
 });
 
-describe('AdvancedDataTable - accessor types', () => {
-  it('renders with function accessor', () => {
+describe("AdvancedDataTable - accessor types", () => {
+  it("renders with function accessor", () => {
     const columns: AdvancedTableColumn[] = [
       {
-        label: 'Custom',
-        accessor: (row) => <span data-testid="custom-cell">{String(row.nick)}</span>,
+        label: "Custom",
+        accessor: (row) => (
+          <span data-testid="custom-cell">{String(row.nick)}</span>
+        ),
       },
     ];
     render(
-      <AdvancedDataTable columns={columns} data={[defaultPlayer]} caption="Custom" />
+      <AdvancedDataTable
+        columns={columns}
+        data={[defaultPlayer]}
+        caption="Custom"
+      />,
     );
-    expect(screen.getByTestId('custom-cell')).toBeInTheDocument();
-    expect(screen.getByTestId('custom-cell')).toHaveTextContent('TestPlayer');
+    expect(screen.getByTestId("custom-cell")).toBeInTheDocument();
+    expect(screen.getByTestId("custom-cell")).toHaveTextContent("TestPlayer");
   });
 
-  it('renders with JSX Element accessor', () => {
+  it("renders with JSX Element accessor", () => {
     const columns: AdvancedTableColumn[] = [
       {
-        label: 'Static',
+        label: "Static",
         accessor: <span data-testid="static-element">Static Content</span>,
       },
     ];
     render(
-      <AdvancedDataTable columns={columns} data={[defaultPlayer]} caption="Static" />
+      <AdvancedDataTable
+        columns={columns}
+        data={[defaultPlayer]}
+        caption="Static"
+      />,
     );
-    expect(screen.getByTestId('static-element')).toBeInTheDocument();
+    expect(screen.getByTestId("static-element")).toBeInTheDocument();
   });
 });
 
-describe('AdvancedDataTable - action button integration', () => {
-  it('does not render action button when action is not provided', () => {
+describe("AdvancedDataTable - action button integration", () => {
+  it("does not render action button when action is not provided", () => {
     const columns: AdvancedTableColumn[] = [
-      { label: 'Action', accessor: '', type: 'button' },
+      { label: "Action", accessor: "", type: "button" },
     ];
     render(
-      <AdvancedDataTable columns={columns} data={[defaultPlayer]} caption="No Action" />
+      <AdvancedDataTable
+        columns={columns}
+        data={[defaultPlayer]}
+        caption="No Action"
+      />,
     );
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
-  it('renders action button when action and actionText are provided', () => {
+  it("renders action button when action and actionText are provided", () => {
     const renderData: Building[] = [createBuildingFixture()];
     const columns: AdvancedTableColumn[] = [
-      { label: 'Name', accessor: 'buildingName' },
-      { label: 'Action', accessor: '', type: 'button' },
+      { label: "Name", accessor: "buildingName" },
+      { label: "Action", accessor: "", type: "button" },
     ];
     render(
       <AdvancedDataTable
@@ -190,15 +205,15 @@ describe('AdvancedDataTable - action button integration', () => {
         renderData={renderData}
         action={jest.fn()}
         actionText="Build"
-      />
+      />,
     );
-    expect(screen.getByRole('button', { name: 'Build' })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Build" })).toBeInTheDocument();
   });
 
-  it('defaults isLoading to false', () => {
+  it("defaults isLoading to false", () => {
     const renderData: Building[] = [createBuildingFixture()];
     const columns: AdvancedTableColumn[] = [
-      { label: 'Action', accessor: '', type: 'button' },
+      { label: "Action", accessor: "", type: "button" },
     ];
     render(
       <AdvancedDataTable
@@ -208,15 +223,15 @@ describe('AdvancedDataTable - action button integration', () => {
         renderData={renderData}
         action={jest.fn()}
         actionText="Build"
-      />
+      />,
     );
-    expect(screen.getByRole('button', { name: 'Build' })).not.toBeDisabled();
+    expect(screen.getByRole("button", { name: "Build" })).not.toBeDisabled();
   });
 
-  it('disables action button when isLoading is true', () => {
+  it("disables action button when isLoading is true", () => {
     const renderData: Building[] = [createBuildingFixture()];
     const columns: AdvancedTableColumn[] = [
-      { label: 'Action', accessor: '', type: 'button' },
+      { label: "Action", accessor: "", type: "button" },
     ];
     render(
       <AdvancedDataTable
@@ -227,8 +242,8 @@ describe('AdvancedDataTable - action button integration', () => {
         action={jest.fn()}
         actionText="Build"
         isLoading={true}
-      />
+      />,
     );
-    expect(screen.getByRole('button', { name: 'Build' })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Build" })).toBeDisabled();
   });
 });

@@ -47,7 +47,9 @@ const UnreadMailAlert: React.FC = () => (
 );
 
 /** Renders the newbie protection notification */
-const NewbieProtectionAlert: React.FC<{ ticksRemaining: number }> = ({ ticksRemaining }) => (
+const NewbieProtectionAlert: React.FC<{ ticksRemaining: number }> = ({
+  ticksRemaining,
+}) => (
   <div
     className="mb-4 rounded-lg bg-blue-100 px-6 py-5 text-base text-blue-800 md:min-w-[30.625rem]"
     role="alert"

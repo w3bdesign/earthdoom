@@ -12,7 +12,7 @@ export const usePlayerData = () => {
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
     { nick: user?.username ?? "" },
-    { enabled: !!isSignedIn && !!user?.username }
+    { enabled: !!isSignedIn && !!user?.username },
   );
 
   const isAuthenticated = !!isSignedIn && !!user?.username;

@@ -50,7 +50,10 @@ function validateTroopsAvailable(areTroopsAvailable: boolean): boolean {
 /** Validate that the player has enough energy; show toast on failure */
 function validateEnergy(currentEnergy: number, cost: number): boolean {
   if (currentEnergy < cost) {
-    ToastComponent({ message: "You need more energy to attack", type: "error" });
+    ToastComponent({
+      message: "You need more energy to attack",
+      type: "error",
+    });
     return false;
   }
   return true;
@@ -84,7 +87,14 @@ const AttackForm: FC<{
   playerEnergy: number;
   onInputChange: IHandleInputChange;
   onAttack: () => void;
-}> = ({ isLoading, canAffordAttack, energyCost, playerEnergy, onInputChange, onAttack }) => (
+}> = ({
+  isLoading,
+  canAffordAttack,
+  energyCost,
+  playerEnergy,
+  onInputChange,
+  onAttack,
+}) => (
   <>
     <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
     <div className="mt-4 flex flex-col items-center justify-center">
@@ -177,7 +187,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     },
   );
 
-  const { mutate: militaryAction, isLoading } =
+  const { mutate: militaryAction, isPending: isLoading } =
     api.paMilitary.militaryAction.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "Troops are on their way", type: "success" });

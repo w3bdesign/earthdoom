@@ -33,12 +33,18 @@ function buildProductionTooltip(
   if (canAffordOne) return undefined;
 
   const parts: string[] = [];
-  if (production.buildingCostCrystal > 0 && paPlayer.crystal < production.buildingCostCrystal) {
+  if (
+    production.buildingCostCrystal > 0 &&
+    paPlayer.crystal < production.buildingCostCrystal
+  ) {
     parts.push(
       `Need ${production.buildingCostCrystal} credits (have ${paPlayer.crystal})`,
     );
   }
-  if (production.buildingCostTitanium > 0 && paPlayer.metal < production.buildingCostTitanium) {
+  if (
+    production.buildingCostTitanium > 0 &&
+    paPlayer.metal < production.buildingCostTitanium
+  ) {
     parts.push(
       `Need ${production.buildingCostTitanium} titanium (have ${paPlayer.metal})`,
     );
@@ -61,7 +67,14 @@ function validateTrainInput(
     return null;
   }
 
-  if (!canAffordToTrain([paPlayer], production.buildingCostCrystal, production.buildingCostTitanium, amount)) {
+  if (
+    !canAffordToTrain(
+      [paPlayer],
+      production.buildingCostCrystal,
+      production.buildingCostTitanium,
+      amount,
+    )
+  ) {
     ToastComponent({ message: "You can not afford this", type: "error" });
     return null;
   }
@@ -78,9 +91,13 @@ function getETADisplay(paPlayer: PaPlayer, production: IProduction): number {
 }
 
 /** Determine the status text for a production field already in progress */
-function getProductionStatus(paPlayer: PaPlayer, production: IProduction): string | null {
+function getProductionStatus(
+  paPlayer: PaPlayer,
+  production: IProduction,
+): string | null {
   const fieldValue = Number(paPlayer[production.buildingFieldName]);
-  if (fieldValue >= 1) return `ETA ${Number(paPlayer[production.buildingFieldNameETA])} ticks`;
+  if (fieldValue >= 1)
+    return `ETA ${Number(paPlayer[production.buildingFieldNameETA])} ticks`;
   return null;
 }
 
@@ -92,7 +109,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const { isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
 
-  const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
+  const { mutate, isPending: isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Training started", type: "success" });
       await ctx.paUsers.getPlayerByNick.invalidate();
@@ -119,7 +136,12 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   );
 
   const isDisabled = isLoading || !canAffordOne;
-  const tooltip = buildProductionTooltip(isLoading, canAffordOne, paPlayer, production);
+  const tooltip = buildProductionTooltip(
+    isLoading,
+    canAffordOne,
+    paPlayer,
+    production,
+  );
   const fieldValue = Number(paPlayer[production.buildingFieldName]);
   const isIdle = paPlayer[production.buildingFieldName] === 0 && !isLoading;
   const productionStatus = getProductionStatus(paPlayer, production);
@@ -129,10 +151,12 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
     if (amount === null) return;
 
     mutate({
-      buildingFieldName:
-        production.buildingFieldName as Parameters<typeof mutate>[0]["buildingFieldName"],
-      buildingFieldNameETA:
-        production.buildingFieldNameETA as Parameters<typeof mutate>[0]["buildingFieldNameETA"],
+      buildingFieldName: production.buildingFieldName as Parameters<
+        typeof mutate
+      >[0]["buildingFieldName"],
+      buildingFieldNameETA: production.buildingFieldNameETA as Parameters<
+        typeof mutate
+      >[0]["buildingFieldNameETA"],
       buildingCostCrystal: production.buildingCostCrystal,
       buildingCostTitanium: production.buildingCostTitanium,
       unitAmount: amount,
@@ -173,17 +197,11 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
       <td data-th="Cost" className={TD_CLASS}>
         {production.buildingCost}
       </td>
-      <td
-        data-th="Build"
-        className={`${TD_CLASS} md:w-[8rem] md:px-4`}
-      >
+      <td data-th="Build" className={`${TD_CLASS} md:w-[8rem] md:px-4`}>
         {isLoading && <div className="mb-1">Starting ...</div>}
         {isIdle && (
           <div title={tooltip} className="inline-block">
-            <Button
-              disabled={isDisabled}
-              onClick={handleTrain}
-            >
+            <Button disabled={isDisabled} onClick={handleTrain}>
               Train
             </Button>
           </div>
@@ -201,37 +219,37 @@ const ProductionTable: FC<ConstructProps> = ({ paPlayer }) => {
         <tr>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Name
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Description
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90  px-6 text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             ETA
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Amount
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Cost
           </th>
           <th
             scope="col"
-            className="hidden h-12  bg-slate-200/90 px-6  text-base font-bold  text-black  first:border-l-0 sm:table-cell"
+            className="hidden h-12 bg-slate-200/90 px-6 text-base font-bold text-black first:border-l-0 sm:table-cell"
           >
             Train
           </th>

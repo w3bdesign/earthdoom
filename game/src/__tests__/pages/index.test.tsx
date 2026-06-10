@@ -1,7 +1,7 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import Home from '../../pages/index';
-import type { PaUsers } from '@prisma/client';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import Home from "../../pages/index";
+import type { PaUsers } from "@prisma/client";
 
 // Define the PaPlayer type that extends PaUsers
 interface PaPlayer extends PaUsers {
@@ -21,122 +21,124 @@ interface UseQueryReturn {
 
 // Mock the clerk hook
 const mockUseUser = jest.fn<UseUserReturn, []>();
-jest.mock('@clerk/nextjs', () => ({
-  useUser: () => mockUseUser()
+jest.mock("@clerk/nextjs", () => ({
+  useUser: () => mockUseUser(),
 }));
 
 // Mock the api
 const mockUseQuery = jest.fn<UseQueryReturn, []>();
-jest.mock('../../utils/api', () => ({
+jest.mock("../../utils/api", () => ({
   api: {
     paUsers: {
       getPlayerByNick: {
-        useQuery: () => mockUseQuery()
-      }
-    }
-  }
+        useQuery: () => mockUseQuery(),
+      },
+    },
+  },
 }));
 
 // Mock the components
-jest.mock('../../components/common/Layout', () => ({
-  Layout: ({ children }: { children: React.ReactNode }) => <div data-testid="layout">{children}</div>
+jest.mock("../../components/common/Layout", () => ({
+  Layout: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="layout">{children}</div>
+  ),
 }));
 
-jest.mock('../../components/common/Loader/LoadingSpinner', () => ({
+jest.mock("../../components/common/Loader/LoadingSpinner", () => ({
   __esModule: true,
-  default: () => <div data-testid="loading-spinner">Loading...</div>
+  default: () => <div data-testid="loading-spinner">Loading...</div>,
 }));
 
-jest.mock('../../components/ui/tables/UnitsTable', () => ({
+jest.mock("../../components/ui/tables/UnitsTable", () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
     <div data-testid="units-table">Units Table: {paPlayer.nick}</div>
-  )
+  ),
 }));
 
-jest.mock('../../components/ui/tables/BDUTable', () => ({
+jest.mock("../../components/ui/tables/BDUTable", () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
     <div data-testid="bdu-table">BDU Table: {paPlayer.nick}</div>
-  )
+  ),
 }));
 
-jest.mock('../../components/ui/tables/LandTable', () => ({
+jest.mock("../../components/ui/tables/LandTable", () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
     <div data-testid="land-table">Land Table: {paPlayer.nick}</div>
-  )
+  ),
 }));
 
-jest.mock('../../components/ui/tables/FleetTable', () => ({
+jest.mock("../../components/ui/tables/FleetTable", () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
     <div data-testid="fleet-table">Fleet Table: {paPlayer.nick}</div>
-  )
+  ),
 }));
 
-describe('Home component', () => {
+describe("Home component", () => {
   beforeEach(() => {
     mockUseUser.mockClear();
     mockUseQuery.mockClear();
     mockUseQuery.mockReturnValue({ data: null, isLoading: false });
   });
 
-  it('renders null when user is not signed in', () => {
+  it("renders null when user is not signed in", () => {
     mockUseUser.mockReturnValue({
       isSignedIn: false,
-      user: null
+      user: null,
     });
-    
+
     const { container } = render(<Home />);
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders null when user is signed in but has no username', () => {
+  it("renders null when user is signed in but has no username", () => {
     mockUseUser.mockReturnValue({
       isSignedIn: true,
-      user: { username: null }
+      user: { username: null },
     });
-    
+
     const { container } = render(<Home />);
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders loading spinner when signed in but player data is loading', () => {
+  it("renders loading spinner when signed in but player data is loading", () => {
     mockUseUser.mockReturnValue({
       isSignedIn: true,
-      user: { username: 'testuser' }
+      user: { username: "testuser" },
     });
-    
+
     mockUseQuery.mockReturnValue({
       data: null,
-      isLoading: true
+      isLoading: true,
     });
 
     const { getByTestId } = render(<Home />);
-    expect(getByTestId('loading-spinner')).toBeInTheDocument();
-    expect(getByTestId('layout')).toBeInTheDocument();
+    expect(getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(getByTestId("layout")).toBeInTheDocument();
   });
 
-  it('renders loading spinner when player data is undefined', () => {
+  it("renders loading spinner when player data is undefined", () => {
     mockUseUser.mockReturnValue({
       isSignedIn: true,
-      user: { username: 'testuser' }
+      user: { username: "testuser" },
     });
-    
+
     mockUseQuery.mockReturnValue({
       data: undefined,
-      isLoading: false
+      isLoading: false,
     });
 
     const { getByTestId } = render(<Home />);
-    expect(getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(getByTestId("loading-spinner")).toBeInTheDocument();
   });
 
-  it('renders all tables with correct player data', () => {
+  it("renders all tables with correct player data", () => {
     const mockPlayer: PaPlayer = {
       id: 1,
-      nick: 'TestPlayer',
+      nick: "TestPlayer",
       crystal: 1000,
       metal: 1000,
       energy: 1000,
@@ -148,13 +150,13 @@ describe('Home component', () => {
       astropods: 10,
       war: 0,
       def: 0,
-      tag: 'TEST',
+      tag: "TEST",
       rank: 1,
       x: 1,
       y: 1,
       commander: 0,
-      galname: 'Test Galaxy',
-      galpic: '125x125earthdoom1.gif',
+      galname: "Test Galaxy",
+      galpic: "125x125earthdoom1.gif",
       civilians: 1000,
       tax: 20,
       credits: 5000,
@@ -218,64 +220,64 @@ describe('Home component', () => {
       lastsleep: 0,
       closed: 0,
       motd: 0,
-      vote: ''
+      vote: "",
     };
 
     mockUseUser.mockReturnValue({
       isSignedIn: true,
-      user: { username: 'testuser' }
+      user: { username: "testuser" },
     });
-    
+
     mockUseQuery.mockReturnValue({
       data: mockPlayer,
-      isLoading: false
+      isLoading: false,
     });
 
     render(<Home />);
-    
-    expect(screen.getByTestId('layout')).toBeInTheDocument();
-    expect(screen.getByTestId('units-table')).toBeInTheDocument();
-    expect(screen.getByTestId('bdu-table')).toBeInTheDocument();
-    expect(screen.getByTestId('land-table')).toBeInTheDocument();
-    expect(screen.getByTestId('fleet-table')).toBeInTheDocument();
+
+    expect(screen.getByTestId("layout")).toBeInTheDocument();
+    expect(screen.getByTestId("units-table")).toBeInTheDocument();
+    expect(screen.getByTestId("bdu-table")).toBeInTheDocument();
+    expect(screen.getByTestId("land-table")).toBeInTheDocument();
+    expect(screen.getByTestId("fleet-table")).toBeInTheDocument();
 
     // Verify player data is passed correctly
-    expect(screen.getByTestId('units-table')).toHaveTextContent('TestPlayer');
-    expect(screen.getByTestId('bdu-table')).toHaveTextContent('TestPlayer');
-    expect(screen.getByTestId('land-table')).toHaveTextContent('TestPlayer');
-    expect(screen.getByTestId('fleet-table')).toHaveTextContent('TestPlayer');
+    expect(screen.getByTestId("units-table")).toHaveTextContent("TestPlayer");
+    expect(screen.getByTestId("bdu-table")).toHaveTextContent("TestPlayer");
+    expect(screen.getByTestId("land-table")).toHaveTextContent("TestPlayer");
+    expect(screen.getByTestId("fleet-table")).toHaveTextContent("TestPlayer");
   });
 
-  it('handles error state in API query', () => {
+  it("handles error state in API query", () => {
     mockUseUser.mockReturnValue({
       isSignedIn: true,
-      user: { username: 'testuser' }
+      user: { username: "testuser" },
     });
-    
+
     mockUseQuery.mockReturnValue({
       data: null,
       isLoading: false,
-      error: new Error('Failed to fetch player data')
+      error: new Error("Failed to fetch player data"),
     });
 
     const { getByTestId } = render(<Home />);
-    expect(getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(getByTestId("loading-spinner")).toBeInTheDocument();
   });
 
-  it('passes correct query parameters to API', () => {
-    const username = 'testuser';
+  it("passes correct query parameters to API", () => {
+    const username = "testuser";
     mockUseUser.mockReturnValue({
       isSignedIn: true,
-      user: { username }
+      user: { username },
     });
-    
+
     mockUseQuery.mockReturnValue({
       data: null,
-      isLoading: true
+      isLoading: true,
     });
 
     render(<Home />);
-    
+
     // Verify API was called with correct parameters
     expect(mockUseQuery).toHaveBeenCalled();
     const queryResult = mockUseQuery.mock.results[0]?.value as UseQueryReturn;

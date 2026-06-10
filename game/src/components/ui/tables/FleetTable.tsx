@@ -20,7 +20,7 @@ interface TargetPlayer {
 const getFleetStatusMessage = (
   paPlayer: PaUsers,
   attackTarget: TargetPlayer | null | undefined,
-  defendTarget: TargetPlayer | null | undefined
+  defendTarget: TargetPlayer | null | undefined,
 ): string => {
   if (paPlayer.war === 0 && paPlayer.def === 0) {
     return "All fleets at home";
@@ -55,7 +55,11 @@ const FleetTable: FC<FleetStatusProps> = ({ paPlayer }) => {
     });
 
   const isLoading = isLoadingAttacked || isLoadingDefended;
-  const statusMessage = getFleetStatusMessage(paPlayer, paAttackedName, paDefendedName);
+  const statusMessage = getFleetStatusMessage(
+    paPlayer,
+    paAttackedName,
+    paDefendedName,
+  );
 
   return (
     <div className="mt-6 flex h-full w-full flex-col items-center justify-center">

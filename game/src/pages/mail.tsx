@@ -23,7 +23,7 @@ const Mail: NextPage = () => {
 
   const { data: paMail } = api.paMail.getAllMailByNick.useQuery(
     { nick: user?.username ?? "" },
-    { enabled: isAuthenticated }
+    { enabled: isAuthenticated },
   );
 
   const { mutate: markAsSeen } = api.paMail.markAsSeen.useMutation({
@@ -61,7 +61,9 @@ const Mail: NextPage = () => {
             Received Mail
           </h2>
           {hasUnseenEmail && (
-            <MarkAllSeenButton onClick={() => markAsSeen({ sentTo: paPlayer.id })} />
+            <MarkAllSeenButton
+              onClick={() => markAsSeen({ sentTo: paPlayer.id })}
+            />
           )}
           <MailTableSection mail={paMail.mail} />
           {recipientNick && (
@@ -83,7 +85,11 @@ const MarkAllSeenButton = ({ onClick }: { onClick: () => void }) => (
 );
 
 /** Mail table wrapper with overflow handling */
-const MailTableSection = ({ mail }: { mail: Parameters<typeof MailTable>[0]["mail"] }) => (
+const MailTableSection = ({
+  mail,
+}: {
+  mail: Parameters<typeof MailTable>[0]["mail"];
+}) => (
   <div className="mt-2 flex flex-col bg-white text-black">
     <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div className="inline-block min-w-full sm:px-6 lg:px-8">
@@ -96,7 +102,13 @@ const MailTableSection = ({ mail }: { mail: Parameters<typeof MailTable>[0]["mai
 );
 
 /** New mail composition section */
-const NewMailSection = ({ paPlayer, recipientNick }: { paPlayer: Parameters<typeof NewMail>[0]["paPlayer"]; recipientNick: string }) => (
+const NewMailSection = ({
+  paPlayer,
+  recipientNick,
+}: {
+  paPlayer: Parameters<typeof NewMail>[0]["paPlayer"];
+  recipientNick: string;
+}) => (
   <div>
     <h2 className="mt-6 py-4 text-center text-2xl font-bold text-white">
       Send Mail to {recipientNick}

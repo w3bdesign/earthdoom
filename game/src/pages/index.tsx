@@ -18,7 +18,7 @@ const Home = () => {
 
   const { data: paPlayer } = api.paUsers.getPlayerByNick.useQuery(
     { nick: user?.username ?? "" },
-    { enabled: !!isSignedIn && !!user?.username }
+    { enabled: !!isSignedIn && !!user?.username },
   );
 
   if (!isSignedIn || !user?.username) {

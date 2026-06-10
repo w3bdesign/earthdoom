@@ -48,7 +48,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     await ctx.paUsers.getPlayerByNick.refetch();
   };
 
-  const { mutate: createAlliance, isLoading: isCreateAllianceLoading } =
+  const { mutate: createAlliance, isPending: isCreateAllianceLoading } =
     api.paTag.createAlliance.useMutation({
       onSuccess: async () => {
         showSuccess("Alliance created");
@@ -59,7 +59,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
       },
     });
 
-  const { mutate: joinAlliance, isLoading: isJoinAllianceLoading } =
+  const { mutate: joinAlliance, isPending: isJoinAllianceLoading } =
     api.paTag.joinAlliance.useMutation({
       onSuccess: async (result: string) => {
         if (result === "Wrong password") {
@@ -74,7 +74,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
       },
     });
 
-  const { mutate: leaveAlliance, isLoading: isLeaveAllianceLoading } =
+  const { mutate: leaveAlliance, isPending: isLeaveAllianceLoading } =
     api.paTag.leaveAlliance.useMutation({
       onSuccess: async () => {
         showSuccess("Alliance left");
@@ -200,25 +200,21 @@ const AllianceInput: FC<{
       <input
         type="text"
         className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-        id={`alliance-${label.toLowerCase().replace(' ', '-')}`}
+        id={`alliance-${label.toLowerCase().replace(" ", "-")}`}
         aria-describedby="emailHelp"
         pattern="[A-Za-z]+"
         title="Please enter letters only"
         ref={inputRef}
       />
       <label
-        htmlFor={`alliance-${label.toLowerCase().replace(' ', '-')}`}
+        htmlFor={`alliance-${label.toLowerCase().replace(" ", "-")}`}
         className="mb-2 block py-2 text-sm font-bold text-gray-500"
       >
         {label}
       </label>
     </div>
     <div className="flex items-center justify-center">
-      <Button
-        extraClasses="mb-4"
-        disabled={disabled}
-        onClick={onClick}
-      >
+      <Button extraClasses="mb-4" disabled={disabled} onClick={onClick}>
         {buttonText}
       </Button>
     </div>

@@ -1,10 +1,7 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createTRPCRouter,
-  privateProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 
 /** Allowed dynamic field names for research on PaUsers */
 const researchFields = [
@@ -138,12 +135,12 @@ export const paUsersRouter = createTRPCRouter({
       // If player has no paConstructId, create a new PaConstruct and link it
       if (!player.paConstructId || !construction) {
         const newConstruct = await ctx.prisma.paConstruct.create({
-          data: {}
+          data: {},
         });
 
         await ctx.prisma.paUsers.update({
           where: { id: player.id },
-          data: { paConstructId: newConstruct.id }
+          data: { paConstructId: newConstruct.id },
         });
 
         return { ...newConstruct, ...player, id: player.id };
@@ -265,12 +262,14 @@ export const paUsersRouter = createTRPCRouter({
     }),
 
   researchBuilding: privateProcedure
-    .input(z.object({
-      buildingFieldName: z.enum(researchFields),
-      buildingCostCrystal: z.number(),
-      buildingCostTitanium: z.number(),
-      buildingETA: z.number(),
-    }))
+    .input(
+      z.object({
+        buildingFieldName: z.enum(researchFields),
+        buildingCostCrystal: z.number(),
+        buildingCostTitanium: z.number(),
+        buildingETA: z.number(),
+      }),
+    )
 
     .mutation(async ({ ctx, input }) => {
       const {
@@ -302,14 +301,16 @@ export const paUsersRouter = createTRPCRouter({
   // TODO Combine constructBuilding, produceUnit and researchBuilding into one?
 
   produceUnit: privateProcedure
-    .input(z.object({
-      buildingFieldName: z.enum(productionFields),
-      buildingFieldNameETA: z.enum(productionETAFields),
-      buildingCostCrystal: z.number(),
-      buildingCostTitanium: z.number(),
-      unitAmount: z.number(),
-      buildingETA: z.number(),
-    }))
+    .input(
+      z.object({
+        buildingFieldName: z.enum(productionFields),
+        buildingFieldNameETA: z.enum(productionETAFields),
+        buildingCostCrystal: z.number(),
+        buildingCostTitanium: z.number(),
+        unitAmount: z.number(),
+        buildingETA: z.number(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const {
         buildingFieldName,

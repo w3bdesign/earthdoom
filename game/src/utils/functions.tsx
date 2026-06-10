@@ -1,4 +1,8 @@
-import type { PaPlayer, PaPlayerBase, PaUserWithConstruct } from "@/types/player";
+import type {
+  PaPlayer,
+  PaPlayerBase,
+  PaUserWithConstruct,
+} from "@/types/player";
 import type { IProduction } from "@/components/features/Production/types/types";
 
 interface IStringifierProps {
@@ -97,7 +101,10 @@ export const Stringifier = ({ value }: IStringifierProps) => {
  * @param {IProduction} production - The production cost of the unit.
  * @returns {number} - The maximum number of units that can be trained.
  */
-export const maximumToTrain = (paPlayer: PaPlayerBase, production: IProduction) => {
+export const maximumToTrain = (
+  paPlayer: PaPlayerBase,
+  production: IProduction,
+) => {
   const maxValues = [];
   maxValues.push(Math.floor(paPlayer.crystal / production.buildingCostCrystal));
   if (production.buildingCostTitanium !== 0) {
@@ -163,7 +170,7 @@ export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const extraTitanium = paPlayer.r_immetal ? 1 : 0;
   const extraCrystal = paPlayer.r_imcrystal ? 1 : 0;
 
-  console.log("Extra crystal:", extraCrystal)
+  console.log("Extra crystal:", extraCrystal);
 
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;
@@ -171,14 +178,11 @@ export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const incomeCredits = Math.floor((civilians * tax) / 100);
 
   const incomeCreditsWithTest =
-  extraCrystal === 1
-    ? incomeCredits + Math.floor(incomeCredits * 0.1)
-    : incomeCredits;
+    extraCrystal === 1
+      ? incomeCredits + Math.floor(incomeCredits * 0.1)
+      : incomeCredits;
 
-    console.log("Extra crystal bonus:", incomeCreditsWithTest)
-
-
-
+  console.log("Extra crystal bonus:", incomeCreditsWithTest);
 
   /*
 

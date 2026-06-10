@@ -10,10 +10,12 @@ export const paTagRouter = createTRPCRouter({
   }),
 
   createAlliance: privateProcedure
-    .input(z.object({
-      Userid: z.number(),
-      tagName: z.string(),
-    }))
+    .input(
+      z.object({
+        Userid: z.number(),
+        tagName: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const { Userid, tagName } = input;
 
@@ -72,10 +74,12 @@ export const paTagRouter = createTRPCRouter({
     }),
 
   joinAlliance: privateProcedure
-    .input(z.object({
-      Userid: z.number(),
-      tagPassword: z.string(),
-    }))
+    .input(
+      z.object({
+        Userid: z.number(),
+        tagPassword: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const { tagPassword } = input;
 

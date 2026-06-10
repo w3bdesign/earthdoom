@@ -4,6 +4,7 @@
  */
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
+import { ssrPrepass } from "@trpc/next/ssrPrepass";
 import superjson from "superjson";
 
 import { type AppRouter } from "@/server/api/root";
@@ -23,13 +24,6 @@ export const api = createTRPCNext<AppRouter>({
   config() {
     return {
       /**
-       * Transformer used for data de-serialization from the server.
-       *
-       * @see https://trpc.io/docs/data-transformers
-       */
-      transformer: superjson,
-
-      /**
        * Links used to determine request flow from client to server.
        *
        * @see https://trpc.io/docs/links
@@ -42,6 +36,12 @@ export const api = createTRPCNext<AppRouter>({
         }),
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
+          /**
+           * Transformer used for data de-serialization from the server.
+           *
+           * @see https://trpc.io/docs/data-transformers
+           */
+          transformer: superjson,
         }),
       ],
 
@@ -54,7 +54,7 @@ export const api = createTRPCNext<AppRouter>({
             refetchInterval: 1000 * 60, // Refetch every 60 seconds
             refetchIntervalInBackground: true, // Keep fetching even when tab is in background
             staleTime: 1000 * 30, // Consider data fresh for 30 seconds
-            cacheTime: 1000 * 60 * 2, // Keep cached data for 2 minutes
+            gcTime: 1000 * 60 * 2, // Keep cached data for 2 minutes (formerly cacheTime)
           },
         },
       },
@@ -65,6 +65,12 @@ export const api = createTRPCNext<AppRouter>({
    *
    * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
    */
-  //ssr: false, //<--- this is the default
   ssr: true,
+  ssrPrepass,
+  /**
+   * Transformer used for data de-serialization from the server.
+   *
+   * @see https://trpc.io/docs/data-transformers
+   */
+  transformer: superjson,
 });
