@@ -36,12 +36,13 @@ Given the scale of breaking changes, **starting fresh with modern versions** tak
 - ✅ Escape Next.js entirely
 - ✅ ~14KB bundle vs Next.js bloat
 - ✅ Edge-native architecture
+- ✅ No need for tRPC - Hono has built-in type-safe RPC
 
 ### Target Stack
 
 ```
-Frontend: React 19 + React Router 7 + TanStack Query v5
-Backend: Hono + @hono/trpc-server (tRPC v11) + Prisma 7
+Frontend: React 19 + React Router 7 + Hono Client (RPC)
+Backend: Hono + Prisma 7
 Database: Cloudflare D1 (SQLite) or Prisma Postgres
 Auth: Clerk v7 (client SDK)
 Validation: Zod v4
@@ -49,12 +50,14 @@ Testing: Vitest + Testing Library
 Deploy: Vercel (frontend) + Cloudflare Workers (backend)
 ```
 
+**Why drop tRPC?** Hono has **built-in type-safe RPC** that's lighter, simpler, and doesn't require extra adapters or middleware. You get the same end-to-end type safety with significantly less code and fewer dependencies.
+
 ### What You Keep (Copy-Paste)
 
 ✅ **All React components** from `src/components/`
-✅ **All tRPC routers** from `src/server/api/routers/`
+✅ **Business logic** from tRPC routers (adapt to Hono routes)
 ✅ **Prisma schema** `prisma/schema.prisma` + migrations
-✅ **Business logic** - game mechanics stay identical
+✅ **Game mechanics** - stays identical
 ✅ **Tailwind config** (upgrade to v4 syntax)
 ✅ **73 tests** (update imports only)
 
@@ -70,14 +73,11 @@ cd earthdoom-v2
 # Backend
 npm create hono@latest server -- --template cloudflare-workers
 cd server
-npm i @hono/trpc-server @trpc/server@11 zod@4
-npm i @prisma/client@7 @prisma/adapter-d1
+npm i hono zod@4 @prisma/client@7 @prisma/adapter-d1
 npm i -D prisma@7
 ```
 
 **Day 2: Set up Prisma with Cloudflare D1**
-
-You have two database options:
 
 **Option A: Cloudflare D1 (Serverless SQLite - FREE)**
 ```bash
@@ -108,21 +108,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Copy your existing models from ../game/prisma/schema.prisma
+// Copy your existing models
 model PaUsers {
   id               Int          @id @default(autoincrement())
   nick             String       @unique
   crystal          Int          @default(0)
-  // ... rest of your schema
+  metal            Int          @default(0)
+  // ... rest of schema from ../game/prisma/schema.prisma
 }
 ```
 
 **Option B: Prisma Postgres (Managed, Zero Cold Start)**
 ```bash
-# Initialize with Prisma Postgres
 npx prisma@latest init --db
-
-# Install Accelerate extension
 npm i @prisma/extension-accelerate
 ```
 
@@ -143,72 +141,84 @@ export const getPrisma = (db: D1Database) => {
   const adapter = new PrismaD1(db)
   return new PrismaClient({ adapter })
 }
-
-// Or for Prisma Postgres
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
-
-export const getPrisma = (databaseUrl: string) => {
-  return new PrismaClient({
-    datasourceUrl: databaseUrl,
-  }).$extends(withAccelerate())
-}
 ```
 
-Copy your existing schema and run migrations:
+Migrate schema:
 ```bash
 # Copy schema
 cp ../game/prisma/schema.prisma ./prisma/schema.prisma
 
-# For D1: Generate and apply migrations
+# For D1
 npx wrangler d1 migrations create earthdoom-db initial_schema
-# Copy SQL from prisma/migrations to the created file
 npx wrangler d1 migrations apply earthdoom-db --local
 
 # For Prisma Postgres
 npx prisma migrate dev
 ```
 
-**Day 4: Set up Hono with tRPC**
+**Day 4: Create Hono API routes with Zod validation**
 
 Create `src/index.ts`:
 ```ts
 import { Hono } from 'hono'
-import { trpcServer } from '@hono/trpc-server'
-import { appRouter } from './api/root'
+import { zValidator } from '@hono/zod-validator'
+import { z } from 'zod'
 import { getPrisma } from './lib/prisma'
 
 type Bindings = {
-  DB: D1Database // For D1
-  // DATABASE_URL: string // For Prisma Postgres
+  DB: D1Database
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-app.use('/api/trpc/*', trpcServer({
-  router: appRouter,
-  createContext: (opts, c) => {
-    // For D1
+// Example: Get user
+const getUserSchema = z.object({
+  id: z.string(),
+})
+
+app.get('/api/users/:id', 
+  zValidator('param', getUserSchema),
+  async (c) => {
+    const { id } = c.req.valid('param')
     const prisma = getPrisma(c.env.DB)
     
-    // For Prisma Postgres
-    // const prisma = getPrisma(c.env.DATABASE_URL)
+    const user = await prisma.paUsers.findUnique({
+      where: { id: parseInt(id) },
+    })
     
-    return { prisma }
-  },
-}))
+    return c.json({ user })
+  }
+)
+
+// Example: Create post
+const createPostSchema = z.object({
+  title: z.string(),
+  body: z.string(),
+})
+
+app.post('/api/posts',
+  zValidator('json', createPostSchema),
+  async (c) => {
+    const { title, body } = c.req.valid('json')
+    const prisma = getPrisma(c.env.DB)
+    
+    // Your game logic here
+    
+    return c.json({ message: 'Created!' }, 201)
+  }
+)
 
 export default app
 ```
 
-Copy your tRPC routers:
-```bash
-cp -r ../game/src/server/api/routers ./src/api/
-cp ../game/src/server/api/root.ts ./src/api/
-cp ../game/src/server/api/trpc.ts ./src/api/
-```
+Copy and adapt your tRPC router logic into Hono routes. The pattern is:
+```ts
+// Old tRPC
+router.query('getUser', { input: z.object(...), resolve: async ({ input }) => {...} })
 
-Update imports in copied files to work with new structure.
+// New Hono
+app.get('/api/users/:id', zValidator('param', z.object(...)), async (c) => {...})
+```
 
 **Day 5: Deploy backend**
 ```bash
@@ -223,82 +233,76 @@ npm run deploy  # Cloudflare Workers
 npm create vite@latest client -- --template react-ts
 cd client
 npm i react@19 react-dom@19 react-router@7
-npm i @tanstack/react-query@5 @trpc/client@11 @trpc/react-query@11
-npm i @clerk/clerk-react@7 hono zod@4
+npm i hono zod@4  # Hono client for RPC
+npm i @clerk/clerk-react@7
 npm i -D tailwindcss@4 @tailwindcss/vite
 ```
 
 **Day 7: Port components**
 ```bash
-# Copy all components
+# Copy components
 cp -r ../game/src/components ./src/
 cp -r ../game/src/styles ./src/
 ```
 
-Update Tailwind v4 config:
+Update Tailwind v4:
 ```ts
-// tailwind.config.ts (v4 uses CSS-first approach)
+// tailwind.config.ts
 import type { Config } from 'tailwindcss'
 
 export default {
   content: ['./src/**/*.{ts,tsx}'],
-  // v4 simplified config
 } satisfies Config
 ```
 
-**Day 8-9: Set up routing**
+**Day 8-9: Set up Hono RPC client**
+
+Export your backend types:
+```ts
+// server/src/index.ts
+const app = new Hono()
+  .get('/api/users/:id', ...)
+  .post('/api/posts', ...)
+  
+export default app
+export type AppType = typeof app
+```
+
+Use in frontend:
+```tsx
+// client/src/lib/api.ts
+import { hc } from 'hono/client'
+import type { AppType } from '../../../server/src/index'
+
+export const client = hc<AppType>('https://your-worker.workers.dev')
+
+// Usage in components
+const res = await client.api.users[':id'].$get({ 
+  param: { id: '123' } 
+})
+const data = await res.json() // Fully typed!
+```
+
+**Day 10: Set up routing**
 ```tsx
 // src/App.tsx
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ClerkProvider } from '@clerk/clerk-react'
-
-const queryClient = new QueryClient()
 
 function App() {
   return (
     <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_KEY}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<IndexPage />} />
-            <Route path="/alliance" element={<AlliancePage />} />
-            <Route path="/construct" element={<ConstructPage />} />
-            <Route path="/military" element={<MilitaryPage />} />
-            {/* Map all routes from src/pages/* */}
-          </Routes>
-        </BrowserRouter>
-      </QueryClientProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<IndexPage />} />
+          <Route path="/alliance" element={<AlliancePage />} />
+          <Route path="/military" element={<MilitaryPage />} />
+          {/* Map all routes from src/pages/* */}
+        </Routes>
+      </BrowserRouter>
     </ClerkProvider>
   )
 }
-```
-
-**Day 10: tRPC client setup**
-```ts
-// src/utils/trpc.ts
-import { createTRPCReact } from '@trpc/react-query'
-import type { AppRouter } from '../../server/src/api/root'
-
-export const trpc = createTRPCReact<AppRouter>()
-
-// src/main.tsx - wrap with trpc provider
-import { trpc } from './utils/trpc'
-import { httpBatchLink } from '@trpc/client'
-
-const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: 'https://your-worker.workers.dev/api/trpc',
-    }),
-  ],
-})
-
-root.render(
-  <trpc.Provider client={trpcClient} queryClient={queryClient}>
-    <App />
-  </trpc.Provider>
-)
 ```
 
 #### Week 3: Testing & Polish (Days 11-15)
@@ -322,45 +326,74 @@ export default defineConfig({
 })
 ```
 
-Update test files:
+Update tests:
 ```ts
-// Old: import { describe, it, expect } from '@jest/globals'
-import { describe, it, expect } from 'vitest'  // New
+// Old
+import { describe, it, expect } from '@jest/globals'
+
+// New
+import { describe, it, expect } from 'vitest'
 ```
 
 **Day 13-14: Integration testing**
-- Test all game mechanics
-- Test authentication flows
 - Test API endpoints
-- Run full test suite: `npm test`
+- Test authentication flows
+- Test game mechanics
+- Run: `npm test`
 
 **Day 15: Deploy**
 ```bash
 # Frontend
 npm run build
 vercel deploy
-
-# Backend already deployed on Day 5
 ```
 
-### Breaking Changes You Avoid
+### Comparison: Hono RPC vs tRPC
 
-By starting fresh, you **skip debugging**:
-1. React 19 compiler changes
-2. Next.js 16 App Router breaking changes  
-3. tRPC 11 API changes
-4. Tailwind 4 CSS-first rewrite
-5. TypeScript 6 stricter types
-6. Clerk 7 auth API changes
-7. Prisma 7 query changes
-8. Jest → Vitest migration
+| Feature | Hono RPC | tRPC |
+|---------|----------|------|
+| **Setup complexity** | Minimal | Complex |
+| **Dependencies** | Built-in | Multiple packages |
+| **Type safety** | ✅ Full | ✅ Full |
+| **Bundle size** | Smaller | Larger |
+| **Learning curve** | Low | Medium |
+| **Code verbosity** | Less | More |
 
-### Estimated Effort
+### Example Code Comparison
 
-- Backend setup: **20 hours**
-- Frontend setup: **25 hours**  
-- Testing: **15 hours**
-- **Total: ~60 hours (2 weeks at 30hr/week)**
+**tRPC approach:**
+```ts
+// Server
+const userRouter = t.router({
+  getById: t.procedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      return await ctx.prisma.user.findUnique({ where: { id: input.id } })
+    }),
+})
+
+// Client
+const user = await trpc.user.getById.query({ id: '123' })
+```
+
+**Hono RPC approach:**
+```ts
+// Server
+app.get('/api/users/:id', 
+  zValidator('param', z.object({ id: z.string() })),
+  async (c) => {
+    const { id } = c.req.valid('param')
+    const user = await prisma.user.findUnique({ where: { id } })
+    return c.json({ user })
+  }
+)
+
+// Client
+const res = await client.api.users[':id'].$get({ param: { id: '123' } })
+const { user } = await res.json() // Fully typed!
+```
+
+**Result: Same type safety, less code, fewer dependencies.**
 
 ---
 
@@ -371,57 +404,28 @@ By starting fresh, you **skip debugging**:
 ### Why You Might Choose This
 - Keep Next.js familiarity
 - Keep file-based routing
-- Keep SSR capabilities (not used currently)
 
 ### The Reality
 
-You'll spend similar time debugging breaking changes:
-
-**Week 1: Core framework updates**
-- React 18 → 19 (component behavior changes)
-- Next.js 15 → 16 (App Router breaking changes)
-- TypeScript 5 → 6 (stricter inference)
-
-**Week 2: API layer updates**
-- tRPC 10 → 11 (context API changes)
-- TanStack Query 4 → 5 (cache behavior)
-- Prisma 6 → 7 (query API changes)
-- Clerk 4 → 7 (complete auth rewrite)
-
-**Week 3: Tooling & testing**
-- Tailwind 3 → 4 (CSS-first rewrite)
-- Jest 29 → 30 (config changes)
-- ESLint 9 → 10 (rule updates)
-- Zod 3 → 4 (validation changes)
+You'll spend similar time debugging breaking changes across 10+ packages.
 
 ### Migration Steps (Condensed)
 
 ```bash
-# Phase 1: Update everything
+# Update everything at once
 npm install react@19 react-dom@19
 npm install next@16 eslint-config-next@16
 npm install @trpc/client@11 @trpc/server@11 @trpc/next@11 @trpc/react-query@11
 npm install @tanstack/react-query@5 @tanstack/react-query-devtools@5
 npm install @clerk/nextjs@7
 npm install @prisma/client@7
-npm install -D prisma@7
-npm install -D tailwindcss@4
-npm install -D typescript@6
+npm install -D prisma@7 tailwindcss@4 typescript@6
 npm install zod@4
 
-# Phase 2: Fix 100+ breaking changes
+# Then fix 100+ breaking changes
 npm test  # Watch it fail
 npm run build  # Watch it fail
-# ... debug for days ...
 ```
-
-### Why This Is Harder
-
-1. **Cascading failures**: One breaking change causes 10 errors
-2. **Migration guides**: Must read 10+ migration guides
-3. **Type errors**: TypeScript 6 finds issues everywhere
-4. **Test failures**: Jest 30 config incompatibilities
-5. **Unknown unknowns**: Interactions between upgrades
 
 ### Pros & Cons
 
@@ -429,13 +433,12 @@ npm run build  # Watch it fail
 - Same timeline as Option 1
 - Higher debugging risk
 - Still on Next.js (security concerns)
-- Future upgrade debt
 - Cascading breaking changes
+- Keep tRPC complexity
 
 ✅ **Pros:**
 - Keep Next.js familiarity
 - Keep file-based routing
-- Don't rewrite tests (but still need updates)
 
 ---
 
@@ -444,72 +447,64 @@ npm run build  # Watch it fail
 | Factor | Option 1: Hono | Option 2: In-Place |
 |--------|----------------|-------------------|
 | **Timeline** | 2-3 weeks | 2-3 weeks |
-| **Risk** | Medium (clean slate) | High (cascading breaks) |
+| **Risk** | Medium | High |
 | **Debugging** | Minimal | Extensive |
 | **Bundle Size** | ~14KB | ~572KB |
-| **Long-term Maintenance** | Modern baseline | Continuous upgrades |
+| **Dependencies** | Fewer | Many |
+| **Type Safety** | ✅ Native RPC | ✅ via tRPC |
 | **Addresses Security** | ✅ Complete | ⚠️ Partial |
-| **Breaking Changes** | Avoid | Must fix 10+ |
-| **Database Options** | D1 (free) or Postgres | Same as current |
+| **Breaking Changes** | Avoid | Fix 10+ |
 
 ---
 
 ## ❓ What About Vue/Nuxt?
 
-**Short answer: Not recommended**
+**Not recommended** - would require:
+- ❌ Rewriting all 73 React tests
+- ❌ Rewriting all components
+- ❌ Additional 2-3 weeks
+- **Timeline: 4-6 weeks vs 2-3 weeks**
 
-### Why Vue/Nuxt Would Add Work
-
-- ❌ Rewrite ALL 73 React component tests
-- ❌ Rewrite ALL components (React → Vue SFC)
-- ❌ Learn new framework patterns
-- ❌ Additional 2-3 weeks on top of migration
-
-**Timeline: 4-6 weeks vs 2-3 weeks with React**
-
-### When Vue WOULD Make Sense
-- Starting from scratch
-- Team already knows Vue
-- Personal preference for Vue API
-
-**Recommendation: Stick with React** - preserve your investment in 73 tests and working components.
+Stick with React to preserve your investment.
 
 ---
 
 ## My Strong Recommendation: Option 1 (React + Hono)
 
-Given that you're facing a **complete stack rewrite anyway**, might as well:
+Since you're doing a complete rewrite anyway:
 - ✅ Start with latest versions
-- ✅ Avoid Next.js entirely  
-- ✅ Get lighter, faster architecture
-- ✅ Use Cloudflare D1 (free serverless DB)
-- ✅ Spend time building features, not debugging upgrades
+- ✅ Escape Next.js entirely
+- ✅ Drop tRPC complexity - use Hono's built-in RPC
+- ✅ Get 14KB bundle
+- ✅ Use free Cloudflare D1
+- ✅ Avoid debugging cascading breaks
 
-**Option 2 (in-place upgrade) takes the same time but leaves you with technical debt.**
+**Option 2 takes the same time but leaves you with more complexity and technical debt.**
 
 ---
 
 ## Next Steps
 
-### Ready to migrate to Hono?
+### Ready to migrate?
 
-1. **Create new repos:**
+1. **Create project structure:**
    ```bash
    mkdir earthdoom-v2
    cd earthdoom-v2
    ```
 
-2. **Start with backend** (game logic is critical):
-   - Set up Hono + tRPC
-   - Configure Cloudflare D1 or Prisma Postgres
-   - Copy routers and test with Postman
+2. **Start with backend:**
+   - Set up Hono
+   - Configure D1/Postgres
+   - Convert tRPC routers to Hono routes
+   - Test with Postman/curl
 
-3. **Build frontend incrementally**:
+3. **Build frontend:**
    - Set up Vite + React 19
-   - Copy components one route at a time
-   - Test as you go
+   - Use Hono client for type-safe API calls
+   - Copy components incrementally
 
-4. **Deploy early and often**:
+4. **Deploy early:**
    - Backend to Cloudflare Workers
    - Frontend to Vercel
 
@@ -517,15 +512,9 @@ Given that you're facing a **complete stack rewrite anyway**, might as well:
 
 ## Resources
 
-### Migration Guides
 - [Hono Documentation](https://hono.dev)
-- [tRPC v11 Migration](https://trpc.io/docs/migrate-from-v10-to-v11)
+- [Hono RPC Guide](https://hono.dev/guides/rpc)
 - [React 19 Upgrade Guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)
-- [Tailwind v4 Docs](https://tailwindcss.com/docs/v4-beta)
-- [Cloudflare D1 with Prisma](https://developers.cloudflare.com/d1/tutorials/d1-and-prisma-orm/)
-- [Prisma Postgres Guide](https://www.prisma.io/docs/orm/overview/databases/prisma-postgres)
-
-### Community
+- [Cloudflare D1 + Prisma](https://developers.cloudflare.com/d1/tutorials/d1-and-prisma-orm/)
+- [Prisma Postgres](https://www.prisma.io/docs/orm/overview/databases/prisma-postgres)
 - [Hono Discord](https://discord.gg/hono)
-- [tRPC Discord](https://trpc.io/discord)
-- [Cloudflare Developers Discord](https://discord.gg/cloudflaredev)
