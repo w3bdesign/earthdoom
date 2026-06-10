@@ -1,6 +1,6 @@
 import { Stringifier, canAffordToTrain } from "@/utils/functions";
 
-import type { FC, RefObject } from "react";
+import type { FC, RefObject, ReactElement } from "react";
 import type { PaPlayerBase } from "@/types/player";
 import type { Building } from "@/components/features/Construct/types/types";
 
@@ -34,8 +34,8 @@ export interface AdvancedTableColumn {
   label: string;
   accessor:
     | string
-    | JSX.Element
-    | ((row: PaPlayerBase | Building) => JSX.Element);
+    | ReactElement
+    | ((row: PaPlayerBase | Building) => ReactElement);
   type?: string;
 }
 
@@ -71,7 +71,7 @@ const CellAccessorContent: FC<{
 /** Renders the input number field when applicable */
 const CellInputNumber: FC<{
   col: AdvancedTableColumn;
-  inputRef: RefObject<HTMLInputElement> | undefined;
+  inputRef: RefObject<HTMLInputElement | null> | undefined;
 }> = ({ col, inputRef }) => {
   if (col.type !== "inputNumber" || !canAffordToTrain) return null;
   return <InputNumber canAffordToTrain={canAffordToTrain} ref={inputRef} />;
@@ -86,7 +86,7 @@ const CellActionButton: FC<{
   action?: TMutateType;
   actionText?: string;
   actionInProgress?: string;
-  inputRef: RefObject<HTMLInputElement> | undefined;
+  inputRef: RefObject<HTMLInputElement | null> | undefined;
   considerLand: boolean;
 }> = ({
   col,
@@ -141,7 +141,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   actionText,
   actionInProgress,
   considerLand = false,
-}: AdvancedDataTableProps): JSX.Element => {
+}: AdvancedDataTableProps): ReactElement => {
   const dataToMap = renderData || data;
 
   const inputAmountRefs = useMultipleRefs(columns.length);

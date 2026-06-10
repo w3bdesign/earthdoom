@@ -56,7 +56,7 @@ function buildProductionTooltip(
 function validateTrainInput(
   paPlayer: PaPlayer,
   production: IProduction,
-  unitAmountRef: RefObject<HTMLInputElement>,
+  unitAmountRef: RefObject<HTMLInputElement | null>,
 ): number | null {
   if (!paPlayer?.id) return null;
 
