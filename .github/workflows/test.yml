@@ -27,6 +27,6 @@ jobs:
           DATABASE_URL: "postgresql://test:test@localhost:5432/test"
 
       - name: Upload results to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
