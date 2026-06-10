@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@source "../**/*.{astro,html,js,jsx,md,mdx,ts,tsx,vue}";
-
 @theme {
   --background-image-space-ship: url("/images/spaceship.jpg");
   --background-image-large-space-ship: url("/images/spaceship.png");
