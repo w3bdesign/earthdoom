@@ -1,19 +1,16 @@
-//import { withClerkMiddleware } from "@clerk/nextjs/server";
-import { authMiddleware } from "@clerk/nextjs";
-//import { NextResponse } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-/*
-export default withClerkMiddleware(() => {
-  return NextResponse.next();
-});
-*/
+// Define public routes that can be accessed without authentication
+const isPublicRoute = createRouteMatcher(["/anyone-can-visit-this-route"]);
 
-export default authMiddleware({
-  // Routes that can be accessed while signed out
-  publicRoutes: ["/anyone-can-visit-this-route"],
-  // Routes that can always be accessed, and have
-  // no authentication information
-  ignoredRoutes: ["/no-auth-in-this-route"],
+// Define ignored routes that have no authentication information
+const isIgnoredRoute = createRouteMatcher(["/no-auth-in-this-route"]);
+
+export default clerkMiddleware(async (auth, request) => {
+  // If the route is not public and not ignored, protect it
+  if (!isPublicRoute(request) && !isIgnoredRoute(request)) {
+    await auth.protect();
+  }
 });
 
 export const config = {
