@@ -16,7 +16,7 @@ interface INewsTableProps {
 const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
   const ctx = api.useContext();
 
-  const { mutate: deleteSingleNews, isLoading: isDeleting } =
+  const { mutate: deleteSingleNews, isPending: isDeleting } =
     api.paNews.deleteSingleNews.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "News deleted", type: "success" });

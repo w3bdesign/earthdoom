@@ -27,7 +27,7 @@ const Construction: NextPage = () => {
   const ctx = api.useContext();
   const { paPlayer, isAuthenticated } = usePlayerData();
 
-  const { mutate, isLoading } = api.paConstruct.constructBuilding.useMutation({
+  const { mutate, isPending: isLoading } = api.paConstruct.constructBuilding.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Building started", type: "success" });
       await ctx.paUsers.getPlayerByNick.invalidate();

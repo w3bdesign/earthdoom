@@ -187,7 +187,7 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
     },
   );
 
-  const { mutate: militaryAction, isLoading } =
+  const { mutate: militaryAction, isPending: isLoading } =
     api.paMilitary.militaryAction.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "Troops are on their way", type: "success" });

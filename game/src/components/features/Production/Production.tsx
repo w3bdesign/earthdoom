@@ -109,7 +109,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const { isLoaded } = useUser();
   const unitAmountRef = useRef<HTMLInputElement>(null);
 
-  const { mutate, isLoading } = api.paUsers.produceUnit.useMutation({
+  const { mutate, isPending: isLoading } = api.paUsers.produceUnit.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Training started", type: "success" });
       await ctx.paUsers.getPlayerByNick.invalidate();

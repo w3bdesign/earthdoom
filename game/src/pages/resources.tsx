@@ -28,7 +28,7 @@ const Resources: NextPage = () => {
   const ctx = api.useContext();
   const { paPlayer, isAuthenticated, isLoaded } = usePlayerData();
 
-  const { mutate, isLoading } = api.paConstruct.developLand.useMutation({
+  const { mutate, isPending: isLoading } = api.paConstruct.developLand.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Resource initiated", type: "success" });
       await ctx.paUsers.getPlayerByNick.invalidate();

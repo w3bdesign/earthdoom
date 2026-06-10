@@ -27,7 +27,7 @@ const Spying: NextPage = () => {
 
   const uiRoids = paPlayer?.ui_roids || 0;
 
-  const { mutate, isLoading } = api.paSpying.spyingInitiate.useMutation({
+  const { mutate, isPending: isLoading } = api.paSpying.spyingInitiate.useMutation({
     onSuccess: async (data) => {
       const newAmountOfRoids = data.ui_roids - uiRoids;
       ToastComponent({

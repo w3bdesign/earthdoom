@@ -48,7 +48,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
     await ctx.paUsers.getPlayerByNick.refetch();
   };
 
-  const { mutate: createAlliance, isLoading: isCreateAllianceLoading } =
+  const { mutate: createAlliance, isPending: isCreateAllianceLoading } =
     api.paTag.createAlliance.useMutation({
       onSuccess: async () => {
         showSuccess("Alliance created");
@@ -59,7 +59,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
       },
     });
 
-  const { mutate: joinAlliance, isLoading: isJoinAllianceLoading } =
+  const { mutate: joinAlliance, isPending: isJoinAllianceLoading } =
     api.paTag.joinAlliance.useMutation({
       onSuccess: async (result: string) => {
         if (result === "Wrong password") {
@@ -74,7 +74,7 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
       },
     });
 
-  const { mutate: leaveAlliance, isLoading: isLeaveAllianceLoading } =
+  const { mutate: leaveAlliance, isPending: isLeaveAllianceLoading } =
     api.paTag.leaveAlliance.useMutation({
       onSuccess: async () => {
         showSuccess("Alliance left");

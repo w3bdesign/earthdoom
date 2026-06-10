@@ -98,7 +98,7 @@ const News: NextPage = () => {
     nick: user.username,
   });
 
-  const { mutate: deleteAllNews, isLoading: isDeletingAll } =
+  const { mutate: deleteAllNews, isPending: isDeletingAll } =
     api.paNews.deleteAllNews.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "News deleted", type: "success" });

@@ -25,7 +25,7 @@ const ResearchPage: NextPage = () => {
   const ctx = api.useContext();
   const { paPlayer, isAuthenticated } = usePlayerData();
 
-  const { mutate, isLoading } = api.paUsers.researchBuilding.useMutation({
+  const { mutate, isPending: isLoading } = api.paUsers.researchBuilding.useMutation({
     onSuccess: async () => {
       ToastComponent({ message: "Research started", type: "success" });
       await ctx.paUsers.getPlayerByNick.invalidate();

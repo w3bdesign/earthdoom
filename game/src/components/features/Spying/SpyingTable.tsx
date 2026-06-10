@@ -111,7 +111,7 @@ const useSpyingMutation = () => {
 const SpyingRow: FC<BuildingRowProps> = ({ paPlayer, resource }) => {
   const { isLoaded } = useUser();
   const spyingAmountRef = useRef<HTMLInputElement>(null);
-  const { mutate, isLoading } = useSpyingMutation();
+  const { mutate, isPending: isLoading } = useSpyingMutation();
 
   if (!isLoaded) {
     return <div>Loading user data...</div>;

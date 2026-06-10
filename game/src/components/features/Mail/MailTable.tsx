@@ -19,7 +19,7 @@ interface IMailTableProps {
 const MailTable: FC<IMailTableProps> = ({ mail }) => {
   const ctx = api.useContext();
 
-  const { mutate: deleteSingleMail, isLoading: isDeletingMail } =
+  const { mutate: deleteSingleMail, isPending: isDeletingMail } =
     api.paMail.deleteEmail.useMutation({
       onSuccess: async () => {
         ToastComponent({ message: "Mail deleted", type: "success" });
