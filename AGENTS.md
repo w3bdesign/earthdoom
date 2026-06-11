@@ -3,6 +3,7 @@
 This file provides guidance to agents when working with code in this repository.
 
 ## Monorepo Structure
+
 - `blog/` - Astro static site (earthdoom.com)
 - `game/` - Next.js T3 stack app (game interface)
 - Commands must be run from respective subdirectories, not project root
