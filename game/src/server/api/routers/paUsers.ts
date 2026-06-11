@@ -49,20 +49,90 @@ export const paUsersRouter = createTRPCRouter({
   createPlayer: privateProcedure
     .input(z.object({ nick: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const timestamp = new Date().toISOString();
+      
+      console.log("[CreatePlayer] Starting player creation", {
+        timestamp,
+        requestedNick: input.nick,
+        authenticatedUsername: ctx.username,
+        userId: ctx.userId,
+      });
+
       if (input.nick !== ctx.username) {
+        const error = {
+          timestamp,
+          code: "FORBIDDEN",
+          message: "Nick mismatch",
+          requestedNick: input.nick,
+          authenticatedUsername: ctx.username,
+        };
+        console.error("[CreatePlayer] FORBIDDEN - Nick mismatch", error);
+        
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Nick must match your authenticated username",
         });
       }
 
-      return await ctx.prisma.paUsers.create({
-        data: {
+      try {
+        // Check if player already exists
+        const existingPlayer = await ctx.prisma.paUsers.findUnique({
+          where: { nick: input.nick },
+        });
+
+        if (existingPlayer) {
+          console.warn("[CreatePlayer] Player already exists", {
+            timestamp,
+            nick: input.nick,
+            playerId: existingPlayer.id,
+            userId: ctx.userId,
+          });
+          
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Player with this username already exists",
+          });
+        }
+
+        const newPlayer = await ctx.prisma.paUsers.create({
+          data: {
+            nick: input.nick,
+            construction: { create: {} },
+          },
+          include: { construction: true },
+        });
+
+        console.log("[CreatePlayer] SUCCESS - Player created", {
+          timestamp,
           nick: input.nick,
-          construction: { create: {} },
-        },
-        include: { construction: true },
-      });
+          playerId: newPlayer.id,
+          userId: ctx.userId,
+          constructionId: newPlayer.construction?.id,
+        });
+
+        return newPlayer;
+      } catch (error) {
+        // If it's already a TRPCError, re-throw it
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+
+        // Log the unexpected error with full details
+        console.error("[CreatePlayer] FAILED - Unexpected error", {
+          timestamp,
+          nick: input.nick,
+          userId: ctx.userId,
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+          errorType: error?.constructor?.name,
+        });
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create player. Please try again or contact support.",
+          cause: error,
+        });
+      }
     }),
 
   getAll: privateProcedure.query(async ({ ctx }) => {
