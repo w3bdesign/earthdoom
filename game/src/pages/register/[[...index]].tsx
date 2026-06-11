@@ -20,7 +20,7 @@ const Register: NextPage = () => {
                 <SignUp
                   path="/register"
                   routing="path"
-                  afterSignUpUrl="/addUser"
+                  fallbackRedirectUrl="/addUser"
                 />
               </div>
             </SignedOut>
