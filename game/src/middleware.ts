@@ -1,7 +1,9 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 // Define public routes that can be accessed without authentication
-const isPublicRoute = createRouteMatcher(["/anyone-can-visit-this-route"]);
+const isPublicRoute = createRouteMatcher([
+  "/api/trpc/(.*)", // tRPC handles its own auth
+]);
 
 // Define ignored routes that have no authentication information
 const isIgnoredRoute = createRouteMatcher(["/no-auth-in-this-route"]);
