@@ -65,7 +65,7 @@ const buildSpyingPayload = (resource: Building, amount: number) => ({
 const getMaximumToSearch = (crystal: PaPlayer["crystal"]): number =>
   Math.floor(Number(crystal) / 500);
 
-const getInputAmount = (ref: React.RefObject<HTMLInputElement>): number =>
+const getInputAmount = (ref: React.RefObject<HTMLInputElement | null>): number =>
   Number(ref.current?.value) || 0;
 
 const canSpy = (
@@ -78,7 +78,7 @@ const canSpy = (
   validateAffordability(paPlayer, resource, amount);
 
 const SpyingAmountInput: FC<{
-  inputRef: React.RefObject<HTMLInputElement>;
+  inputRef: React.RefObject<HTMLInputElement | null>;
   defaultValue: number;
 }> = ({ inputRef, defaultValue }) => (
   <input

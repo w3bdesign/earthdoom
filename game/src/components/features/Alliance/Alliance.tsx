@@ -190,7 +190,7 @@ const AllianceHeader: FC<{
 /** Reusable alliance input field with label and action button */
 const AllianceInput: FC<{
   label: string;
-  inputRef: React.RefObject<HTMLInputElement>;
+  inputRef: React.RefObject<HTMLInputElement | null>;
   buttonText: string;
   disabled: boolean;
   onClick: (event: { preventDefault: () => void }) => void;

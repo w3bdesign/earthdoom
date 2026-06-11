@@ -7,11 +7,11 @@ import type { RefObject } from "react";
  *
  * @template T - The type of HTMLInputElement the RefObject will reference.
  * @param {number} length - The number of RefObjects to create.
- * @returns {RefObject<T>[]} - An array of RefObjects of the specified length.
+ * @returns {RefObject<T | null>[]} - An array of RefObjects of the specified length.
  */
 export const useMultipleRefs = <T extends HTMLInputElement>(
   length: number,
-): RefObject<T>[] => {
+): RefObject<T | null>[] => {
   const refs = Array(length)
     .fill(null)
     .map(() => createRef<T>());

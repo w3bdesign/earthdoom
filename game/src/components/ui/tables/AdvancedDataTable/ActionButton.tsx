@@ -16,7 +16,7 @@ interface IActionButtonProps {
   mutate: TMutateType;
   actionText?: string;
   actionInProgress?: string;
-  inputAmountRef?: RefObject<HTMLInputElement>;
+  inputAmountRef?: RefObject<HTMLInputElement | null>;
   disabled?: boolean;
   considerLand?: boolean;
 }
@@ -59,7 +59,7 @@ function shouldSkipFieldNameCheck(building: Building): boolean {
 }
 
 /** Get the numeric value from the input ref, defaulting to 0 */
-function getInputAmount(inputAmountRef?: RefObject<HTMLInputElement>): number {
+function getInputAmount(inputAmountRef?: RefObject<HTMLInputElement | null>): number {
   return Number(inputAmountRef?.current?.value) || 0;
 }
 
@@ -78,7 +78,7 @@ function getStatusText(
 function handleActionClick(
   paPlayer: PaPlayerBase[],
   building: Building,
-  inputAmountRef: RefObject<HTMLInputElement> | undefined,
+  inputAmountRef: RefObject<HTMLInputElement | null> | undefined,
   considerLand: boolean | undefined,
   mutate: TMutateType,
 ): void {

@@ -1,3 +1,5 @@
+import type { ReactElement } from "react";
+
 export interface IProduction {
   buildingId: number;
   buildingName: string;
@@ -6,7 +8,7 @@ export interface IProduction {
   buildingFieldNameETA: string;
   buildingRequirement: string;
   buildingETA: number;
-  buildingConstruct?: JSX.Element;
+  buildingConstruct?: ReactElement;
   buildingCost: string;
   buildingCostCrystal: number;
   buildingCostTitanium: number;
