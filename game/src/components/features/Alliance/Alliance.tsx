@@ -150,13 +150,15 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
                     </Button>
                   </div>
                 )}
-                <AllianceInput
-                  label="Join alliance"
-                  inputRef={joinAllianceRef}
-                  buttonText="Join"
-                  disabled={isAnyMutationLoading}
-                  onClick={handleJoin}
-                />
+                {!paPlayer.tag && (
+                  <AllianceInput
+                    label="Join alliance"
+                    inputRef={joinAllianceRef}
+                    buttonText="Join"
+                    disabled={isAnyMutationLoading}
+                    onClick={handleJoin}
+                  />
+                )}
               </form>
             </div>
           </div>
