@@ -95,8 +95,8 @@ const Information: React.FC<InformationProps> = ({ paPlayer }) => {
             <AlertBanner lines={friendliesData.defenders} variant="friendly" />
           )}
           {hasUnreadMail && <UnreadMailAlert />}
-          {paPlayer.newbie > 0 && (
-            <NewbieProtectionAlert ticksRemaining={paPlayer.newbie} />
+          {Number(paPlayer.newbie ?? 0) > 0 && (
+            <NewbieProtectionAlert ticksRemaining={Number(paPlayer.newbie ?? 0)} />
           )}
           <OverviewTable paPlayer={paPlayer} />
         </div>

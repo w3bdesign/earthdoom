@@ -189,6 +189,18 @@ describe("Information component", () => {
     expect(screen.queryByText(/under protection/)).not.toBeInTheDocument();
   });
 
+  it("does not render newbie protection alert when newbie is null", () => {
+    const player = createMockPaPlayer({ newbie: null as unknown as number });
+    render(<Information paPlayer={player} />);
+    expect(screen.queryByText(/under protection/)).not.toBeInTheDocument();
+  });
+
+  it("does not render newbie protection alert when newbie is undefined", () => {
+    const player = createMockPaPlayer({ newbie: undefined as unknown as number });
+    render(<Information paPlayer={player} />);
+    expect(screen.queryByText(/under protection/)).not.toBeInTheDocument();
+  });
+
   it("renders multiple alerts simultaneously", () => {
     mockGetHostilesUseQuery.mockReturnValue({
       data: { hostiles: "Incoming attack!" },
