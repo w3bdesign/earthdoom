@@ -86,8 +86,8 @@ function handleActionClick(
   if (!player?.id) return;
 
   const hasInputField =
-    Number(building.hasInputField) === 1 ||
-    building.hasInputField !== "undefined";
+    building.hasInputField === 1 ||
+    Number(building.hasInputField) === 1;
 
   const amount = getInputAmount(inputAmountRef);
 
