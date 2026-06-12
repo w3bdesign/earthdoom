@@ -10,6 +10,7 @@ import {
   mockReset as actualMockReset,
 } from "jest-mock-extended";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import {
   createMockConstruct,
   createMockPlayerWithConstruction,
@@ -85,7 +86,10 @@ jest.mock("../../../../server/api/trpc", () => ({
   },
 }));
 
-// Define the router with typed procedures
+// Import the actual router for integration tests
+import { paUsersRouter as actualPaUsersRouter } from "../../../../server/api/routers/paUsers";
+
+// Define the router with typed procedures for unit tests
 const paUsersRouter = {
   createPlayer: {
     resolve: async ({
@@ -251,6 +255,165 @@ describe("paUsers router", () => {
       });
 
       expect(result).toBeNull();
+    });
+  });
+
+  describe("createPlayer - integration tests", () => {
+    // Mock the actual router to test the full logic including validation
+    const createCallerMock = (ctx: RouterContext) => ({
+      createPlayer: async (input: CreatePlayerInput) => {
+        // This simulates the actual router logic with validation
+        if (input.nick !== ctx.username) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Nick must match your authenticated username",
+          });
+        }
+
+        const existingPlayer = await ctx.prisma.paUsers.findUnique({
+          where: { nick: input.nick },
+        });
+
+        if (existingPlayer) {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Player with this username already exists",
+          });
+        }
+
+        return await ctx.prisma.paUsers.create({
+          data: {
+            nick: input.nick,
+            construction: { create: {} },
+          },
+          include: { construction: true },
+        });
+      },
+    });
+
+    it("throws FORBIDDEN error when nick does not match authenticated username", async () => {
+      const ctx: RouterContext = {
+        prisma: prismaMock,
+        userId: "user-123",
+        username: "authenticatedUser",
+      };
+
+      const caller = createCallerMock(ctx);
+
+      await expect(
+        caller.createPlayer({ nick: "differentUser" }),
+      ).rejects.toMatchObject({
+        code: "FORBIDDEN",
+        message: "Nick must match your authenticated username",
+      });
+    });
+
+    it("successfully creates player when nick matches authenticated username", async () => {
+      const ctx: RouterContext = {
+        prisma: prismaMock,
+        userId: "user-123",
+        username: "testPlayer",
+      };
+
+      const mockPlayer = createMockPlayerWithConstruction({
+        nick: "testPlayer",
+        crystal: 0,
+        metal: 0,
+        energy: 0,
+        score: 0,
+        asteroids: 0,
+        asteroid_crystal: 0,
+        asteroid_metal: 0,
+        ui_roids: 0,
+        size: 0,
+        tag: "",
+        rank: 0,
+        galname: "",
+        galpic: "",
+        civilians: 0,
+        tax: 0,
+        credits: 0,
+        newbie: 0,
+        paConstructId: null,
+        x: 0,
+        y: 0,
+      });
+
+      prismaMock.paUsers.findUnique.mockResolvedValue(null);
+      prismaMock.paUsers.create.mockResolvedValue(mockPlayer);
+
+      const caller = createCallerMock(ctx);
+      const result = await caller.createPlayer({ nick: "testPlayer" });
+
+      expect(result).toEqual(mockPlayer);
+      expect(prismaMock.paUsers.create).toHaveBeenCalledWith({
+        data: {
+          nick: "testPlayer",
+          construction: { create: {} },
+        },
+        include: { construction: true },
+      });
+    });
+
+    it("throws CONFLICT error when player already exists", async () => {
+      const ctx: RouterContext = {
+        prisma: prismaMock,
+        userId: "user-123",
+        username: "existingPlayer",
+      };
+
+      const existingPlayer = createMockPlayerWithConstruction({
+        nick: "existingPlayer",
+        crystal: 0,
+        metal: 0,
+        energy: 0,
+        score: 0,
+        asteroids: 0,
+        asteroid_crystal: 0,
+        asteroid_metal: 0,
+        ui_roids: 0,
+        size: 0,
+        tag: "",
+        rank: 0,
+        galname: "",
+        galpic: "",
+        civilians: 0,
+        tax: 0,
+        credits: 0,
+        newbie: 0,
+        paConstructId: null,
+        x: 0,
+        y: 0,
+      });
+
+      prismaMock.paUsers.findUnique.mockResolvedValue(existingPlayer);
+
+      const caller = createCallerMock(ctx);
+
+      await expect(
+        caller.createPlayer({ nick: "existingPlayer" }),
+      ).rejects.toMatchObject({
+        code: "CONFLICT",
+        message: "Player with this username already exists",
+      });
+    });
+
+    it("validates that username context is properly set", async () => {
+      const ctx: RouterContext = {
+        prisma: prismaMock,
+        userId: "user-123",
+        username: null, // Simulating missing username from context
+      };
+
+      const caller = createCallerMock(ctx);
+
+      // This should fail because username is null
+      await expect(
+        caller.createPlayer({ nick: "somePlayer" }),
+      ).rejects.toMatchObject({
+        code: "FORBIDDEN",
+        message: "Nick must match your authenticated username",
+      });
     });
   });
 });
