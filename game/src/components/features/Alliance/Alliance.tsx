@@ -7,6 +7,7 @@ import type { FC } from "react";
 
 import { api } from "@/utils/api";
 import ToastComponent from "@/components/ui/notifications/ToastComponent";
+import showConfirmationToast from "@/components/ui/notifications/ConfirmationToast";
 
 interface IAllianceProps {
   paPlayer: PaUsers;
@@ -105,7 +106,12 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
 
   const handleLeave = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    leaveAlliance({ Userid: paPlayer.id });
+    showConfirmationToast({
+      message: "Are you sure you want to leave your alliance?",
+      onConfirm: () => leaveAlliance({ Userid: paPlayer.id }),
+      confirmText: "Leave",
+      cancelText: "Cancel",
+    });
   };
 
   const handleJoin = (event: { preventDefault: () => void }) => {
