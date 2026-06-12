@@ -54,8 +54,12 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
         showSuccess("Alliance created");
         await invalidateAndRefetch();
       },
-      onError: () => {
-        showError("Database error");
+      onError: (error) => {
+        if (error.data?.code === "CONFLICT") {
+          showError("Alliance already exists");
+        } else {
+          showError("Database error");
+        }
       },
     });
 
@@ -178,10 +182,13 @@ const AllianceHeader: FC<{
       )}
     </h2>
     {isLeader && paPlayer.tag && (
-      <div className="relative mt-2 w-full max-w-md">
-        <h2 className="mb-4 break-all text-center text-2xl font-bold text-black">
-          Password: {alliancePassword}
+      <div className="relative mt-2 w-full">
+        <h2 className="mb-2 text-center text-2xl font-bold text-black">
+          Password:
         </h2>
+        <p className="mb-4 break-all text-center text-xl text-black">
+          {alliancePassword}
+        </p>
       </div>
     )}
   </>
