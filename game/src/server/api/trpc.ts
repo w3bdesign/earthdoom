@@ -16,7 +16,7 @@
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
-import { auth } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
 import { prisma } from "@/server/db";
 
 import { env } from "@/env.mjs";
@@ -39,7 +39,7 @@ import { env } from "@/env.mjs";
  * @see https://trpc.io/docs/context
  */
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const session = await auth();
+  const session = getAuth(opts.req);
 
   const { userId } = session;
   // In Clerk v6, user data is accessed via sessionClaims
