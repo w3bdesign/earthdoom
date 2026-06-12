@@ -54,8 +54,12 @@ const Alliance: FC<IAllianceProps> = ({ paPlayer, paTag }) => {
         showSuccess("Alliance created");
         await invalidateAndRefetch();
       },
-      onError: () => {
-        showError("Database error");
+      onError: (error) => {
+        if (error.data?.code === "CONFLICT") {
+          showError("Alliance already exists");
+        } else {
+          showError("Database error");
+        }
       },
     });
 
