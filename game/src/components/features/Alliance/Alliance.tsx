@@ -178,8 +178,8 @@ const AllianceHeader: FC<{
       )}
     </h2>
     {isLeader && paPlayer.tag && (
-      <div className="relative mt-2 w-64">
-        <h2 className="mb-4 text-center text-2xl font-bold text-black">
+      <div className="relative mt-2 w-full max-w-md">
+        <h2 className="mb-4 break-all text-center text-2xl font-bold text-black">
           Password: {alliancePassword}
         </h2>
       </div>
