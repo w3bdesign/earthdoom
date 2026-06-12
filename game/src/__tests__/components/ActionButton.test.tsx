@@ -27,7 +27,7 @@ function createBuilding(overrides: Partial<Building> = {}): Building {
     buildingCostCrystal: 100,
     buildingCostTitanium: 50,
     needsFieldName: 0,
-    hasInputField: "undefined",
+    hasInputField: undefined,
     ...overrides,
   };
 }
@@ -134,7 +134,7 @@ describe("ActionButton - disabled states", () => {
 describe("ActionButton - click behavior", () => {
   it("calls mutate with correct parameters when clicked", () => {
     const building = createBuilding({
-      hasInputField: "undefined",
+      hasInputField: undefined,
       needsFieldName: 0,
     });
     renderInTable(<ActionButton {...defaultProps} building={building} />);
@@ -144,6 +144,33 @@ describe("ActionButton - click behavior", () => {
       buildingETA: 3,
       buildingCostCrystal: 100,
       buildingCostTitanium: 50,
+      unitAmount: 0,
+    });
+  });
+
+  it("allows free buildings without input field to be built (Tax collectors case)", () => {
+    const freeBuilding = createBuilding({
+      buildingName: "Tax collectors",
+      buildingCostCrystal: 0,
+      buildingCostTitanium: 0,
+      hasInputField: undefined, // No input field needed
+      needsFieldName: 0,
+    });
+    renderInTable(<ActionButton {...defaultProps} building={freeBuilding} />);
+    fireEvent.click(screen.getByRole("button", { name: "Build" }));
+    
+    // Should NOT show quantity error for free buildings without input field
+    expect(mockToast).not.toHaveBeenCalledWith({
+      message: "Quantity needs to be more than 0",
+      type: "error",
+    });
+    
+    // Should call mutate successfully
+    expect(mockMutate).toHaveBeenCalledWith({
+      buildingFieldName: "c_crystal",
+      buildingETA: 3,
+      buildingCostCrystal: 0,
+      buildingCostTitanium: 0,
       unitAmount: 0,
     });
   });

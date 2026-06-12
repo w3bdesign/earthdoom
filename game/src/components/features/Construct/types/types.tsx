@@ -11,4 +11,6 @@ export interface Building {
   buildingCost: string;
   buildingCostCrystal: number;
   buildingCostTitanium: number;
+  hasInputField?: number;
+  needsFieldName?: number | string;
 }
