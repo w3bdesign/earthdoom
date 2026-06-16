@@ -1,9 +1,79 @@
 @import "tailwindcss";
 
 @theme {
+  /* Background Images */
   --background-image-space-ship: url("/images/spaceship.jpg");
   --background-image-large-space-ship: url("/images/spaceship.png");
   --background-image-cool-space-ship: url("/images/new-spaceship.jpg");
+
+  /* Font Family */
+  --font-family-roboto: "Roboto", sans-serif;
+
+  /* Letter Spacing */
+  --letter-spacing-body: 0.5px;
+
+  /* Animations */
+  --animate-typed-out:
+    typing 2s steps(20, end), blinkCaret 0.75s step-end 8,
+    removeCaret 0s 1.2s forwards;
+  --animate-fade-in-top-second: fadeInTop 0.7s ease-in-out 2s forwards;
+  --animate-fade-in-top-third: fadeInTop 0.7s ease-in-out 2.7s forwards;
+  --animate-fade-in-cta: fadeInUp 0.7s ease-out 3.2s forwards;
+}
+
+@layer base {
+  body {
+    font-family: "Roboto", sans-serif;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+  }
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  @keyframes blinkCaret {
+    from,
+    to {
+      border-color: transparent;
+    }
+    50% {
+      border-color: #fff;
+    }
+  }
+
+  @keyframes removeCaret {
+    to {
+      border-right: none;
+    }
+  }
+
+  @keyframes fadeInTop {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 @layer utilities {
