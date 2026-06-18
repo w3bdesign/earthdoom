@@ -59,7 +59,7 @@
     "tailwindcss": "^3.4.19",
     "ts-jest": "^29.4.11",
     "tw-elements": "^2.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.0"
   },
   "ct3aMetadata": {
     "initVersion": "7.15.0"
