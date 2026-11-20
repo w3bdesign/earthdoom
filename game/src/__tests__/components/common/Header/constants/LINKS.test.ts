@@ -2,6 +2,7 @@ import {
   LINKS,
   LINK_GROUPS,
   TAB_BAR_HREFS,
+  TAB_BAR_LABELS,
 } from "../../../../../components/common/Header/constants/LINKS";
 
 describe("LINKS constant", () => {
@@ -93,5 +94,12 @@ describe("LINKS constant", () => {
   it("only uses existing links in the mobile tab bar", () => {
     const hrefs = LINKS.map((l) => l.href);
     TAB_BAR_HREFS.forEach((href) => expect(hrefs).toContain(href));
+  });
+
+  it("has a short tab bar label for every tab", () => {
+    TAB_BAR_HREFS.forEach((href) => {
+      expect(typeof TAB_BAR_LABELS[href]).toBe("string");
+    });
+    expect(TAB_BAR_LABELS["/construct"]).toBe("Build");
   });
 });
