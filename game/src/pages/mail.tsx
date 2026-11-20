@@ -6,7 +6,9 @@ import { usePlayerData } from "@/utils/usePlayerData";
 import { Layout } from "@/components/common/Layout";
 import MailTable from "@/components/features/Mail/MailTable";
 import { Button, ToastComponent } from "@/components/ui";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import { PageSkeleton } from "@/components/ui/Skeleton";
+import PageHeader from "@/components/ui/PageHeader";
+import Panel from "@/components/ui/Panel";
 import NewMail from "@/components/features/Mail/NewMail";
 
 /**
@@ -44,9 +46,7 @@ const Mail: NextPage = () => {
   if (!paMail || !paPlayer) {
     return (
       <Layout>
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
+        <PageSkeleton />
       </Layout>
     );
   }
@@ -55,21 +55,22 @@ const Mail: NextPage = () => {
 
   return (
     <Layout paPlayer={paPlayer}>
-      <div className="container mb-6 flex flex-col items-center justify-center">
-        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-          <h2 className="mt-4 py-4 text-center text-2xl font-bold text-white">
-            Received Mail
-          </h2>
-          {hasUnseenEmail && (
+      <PageHeader
+        title="Mail"
+        description="To write to a player, use Mail next to their name in the Ranking."
+        actions={
+          hasUnseenEmail && (
             <MarkAllSeenButton
               onClick={() => markAsSeen({ sentTo: paPlayer.id })}
             />
-          )}
-          <MailTableSection mail={paMail.mail} />
-          {recipientNick && (
-            <NewMailSection paPlayer={paPlayer} recipientNick={recipientNick} />
-          )}
-        </div>
+          )
+        }
+      />
+      <div className="flex flex-col gap-4">
+        {recipientNick && (
+          <NewMailSection paPlayer={paPlayer} recipientNick={recipientNick} />
+        )}
+        <MailTableSection mail={paMail.mail} />
       </div>
     </Layout>
   );
@@ -77,11 +78,9 @@ const Mail: NextPage = () => {
 
 /** Button to mark all mails as seen */
 const MarkAllSeenButton = ({ onClick }: { onClick: () => void }) => (
-  <div className="mt-6 flex justify-end py-4">
-    <Button extraClasses="w-64" onClick={onClick}>
-      Mark all as seen
-    </Button>
-  </div>
+  <Button variant="secondary" onClick={onClick}>
+    Mark all as seen
+  </Button>
 );
 
 /** Mail table wrapper with overflow handling */
@@ -90,15 +89,9 @@ const MailTableSection = ({
 }: {
   mail: Parameters<typeof MailTable>[0]["mail"];
 }) => (
-  <div className="mt-2 flex flex-col bg-white text-black">
-    <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div className="inline-block min-w-full sm:px-6 lg:px-8">
-        <div className="overflow-hidden">
-          <MailTable mail={mail} />
-        </div>
-      </div>
-    </div>
-  </div>
+  <Panel title="Inbox" meta={`${mail.length}`} flush>
+    <MailTable mail={mail} />
+  </Panel>
 );
 
 /** New mail composition section */
@@ -109,12 +102,9 @@ const NewMailSection = ({
   paPlayer: Parameters<typeof NewMail>[0]["paPlayer"];
   recipientNick: string;
 }) => (
-  <div>
-    <h2 className="mt-6 py-4 text-center text-2xl font-bold text-white">
-      Send Mail to {recipientNick}
-    </h2>
+  <Panel title={`New mail to ${recipientNick}`}>
     <NewMail paPlayer={paPlayer} recipient={recipientNick} />
-  </div>
+  </Panel>
 );
 
 export default Mail;

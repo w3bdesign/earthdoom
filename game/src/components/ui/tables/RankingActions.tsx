@@ -1,8 +1,10 @@
 import type { FC } from "react";
+import type { IconType } from "react-icons";
 import type { PaPlayerBase } from "@/types/player";
 
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
+import { LuMail, LuSwords, LuShield } from "react-icons/lu";
 
 interface RankingActionsProps {
   playerNick: string;
@@ -15,31 +17,34 @@ interface ActionButtonProps {
   className: string;
   title: string;
   tooltip: string;
-  emoji: string;
+  icon: IconType;
   disabled?: boolean;
 }
 
 // TODO: Set this to true for production
 const ENABLE_NEWBIE_PROTECTION = false;
 
+const BASE_CLASS =
+  "inline-flex h-9 items-center gap-1.5 rounded-md border px-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+
 const ActionButton: FC<ActionButtonProps> = ({
   onClick,
   className,
   title,
   tooltip,
-  emoji,
+  icon: Icon,
   disabled = false,
 }) => (
   <button
+    type="button"
     onClick={onClick}
-    className={className}
-    title={title}
+    className={`${BASE_CLASS} ${className}`}
+    title={tooltip}
+    aria-label={tooltip}
     disabled={disabled}
   >
-    <span className="absolute -top-8 left-1/2 z-50 hidden -translate-x-1/2 transform whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white group-hover:block">
-      {tooltip}
-    </span>
-    {emoji}
+    <Icon aria-hidden className="h-4 w-4" />
+    <span className="hidden sm:inline lg:hidden xl:inline">{title}</span>
   </button>
 );
 
@@ -61,7 +66,7 @@ const RankingActions: FC<RankingActionsProps> = ({
 
   // Don't show actions for the current user
   if (user?.username === playerNick) {
-    return null;
+    return <span className="text-sm text-muted">You</span>;
   }
 
   const hasTroops = computeShipCount(currentPlayer) > 0;
@@ -75,33 +80,33 @@ const RankingActions: FC<RankingActionsProps> = ({
 
   const attackTooltip = isProtected
     ? `Player is protected for ${newbie} more ticks`
-    : "Send your troops to attack this player";
+    : `Attack ${playerNick}`;
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center gap-2">
       <ActionButton
         onClick={navigateToMail}
-        className="group relative rounded-md bg-blue-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-blue-600"
-        title="Send Mail"
-        tooltip="Send a mail"
-        emoji="📧"
+        className="border-line-strong bg-raised text-ink hover:bg-line"
+        title="Mail"
+        tooltip={`Mail ${playerNick}`}
+        icon={LuMail}
       />
       {hasTroops && (
         <>
           <ActionButton
             onClick={navigateToAttack}
-            className="group relative rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-50"
+            className="border-hostile/40 bg-hostile/10 text-hostile hover:bg-hostile/20"
             title="Attack"
             tooltip={attackTooltip}
-            emoji="⚔️"
+            icon={LuSwords}
             disabled={isProtected}
           />
           <ActionButton
             onClick={navigateToDefend}
-            className="group relative rounded-md bg-green-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-green-600"
+            className="border-friendly/35 bg-friendly/10 text-friendly hover:bg-friendly/20"
             title="Defend"
-            tooltip="Send your troops to defend this player"
-            emoji="🛡️"
+            tooltip={`Defend ${playerNick}`}
+            icon={LuShield}
           />
         </>
       )}

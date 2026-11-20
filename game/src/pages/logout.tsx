@@ -6,6 +6,8 @@ import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
 import { Button } from "@/components/ui";
+import PageHeader from "@/components/ui/PageHeader";
+import Panel from "@/components/ui/Panel";
 
 /**
  * Renders a logout button that either signs out the user or redirects them to the sign in page depending on their authentication status.
@@ -17,25 +19,22 @@ const Logout: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <p className="mt-12 text-2xl text-white">
-              <SignedIn>
-                <Button onClick={() => signOut()}>Sign out</Button>
-              </SignedIn>
-              <SignedOut>
-                <SignInButton>
-                  <Button
-                    type="button"
-                    className="inline-block rounded bg-primary p-8 pb-2 pt-2.5 text-xl font-medium leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 focus:bg-primary-600"
-                  >
-                    Sign in
-                  </Button>
-                </SignInButton>
-              </SignedOut>
+        <PageHeader title="Log out" />
+        <Panel>
+          <SignedIn>
+            <p className="mb-4 text-sm text-muted">
+              Your empire keeps running while you are away.
             </p>
-          </div>
-        </div>
+            <Button variant="secondary" onClick={() => signOut()}>
+              Log out
+            </Button>
+          </SignedIn>
+          <SignedOut>
+            <SignInButton>
+              <Button>Sign in</Button>
+            </SignInButton>
+          </SignedOut>
+        </Panel>
       </Layout>
     </>
   );

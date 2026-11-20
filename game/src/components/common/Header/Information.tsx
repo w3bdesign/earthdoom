@@ -1,106 +1,99 @@
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
-import type { PaPlayer } from "@/components/features/Military/Military";
+import type { PaPlayer } from "@/types/player";
 
 import { api } from "@/utils/api";
+import Alert from "@/components/ui/Alert";
 
-import OverviewTable from "./OverviewTable";
-import LoadingSpinner from "../Loader/LoadingSpinner";
+import ResourceBar from "./ResourceBar";
 
 interface InformationProps {
   paPlayer?: PaPlayer;
 }
 
-interface AlertBannerProps {
-  lines: string;
-  variant: "hostile" | "friendly";
-}
+const lines = (text: string) => text.split("\n").filter(Boolean);
 
-/** Renders a multi-line alert banner for hostiles or friendlies */
-const AlertBanner: React.FC<AlertBannerProps> = ({ lines, variant }) => {
-  const bgClass = variant === "hostile" ? "bg-red-300" : "bg-green-300";
-  return (
-    <div
-      className={`mb-4 rounded-lg ${bgClass} px-6 py-5 text-base text-black md:min-w-[30.625rem]`}
-      role="alert"
-    >
-      {lines.split("\n").map((line, index) => (
-        <div className="text-left" key={index}>
-          {line}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-/** Renders the unread mail notification */
-const UnreadMailAlert: React.FC = () => (
-  <div
-    className="mb-4 min-w-[27.125rem] rounded-lg bg-secondary-100 px-6 py-5 text-base text-secondary-800 md:min-w-[30.375rem]"
-    role="alert"
-  >
-    <Link href="/mail" className="font-bold text-info-800">
-      You have unread email
-    </Link>
-  </div>
-);
-
-/** Renders the newbie protection notification */
-const NewbieProtectionAlert: React.FC<{ ticksRemaining: number }> = ({
-  ticksRemaining,
-}) => (
-  <div
-    className="mb-4 rounded-lg bg-blue-100 px-6 py-5 text-base text-blue-800 md:min-w-[30.625rem]"
-    role="alert"
-  >
-    You are under protection for {ticksRemaining} more ticks
-  </div>
-);
-
+/**
+ * The resource bar and the alerts every page shows: incoming fleets and newbie protection.
+ * Unread mail is shown as a badge in the navigation.
+ */
 const Information: React.FC<InformationProps> = ({ paPlayer }) => {
   const { user } = useUser();
+  const nick = user?.username ?? "";
 
-  if (!user?.username) {
+  const { data: hostilesData } = api.paUsers.getHostiles.useQuery(
+    { nick },
+    { enabled: !!nick },
+  );
+  const { data: friendliesData } = api.paUsers.getFriendlies.useQuery(
+    { nick },
+    { enabled: !!nick },
+  );
+
+  if (!nick || !paPlayer) {
     return null;
   }
 
-  const { data: hostilesData, isLoading } = api.paUsers.getHostiles.useQuery({
-    nick: user.username,
-  });
-
-  const { data: friendliesData } = api.paUsers.getFriendlies.useQuery({
-    nick: user.username,
-  });
-
-  const { data: paUnseenMail } = api.paMail.getUnseenMailByUserId.useQuery({
-    nick: user.username,
-  });
-
-  if (!paPlayer) {
-    return null;
-  }
-
-  const hasUnreadMail = (paUnseenMail?.email?.length ?? 0) > 0;
+  const hostiles = hostilesData?.hostiles ? lines(hostilesData.hostiles) : [];
+  const defenders = friendliesData?.defenders
+    ? lines(friendliesData.defenders)
+    : [];
+  const protectedTicks = Number(paPlayer.newbie ?? 0);
+  const hasAlerts =
+    hostiles.length > 0 || defenders.length > 0 || protectedTicks > 0;
 
   return (
     <>
-      <div className="mt-4 flex w-full flex-col items-center justify-center gap-12 px-4 py-4 text-white">
-        <div className="flex flex-col items-center gap-2 text-center text-lg md:w-[44.5625rem]">
-          {isLoading && <LoadingSpinner />}
-          {hostilesData?.hostiles && (
-            <AlertBanner lines={hostilesData.hostiles} variant="hostile" />
+      <ResourceBar paPlayer={paPlayer} />
+      {hasAlerts && (
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 pt-4 md:px-8">
+          {hostiles.length > 0 && (
+            <Alert
+              tone="hostile"
+              title={
+                hostiles.length === 1
+                  ? "Hostile fleet incoming"
+                  : `${hostiles.length} hostile fleets incoming`
+              }
+              action={
+                <Link
+                  href="/military"
+                  className="text-sm font-semibold text-hostile underline-offset-4 hover:underline"
+                >
+                  Military
+                </Link>
+              }
+            >
+              {hostiles.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </Alert>
           )}
-          {friendliesData?.defenders && (
-            <AlertBanner lines={friendliesData.defenders} variant="friendly" />
+          {defenders.length > 0 && (
+            <Alert
+              tone="friendly"
+              title={
+                defenders.length === 1
+                  ? "Friendly fleet incoming"
+                  : `${defenders.length} friendly fleets incoming`
+              }
+            >
+              {defenders.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </Alert>
           )}
-          {hasUnreadMail && <UnreadMailAlert />}
-          {Number(paPlayer.newbie ?? 0) > 0 && (
-            <NewbieProtectionAlert ticksRemaining={Number(paPlayer.newbie ?? 0)} />
+          {protectedTicks > 0 && (
+            <div className="sm:hidden">
+              <Alert
+                tone="info"
+                title={`You are under protection for ${protectedTicks} more ticks`}
+              />
+            </div>
           )}
-          <OverviewTable paPlayer={paPlayer} />
         </div>
-      </div>
+      )}
     </>
   );
 };

@@ -50,7 +50,7 @@ describe("Logout page", () => {
   it("renders SignedIn section with sign out button", () => {
     render(<Logout />);
     expect(screen.getByTestId("signed-in")).toBeInTheDocument();
-    expect(screen.getByText("Sign out")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
   });
 
   it("renders SignedOut section with sign in button", () => {
@@ -61,7 +61,7 @@ describe("Logout page", () => {
 
   it("calls signOut when sign out button is clicked", () => {
     render(<Logout />);
-    const signOutButton = screen.getByText("Sign out");
+    const signOutButton = screen.getByRole("button", { name: "Log out" });
     fireEvent.click(signOutButton);
     expect(mockSignOut).toHaveBeenCalled();
   });

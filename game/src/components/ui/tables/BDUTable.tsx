@@ -1,24 +1,31 @@
 import type { PaPlayer } from "@/components/features/Military/Military";
 import type { FC } from "react";
 
-import { DataTable } from "@/components/ui";
+import Panel from "@/components/ui/Panel";
+import StatList from "@/components/ui/StatList";
+
+import { formatNumber } from "@/utils/functions";
 
 interface BDUTableProps {
   paPlayer: PaPlayer;
 }
 
+/** The player's base defence units (BDU), with the total in the title. */
 const BDUTable: FC<BDUTableProps> = ({ paPlayer }) => {
   const bduCount = paPlayer.rcannons + paPlayer.avengers + paPlayer.lstalkers;
 
-  const columns = [
-    { label: "Reaper cannons", accessor: "rcannons" },
-    { label: "Avengers", accessor: "avengers" },
-    { label: "Lucius stalkers", accessor: "lstalkers" },
-  ];
-
-  const caption = `BDU (${bduCount} total)`;
-
-  return <DataTable columns={columns} data={[paPlayer]} caption={caption} />;
+  return (
+    <Panel title="Base defence" meta={`${formatNumber(bduCount)} total`}>
+      <StatList
+        label="Base defence units"
+        stats={[
+          { label: "Reaper cannons", value: paPlayer.rcannons },
+          { label: "Avengers", value: paPlayer.avengers },
+          { label: "Lucius stalkers", value: paPlayer.lstalkers },
+        ]}
+      />
+    </Panel>
+  );
 };
 
 export default BDUTable;

@@ -141,7 +141,12 @@ describe("Energy page", () => {
       isLoaded: true,
     });
     render(<Energy />);
-    expect(screen.getByTestId("render-message")).toHaveTextContent("Energy");
+    expect(
+      screen.getByText(/You need to research power plants/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Go to Research" }),
+    ).toHaveAttribute("href", "/research");
   });
 
   it("renders energy message when r_energy > 1", () => {
@@ -151,7 +156,9 @@ describe("Energy page", () => {
       isLoaded: true,
     });
     render(<Energy />);
-    expect(screen.getByTestId("render-message")).toBeInTheDocument();
+    expect(
+      screen.getByText(/You need to research power plants/),
+    ).toBeInTheDocument();
   });
 
   it("renders AdvancedDataTable when r_energy is 1", () => {

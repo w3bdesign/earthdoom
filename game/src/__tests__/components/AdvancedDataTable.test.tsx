@@ -79,12 +79,14 @@ describe("AdvancedDataTable - rendering structure", () => {
     expect(cells).toHaveLength(3);
   });
 
-  it("renders data-th attributes on td elements", () => {
-    const { container } = render(<AdvancedDataTable {...defaultProps} />);
-    const tds = container.querySelectorAll("td");
-    expect(tds[0]).toHaveAttribute("data-th", "Name");
-    expect(tds[1]).toHaveAttribute("data-th", "Crystal");
-    expect(tds[2]).toHaveAttribute("data-th", "Metal");
+  it("renders one column header per column", () => {
+    render(<AdvancedDataTable {...defaultProps} />);
+    const headers = screen.getAllByRole("columnheader");
+    expect(headers.map((h) => h.textContent)).toEqual([
+      "Name",
+      "Crystal",
+      "Metal",
+    ]);
   });
 
   it("renders empty tbody when data is empty", () => {
@@ -101,8 +103,8 @@ describe("AdvancedDataTable - data rendering", () => {
   it("renders data from the data prop using string accessors", () => {
     render(<AdvancedDataTable {...defaultProps} />);
     expect(screen.getByText("TestPlayer")).toBeInTheDocument();
-    expect(screen.getByText("5000")).toBeInTheDocument();
-    expect(screen.getByText("3000")).toBeInTheDocument();
+    expect(screen.getByText("5,000")).toBeInTheDocument();
+    expect(screen.getByText("3,000")).toBeInTheDocument();
   });
 
   it("renders multiple rows with multiple data entries", () => {
@@ -133,7 +135,8 @@ describe("AdvancedDataTable - data rendering", () => {
       />,
     );
     expect(screen.getByText("Crystal Mine")).toBeInTheDocument();
-    expect(screen.getByText("100 credits")).toBeInTheDocument();
+    // Shown in the Cost column and repeated under the name for small screens
+    expect(screen.getAllByText("100 credits").length).toBeGreaterThan(0);
   });
 });
 

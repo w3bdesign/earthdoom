@@ -51,24 +51,6 @@ jest.mock("@/utils/api", () => ({
   },
 }));
 
-// Mock OverviewTable
-jest.mock("../../../../components/common/Header/OverviewTable", () => {
-  return function MockOverviewTable({
-    paPlayer,
-  }: {
-    paPlayer: { nick: string };
-  }) {
-    return <div data-testid="overview-table">Overview for {paPlayer.nick}</div>;
-  };
-});
-
-// Mock LoadingSpinner
-jest.mock("../../../../components/common/Loader/LoadingSpinner", () => {
-  return function MockLoadingSpinner() {
-    return <div data-testid="loading-spinner">Loading...</div>;
-  };
-});
-
 describe("Information component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -97,18 +79,20 @@ describe("Information component", () => {
     expect(container.innerHTML).toBe("");
   });
 
-  it("renders OverviewTable when player data is available", () => {
+  it("renders the resource bar when player data is available", () => {
     const player = createMockPaPlayer({ nick: "TestPlayer" });
     render(<Information paPlayer={player} />);
-    expect(screen.getByTestId("overview-table")).toBeInTheDocument();
-    expect(screen.getByText("Overview for TestPlayer")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Resources for TestPlayer"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Credits")).toBeInTheDocument();
   });
 
-  it("shows loading spinner when hostiles data is loading", () => {
+  it("shows no fleet alerts while hostiles data is loading", () => {
     mockGetHostilesUseQuery.mockReturnValue({ data: null, isLoading: true });
     const player = createMockPaPlayer();
     render(<Information paPlayer={player} />);
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("renders hostile alert banner when hostiles are present", () => {
@@ -120,11 +104,12 @@ describe("Information component", () => {
     });
     const player = createMockPaPlayer();
     render(<Information paPlayer={player} />);
-    const alerts = screen.getAllByRole("alert");
-    const hostileAlert = alerts.find((el) =>
-      el.className.includes("bg-red-300"),
+    const hostileAlert = screen.getByRole("alert");
+    expect(hostileAlert).toHaveTextContent("2 hostile fleets incoming");
+    expect(screen.getByRole("link", { name: "Military" })).toHaveAttribute(
+      "href",
+      "/military",
     );
-    expect(hostileAlert).toBeInTheDocument();
     expect(
       screen.getByText("5 Infinitys from EnemyPlayer"),
     ).toBeInTheDocument();
@@ -137,42 +122,24 @@ describe("Information component", () => {
     });
     const player = createMockPaPlayer();
     render(<Information paPlayer={player} />);
-    const alerts = screen.getAllByRole("alert");
-    const friendlyAlert = alerts.find((el) =>
-      el.className.includes("bg-green-300"),
-    );
-    expect(friendlyAlert).toBeInTheDocument();
+    const statuses = screen.getAllByRole("status");
+    expect(
+      statuses.some((el) =>
+        el.textContent?.includes("Friendly fleet incoming"),
+      ),
+    ).toBe(true);
     expect(
       screen.getByText("10 Destroyers from AllyPlayer"),
     ).toBeInTheDocument();
   });
 
-  it("renders unread mail notification when there is unseen mail", () => {
+  it("leaves unread mail to the navigation badge", () => {
     mockGetUnseenMailUseQuery.mockReturnValue({
       data: { email: [{ id: 1 }] },
     });
     const player = createMockPaPlayer();
     render(<Information paPlayer={player} />);
-    expect(screen.getByText("You have unread email")).toBeInTheDocument();
-  });
-
-  it("unread mail link points to /mail", () => {
-    mockGetUnseenMailUseQuery.mockReturnValue({
-      data: { email: [{ id: 1 }] },
-    });
-    const player = createMockPaPlayer();
-    render(<Information paPlayer={player} />);
-    const mailLink = screen.getByText("You have unread email");
-    expect(mailLink).toHaveAttribute("href", "/mail");
-  });
-
-  it("does not render unread mail notification when email array is empty", () => {
-    mockGetUnseenMailUseQuery.mockReturnValue({
-      data: { email: [] },
-    });
-    const player = createMockPaPlayer();
-    render(<Information paPlayer={player} />);
-    expect(screen.queryByText("You have unread email")).not.toBeInTheDocument();
+    expect(screen.queryByText(/unread/i)).not.toBeInTheDocument();
   });
 
   it("renders newbie protection alert when player has newbie ticks", () => {
@@ -196,7 +163,9 @@ describe("Information component", () => {
   });
 
   it("does not render newbie protection alert when newbie is undefined", () => {
-    const player = createMockPaPlayer({ newbie: undefined as unknown as number });
+    const player = createMockPaPlayer({
+      newbie: undefined as unknown as number,
+    });
     render(<Information paPlayer={player} />);
     expect(screen.queryByText(/under protection/)).not.toBeInTheDocument();
   });
@@ -217,7 +186,6 @@ describe("Information component", () => {
 
     expect(screen.getByText("Incoming attack!")).toBeInTheDocument();
     expect(screen.getByText("Defenders arriving!")).toBeInTheDocument();
-    expect(screen.getByText("You have unread email")).toBeInTheDocument();
     expect(
       screen.getByText("You are under protection for 25 more ticks"),
     ).toBeInTheDocument();
@@ -239,14 +207,13 @@ describe("Information component", () => {
     mockUseUser.mockReturnValue({ user: { username: "SpecialUser" } });
     const player = createMockPaPlayer();
     render(<Information paPlayer={player} />);
-    expect(mockGetHostilesUseQuery).toHaveBeenCalledWith({
-      nick: "SpecialUser",
-    });
-    expect(mockGetFriendliesUseQuery).toHaveBeenCalledWith({
-      nick: "SpecialUser",
-    });
-    expect(mockGetUnseenMailUseQuery).toHaveBeenCalledWith({
-      nick: "SpecialUser",
-    });
+    expect(mockGetHostilesUseQuery).toHaveBeenCalledWith(
+      { nick: "SpecialUser" },
+      { enabled: true },
+    );
+    expect(mockGetFriendliesUseQuery).toHaveBeenCalledWith(
+      { nick: "SpecialUser" },
+      { enabled: true },
+    );
   });
 });

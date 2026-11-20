@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
 import Alliance from "@/components/features/Alliance";
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 
 /**
  * Renders the Alliance page if the user is signed in and has a username.
@@ -29,9 +29,7 @@ const AlliancePage: NextPage = () => {
   if (!paPlayer) {
     return (
       <Layout>
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
+        <PageSkeleton />
       </Layout>
     );
   }
@@ -39,16 +37,8 @@ const AlliancePage: NextPage = () => {
   return (
     <>
       <Layout paPlayer={paPlayer}>
-        <div className="container mb-6 flex flex-col items-center justify-center text-white">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <div className="relative sm:mx-auto">
-              {isLoading && <LoadingSpinner />}
-              {paPlayer && paTag && (
-                <Alliance paPlayer={paPlayer} paTag={paTag} />
-              )}
-            </div>
-          </div>
-        </div>
+        {isLoading && <PageSkeleton />}
+        {paPlayer && paTag && <Alliance paPlayer={paPlayer} paTag={paTag} />}
       </Layout>
     </>
   );

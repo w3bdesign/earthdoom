@@ -20,31 +20,33 @@ jest.mock("../../components/common/Layout", () => ({
   ),
 }));
 
-jest.mock("../../components/ui", () => ({
-  Button: ({
-    children,
-    onClick,
-  }: {
-    children: React.ReactNode;
-    onClick?: () => void;
-  }) => <button onClick={onClick}>{children}</button>,
-}));
-
 jest.mock("next/link", () => ({
   __esModule: true,
   default: ({
     children,
     href,
+    ...props
   }: {
     children: React.ReactNode;
     href: string;
-  }) => <a href={href}>{children}</a>,
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
 }));
 
-jest.mock("react-icons/bs", () => ({
-  BsArrowLeft: () => <span data-testid="arrow-left">←</span>,
-  BsArrowRight: () => <span data-testid="arrow-right">→</span>,
-}));
+const player = (overrides: Record<string, unknown> = {}) => ({
+  id: 1,
+  nick: "Player1",
+  y: 2,
+  tag: "",
+  score: 1000,
+  commander: 0,
+  timer: 0,
+  ...overrides,
+});
 
 describe("Country page", () => {
   beforeEach(() => jest.clearAllMocks());
@@ -58,108 +60,76 @@ describe("Country page", () => {
   it("renders navigation buttons", () => {
     mockGetAll.mockReturnValue({ data: null });
     render(<Country />);
-    expect(screen.getByText("Previous")).toBeInTheDocument();
-    expect(screen.getByText("Next")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Previous continent" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Next continent" }),
+    ).toBeInTheDocument();
+  });
+
+  it("moves between continents with Previous and Next", () => {
+    mockGetAll.mockReturnValue({ data: null });
+    render(<Country />);
+    const input = screen.getByLabelText("Continent number");
+    fireEvent.click(screen.getByRole("button", { name: "Next continent" }));
+    expect(input).toHaveValue("2");
+    fireEvent.click(screen.getByRole("button", { name: "Previous continent" }));
+    expect(input).toHaveValue("1");
   });
 
   it("renders table headers", () => {
     mockGetAll.mockReturnValue({ data: null });
     render(<Country />);
-    expect(screen.getByText("Location")).toBeInTheDocument();
-    expect(screen.getByText("Tag")).toBeInTheDocument();
-    expect(screen.getByText("Nick")).toBeInTheDocument();
-    expect(screen.getByText("Score")).toBeInTheDocument();
-    expect(screen.getByText("Spying")).toBeInTheDocument();
-    expect(screen.getByText("Mail")).toBeInTheDocument();
+    const headers = screen
+      .getAllByRole("columnheader")
+      .map((h) => h.textContent);
+    expect(headers).toEqual(["Location", "Player", "Score", "Actions"]);
   });
 
   it("renders player data in the table", () => {
     mockGetAll.mockReturnValue({
-      data: [
-        {
-          id: 1,
-          nick: "Player1",
-          y: 2,
-          tag: "TAG1",
-          score: 5000,
-          commander: 0,
-          timer: 0,
-        },
-      ],
+      data: [player({ tag: "TAG1", score: 5000 })],
     });
     render(<Country />);
     expect(screen.getByText("Player1")).toBeInTheDocument();
-    expect(screen.getByText("TAG1")).toBeInTheDocument();
-    expect(screen.getByText("5000")).toBeInTheDocument();
+    expect(screen.getByText("[TAG1]")).toBeInTheDocument();
+    // Score column, plus a copy under the name for small screens
+    expect(screen.getByText("5,000")).toBeInTheDocument();
   });
 
   it("renders input field with initial value 1", () => {
     mockGetAll.mockReturnValue({ data: null });
     render(<Country />);
-    const input = screen.getByDisplayValue("1");
-    expect(input).toBeInTheDocument();
+    expect(screen.getByLabelText("Continent number")).toHaveValue("1");
   });
 
-  it("highlights commander players in red", () => {
+  it("marks commander players with a badge", () => {
     mockGetAll.mockReturnValue({
-      data: [
-        {
-          id: 1,
-          nick: "Commander1",
-          y: 1,
-          tag: "",
-          score: 1000,
-          commander: 1,
-          timer: 0,
-        },
-      ],
+      data: [player({ nick: "Commander1", commander: 1 })],
     });
     render(<Country />);
-    const playerSpan = screen.getByText("Commander1");
-    expect(playerSpan).toHaveClass("text-red");
+    expect(screen.getByText("Commander1")).toBeInTheDocument();
+    expect(screen.getByText("Commander")).toBeInTheDocument();
   });
 
   it("shows ONLINE status for recently active players", () => {
     mockGetAll.mockReturnValue({
-      data: [
-        {
-          id: 1,
-          nick: "ActivePlayer",
-          y: 1,
-          tag: "",
-          score: 1000,
-          commander: 0,
-          timer: Date.now(),
-        },
-      ],
+      data: [player({ nick: "ActivePlayer", timer: Date.now() })],
     });
     render(<Country />);
-    expect(screen.getByText("(ONLINE)")).toBeInTheDocument();
+    expect(screen.getByText("Online")).toBeInTheDocument();
   });
 
   it("renders spying and mail links for each player", () => {
-    mockGetAll.mockReturnValue({
-      data: [
-        {
-          id: 42,
-          nick: "Player1",
-          y: 1,
-          tag: "",
-          score: 1000,
-          commander: 0,
-          timer: 0,
-        },
-      ],
-    });
+    mockGetAll.mockReturnValue({ data: [player({ id: 42 })] });
     render(<Country />);
-    const links = screen.getAllByRole("link");
-    const spyLink = links.find(
-      (link) => link.getAttribute("href") === "/spy?id=42",
+    expect(
+      screen.getByRole("link", { name: "Spy on Player1" }),
+    ).toHaveAttribute("href", "/spy?id=42");
+    expect(screen.getByRole("link", { name: "Mail Player1" })).toHaveAttribute(
+      "href",
+      "/mail?id=42",
     );
-    const mailLink = links.find(
-      (link) => link.getAttribute("href") === "/mail?id=42",
-    );
-    expect(spyLink).toBeInTheDocument();
-    expect(mailLink).toBeInTheDocument();
   });
 });

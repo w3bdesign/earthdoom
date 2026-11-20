@@ -22,6 +22,9 @@ interface CombatReportProps {
   time: string;
 }
 
+const SECTION_ROW = "bg-raised text-xs font-medium text-muted";
+const CELL = "px-4 py-2";
+
 const CombatReport: React.FC<CombatReportProps> = ({
   title,
   defenders,
@@ -31,96 +34,70 @@ const CombatReport: React.FC<CombatReportProps> = ({
   time,
 }) => {
   const renderRow = (name: string, data: { total: number; lost: string }) => (
-    <tr className="block border-b p-4 last:border-b-0 sm:table-row sm:border-none md:p-0">
-      <td className="h-12 w-[6.25rem] text-center text-base text-black transition duration-300 before:font-medium before:text-black first:border-l-0 sm:border-l sm:border-t">
-        {name}
-      </td>
-      <td className="h-12 w-[6.25rem] text-center text-base text-black transition duration-300 before:font-medium before:text-black first:border-l-0 sm:border-l sm:border-t">
-        {data.total}
-      </td>
-      <td className="h-12 w-[6.25rem] text-center text-base text-black transition duration-300 before:font-medium before:text-black first:border-l-0 sm:border-l sm:border-t">
+    <tr key={name} className="border-t border-line">
+      <td className={CELL}>{name}</td>
+      <td className={`${CELL} text-right tabular-nums`}>{data.total}</td>
+      <td className={`${CELL} text-right tabular-nums text-hostile`}>
         {data.lost}
       </td>
     </tr>
   );
 
+  const renderValueRow = (name: string, value: number | string) => (
+    <tr key={name} className="border-t border-line">
+      <td className={CELL}>{name}</td>
+      <td className={`${CELL} text-right tabular-nums`}>{value}</td>
+      <td className={CELL} />
+    </tr>
+  );
+
+  const section = (label: string) => (
+    <tr className={SECTION_ROW}>
+      <th scope="rowgroup" colSpan={3} className={`${CELL} text-left`}>
+        {label}
+      </th>
+    </tr>
+  );
+
   return (
-    <table className="py-6 text-left ring-1 ring-slate-400/10 md:w-full">
-      <caption className="bg-slate-400/90 py-4 text-center text-xl font-bold text-black">
-        {title} - {time}
-      </caption>
-      <thead>
-        <tr className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0">
-          <th className="h-12 px-6 pl-[2.2rem] text-center text-base font-bold text-black first:border-l-0 sm:table-cell md:pl-4">
-            Unit
-          </th>
-          <th className="h-12 px-6 pl-[2.2rem] text-center text-base font-bold text-black first:border-l-0 sm:table-cell md:pl-4">
-            Total
-          </th>
-          <th className="h-12 px-6 pl-[2.2rem] text-center text-base font-bold text-black first:border-l-0 sm:table-cell md:pl-4">
-            Lost
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr className="block last:border-b-0 sm:table-row sm:border-none md:p-0">
-          <td className="flex h-12 items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-            Defenders
-          </td>
-          <td className="bg-slate-300/90"></td>
-          <td className="bg-slate-300/90"></td>
-        </tr>
-        {Object.entries(defenders).map(([name, data]) => renderRow(name, data))}
-        <tr className="block last:border-b-0 sm:table-row sm:border-none md:p-0">
-          <td className="flex h-12 items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-            Attackers
-          </td>
-          <td className="bg-slate-300/90"></td>
-          <td className="bg-slate-300/90"></td>
-        </tr>
-        {Object.entries(attackers).map(([name, data]) => renderRow(name, data))}
-        <tr className="block last:border-b-0 sm:table-row sm:border-none md:p-0">
-          <td className="flex h-12 items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-            Yours
-          </td>
-          <td className="bg-slate-300/90"></td>
-          <td className="bg-slate-300/90"></td>
-        </tr>
-        {Object.entries(yours).map(([name, value]) => (
-          <tr
-            className="block border-b p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
-            key={name}
-          >
-            <td className="h-12 w-[6.25rem] text-center text-base text-black transition duration-300 before:font-medium before:text-black first:border-l-0 sm:border-l sm:border-t">
-              {name}
-            </td>
-            <td className="h-12 w-[6.25rem] text-center text-base text-black transition duration-300 before:font-medium before:text-black first:border-l-0 sm:border-l sm:border-t">
-              {value}
-            </td>
+    <div className="overflow-x-auto rounded-lg border border-line bg-panel shadow-panel">
+      <table className="w-full text-left text-sm">
+        <caption className="border-b border-line px-4 py-3 text-left text-base font-semibold [font-stretch:112%]">
+          {title} <span className="text-sm font-normal text-muted">{time}</span>
+        </caption>
+        <thead>
+          <tr className="text-xs text-muted">
+            <th scope="col" className={CELL}>
+              Unit
+            </th>
+            <th scope="col" className={`${CELL} text-right`}>
+              Total
+            </th>
+            <th scope="col" className={`${CELL} text-right`}>
+              Lost
+            </th>
           </tr>
-        ))}
-        <tr className="block last:border-b-0 sm:table-row sm:border-none md:p-0">
-          <td className="flex h-12 items-center bg-slate-300/90 px-6 text-center text-base font-bold text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none">
-            Land captures
-          </td>
-          <td className="bg-slate-300/90"></td>
-          <td className="bg-slate-300/90"></td>
-        </tr>
-        {Object.entries(land).map(([name, value]) => (
-          <tr
-            className="block border-b p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
-            key={name}
-          >
-            <td className="h-12 w-[6.25rem] text-center text-base text-black transition duration-300 before:font-medium before:text-black first:border-l-0 sm:border-l sm:border-t">
-              {name}
-            </td>
-            <td className="h-12 w-[6.25rem] text-center text-base text-black transition duration-300 before:font-medium before:text-black first:border-l-0 sm:border-l sm:border-t">
-              {value}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {section("Defenders")}
+          {Object.entries(defenders).map(([name, data]) =>
+            renderRow(name, data),
+          )}
+          {section("Attackers")}
+          {Object.entries(attackers).map(([name, data]) =>
+            renderRow(name, data),
+          )}
+          {section("Yours")}
+          {Object.entries(yours).map(([name, value]) =>
+            renderValueRow(name, value),
+          )}
+          {section("Land captures")}
+          {Object.entries(land).map(([name, value]) =>
+            renderValueRow(name, value),
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

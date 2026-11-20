@@ -8,14 +8,17 @@ jest.mock("../../components/common/Loader/LoadingSpinner", () => ({
 }));
 
 describe("RenderIncoming", () => {
-  it("renders loading spinner when isLoading is true", () => {
-    render(<RenderIncoming isLoading={true} />);
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+  it("renders a loading placeholder instead of news when isLoading is true", () => {
+    render(<RenderIncoming isLoading={true} hostiles="Enemy approaching!" />);
+    expect(screen.queryByText("Enemy approaching!")).not.toBeInTheDocument();
+    expect(screen.queryByText(/No fleets are moving/)).not.toBeInTheDocument();
   });
 
-  it('renders "No data" when not loading and no news', () => {
+  it("renders an empty state when not loading and no news", () => {
     render(<RenderIncoming isLoading={false} />);
-    expect(screen.getByText("No data")).toBeInTheDocument();
+    expect(
+      screen.getByText("No fleets are moving in your continent right now."),
+    ).toBeInTheDocument();
   });
 
   it("renders hostile news when hostiles provided", () => {
@@ -40,26 +43,36 @@ describe("RenderIncoming", () => {
     expect(screen.getByText("Ally incoming")).toBeInTheDocument();
   });
 
-  it('does not render "No data" when hostiles are present', () => {
+  it('does not render "No fleets are moving in your continent right now." when hostiles are present', () => {
     render(<RenderIncoming isLoading={false} hostiles="Hostiles detected" />);
-    expect(screen.queryByText("No data")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("No fleets are moving in your continent right now."),
+    ).not.toBeInTheDocument();
   });
 
-  it('does not render "No data" when friendlies are present', () => {
+  it('does not render "No fleets are moving in your continent right now." when friendlies are present', () => {
     render(<RenderIncoming isLoading={false} friendlies="Friends arriving" />);
-    expect(screen.queryByText("No data")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("No fleets are moving in your continent right now."),
+    ).not.toBeInTheDocument();
   });
 
-  it("applies red color styling to hostile news", () => {
+  it("marks hostile news as hostile for screen readers", () => {
     render(<RenderIncoming isLoading={false} hostiles="Red alert!" />);
-    const hostileElement = screen.getByText("Red alert!");
-    expect(hostileElement).toHaveClass("text-red-500");
+    const row = screen.getByText("Red alert!").closest("li");
+    expect(row).toHaveTextContent("Hostile: Red alert!");
   });
 
-  it("applies green color styling to friendly news", () => {
+  it("marks friendly news as friendly for screen readers", () => {
     render(<RenderIncoming isLoading={false} friendlies="Green signal!" />);
-    const friendlyElement = screen.getByText("Green signal!");
-    expect(friendlyElement).toHaveClass("text-green-500");
+    const row = screen.getByText("Green signal!").closest("li");
+    expect(row).toHaveTextContent("Friendly: Green signal!");
+  });
+
+  it("renders one row per fleet line", () => {
+    render(<RenderIncoming isLoading={false} hostiles={"Fleet A\nFleet B"} />);
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    expect(screen.getByText("2 fleets")).toBeInTheDocument();
   });
 
   it("does not render spinner when isLoading is false", () => {

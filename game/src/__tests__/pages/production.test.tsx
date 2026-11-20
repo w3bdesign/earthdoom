@@ -91,9 +91,12 @@ describe("Production page", () => {
       isAuthenticated: true,
     });
     render(<ProductionPage />);
-    expect(screen.getByTestId("render-message")).toBeInTheDocument();
-    expect(screen.getByTestId("render-message")).toHaveTextContent(
-      "Production",
+    expect(
+      screen.getByText(/You need to construct barracks/),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /construct/i })).toHaveAttribute(
+      "href",
+      "/construct",
     );
   });
 
@@ -103,7 +106,9 @@ describe("Production page", () => {
       isAuthenticated: true,
     });
     render(<ProductionPage />);
-    expect(screen.getByTestId("render-message")).toBeInTheDocument();
+    expect(
+      screen.getByText(/You need to construct barracks/),
+    ).toBeInTheDocument();
   });
 
   it("renders Production component when c_airport is 1", () => {

@@ -9,6 +9,9 @@ import { api } from "@/utils/api";
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import NewsTable from "@/components/features/News/NewsTable";
+import { PageSkeleton } from "@/components/ui/Skeleton";
+import PageHeader from "@/components/ui/PageHeader";
+import Panel from "@/components/ui/Panel";
 import { Button, ToastComponent } from "@/components/ui";
 import { CombatReport } from "@/components/features/News";
 import { isJSON } from "@/utils/functions";
@@ -56,7 +59,7 @@ const renderNews = (
 ) => {
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center p-4">
+      <div className="flex items-center justify-center p-6">
         <LoadingSpinner />
       </div>
     );
@@ -70,11 +73,7 @@ const renderNews = (
     );
   }
 
-  return (
-    <h1 className="text-bold p-4 text-center text-2xl text-black">
-      No news to report
-    </h1>
-  );
+  return <p className="px-4 py-6 text-sm text-muted">No news to report</p>;
 };
 
 /**
@@ -113,9 +112,7 @@ const News: NextPage = () => {
   if (!paNews || !paPlayer) {
     return (
       <Layout>
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
+        <PageSkeleton />
       </Layout>
     );
   }
@@ -146,40 +143,34 @@ const News: NextPage = () => {
   return (
     <>
       <Layout paPlayer={paPlayer}>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden md:w-[47.125rem]">
-            <div className="container mt-6 flex justify-end">
-              {paNews && paNews.news.length > 0 && (
-                <Button
-                  disabled={isDeletingAll}
-                  variant="danger"
-                  onClick={() => {
-                    if (!user || !user.username) return;
-                    deleteAllNews({ nick: user.username });
-                  }}
-                >
-                  Delete All
-                </Button>
-              )}
-            </div>
-            <div className="mt-4 flex min-w-[20.5rem] flex-col bg-white text-black">
-              <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="inline-block min-w-full sm:px-6 lg:px-8">
-                  <div className="flex items-center justify-center overflow-hidden">
-                    {paNews && renderNews(isLoading, paNews, isDeletingAll)}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mt-4 flex min-w-[20.5rem] flex-col bg-white text-black">
-              {combatReports &&
-                combatReports.map((report) =>
-                  report?.title ? (
-                    <CombatReport key={report.title} {...report} />
-                  ) : null,
-                )}
-            </div>
-          </div>
+        <PageHeader
+          title="News"
+          actions={
+            paNews &&
+            paNews.news.length > 0 && (
+              <Button
+                disabled={isDeletingAll}
+                variant="danger"
+                onClick={() => {
+                  if (!user || !user.username) return;
+                  deleteAllNews({ nick: user.username });
+                }}
+              >
+                Delete all
+              </Button>
+            )
+          }
+        />
+        <div className="flex flex-col gap-4">
+          <Panel flush>
+            {paNews && renderNews(isLoading, paNews, isDeletingAll)}
+          </Panel>
+          {combatReports &&
+            combatReports.map((report) =>
+              report?.title ? (
+                <CombatReport key={report.title} {...report} />
+              ) : null,
+            )}
         </div>
       </Layout>
     </>

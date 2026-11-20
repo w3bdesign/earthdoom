@@ -1,19 +1,22 @@
 import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
+import { PageHeader, Panel } from "@/components/ui";
 
 const Senate: NextPage = () => {
-  // TODO Implement this feature
+  // TODO - Implement this functionality
   return (
-    <>
-      <Layout>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <p className="text-2xl text-white"></p>
-          </div>
-        </div>
-      </Layout>
-    </>
+    <Layout>
+      <PageHeader
+        title="Senate"
+        description="Vote on proposals that affect every player in the senate."
+      />
+      <Panel>
+        <p className="text-sm text-muted">
+          The senate isn't available yet. Check back after a future update.
+        </p>
+      </Panel>
+    </Layout>
   );
 };
 

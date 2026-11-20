@@ -48,14 +48,10 @@ export const calculateLand = (searchAttempts: number): number => {
 export const renderMessage = ({ title, message }: IRenderMessageProps) => {
   return (
     <>
-      <h1 className="mt-6 text-center text-2xl font-bold text-white">
-        {title}
-      </h1>
-      <div className="mb-4 mt-6 w-[20.625rem] rounded bg-white px-8 py-5 shadow-md md:w-[47.125rem]">
-        <h2 className="text-md p-2 text-center text-black md:text-lg">
-          {message}
-        </h2>
-      </div>
+      <h1 className="text-2xl font-semibold text-ink">{title}</h1>
+      <p className="mt-4 rounded-lg border border-line bg-panel px-5 py-4 text-muted">
+        {message}
+      </p>
     </>
   );
 };
@@ -75,6 +71,53 @@ export const isJSON = (str: string): boolean => {
   return typeof value === "object" && value !== null;
 };
 
+const NUMBER_FORMAT = new Intl.NumberFormat("en-US");
+const COMPACT_FORMAT = new Intl.NumberFormat("en-US", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
+
+/**
+ * Formats a number with thousands separators (12480 -> "12,480").
+ *
+ * @param {number | bigint} value - The number to format.
+ * @return {string} The formatted number.
+ */
+export const formatNumber = (value: number | bigint): string =>
+  NUMBER_FORMAT.format(value);
+
+/**
+ * Formats a number compactly for narrow screens (12480 -> "12.5K").
+ * Numbers below 10,000 keep their full form.
+ *
+ * @param {number} value - The number to format.
+ * @return {string} The compact number.
+ */
+export const formatCompact = (value: number): string =>
+  Math.abs(value) < 10_000 ? formatNumber(value) : COMPACT_FORMAT.format(value);
+
+/**
+ * The largest quantity the player can pay for, or null when nothing limits it.
+ *
+ * @param {PaPlayerBase} paPlayer - The player.
+ * @param {number} costCrystal - Credits per unit.
+ * @param {number} costTitanium - Titanium per unit.
+ * @param {boolean} [considerLand=false] - Also limit by undeveloped land.
+ * @return {number | null} The maximum quantity.
+ */
+export const maximumAffordable = (
+  paPlayer: PaPlayerBase,
+  costCrystal: number,
+  costTitanium: number,
+  considerLand = false,
+): number | null => {
+  const limits: number[] = [];
+  if (costCrystal > 0) limits.push(Math.floor(paPlayer.crystal / costCrystal));
+  if (costTitanium > 0) limits.push(Math.floor(paPlayer.metal / costTitanium));
+  if (considerLand) limits.push(paPlayer.ui_roids);
+  return limits.length > 0 ? Math.max(0, Math.min(...limits)) : null;
+};
+
 /**
  * Converts a value to a string and renders it as a React element.
  * @param {IStringifierProps} props - The props for the component
@@ -83,16 +126,14 @@ export const isJSON = (str: string): boolean => {
 export const Stringifier = ({ value }: IStringifierProps) => {
   let stringifiedValue: string;
   // We check if the value is a string, number or bigint. If it is, we convert it to a string. Otherwise, we set it to an empty string.
-  if (
-    typeof value === "string" ||
-    typeof value === "number" ||
-    typeof value === "bigint"
-  ) {
-    stringifiedValue = String(value);
+  if (typeof value === "number" || typeof value === "bigint") {
+    stringifiedValue = formatNumber(value);
+  } else if (typeof value === "string") {
+    stringifiedValue = value;
   } else {
     stringifiedValue = "";
   }
-  return <span className="max-w-[12rem] pl-8 md:pl-0">{stringifiedValue}</span>;
+  return <span>{stringifiedValue}</span>;
 };
 
 /**
@@ -170,10 +211,10 @@ export const renderIncomeData = (paPlayer: PaUserWithConstruct) => {
   const extraTitanium = paPlayer.r_immetal ? 1 : 0;
   const extraCrystal = paPlayer.r_imcrystal ? 1 : 0;
 
-  console.log("Extra crystal:", extraCrystal);
-
   const civilians = paPlayer.civilians || 1000;
   const metalroid = paPlayer.asteroid_metal;
+
+  console.log("Extra crystal:", extraCrystal);
 
   const incomeCredits = Math.floor((civilians * tax) / 100);
 

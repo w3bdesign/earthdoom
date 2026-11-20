@@ -1,15 +1,25 @@
 import { useState } from "react";
-import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import Link from "next/link";
+import {
+  LuChevronLeft,
+  LuChevronRight,
+  LuGlobe,
+  LuMail,
+  LuRadar,
+} from "react-icons/lu";
 
 import type { NextPage } from "next";
 import type { FC } from "react";
 import type { PaUsers } from "@prisma/client";
 
 import { api } from "@/utils/api";
+import { formatNumber } from "@/utils/functions";
 
 import { Layout } from "@/components/common/Layout";
-import { Button } from "@/components/ui";
+import { Badge, INPUT_CLASS, PageHeader } from "@/components/ui";
+
+const NAV_BUTTON =
+  "inline-flex h-10 items-center gap-1.5 rounded-md border border-line-strong bg-raised px-3 text-sm font-medium text-ink transition-colors hover:bg-line";
 
 /** Navigation controls for browsing continents */
 const ContinentNavigation: FC<{
@@ -18,101 +28,91 @@ const ContinentNavigation: FC<{
   onNext: () => void;
   onChange: (event: { target: { value: string | number } }) => void;
 }> = ({ myx, onPrev, onNext, onChange }) => (
-  <div className="flex justify-center">
-    <div className="my-6 mt-16">
-      <Button onClick={onPrev}>
-        <BsArrowLeft className="mr-2 inline-block" />
-        Previous
-      </Button>
-      <input
-        className="mr-2 rounded-lg border px-4 py-2"
-        type="text"
-        name="myx"
-        size={5}
-        maxLength={3}
-        value={myx}
-        onChange={onChange}
-      />
-      <Button onClick={onNext}>
-        Next
-        <BsArrowRight className="ml-2 inline-block" />
-      </Button>
-    </div>
+  <div className="flex items-center gap-2">
+    <button
+      type="button"
+      onClick={onPrev}
+      className={NAV_BUTTON}
+      aria-label="Previous continent"
+    >
+      <LuChevronLeft aria-hidden className="h-4 w-4" />
+      <span className="hidden sm:inline">Previous</span>
+    </button>
+    <input
+      className={`${INPUT_CLASS} !w-16 text-center tabular-nums`}
+      type="text"
+      inputMode="numeric"
+      name="myx"
+      aria-label="Continent number"
+      size={5}
+      maxLength={3}
+      value={myx}
+      onChange={onChange}
+    />
+    <button
+      type="button"
+      onClick={onNext}
+      className={NAV_BUTTON}
+      aria-label="Next continent"
+    >
+      <span className="hidden sm:inline">Next</span>
+      <LuChevronRight aria-hidden className="h-4 w-4" />
+    </button>
   </div>
 );
 
-const TABLE_HEADERS = [
-  "Location",
-  "Tag",
-  "Nick",
-  "Score",
-  "Spying",
-  "Mail",
-] as const;
-
-/** Table header row */
-const CountryTableHeader: FC = () => (
-  <tr>
-    {TABLE_HEADERS.map((header) => (
-      <th
-        key={header}
-        scope="col"
-        className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-      >
-        {header}
-      </th>
-    ))}
-  </tr>
-);
-
-const CELL_CLASS =
-  "flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none";
+const TH = "h-10 px-3 text-xs font-medium text-muted lg:px-4";
+const TD = "px-3 py-3 align-middle lg:px-4";
+const ACTION_LINK =
+  "inline-flex h-9 items-center gap-1.5 rounded-md border border-line-strong bg-raised px-2.5 text-sm font-medium text-ink transition-colors hover:bg-line";
 
 /** Single player row in the country table */
 const PlayerRow: FC<{ player: PaUsers }> = ({ player }) => (
-  <tr
-    key={player.id}
-    className="block border-b bg-white text-center last:border-b-0 sm:table-row sm:border-none"
-  >
-    <td data-th="Location" className={CELL_CLASS}>
-      {player.y}
-    </td>
-    <td data-th="Tag" className={CELL_CLASS}>
-      {player.tag}
-    </td>
-    <td data-th="Nick" className={CELL_CLASS}>
-      <span className={`text-${player.commander === 1 ? "red" : "blue"}`}>
-        {player.nick}
+  <tr className="hover:bg-raised/60">
+    <td className={`${TD} text-right text-muted`}>{player.y}</td>
+    <td className={TD}>
+      <span className="inline-flex flex-wrap items-center gap-2 font-semibold text-ink">
+        {player.tag && (
+          <span className="text-sm font-normal text-muted">[{player.tag}]</span>
+        )}
+        <span>{player.nick}</span>
+        {player.commander === 1 && <Badge tone="caution">Commander</Badge>}
+        {Date.now() - player.timer < 600000 && (
+          <Badge tone="friendly">Online</Badge>
+        )}
+        <span className="block w-full text-xs font-normal text-muted sm:hidden">
+          {formatNumber(player.score)} score
+        </span>
       </span>
-      {Date.now() - player.timer < 600000 && (
-        <span className="text-green-500"> (ONLINE)</span>
-      )}
     </td>
-    <td data-th="Score" className={CELL_CLASS}>
-      {player.score.toString()}
+    <td className={`${TD} hidden text-right text-ink sm:table-cell`}>
+      {formatNumber(player.score)}
     </td>
-    <td data-th="Spying" className={CELL_CLASS}>
-      <Link href={`/spy?id=${player.id}`}>
-        <Button
+    <td className={TD}>
+      <div className="flex items-center gap-2">
+        <Link
+          href={`/spy?id=${player.id}`}
+          className={ACTION_LINK}
+          aria-label={`Spy on ${player.nick}`}
           onClick={() => {
             alert(player.id);
           }}
         >
-          Spying
-        </Button>
-      </Link>
-    </td>
-    <td data-th="Mail" className={CELL_CLASS}>
-      <Link href={`/mail?id=${player.id}`}>
-        <Button
-          type="button"
+          <LuRadar aria-hidden className="h-4 w-4" />
+          <span className="hidden md:inline">Spy</span>
+        </Link>
+        <Link
+          href={`/mail?id=${player.id}`}
+          className={ACTION_LINK}
+          aria-label={`Mail ${player.nick}`}
           onClick={() => {
             alert(player.id);
           }}
         >
-          Mail
-        </Button>
-      </Link>
+          <LuMail aria-hidden className="h-4 w-4" />
+          <span className="hidden md:inline">Mail</span>
+        </Link>
+      </div>
     </td>
   </tr>
 );
@@ -134,37 +134,61 @@ const Country: NextPage = () => {
 
   return (
     <Layout>
-      <main className="bg-neutral-900">
-        <ContinentNavigation
-          myx={myx}
-          onPrev={handlePrev}
-          onNext={handleNext}
-          onChange={handleChange}
-        />
-        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 p-6">
-          <div className="relative sm:mx-auto">
-            <div className="relative mb-6 w-full break-words p-6 shadow-lg">
-              <img
-                src="https://via.placeholder.com/250"
-                alt=""
-                className="mx-auto max-w-[15.625rem] text-center"
-              />
-            </div>
-            <table className="mt-2 w-full text-left ring-1 ring-slate-400/10">
-              <caption className="mb-10 text-xl font-medium text-white">
-                Continent name here <br />
-                Score: 1000000
-              </caption>
-              <tbody>
-                <CountryTableHeader />
-                {paPlayers?.map((player) => (
-                  <PlayerRow key={player.id} player={player} />
-                ))}
-              </tbody>
-            </table>
+      <PageHeader
+        title="Country"
+        description={`Players in continent ${myx}.`}
+        actions={
+          <ContinentNavigation
+            myx={myx}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onChange={handleChange}
+          />
+        }
+      />
+      <section className="overflow-hidden rounded-lg border border-line bg-panel shadow-panel">
+        <header className="flex items-center gap-4 border-b border-line px-4 py-4">
+          <div
+            aria-hidden
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-line-strong bg-sunken text-accent"
+          >
+            <LuGlobe className="h-7 w-7" />
           </div>
-        </div>
-      </main>
+          <div className="min-w-0">
+            <h2 className="text-lg font-semibold text-ink">
+              Continent name here
+            </h2>
+            <p className="text-sm text-muted">Score: {formatNumber(1000000)}</p>
+          </div>
+        </header>
+        <table className="w-full text-left text-sm">
+          <caption className="sr-only">Players in continent {myx}</caption>
+          <thead className="bg-raised">
+            <tr>
+              <th scope="col" className={`${TH} w-px text-right`}>
+                Location
+              </th>
+              <th scope="col" className={TH}>
+                Player
+              </th>
+              <th
+                scope="col"
+                className={`${TH} hidden text-right sm:table-cell`}
+              >
+                Score
+              </th>
+              <th scope="col" className={`${TH} w-px`}>
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-line">
+            {paPlayers?.map((player) => (
+              <PlayerRow key={player.id} player={player} />
+            ))}
+          </tbody>
+        </table>
+      </section>
     </Layout>
   );
 };

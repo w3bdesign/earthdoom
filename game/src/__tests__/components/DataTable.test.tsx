@@ -45,9 +45,9 @@ describe("DataTable", () => {
         caption="Resources"
       />,
     );
-    expect(screen.getByText("9999")).toBeInTheDocument();
-    expect(screen.getByText("4444")).toBeInTheDocument();
-    expect(screen.getByText("2222")).toBeInTheDocument();
+    expect(screen.getByText("9,999")).toBeInTheDocument();
+    expect(screen.getByText("4,444")).toBeInTheDocument();
+    expect(screen.getByText("2,222")).toBeInTheDocument();
   });
 
   it("renders multiple rows when multiple data entries provided", () => {

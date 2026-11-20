@@ -4,10 +4,11 @@ import type { TMutateType } from "@/components/ui/tables/AdvancedDataTable/Advan
 
 import { api } from "@/utils/api";
 import { usePlayerData } from "@/utils/usePlayerData";
-import { renderMessage } from "@/utils/functions";
+import Link from "next/link";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 import { ENERGY } from "@/components/features/Energy/constants/ENERGY";
 import PageShell from "@/components/common/PageShell";
+import PageHeader from "@/components/ui/PageHeader";
 
 const columns = [
   { label: "Name", accessor: "buildingName" },
@@ -20,10 +21,17 @@ const columns = [
 
 const renderEnergyMessage = (paPlayer: PaPlayer) => {
   if (paPlayer.r_energy === 0 || paPlayer.r_energy > 1) {
-    return renderMessage({
-      title: "Energy",
-      message: "You need to research power plants before you can build them",
-    });
+    return (
+      <p className="rounded-lg border border-line bg-panel px-5 py-4 text-sm text-muted">
+        You need to research power plants before you can build them.{" "}
+        <Link
+          href="/research"
+          className="font-semibold text-accent hover:underline"
+        >
+          Go to Research
+        </Link>
+      </p>
+    );
   }
   return null;
 };
@@ -37,40 +45,37 @@ const Energy: NextPage = () => {
   const ctx = api.useContext();
   const { paPlayer, isAuthenticated } = usePlayerData();
 
-  const { mutate, isPending: isLoading } = api.paSpying.spyingInitiate.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Construction started", type: "success" });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate, isPending: isLoading } =
+    api.paSpying.spyingInitiate.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Construction started", type: "success" });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   return (
     <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer}>
-      <div className="container mb-6 flex flex-col items-center justify-center">
-        <div
-          className={`relative flex flex-col justify-center overflow-hidden bg-neutral-900 ${
-            paPlayer?.r_energy === 1 ? "md:w-[63rem]" : ""
-          }`}
-        >
-          {paPlayer && renderEnergyMessage(paPlayer)}
-          {paPlayer && paPlayer.r_energy === 1 && (
-            <AdvancedDataTable
-              isLoading={isLoading}
-              columns={columns}
-              data={[paPlayer]}
-              caption="Energy"
-              renderData={ENERGY}
-              action={mutate as unknown as TMutateType}
-              actionText="Construct"
-              actionInProgress="Constructing ..."
-            />
-          )}
-        </div>
-      </div>
+      <PageHeader
+        title="Energy"
+        description="Each power plant produces 45 energy per tick. Attacks cost energy."
+      />
+      {paPlayer && renderEnergyMessage(paPlayer)}
+      {paPlayer && paPlayer.r_energy === 1 && (
+        <AdvancedDataTable
+          isLoading={isLoading}
+          columns={columns}
+          data={[paPlayer]}
+          caption="Energy"
+          renderData={ENERGY}
+          action={mutate as unknown as TMutateType}
+          actionText="Construct"
+          actionInProgress="Constructing ..."
+        />
+      )}
     </PageShell>
   );
 };

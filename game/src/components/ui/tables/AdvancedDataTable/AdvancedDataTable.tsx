@@ -1,9 +1,14 @@
-import { Stringifier, canAffordToTrain } from "@/utils/functions";
+import {
+  Stringifier,
+  formatNumber,
+  maximumAffordable,
+} from "@/utils/functions";
 
 import type { FC, RefObject, ReactElement } from "react";
 import type { PaPlayerBase } from "@/types/player";
 import type { Building } from "@/components/features/Construct/types/types";
 
+import Cost from "../../Cost";
 import ActionButton from "./ActionButton";
 import InputNumber from "./InputNumber";
 import { useMultipleRefs } from "@/utils/hooks";
@@ -37,6 +42,12 @@ export interface AdvancedTableColumn {
     | ReactElement
     | ((row: PaPlayerBase | Building) => ReactElement);
   type?: string;
+  /** Right-align the column on wide screens (numbers) */
+  align?: "left" | "right";
+  /** The main column (default: the first). On narrow screens it also shows the ETA and description */
+  primary?: boolean;
+  /** Hide the column below 768px */
+  hideOnMobile?: boolean;
 }
 
 interface AdvancedDataTableProps {
@@ -49,15 +60,40 @@ interface AdvancedDataTableProps {
   actionText?: string;
   actionInProgress?: string;
   considerLand?: boolean;
+  /** Rows to emphasise, such as the current player in the ranking */
+  highlightRow?: (row: PaPlayerBase | Building) => boolean;
 }
+
+const isBuilding = (row: PaPlayerBase | Building): row is Building =>
+  typeof row.buildingCostCrystal === "number";
 
 /** Renders the accessor content for a table cell */
 const CellAccessorContent: FC<{
   col: AdvancedTableColumn;
   row: PaPlayerBase | Building;
-}> = ({ col, row }) => {
+  player?: PaPlayerBase;
+}> = ({ col, row, player }) => {
   if (typeof col.accessor === "function") {
     return <>{col.accessor(row)}</>;
+  }
+  if (col.accessor === "buildingCost" && isBuilding(row)) {
+    return (
+      <Cost
+        crystal={row.buildingCostCrystal}
+        titanium={row.buildingCostTitanium}
+        player={player}
+      />
+    );
+  }
+  if (col.accessor === "buildingETA" && typeof row.buildingETA === "number") {
+    return (
+      <span className="whitespace-nowrap">
+        {formatNumber(row.buildingETA)} ticks
+      </span>
+    );
+  }
+  if (col.type === "inputNumber") {
+    return null;
   }
   if (typeof col.accessor === "string" && col.accessor !== "") {
     return <Stringifier value={row[col.accessor]} />;
@@ -71,10 +107,30 @@ const CellAccessorContent: FC<{
 /** Renders the input number field when applicable */
 const CellInputNumber: FC<{
   col: AdvancedTableColumn;
+  row: PaPlayerBase | Building;
+  player?: PaPlayerBase;
+  rowKey: string;
   inputRef: RefObject<HTMLInputElement | null> | undefined;
-}> = ({ col, inputRef }) => {
-  if (col.type !== "inputNumber" || !canAffordToTrain) return null;
-  return <InputNumber canAffordToTrain={canAffordToTrain} ref={inputRef} />;
+  considerLand: boolean;
+}> = ({ col, row, player, rowKey, inputRef, considerLand }) => {
+  if (col.type !== "inputNumber") return null;
+  const max =
+    player && isBuilding(row)
+      ? maximumAffordable(
+          player,
+          row.buildingCostCrystal,
+          row.buildingCostTitanium,
+          considerLand,
+        )
+      : null;
+  return (
+    <InputNumber
+      ref={inputRef}
+      id={`amount-${rowKey}`}
+      label={`Amount of ${String(row.buildingName ?? col.label)}`}
+      max={max}
+    />
+  );
 };
 
 /** Renders the action button when applicable */
@@ -115,8 +171,54 @@ const CellActionButton: FC<{
   );
 };
 
+/** Which columns are visible at which width. Hidden ETA and description move under the name. */
+const visibility = (col: AdvancedTableColumn): string => {
+  if (col.accessor === "buildingDescription") return "hidden lg:table-cell";
+  if (col.accessor === "buildingETA" || col.hideOnMobile)
+    return "hidden md:table-cell";
+  if (col.accessor === "buildingCost") return "hidden sm:table-cell";
+  return "";
+};
+
+/** The ETA and description shown under the name where their own columns are hidden */
+const PrimaryExtras: FC<{
+  row: PaPlayerBase | Building;
+  columns: AdvancedTableColumn[];
+  player?: PaPlayerBase;
+}> = ({ row, columns, player }) => {
+  const hasCost = columns.some((col) => col.accessor === "buildingCost");
+  const hasEta = columns.some((col) => col.accessor === "buildingETA");
+  const hasDescription = columns.some(
+    (col) => col.accessor === "buildingDescription",
+  );
+  return (
+    <>
+      {hasEta && typeof row.buildingETA === "number" && (
+        <span className="block text-xs font-normal text-muted md:hidden">
+          {formatNumber(row.buildingETA)} ticks
+        </span>
+      )}
+      {hasCost && isBuilding(row) && (
+        <span className="mt-1 block text-xs font-normal sm:hidden">
+          <Cost
+            crystal={row.buildingCostCrystal}
+            titanium={row.buildingCostTitanium}
+            player={player}
+          />
+        </span>
+      )}
+      {hasDescription && typeof row.buildingDescription === "string" && (
+        <span className="mt-1 line-clamp-2 text-xs font-normal text-muted lg:hidden">
+          {row.buildingDescription}
+        </span>
+      )}
+    </>
+  );
+};
+
 /**
- * Renders an advanced data table component.
+ * Renders a table of buildings, units or players with optional quantity inputs and actions.
+ * On narrow screens the ETA and description columns move under the name.
  *
  * @param {AdvancedDataTableProps} props - The component props.
  * @param {boolean} props.isLoading - Indicates if the data is currently loading.
@@ -130,7 +232,6 @@ const CellActionButton: FC<{
  * @param {boolean} props.considerLand - Indicates if land should be considered.
  * @return {JSX.Element} The rendered advanced data table.
  */
-
 const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   isLoading = false,
   columns,
@@ -141,64 +242,100 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
   actionText,
   actionInProgress,
   considerLand = false,
+  highlightRow,
 }: AdvancedDataTableProps): ReactElement => {
   const dataToMap = renderData || data;
+  const player = renderData ? data[0] : undefined;
 
-  const inputAmountRefs = useMultipleRefs(columns.length);
+  // One ref per row: each row has its own quantity input
+  const inputAmountRefs = useMultipleRefs(dataToMap?.length ?? 0);
+
+  const markedPrimary = columns.findIndex((col) => col.primary);
+  const primaryIndex = markedPrimary === -1 ? 0 : markedPrimary;
 
   return (
-    <table className="mb-8 mt-4 block pl-2 text-left md:pl-0">
-      <caption className="py-6 text-center text-2xl font-bold text-white">
-        {caption}
-      </caption>
-      <thead>
-        <tr>
-          {columns.map((col, index) => (
-            <th
-              key={index}
-              scope="col"
-              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-            >
-              {col.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {dataToMap &&
-          dataToMap.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              className="block border-b bg-white p-4 last:border-b-0 sm:table-row sm:border-none md:p-0"
-            >
-              {columns.map((col, colIndex) => (
-                <td
-                  key={colIndex}
-                  data-th={col.label}
-                  className="flex h-[7rem] items-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none md:h-12 md:px-6 md:text-left"
+    <div className="overflow-hidden rounded-lg border border-line bg-panel shadow-panel">
+      <table className="w-full text-left text-sm">
+        <caption className="sr-only">{caption}</caption>
+        <thead>
+          <tr className="border-b border-line bg-raised">
+            {columns.map((col, index) => (
+              <th
+                key={index}
+                scope="col"
+                className={`h-10 px-3 text-xs font-medium text-muted lg:px-4 ${visibility(col)} ${
+                  col.align === "right" ? "text-right" : ""
+                } ${col.type === "button" ? "lg:w-40" : ""}`}
+              >
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-line">
+          {dataToMap &&
+            dataToMap.map((row, rowIndex) => {
+              const highlighted = highlightRow?.(row) ?? false;
+              const rowKey = String(row.buildingId ?? row.id ?? rowIndex);
+              return (
+                <tr
+                  key={rowKey}
+                  aria-current={highlighted ? "true" : undefined}
+                  className={
+                    highlighted ? "bg-accent/10" : "hover:bg-white/[0.02]"
+                  }
                 >
-                  <CellAccessorContent col={col} row={row} />
-                  <CellInputNumber
-                    col={col}
-                    inputRef={inputAmountRefs[rowIndex]}
-                  />
-                  <CellActionButton
-                    col={col}
-                    row={row}
-                    isLoading={isLoading}
-                    data={data}
-                    action={action}
-                    actionText={actionText}
-                    actionInProgress={actionInProgress}
-                    inputRef={inputAmountRefs[rowIndex]}
-                    considerLand={considerLand}
-                  />
-                </td>
-              ))}
-            </tr>
-          ))}
-      </tbody>
-    </table>
+                  {columns.map((col, colIndex) => {
+                    const isPrimary = colIndex === primaryIndex;
+                    return (
+                      <td
+                        key={colIndex}
+                        className={`px-3 py-3 align-middle lg:px-4 ${visibility(col)} ${
+                          col.align === "right" ? "text-right" : ""
+                        } ${
+                          isPrimary
+                            ? "font-semibold text-ink"
+                            : col.accessor === "buildingDescription"
+                              ? "max-w-sm text-muted"
+                              : "text-ink"
+                        }`}
+                      >
+                        <CellAccessorContent
+                          col={col}
+                          row={row}
+                          player={player}
+                        />
+                        {isPrimary && (
+                          <PrimaryExtras row={row} columns={columns} />
+                        )}
+                        <CellInputNumber
+                          col={col}
+                          row={row}
+                          player={player}
+                          rowKey={rowKey}
+                          inputRef={inputAmountRefs[rowIndex]}
+                          considerLand={considerLand}
+                        />
+                        <CellActionButton
+                          col={col}
+                          row={row}
+                          isLoading={isLoading}
+                          data={data}
+                          action={action}
+                          actionText={actionText}
+                          actionInProgress={actionInProgress}
+                          inputRef={inputAmountRefs[rowIndex]}
+                          considerLand={considerLand}
+                        />
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

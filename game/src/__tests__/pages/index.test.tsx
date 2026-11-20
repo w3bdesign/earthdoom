@@ -49,20 +49,6 @@ jest.mock("../../components/common/Loader/LoadingSpinner", () => ({
   default: () => <div data-testid="loading-spinner">Loading...</div>,
 }));
 
-jest.mock("../../components/ui/tables/UnitsTable", () => ({
-  __esModule: true,
-  default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
-    <div data-testid="units-table">Units Table: {paPlayer.nick}</div>
-  ),
-}));
-
-jest.mock("../../components/ui/tables/BDUTable", () => ({
-  __esModule: true,
-  default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
-    <div data-testid="bdu-table">BDU Table: {paPlayer.nick}</div>
-  ),
-}));
-
 jest.mock("../../components/ui/tables/LandTable", () => ({
   __esModule: true,
   default: ({ paPlayer }: { paPlayer: PaPlayer }) => (
@@ -115,8 +101,8 @@ describe("Home component", () => {
       isLoading: true,
     });
 
-    const { getByTestId } = render(<Home />);
-    expect(getByTestId("loading-spinner")).toBeInTheDocument();
+    const { getByTestId, getByText } = render(<Home />);
+    expect(getByText("Loading...")).toBeInTheDocument();
     expect(getByTestId("layout")).toBeInTheDocument();
   });
 
@@ -131,8 +117,8 @@ describe("Home component", () => {
       isLoading: false,
     });
 
-    const { getByTestId } = render(<Home />);
-    expect(getByTestId("loading-spinner")).toBeInTheDocument();
+    const { getByText } = render(<Home />);
+    expect(getByText("Loading...")).toBeInTheDocument();
   });
 
   it("renders all tables with correct player data", () => {
@@ -236,14 +222,20 @@ describe("Home component", () => {
     render(<Home />);
 
     expect(screen.getByTestId("layout")).toBeInTheDocument();
-    expect(screen.getByTestId("units-table")).toBeInTheDocument();
-    expect(screen.getByTestId("bdu-table")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Overview" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /^Forces/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("Units")).toBeInTheDocument();
+    expect(screen.getByLabelText("Base defence")).toBeInTheDocument();
     expect(screen.getByTestId("land-table")).toBeInTheDocument();
     expect(screen.getByTestId("fleet-table")).toBeInTheDocument();
 
     // Verify player data is passed correctly
-    expect(screen.getByTestId("units-table")).toHaveTextContent("TestPlayer");
-    expect(screen.getByTestId("bdu-table")).toHaveTextContent("TestPlayer");
+    // 6 ship types x 10 each
+    expect(screen.getByText("Units · 60")).toBeInTheDocument();
     expect(screen.getByTestId("land-table")).toHaveTextContent("TestPlayer");
     expect(screen.getByTestId("fleet-table")).toHaveTextContent("TestPlayer");
   });
@@ -260,8 +252,8 @@ describe("Home component", () => {
       error: new Error("Failed to fetch player data"),
     });
 
-    const { getByTestId } = render(<Home />);
-    expect(getByTestId("loading-spinner")).toBeInTheDocument();
+    const { getByText } = render(<Home />);
+    expect(getByText("Loading...")).toBeInTheDocument();
   });
 
   it("passes correct query parameters to API", () => {

@@ -14,7 +14,8 @@ export interface DataTableProps {
 }
 
 /**
- * DataTable component for displaying data in a table
+ * DataTable component for displaying data in a table.
+ * On narrow screens each row becomes a list of label and value pairs.
  * @param {DataTableProps} props - The props for the DataTable component
  * @returns {JSX.Element} - The DataTable component
  */
@@ -24,41 +25,43 @@ export const DataTable: React.FC<DataTableProps> = ({
   caption,
 }) => {
   return (
-    <table className="mt-4 w-[20.625rem] text-left ring-1 ring-slate-400/10 md:w-[47.125rem]">
-      <caption className="py-6 text-center text-2xl font-bold text-white">
-        {caption}
-      </caption>
-      <thead>
-        <tr>
-          {columns.map((column, index) => (
-            <th
-              key={index}
-              scope="col"
-              className="hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell"
-            >
-              {column.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, rowIndex) => (
-          <tr
-            key={rowIndex}
-            className="block rounded bg-white p-4 shadow last:border-b-0 sm:table-row sm:border-none md:p-0"
-          >
-            {columns.map((column, colIndex) => (
-              <td
-                key={colIndex}
-                data-th={column.label}
-                className="flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none"
+    <div className="overflow-hidden rounded-lg border border-line bg-panel shadow-panel">
+      <table className="block w-full text-left text-sm md:table">
+        <caption className="block border-b border-line px-4 py-3 text-left text-base font-semibold text-ink [font-stretch:112%]">
+          {caption}
+        </caption>
+        <thead className="hidden md:table-header-group">
+          <tr className="border-b border-line bg-raised">
+            {columns.map((column, index) => (
+              <th
+                key={index}
+                scope="col"
+                className="h-10 px-4 text-right text-xs font-medium text-muted"
               >
-                <Stringifier value={row[column.accessor]} />
-              </td>
+                {column.label}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="block divide-y divide-line md:table-row-group">
+          {data.map((row, rowIndex) => (
+            <tr
+              key={rowIndex}
+              className="block divide-y divide-line md:table-row md:divide-y-0"
+            >
+              {columns.map((column, colIndex) => (
+                <td
+                  key={colIndex}
+                  data-th={column.label}
+                  className="flex items-center justify-between px-4 py-2 tabular-nums text-ink before:text-muted before:content-[attr(data-th)] md:table-cell md:py-3 md:text-right md:before:content-none"
+                >
+                  <Stringifier value={row[column.accessor]} />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };

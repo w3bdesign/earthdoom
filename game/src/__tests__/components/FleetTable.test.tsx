@@ -125,14 +125,15 @@ describe("FleetTable", () => {
     expect(screen.getByText("Fleet status")).toBeInTheDocument();
   });
 
-  it("renders loading spinner when data is loading", () => {
+  it("renders a placeholder instead of a status while loading", () => {
     mockGetAttackedPlayer.mockReturnValue({ data: null, isLoading: true });
     mockGetDefendedPlayer.mockReturnValue({ data: null, isLoading: false });
 
     const player = createMockPaUser({ war: 5 });
     render(<FleetTable paPlayer={player} />);
 
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(screen.getByText("Fleet status")).toBeInTheDocument();
+    expect(screen.queryByText(/Attacking|Home|Returning/)).toBeNull();
   });
 
   it("renders empty string when war > 0 but no attack target loaded", () => {

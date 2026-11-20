@@ -141,7 +141,7 @@ describe("Mail page", () => {
     });
     mockGetAllMail.mockReturnValue({ data: null, isLoading: true });
     render(<Mail />);
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
   it("renders mail table when data is loaded", () => {
@@ -154,10 +154,10 @@ describe("Mail page", () => {
     expect(screen.getByTestId("mail-table")).toBeInTheDocument();
   });
 
-  it('renders "Received Mail" heading', () => {
+  it('renders the "Inbox" heading', () => {
     setupWithMail({ mail: [] });
     render(<Mail />);
-    expect(screen.getByText("Received Mail")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^Inbox/ })).toBeInTheDocument();
   });
 
   it('renders "Mark all as seen" button when there are unseen emails', () => {

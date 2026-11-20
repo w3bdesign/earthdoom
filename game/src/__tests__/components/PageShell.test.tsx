@@ -37,13 +37,14 @@ describe("PageShell", () => {
     expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
   });
 
-  it("renders loading spinner when authenticated but no player data", () => {
+  it("renders a page skeleton when authenticated but no player data", () => {
     render(
       <PageShell isAuthenticated={true} paPlayer={null}>
         <div>Content</div>
       </PageShell>,
     );
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Loading...");
+    expect(screen.queryByText("Content")).not.toBeInTheDocument();
     expect(screen.getByTestId("layout")).toBeInTheDocument();
   });
 

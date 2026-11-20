@@ -3,6 +3,7 @@ import type { PaPlayer } from "@/types/player";
 
 import { Layout } from "@/components/common/Layout";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 
 interface PageShellProps {
   isAuthenticated: boolean;
@@ -33,9 +34,7 @@ const PageShell: FC<PageShellProps> = ({
   if (!paPlayer) {
     return (
       <Layout>
-        <div className="mt-12">
-          <LoadingSpinner />
-        </div>
+        <PageSkeleton />
       </Layout>
     );
   }

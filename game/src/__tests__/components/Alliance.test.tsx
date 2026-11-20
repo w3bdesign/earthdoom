@@ -86,7 +86,9 @@ describe("Alliance Component", () => {
     const playerAsLeader = { ...mockPlayer, tag: "TEST", nick: "testuser" };
     render(<Alliance paPlayer={playerAsLeader} paTag={mockTags} />);
 
-    expect(screen.getByText("Password:")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Password" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("password123")).toBeInTheDocument();
   });
 
@@ -94,7 +96,9 @@ describe("Alliance Component", () => {
     const playerAsMember = { ...mockPlayer, tag: "TEST", nick: "othername" };
     render(<Alliance paPlayer={playerAsMember} paTag={mockTags} />);
 
-    expect(screen.queryByText("Password:")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Password" }),
+    ).not.toBeInTheDocument();
   });
 
   it("hides join alliance form when player is in an alliance", () => {
@@ -102,7 +106,9 @@ describe("Alliance Component", () => {
     render(<Alliance paPlayer={playerWithTag} paTag={mockTags} />);
 
     expect(screen.queryByText("Join alliance")).not.toBeInTheDocument();
-    expect(screen.getByText("Leave")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Leave alliance" }),
+    ).toBeInTheDocument();
   });
 
   it("shows both create and join forms when player has no tag", () => {
@@ -117,7 +123,7 @@ describe("Alliance Component", () => {
     const playerWithTag = { ...mockPlayer, tag: "TEST" };
     render(<Alliance paPlayer={playerWithTag} paTag={mockTags} />);
 
-    const leaveButton = screen.getByText("Leave");
+    const leaveButton = screen.getByRole("button", { name: "Leave alliance" });
     fireEvent.click(leaveButton);
 
     expect(mockShowConfirmationToast).toHaveBeenCalledWith({
@@ -146,11 +152,11 @@ describe("Alliance Component", () => {
     const playerWithoutTag = { ...mockPlayer, tag: "" };
     render(<Alliance paPlayer={playerWithoutTag} paTag={mockTags} />);
 
-    const createInput = screen.getByLabelText("Create alliance");
+    const createInput = screen.getByLabelText("Alliance tag");
     expect(createInput).toHaveAttribute("pattern", "[A-Za-z]+");
     expect(createInput).toHaveAttribute("title", "Please enter letters only");
 
-    const joinInput = screen.getByLabelText("Join alliance");
+    const joinInput = screen.getByLabelText("Alliance password");
     expect(joinInput).toHaveAttribute("pattern", "[A-Za-z]+");
     expect(joinInput).toHaveAttribute("title", "Please enter letters only");
   });

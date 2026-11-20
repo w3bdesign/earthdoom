@@ -1,17 +1,9 @@
 import type { FC } from "react";
 
 import { format } from "date-fns";
+import { LuTrash2 } from "react-icons/lu";
 
-import { Button } from "@/components/ui";
-
-const TH_CLASS =
-  "hidden h-12 bg-slate-200/90 px-6 text-center text-base font-bold text-black first:border-l-0 sm:table-cell";
-
-const TD_CLASS =
-  "flex h-12 items-center px-6 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':'] first:border-l-0  sm:table-cell sm:border-l sm:border-t sm:before:content-none";
-
-const TD_ACTION_CLASS =
-  "flex h-12 items-center px-6 py-2 text-center text-base text-black transition duration-300 before:inline-block before:w-24 before:font-medium before:text-black before:content-[attr(data-th)':']  first:border-l-0 sm:table-cell sm:border-l sm:border-t sm:before:content-none";
+import Badge from "@/components/ui/Badge";
 
 /** A single row item that both Mail and News tables share */
 interface MessageRow {
@@ -19,6 +11,8 @@ interface MessageRow {
   time: number;
   header: string;
   news: string;
+  /** Mail only: 0 while unread */
+  seen?: number | string;
 }
 
 interface MessageTableProps {
@@ -31,8 +25,7 @@ interface MessageTableProps {
 }
 
 /**
- * Shared table component for displaying time-stamped messages (mail, news)
- * with a delete action per row.
+ * Shared list for time-stamped messages (mail, news) with a delete action per item.
  */
 const MessageTable: FC<MessageTableProps> = ({
   items,
@@ -46,44 +39,47 @@ const MessageTable: FC<MessageTableProps> = ({
   if (filteredItems.length === 0) return null;
 
   return (
-    <table className="min-w-full text-left text-sm font-light">
-      <thead className="border-b font-medium dark:border-neutral-500">
-        <tr>
-          <th scope="col" className={TH_CLASS}>
-            {timeColumnLabel}
-          </th>
-          <th scope="col" className={TH_CLASS}>
-            Title
-          </th>
-          <th scope="col" className={TH_CLASS}>
-            Content
-          </th>
-          <th scope="col" className={TH_CLASS}>
-            Delete
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredItems.map((item) => (
-          <tr key={item.id} className="border-b dark:border-neutral-500">
-            <td className={TD_CLASS}>
-              {format(new Date(item.time * 1000), "dd/MM-yyyy HH:mm:ss")}
-            </td>
-            <td className={TD_CLASS}>{item.header}</td>
-            <td className={TD_CLASS}>{item.news}</td>
-            <td className={TD_ACTION_CLASS}>
-              <Button
-                disabled={isDeleting}
-                variant="danger"
-                onClick={() => onDelete(item.id)}
-              >
-                Delete
-              </Button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <ul className="divide-y divide-line">
+      {filteredItems.map((item) => {
+        const date = new Date(item.time * 1000);
+        const unread = item.seen === 0;
+        return (
+          <li
+            key={item.id}
+            className={`flex gap-3 px-4 py-3 ${unread ? "bg-accent/[0.06]" : ""}`}
+          >
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h3 className="text-sm font-semibold text-ink [font-stretch:100%]">
+                  {item.header}
+                </h3>
+                {unread && <Badge tone="accent">New</Badge>}
+                <time
+                  dateTime={date.toISOString()}
+                  title={timeColumnLabel}
+                  className="text-xs text-muted"
+                >
+                  {format(date, "dd/MM-yyyy HH:mm:ss")}
+                </time>
+              </div>
+              <p className="mt-1 whitespace-pre-line break-words text-sm text-ink/80">
+                {item.news}
+              </p>
+            </div>
+            <button
+              type="button"
+              disabled={isDeleting}
+              onClick={() => onDelete(item.id)}
+              aria-label={`Delete "${item.header}"`}
+              title="Delete"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-md text-muted transition-colors hover:bg-hostile/10 hover:text-hostile disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <LuTrash2 aria-hidden className="h-4 w-4" />
+            </button>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
 

@@ -1,11 +1,16 @@
 import { useState } from "react";
+import Link from "next/link";
+import { LuShield, LuSwords } from "react-icons/lu";
 
 import { api } from "@/utils/api";
+import { formatNumber, getShipCount } from "@/utils/functions";
 
-import type { FC, ChangeEvent } from "react";
+import type { FC, FormEvent } from "react";
 import type { PaPlayer } from "@/types/player";
 
 import { Button, ToastComponent } from "@/components/ui";
+import Field, { INPUT_CLASS } from "@/components/ui/Field";
+import Panel from "@/components/ui/Panel";
 
 export type { PaPlayer } from "@/types/player";
 
@@ -13,159 +18,56 @@ interface IMilitaryProps {
   paPlayer: PaPlayer;
 }
 
-interface IHandleInputChange {
-  (event: ChangeEvent<HTMLInputElement>): void;
-}
+type Mode = "attack" | "defend";
 
-/** Calculate the total ship count for the player */
-function calculateShipCount(paPlayer: PaPlayer): number {
-  return (
-    paPlayer["astropods"] +
-    paPlayer["infinitys"] +
-    paPlayer["wraiths"] +
-    paPlayer["warfrigs"] +
-    paPlayer["destroyers"] +
-    paPlayer["scorpions"]
-  );
-}
+const ENERGY_PER_SHIP = 9;
 
-/** Validate that a target value is not empty; show toast on failure */
-function validateTarget(target: string): boolean {
-  if (!target.trim().length) {
-    ToastComponent({ message: "You need to enter a target", type: "error" });
-    return false;
-  }
-  return true;
-}
-
-/** Validate that troops are available; show toast on failure */
-function validateTroopsAvailable(areTroopsAvailable: boolean): boolean {
-  if (!areTroopsAvailable) {
-    ToastComponent({ message: "Troops are not available", type: "error" });
-    return false;
-  }
-  return true;
-}
-
-/** Validate that the player has enough energy; show toast on failure */
-function validateEnergy(currentEnergy: number, cost: number): boolean {
-  if (currentEnergy < cost) {
-    ToastComponent({
-      message: "You need more energy to attack",
-      type: "error",
-    });
-    return false;
-  }
-  return true;
-}
-
-/** Retreat section sub-component */
-const RetreatSection: FC<{
-  isLoading: boolean;
-  onRetreat: () => void;
-}> = ({ isLoading, onRetreat }) => (
-  <div className="mb-4 flex flex-col items-center justify-center rounded bg-white px-8 py-5 shadow md:w-[44.563rem]">
-    <h2 className="py-4 text-center text-xl font-bold">Retreat troops:</h2>
-    <Button
-      extraClasses="mt-4 mb-4"
-      disabled={isLoading}
-      onClick={(event) => {
-        event.preventDefault();
-        onRetreat();
-      }}
-    >
-      Retreat
-    </Button>
-  </div>
-);
-
-/** Attack form sub-component */
-const AttackForm: FC<{
-  isLoading: boolean;
-  canAffordAttack: boolean;
-  energyCost: number;
-  playerEnergy: number;
-  onInputChange: IHandleInputChange;
-  onAttack: () => void;
-}> = ({
-  isLoading,
-  canAffordAttack,
-  energyCost,
-  playerEnergy,
-  onInputChange,
-  onAttack,
+/** Attack or defend, chosen with a two-option segmented control */
+const ModeSwitch: FC<{ mode: Mode; onChange: (mode: Mode) => void }> = ({
+  mode,
+  onChange,
 }) => (
-  <>
-    <h2 className="py-4 text-center text-xl font-bold">Attack:</h2>
-    <div className="mt-4 flex flex-col items-center justify-center">
-      <span className="text-md mb-2">Country nick:</span>
-      <input
-        type="text"
-        name="attack"
-        onChange={onInputChange}
-        className="w-64 rounded-md border border-gray-300 px-3 py-2"
-      />
-      <div
-        title={
-          !canAffordAttack
-            ? `Need ${energyCost} energy (have ${playerEnergy})`
-            : undefined
-        }
-        className="inline-block"
-      >
-        <Button
-          disabled={isLoading || !canAffordAttack}
-          onClick={(event) => {
-            event.preventDefault();
-            onAttack();
-          }}
-          extraClasses="w-32 mt-4"
+  <fieldset>
+    <legend className="sr-only">Mission</legend>
+    <div className="grid grid-cols-2 gap-1 rounded-lg border border-line bg-sunken p-1">
+      {(
+        [
+          { value: "attack", label: "Attack", icon: LuSwords },
+          { value: "defend", label: "Defend", icon: LuShield },
+        ] as const
+      ).map(({ value, label, icon: Icon }) => (
+        <label
+          key={value}
+          className={`flex h-9 cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-semibold transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-accent ${
+            mode === value
+              ? value === "attack"
+                ? "bg-hostile/15 text-hostile"
+                : "bg-friendly/15 text-friendly"
+              : "text-muted hover:text-ink"
+          }`}
         >
-          Attack
-        </Button>
-      </div>
+          <input
+            type="radio"
+            name="mission"
+            value={value}
+            checked={mode === value}
+            onChange={() => onChange(value)}
+            className="sr-only"
+          />
+          <Icon aria-hidden className="h-4 w-4" />
+          {label}
+        </label>
+      ))}
     </div>
-  </>
-);
-
-/** Defend form sub-component */
-const DefendForm: FC<{
-  isLoading: boolean;
-  onInputChange: IHandleInputChange;
-  onDefend: () => void;
-}> = ({ isLoading, onInputChange, onDefend }) => (
-  <>
-    <h2 className="py-4 text-center text-xl font-bold">Defend:</h2>
-    <form className="mt-4 flex flex-col items-center justify-center">
-      <span className="text-md mb-2">Country nick:</span>
-      <input
-        type="text"
-        name="defend"
-        onChange={onInputChange}
-        className="w-64 rounded-md border border-gray-300 px-3 py-2"
-      />
-      <Button
-        disabled={isLoading}
-        extraClasses="w-32 mt-4"
-        onClick={(event) => {
-          event.preventDefault();
-          onDefend();
-        }}
-      >
-        Defend
-      </Button>
-    </form>
-  </>
+  </fieldset>
 );
 
 const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   const ctx = api.useContext();
 
-  const [attackValue, setAttackValue] = useState<string>("");
-  const [defValue, setDefValue] = useState<string>("");
-
-  const areTroopsAvailable =
-    Number(paPlayer.war) === 0 && Number(paPlayer.def) === 0;
+  const [mode, setMode] = useState<Mode>("attack");
+  const [target, setTarget] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const { mutate: addNews } = api.paNews.addNews.useMutation({
     onSuccess: async () => {
@@ -179,34 +81,31 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
   });
 
   const { data: targetedPlayer } = api.paUsers.getPlayerByNick.useQuery(
-    {
-      nick: attackValue || defValue,
-    },
-    {
-      enabled: attackValue.length > 3 || defValue.length > 3,
-    },
+    { nick: target },
+    { enabled: target.length > 3 },
   );
 
   const { mutate: militaryAction, isPending: isLoading } =
     api.paMilitary.militaryAction.useMutation({
-      onSuccess: async () => {
+      onSuccess: async (_data, variables) => {
         ToastComponent({ message: "Troops are on their way", type: "success" });
         await ctx.paUsers.getPlayerByNick.invalidate();
         await ctx.paUsers.getPlayerByNick.refetch();
 
-        if (targetedPlayer && attackValue) {
-          addNews({
-            sentTo: targetedPlayer.id,
-            news: `${paPlayer.nick} is attacking you, ETA 30 mins`,
-            header: "Incoming hostile fleet",
-          });
-        }
-        if (targetedPlayer && defValue) {
-          addNews({
-            sentTo: targetedPlayer.id,
-            news: `${paPlayer.nick} is defending you, ETA 25 mins`,
-            header: "Incoming defending fleet",
-          });
+        if (targetedPlayer) {
+          addNews(
+            variables.mode === "attack"
+              ? {
+                  sentTo: targetedPlayer.id,
+                  news: `${paPlayer.nick} is attacking you, ETA 30 mins`,
+                  header: "Incoming hostile fleet",
+                }
+              : {
+                  sentTo: targetedPlayer.id,
+                  news: `${paPlayer.nick} is defending you, ETA 25 mins`,
+                  header: "Incoming defending fleet",
+                },
+          );
         }
       },
       onError: () => {
@@ -214,89 +113,153 @@ const Military: FC<IMilitaryProps> = ({ paPlayer }) => {
       },
     });
 
-  const { mutate: retreatTroops } = api.paMilitary.retreatTroops.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Troops are returning", type: "success" });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Error ...", type: "error" });
-    },
-  });
-
-  const handleInputAttackChange: IHandleInputChange = (event) => {
-    setAttackValue(event.target.value);
-  };
-
-  const handleInputDefChange: IHandleInputChange = (event) => {
-    setDefValue(event.target.value);
-  };
+  const { mutate: retreatTroops, isPending: isRetreating } =
+    api.paMilitary.retreatTroops.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Troops are returning", type: "success" });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Error ...", type: "error" });
+      },
+    });
 
   const allFleetsAtHome = paPlayer.war === 0 && paPlayer.def === 0;
-  const shipCount = calculateShipCount(paPlayer);
-  const energyCost = 9 * shipCount;
+  const shipCount = getShipCount(paPlayer);
+  const energyCost = ENERGY_PER_SHIP * shipCount;
   const canAffordAttack = paPlayer.energy >= energyCost && energyCost > 0;
+  const isAttack = mode === "attack";
 
-  const shouldShowRetreatButton =
-    !allFleetsAtHome && shipCount > 0 && paPlayer.war > 0;
+  if (shipCount === 0) {
+    return (
+      <Panel title="Send fleet">
+        <p className="text-sm text-muted">
+          You have no ships yet.{" "}
+          <Link
+            href="/production"
+            className="font-semibold text-accent hover:underline"
+          >
+            Train units in Production
+          </Link>
+          .
+        </p>
+      </Panel>
+    );
+  }
 
-  const handleAttack = () => {
-    if (!validateTarget(attackValue)) return;
-    if (!validateEnergy(paPlayer.energy, energyCost)) return;
-    if (!validateTroopsAvailable(areTroopsAvailable)) return;
-    militaryAction({
-      Userid: paPlayer.id,
-      target: attackValue,
-      energyCost: energyCost,
-      mode: "attack",
-    });
-  };
+  if (!allFleetsAtHome) {
+    const canRetreat = paPlayer.war > 0;
+    return (
+      <Panel title="Fleet away">
+        <p className="text-sm text-muted">
+          Your fleet is out on a mission. You can send it again once it is home.
+        </p>
+        {canRetreat && (
+          <Button
+            variant="danger"
+            extraClasses="mt-4 w-full sm:w-auto"
+            disabled={isRetreating}
+            onClick={() => retreatTroops({ Userid: paPlayer.id })}
+          >
+            Retreat
+          </Button>
+        )}
+      </Panel>
+    );
+  }
 
-  const handleDefend = () => {
-    if (!validateTarget(defValue)) return;
-    if (!validateTroopsAvailable(areTroopsAvailable)) return;
-    militaryAction({
-      Userid: paPlayer.id,
-      target: defValue,
-      mode: "defend",
-    });
-  };
-
-  const handleRetreat = () => {
-    retreatTroops({ Userid: paPlayer.id });
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const nick = target.trim();
+    if (!nick) {
+      setError("Enter the nick of the player to " + mode);
+      return;
+    }
+    if (isAttack && !canAffordAttack) {
+      setError(
+        `You need ${formatNumber(energyCost - paPlayer.energy)} more energy to attack`,
+      );
+      return;
+    }
+    setError("");
+    militaryAction(
+      isAttack
+        ? { Userid: paPlayer.id, target: nick, energyCost, mode: "attack" }
+        : { Userid: paPlayer.id, target: nick, mode: "defend" },
+    );
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-5">
-      <div className="w-full">
-        {shouldShowRetreatButton && (
-          <RetreatSection isLoading={isLoading} onRetreat={handleRetreat} />
-        )}
-        {allFleetsAtHome && shipCount > 0 && (
-          <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
-            <h2 className="py-4 text-center text-xl font-bold">
-              Cost to attack: {energyCost} energy
-              <br />
-              (defending is free)
-            </h2>
-            <AttackForm
-              isLoading={isLoading}
-              canAffordAttack={canAffordAttack}
-              energyCost={energyCost}
-              playerEnergy={paPlayer.energy}
-              onInputChange={handleInputAttackChange}
-              onAttack={handleAttack}
-            />
-            <DefendForm
-              isLoading={isLoading}
-              onInputChange={handleInputDefChange}
-              onDefend={handleDefend}
-            />
+    <Panel title="Send fleet">
+      <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <ModeSwitch
+          mode={mode}
+          onChange={(value) => {
+            setMode(value);
+            setError("");
+          }}
+        />
+        <Field
+          label="Target"
+          htmlFor="military-target"
+          hint={
+            isAttack
+              ? "Nick of the player to attack"
+              : "Nick of the player to defend"
+          }
+        >
+          <input
+            id="military-target"
+            type="text"
+            name="target"
+            autoComplete="off"
+            value={target}
+            onChange={(event) => {
+              setTarget(event.target.value);
+              setError("");
+            }}
+            aria-invalid={!!error}
+            aria-describedby={error ? "military-error" : undefined}
+            className={INPUT_CLASS}
+          />
+        </Field>
+        <dl className="grid grid-cols-2 gap-3 rounded-md border border-line bg-sunken px-3 py-2.5 text-sm">
+          <div>
+            <dt className="text-xs text-muted">Ships sent</dt>
+            <dd className="font-semibold tabular-nums">
+              {formatNumber(shipCount)}
+            </dd>
           </div>
+          <div>
+            <dt className="text-xs text-muted">Energy cost</dt>
+            <dd
+              className={`font-semibold tabular-nums ${
+                isAttack && !canAffordAttack ? "text-hostile" : ""
+              }`}
+            >
+              {isAttack
+                ? `${formatNumber(energyCost)} of ${formatNumber(paPlayer.energy)}`
+                : "Free"}
+            </dd>
+          </div>
+        </dl>
+        {error && (
+          <p id="military-error" role="alert" className="text-sm text-hostile">
+            {error}
+          </p>
         )}
-      </div>
-    </div>
+        <Button
+          type="submit"
+          variant={isAttack ? "danger" : "primary"}
+          disabled={isLoading || (isAttack && !canAffordAttack)}
+          extraClasses="w-full sm:w-auto sm:self-start"
+        >
+          {isAttack ? <LuSwords aria-hidden /> : <LuShield aria-hidden />}
+          {isAttack ? "Launch attack" : "Send defence"}
+        </Button>
+      </form>
+    </Panel>
   );
 };
 

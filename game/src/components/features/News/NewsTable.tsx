@@ -34,9 +34,7 @@ const NewsTable: FC<INewsTableProps> = ({ news, isDeletingAll }) => {
 
   if (isOnlyCombatReport) {
     return (
-      <h2 className="py-4 text-right text-xl font-bold">
-        No general news to display
-      </h2>
+      <p className="px-4 py-6 text-sm text-muted">No general news to display</p>
     );
   }
 
