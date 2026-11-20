@@ -250,3 +250,66 @@ describe("AdvancedDataTable - action button integration", () => {
     expect(screen.getByRole("button", { name: "Build" })).toBeDisabled();
   });
 });
+
+describe("AdvancedDataTable - responsive build table", () => {
+  const buildingColumns: AdvancedTableColumn[] = [
+    { label: "Name", accessor: "buildingName" },
+    { label: "Description", accessor: "buildingDescription" },
+    { label: "ETA", accessor: "buildingETA" },
+    { label: "Cost", accessor: "buildingCost" },
+    { label: "Amount", accessor: "ui_roids", type: "inputNumber" },
+  ];
+
+  it("renders an amount input limited to what the player can afford", () => {
+    render(
+      <AdvancedDataTable
+        columns={buildingColumns}
+        data={[defaultPlayer]}
+        caption="Houses"
+        renderData={[
+          createBuildingFixture({
+            buildingName: "Houses",
+            buildingCostCrystal: 500,
+            buildingCostTitanium: 0,
+          }),
+        ]}
+      />,
+    );
+    // 5,000 credits / 500 per house
+    expect(screen.getByRole("spinbutton")).toHaveAttribute("max", "10");
+    expect(screen.getByRole("button", { name: "Max" })).toBeInTheDocument();
+  });
+
+  it("hides secondary columns on small screens", () => {
+    render(
+      <AdvancedDataTable
+        columns={buildingColumns}
+        data={[defaultPlayer]}
+        caption="Buildings"
+        renderData={[createBuildingFixture()]}
+      />,
+    );
+    const header = (name: string) =>
+      screen.getByRole("columnheader", { name }).className;
+    expect(header("Description")).toContain("hidden lg:table-cell");
+    expect(header("ETA")).toContain("hidden md:table-cell");
+    expect(header("Cost")).toContain("hidden sm:table-cell");
+    expect(header("Name")).not.toContain("hidden");
+  });
+
+  it("hides columns marked hideOnMobile below 768px", () => {
+    render(
+      <AdvancedDataTable
+        columns={[
+          { label: "Name", accessor: "nick" },
+          { label: "Score", accessor: "score", hideOnMobile: true },
+        ]}
+        data={[defaultPlayer]}
+        caption="Ranking"
+      />,
+    );
+    expect(
+      screen.getByRole("columnheader", { name: "Score" }).className,
+    ).toContain("hidden md:table-cell");
+  });
+});

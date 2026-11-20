@@ -216,4 +216,14 @@ describe("Information component", () => {
       { enabled: true },
     );
   });
+
+  it("counts several friendly fleets in the title", () => {
+    mockGetFriendliesUseQuery.mockReturnValue({
+      data: { defenders: "Ally one\nAlly two" },
+    });
+    render(<Information paPlayer={createMockPaPlayer({ newbie: 0 })} />);
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "2 friendly fleets incoming",
+    );
+  });
 });

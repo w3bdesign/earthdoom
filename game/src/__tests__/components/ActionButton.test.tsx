@@ -1,6 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import ActionButton from "../../components/ui/tables/AdvancedDataTable/ActionButton";
+import ActionButton, {
+  buildShortfall,
+} from "../../components/ui/tables/AdvancedDataTable/ActionButton";
 import { createMockPaPlayer } from "../../test-utils/players";
 import type { Building } from "../../components/features/Construct/types/types";
 
@@ -323,6 +325,44 @@ describe("ActionButton - affordability hint", () => {
     expect(screen.queryByText(/^Need /)).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Build" })).not.toHaveAttribute(
       "aria-describedby",
+    );
+  });
+});
+
+describe("buildShortfall", () => {
+  const building = createBuilding({
+    buildingCostCrystal: 100,
+    buildingCostTitanium: 50,
+  });
+
+  it("returns nothing when the player can afford it", () => {
+    expect(
+      buildShortfall(true, createMockPaPlayer(), building),
+    ).toBeUndefined();
+  });
+
+  it("names the missing credits and titanium", () => {
+    const player = createMockPaPlayer({ crystal: 40, metal: 20 });
+    expect(buildShortfall(false, player, building)).toBe(
+      "Need 60 more credits and 30 more titanium",
+    );
+  });
+
+  it("explains missing land when resources are enough", () => {
+    const player = createMockPaPlayer({
+      crystal: 1000,
+      metal: 1000,
+      ui_roids: 0,
+    });
+    expect(buildShortfall(false, player, building, true)).toBe(
+      "No undeveloped land",
+    );
+  });
+
+  it("falls back to a general message", () => {
+    const player = createMockPaPlayer({ crystal: 1000, metal: 1000 });
+    expect(buildShortfall(false, player, building)).toBe(
+      "You cannot afford this",
     );
   });
 });
