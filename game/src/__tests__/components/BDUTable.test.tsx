@@ -4,24 +4,28 @@ import BDUTable from "../../components/ui/tables/BDUTable";
 import { createMockPaPlayer } from "../../test-utils/players";
 
 describe("BDUTable", () => {
-  it("renders the caption with total BDU count", () => {
+  it("renders the heading with total BDU count", () => {
     const player = createMockPaPlayer({
       rcannons: 5,
       avengers: 3,
       lstalkers: 2,
     });
     render(<BDUTable paPlayer={player} />);
-    expect(screen.getByText("BDU (10 total)")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /^Base defence/ }),
+    ).toHaveTextContent("10 total");
   });
 
-  it("renders caption with 0 total when no BDU units", () => {
+  it("renders heading with 0 total when no BDU units", () => {
     const player = createMockPaPlayer({
       rcannons: 0,
       avengers: 0,
       lstalkers: 0,
     });
     render(<BDUTable paPlayer={player} />);
-    expect(screen.getByText("BDU (0 total)")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /^Base defence/ }),
+    ).toHaveTextContent("0 total");
   });
 
   it("renders all BDU column headers", () => {
@@ -44,10 +48,10 @@ describe("BDUTable", () => {
     expect(screen.getByText("4")).toBeInTheDocument();
   });
 
-  it("renders a table element", () => {
+  it("renders the values as a description list", () => {
     const player = createMockPaPlayer();
     const { container } = render(<BDUTable paPlayer={player} />);
-    expect(container.querySelector("table")).toBeInTheDocument();
+    expect(container.querySelector("dl")).toBeInTheDocument();
   });
 
   it("calculates total correctly with large numbers", () => {
@@ -57,6 +61,8 @@ describe("BDUTable", () => {
       lstalkers: 300,
     });
     render(<BDUTable paPlayer={player} />);
-    expect(screen.getByText("BDU (600 total)")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /^Base defence/ }),
+    ).toHaveTextContent("600 total");
   });
 });

@@ -4,10 +4,13 @@ import type { Building } from "@/components/features/Construct/types/types";
 import type { PaPlayerBase } from "@/types/player";
 import type { TMutateType } from "./AdvancedDataTable";
 
+import { LuCheck, LuHourglass } from "react-icons/lu";
+
 import Button from "../../../common/Button";
+import ActionStatus, { ACTION_WIDTH } from "../../ActionStatus";
 import ToastComponent from "../../notifications/ToastComponent";
 
-import { canAffordToTrain } from "@/utils/functions";
+import { canAffordToTrain, formatNumber } from "@/utils/functions";
 
 interface IActionButtonProps {
   isLoading: boolean;
@@ -21,14 +24,13 @@ interface IActionButtonProps {
   considerLand?: boolean;
 }
 
-/** Determine the tooltip text based on the current disabled state */
-function buildTooltip(
-  isLoading: boolean,
+/** Explain why the action can't be taken, e.g. "Need 1,200 more credits" */
+export function buildShortfall(
   canAffordOne: boolean,
   player: PaPlayerBase,
   building: Building,
+  considerLand = false,
 ): string | undefined {
-  if (isLoading) return "Action in progress...";
   if (canAffordOne) return undefined;
 
   const parts: string[] = [];
@@ -37,7 +39,7 @@ function buildTooltip(
     player.crystal < building.buildingCostCrystal
   ) {
     parts.push(
-      `Need ${building.buildingCostCrystal} credits (have ${player.crystal})`,
+      `${formatNumber(building.buildingCostCrystal - player.crystal)} more credits`,
     );
   }
   if (
@@ -45,10 +47,12 @@ function buildTooltip(
     player.metal < building.buildingCostTitanium
   ) {
     parts.push(
-      `Need ${building.buildingCostTitanium} titanium (have ${player.metal})`,
+      `${formatNumber(building.buildingCostTitanium - player.metal)} more titanium`,
     );
   }
-  return parts.length > 0 ? parts.join(". ") : "You cannot afford this";
+  if (parts.length > 0) return `Need ${parts.join(" and ")}`;
+  if (considerLand && player.ui_roids < 1) return "No undeveloped land";
+  return "You cannot afford this";
 }
 
 /** Determine if the building's field name check should be skipped */
@@ -59,18 +63,28 @@ function shouldSkipFieldNameCheck(building: Building): boolean {
 }
 
 /** Get the numeric value from the input ref, defaulting to 0 */
-function getInputAmount(inputAmountRef?: RefObject<HTMLInputElement | null>): number {
+function getInputAmount(
+  inputAmountRef?: RefObject<HTMLInputElement | null>,
+): number {
   return Number(inputAmountRef?.current?.value) || 0;
 }
 
-/** Determine the status text for in-progress or completed buildings */
-function getStatusText(
-  player: PaPlayerBase,
-  building: Building,
-): string | null {
-  const fieldValue = Number(player[building.buildingFieldName]);
-  if (fieldValue >= 2) return `${fieldValue} ticks left`;
-  if (fieldValue === 1) return "Done";
+/** The status of a building or research that was already started */
+function BuildStatus({ fieldValue }: { fieldValue: number }) {
+  if (fieldValue >= 2) {
+    return (
+      <ActionStatus tone="caution" icon={LuHourglass}>
+        {fieldValue} ticks left
+      </ActionStatus>
+    );
+  }
+  if (fieldValue === 1) {
+    return (
+      <ActionStatus tone="friendly" icon={LuCheck}>
+        Done
+      </ActionStatus>
+    );
+  }
   return null;
 }
 
@@ -86,12 +100,11 @@ function handleActionClick(
   if (!player?.id) return;
 
   const hasInputField =
-    building.hasInputField === 1 ||
-    Number(building.hasInputField) === 1;
+    building.hasInputField === 1 || Number(building.hasInputField) === 1;
 
   const amount = getInputAmount(inputAmountRef);
 
-  if (hasInputField && amount === 0) {
+  if (hasInputField && amount <= 0) {
     ToastComponent({
       message: "Quantity needs to be more than 0",
       type: "error",
@@ -127,6 +140,7 @@ const ActionButton: FC<IActionButtonProps> = ({
   building,
   mutate,
   actionText,
+  actionInProgress,
   inputAmountRef,
   disabled,
   considerLand,
@@ -137,6 +151,14 @@ const ActionButton: FC<IActionButtonProps> = ({
   }
 
   const skipFieldNameCheck = shouldSkipFieldNameCheck(building);
+  const showButton =
+    skipFieldNameCheck || player[building.buildingFieldName] === 0;
+
+  if (!showButton) {
+    return (
+      <BuildStatus fieldValue={Number(player[building.buildingFieldName])} />
+    );
+  }
 
   const canAffordOne = canAffordToTrain(
     paPlayer,
@@ -145,40 +167,39 @@ const ActionButton: FC<IActionButtonProps> = ({
     1,
     considerLand,
   );
-
   const isDisabled = isLoading || disabled || !canAffordOne;
-  const tooltip = buildTooltip(isLoading, canAffordOne, player, building);
-
-  const showButton =
-    skipFieldNameCheck || player[building.buildingFieldName] === 0;
-  const statusText = !skipFieldNameCheck
-    ? getStatusText(player, building)
-    : null;
+  const shortfall = buildShortfall(
+    canAffordOne,
+    player,
+    building,
+    considerLand,
+  );
+  const hintId = `shortfall-${building.buildingFieldName}`;
 
   return (
-    <>
-      <td className="flex items-center px-8 text-base text-black transition duration-300 before:text-black first:border-l-0 sm:table-cell sm:before:content-none md:h-12 md:px-0">
-        {showButton && (
-          <div title={tooltip} className="inline-block">
-            <Button
-              disabled={isDisabled}
-              onClick={() =>
-                handleActionClick(
-                  paPlayer,
-                  building,
-                  inputAmountRef,
-                  considerLand,
-                  mutate,
-                )
-              }
-            >
-              {actionText}
-            </Button>
-          </div>
-        )}
-        {statusText}
-      </td>
-    </>
+    <div className="flex flex-col items-start gap-1">
+      <Button
+        disabled={isDisabled}
+        aria-describedby={shortfall ? hintId : undefined}
+        extraClasses={ACTION_WIDTH}
+        onClick={() =>
+          handleActionClick(
+            paPlayer,
+            building,
+            inputAmountRef,
+            considerLand,
+            mutate,
+          )
+        }
+      >
+        {isLoading && actionInProgress ? actionInProgress : actionText}
+      </Button>
+      {shortfall && (
+        <p id={hintId} className="text-xs text-hostile">
+          {shortfall}
+        </p>
+      )}
+    </div>
   );
 };
 

@@ -9,20 +9,32 @@ describe("Button component", () => {
     render(<Button>Click me</Button>);
     const button = screen.getByRole("button", { name: /click me/i });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass("bg-primary");
+    expect(button).toHaveClass("bg-accent", "h-10");
+    expect(button).toHaveAttribute("type", "button");
     expect(button).not.toBeDisabled();
   });
 
   it("renders primary variant correctly", () => {
     render(<Button variant="primary">Primary</Button>);
     const button = screen.getByRole("button", { name: /primary/i });
-    expect(button).toHaveClass("bg-primary");
+    expect(button).toHaveClass("bg-accent", "text-accent-ink");
+  });
+
+  it("renders secondary variant correctly", () => {
+    render(<Button variant="secondary">Secondary</Button>);
+    const button = screen.getByRole("button", { name: /secondary/i });
+    expect(button).toHaveClass("bg-raised", "text-ink");
   });
 
   it("renders danger variant correctly", () => {
     render(<Button variant="danger">Danger</Button>);
     const button = screen.getByRole("button", { name: /danger/i });
-    expect(button).toHaveClass("bg-danger");
+    expect(button).toHaveClass("text-hostile");
+  });
+
+  it("renders the small size", () => {
+    render(<Button size="sm">Small</Button>);
+    expect(screen.getByRole("button", { name: /small/i })).toHaveClass("h-8");
   });
 
   it("applies disabled state correctly", () => {
@@ -43,9 +55,7 @@ describe("Button component", () => {
   it("handles click events", () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Click Handler</Button>);
-    const button = screen.getByRole("button", { name: /click handler/i });
-
-    fireEvent.click(button);
+    fireEvent.click(screen.getByRole("button", { name: /click handler/i }));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
@@ -56,18 +66,15 @@ describe("Button component", () => {
         Disabled Click
       </Button>,
     );
-    const button = screen.getByRole("button", { name: /disabled click/i });
-
-    fireEvent.click(button);
+    fireEvent.click(screen.getByRole("button", { name: /disabled click/i }));
     expect(handleClick).not.toHaveBeenCalled();
   });
 
   it("applies hover and focus styles", () => {
     render(<Button>Style Test</Button>);
-    const button = screen.getByRole("button", { name: /style test/i });
-    const className = button.className;
-    expect(className).toContain("hover:bg-primary-600");
-    expect(className).toContain("focus:bg-primary-600");
+    const { className } = screen.getByRole("button", { name: /style test/i });
+    expect(className).toContain("hover:bg-accent-strong");
+    expect(className).toContain("focus-visible:bg-accent-strong");
   });
 
   it("spreads additional props to button element", () => {
@@ -76,23 +83,20 @@ describe("Button component", () => {
         Props Spread
       </Button>,
     );
-    const button = screen.getByTestId("test-button");
-    expect(button).toHaveAttribute("aria-label", "test button");
+    expect(screen.getByTestId("test-button")).toHaveAttribute(
+      "aria-label",
+      "test button",
+    );
   });
 
-  it("maintains consistent styling with long text content", () => {
+  it("keeps long text on one line", () => {
     render(
       <Button>
         This is a very long button text that should still maintain proper
         styling
       </Button>,
     );
-    const button = screen.getByRole("button");
-    const className = button.className;
-    expect(className).toContain("p-8");
-    expect(className).toContain("w-32");
-    expect(className).toContain("pb-2");
-    expect(className).toContain("pt-2.5");
+    expect(screen.getByRole("button")).toHaveClass("whitespace-nowrap");
   });
 
   it("combines all style classes correctly", () => {
@@ -101,38 +105,24 @@ describe("Button component", () => {
         Test
       </Button>,
     );
-    const button = screen.getByRole("button");
-    const className = button.className;
-
-    // Base classes
-    expect(className).toContain("inline-block");
-    expect(className).toContain("rounded");
-    expect(className).toContain("text-white");
-
-    // Variant classes
-    expect(className).toContain("bg-primary");
-
-    // Extra classes
+    const { className } = screen.getByRole("button");
+    expect(className).toContain("inline-flex");
+    expect(className).toContain("rounded-md");
+    expect(className).toContain("bg-accent");
     expect(className).toContain("custom-class");
-
-    // Interactive states
     expect(className).toContain("disabled:opacity-50");
-    expect(className).toContain("hover:bg-primary-600");
-    expect(className).toContain("focus:bg-primary-600");
   });
 
   it("named export renders the same as default export", () => {
     render(<NamedButton>Named Export</NamedButton>);
     const button = screen.getByRole("button", { name: /named export/i });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass("bg-primary");
+    expect(button).toHaveClass("bg-accent");
   });
 
-  it("danger variant applies correct hover and focus classes", () => {
+  it("danger variant applies a hover class", () => {
     render(<Button variant="danger">Danger Hover</Button>);
-    const button = screen.getByRole("button", { name: /danger hover/i });
-    const className = button.className;
-    expect(className).toContain("hover:bg-danger-600");
-    expect(className).toContain("focus:bg-danger-600");
+    const { className } = screen.getByRole("button", { name: /danger hover/i });
+    expect(className).toContain("hover:bg-hostile/20");
   });
 });

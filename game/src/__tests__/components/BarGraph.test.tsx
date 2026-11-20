@@ -5,8 +5,17 @@ import type { ChartData } from "../../components/features/Resources/BarGraph";
 
 // Mock chart.js and react-chartjs-2 since they use canvas
 jest.mock("react-chartjs-2", () => ({
-  Bar: ({ data, options }: { data: unknown; options: unknown }) => (
+  Bar: ({
+    data,
+    options,
+    ...rest
+  }: {
+    data: unknown;
+    options: unknown;
+    [key: string]: unknown;
+  }) => (
     <div
+      {...rest}
       data-testid="bar-chart"
       data-data={JSON.stringify(data)}
       data-options={JSON.stringify(options)}
@@ -52,7 +61,7 @@ describe("BarChart", () => {
     expect(passedData.datasets[0]?.data).toEqual([600, 200, 225]);
   });
 
-  it('passes options with title "Income"', () => {
+  it('keeps the "Income" title in options but hides it (the panel heading shows it)', () => {
     const { getByTestId } = render(<BarChart chartData={mockChartData} />);
     const chart = getByTestId("bar-chart");
     const passedOptions = JSON.parse(
@@ -62,7 +71,14 @@ describe("BarChart", () => {
       responsive: boolean;
     };
     expect(passedOptions.plugins.title.text).toBe("Income");
-    expect(passedOptions.plugins.title.display).toBe(true);
+    expect(passedOptions.plugins.title.display).toBe(false);
+  });
+
+  it("labels the chart for screen readers", () => {
+    const { getByRole } = render(<BarChart chartData={mockChartData} />);
+    expect(
+      getByRole("img", { name: "Income per tick by resource" }),
+    ).toBeInTheDocument();
   });
 
   it("sets responsive to true in options", () => {

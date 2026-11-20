@@ -79,12 +79,14 @@ describe("AdvancedDataTable - rendering structure", () => {
     expect(cells).toHaveLength(3);
   });
 
-  it("renders data-th attributes on td elements", () => {
-    const { container } = render(<AdvancedDataTable {...defaultProps} />);
-    const tds = container.querySelectorAll("td");
-    expect(tds[0]).toHaveAttribute("data-th", "Name");
-    expect(tds[1]).toHaveAttribute("data-th", "Crystal");
-    expect(tds[2]).toHaveAttribute("data-th", "Metal");
+  it("renders one column header per column", () => {
+    render(<AdvancedDataTable {...defaultProps} />);
+    const headers = screen.getAllByRole("columnheader");
+    expect(headers.map((h) => h.textContent)).toEqual([
+      "Name",
+      "Crystal",
+      "Metal",
+    ]);
   });
 
   it("renders empty tbody when data is empty", () => {
@@ -101,8 +103,8 @@ describe("AdvancedDataTable - data rendering", () => {
   it("renders data from the data prop using string accessors", () => {
     render(<AdvancedDataTable {...defaultProps} />);
     expect(screen.getByText("TestPlayer")).toBeInTheDocument();
-    expect(screen.getByText("5000")).toBeInTheDocument();
-    expect(screen.getByText("3000")).toBeInTheDocument();
+    expect(screen.getByText("5,000")).toBeInTheDocument();
+    expect(screen.getByText("3,000")).toBeInTheDocument();
   });
 
   it("renders multiple rows with multiple data entries", () => {
@@ -133,7 +135,8 @@ describe("AdvancedDataTable - data rendering", () => {
       />,
     );
     expect(screen.getByText("Crystal Mine")).toBeInTheDocument();
-    expect(screen.getByText("100 credits")).toBeInTheDocument();
+    // Shown in the Cost column and repeated under the name for small screens
+    expect(screen.getAllByText("100 credits").length).toBeGreaterThan(0);
   });
 });
 
@@ -245,5 +248,68 @@ describe("AdvancedDataTable - action button integration", () => {
       />,
     );
     expect(screen.getByRole("button", { name: "Build" })).toBeDisabled();
+  });
+});
+
+describe("AdvancedDataTable - responsive build table", () => {
+  const buildingColumns: AdvancedTableColumn[] = [
+    { label: "Name", accessor: "buildingName" },
+    { label: "Description", accessor: "buildingDescription" },
+    { label: "ETA", accessor: "buildingETA" },
+    { label: "Cost", accessor: "buildingCost" },
+    { label: "Amount", accessor: "ui_roids", type: "inputNumber" },
+  ];
+
+  it("renders an amount input limited to what the player can afford", () => {
+    render(
+      <AdvancedDataTable
+        columns={buildingColumns}
+        data={[defaultPlayer]}
+        caption="Houses"
+        renderData={[
+          createBuildingFixture({
+            buildingName: "Houses",
+            buildingCostCrystal: 500,
+            buildingCostTitanium: 0,
+          }),
+        ]}
+      />,
+    );
+    // 5,000 credits / 500 per house
+    expect(screen.getByRole("spinbutton")).toHaveAttribute("max", "10");
+    expect(screen.getByRole("button", { name: "Max" })).toBeInTheDocument();
+  });
+
+  it("hides secondary columns on small screens", () => {
+    render(
+      <AdvancedDataTable
+        columns={buildingColumns}
+        data={[defaultPlayer]}
+        caption="Buildings"
+        renderData={[createBuildingFixture()]}
+      />,
+    );
+    const header = (name: string) =>
+      screen.getByRole("columnheader", { name }).className;
+    expect(header("Description")).toContain("hidden lg:table-cell");
+    expect(header("ETA")).toContain("hidden md:table-cell");
+    expect(header("Cost")).toContain("hidden sm:table-cell");
+    expect(header("Name")).not.toContain("hidden");
+  });
+
+  it("hides columns marked hideOnMobile below 768px", () => {
+    render(
+      <AdvancedDataTable
+        columns={[
+          { label: "Name", accessor: "nick" },
+          { label: "Score", accessor: "score", hideOnMobile: true },
+        ]}
+        data={[defaultPlayer]}
+        caption="Ranking"
+      />,
+    );
+    expect(
+      screen.getByRole("columnheader", { name: "Score" }).className,
+    ).toContain("hidden md:table-cell");
   });
 });

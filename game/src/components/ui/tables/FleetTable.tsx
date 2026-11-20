@@ -2,8 +2,11 @@ import { api } from "@/utils/api";
 
 import type { PaUsers } from "@prisma/client";
 import type { FC } from "react";
+import type { Tone } from "@/components/ui/Badge";
 
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import Badge from "@/components/ui/Badge";
+import Panel from "@/components/ui/Panel";
+import Skeleton from "@/components/ui/Skeleton";
 
 interface FleetStatusProps {
   paPlayer: PaUsers;
@@ -14,33 +17,51 @@ interface TargetPlayer {
   id: number;
 }
 
+interface FleetStatus {
+  state: string;
+  tone: Tone;
+  message: string;
+}
+
 /**
- * Determines the fleet status message based on player state and target data.
+ * Determines the fleet status based on player state and target data.
  */
-const getFleetStatusMessage = (
+export const getFleetStatus = (
   paPlayer: PaUsers,
   attackTarget: TargetPlayer | null | undefined,
   defendTarget: TargetPlayer | null | undefined,
-): string => {
+): FleetStatus => {
+  const eta = Math.max(paPlayer.wareta - 5, 0);
+
   if (paPlayer.war === 0 && paPlayer.def === 0) {
-    return "All fleets at home";
+    return { state: "Home", tone: "neutral", message: "All fleets at home" };
   }
 
   if (paPlayer.war < 0 || paPlayer.def < 0) {
-    return `Returning ... ETA ${paPlayer.wareta}`;
+    return {
+      state: "Returning",
+      tone: "caution",
+      message: `Returning ... ETA ${paPlayer.wareta}`,
+    };
   }
 
   if (paPlayer.war > 0 && attackTarget) {
-    const eta = Math.max(paPlayer.wareta - 5, 0);
-    return `Attacking ${attackTarget.nick} #${attackTarget.id}   (ETA: ${eta} ticks)`;
+    return {
+      state: "Attacking",
+      tone: "hostile",
+      message: `Attacking ${attackTarget.nick} #${attackTarget.id} (ETA: ${eta} ticks)`,
+    };
   }
 
   if (paPlayer.def > 0 && defendTarget) {
-    const eta = Math.max(paPlayer.wareta - 5, 0);
-    return `Defending ${defendTarget.nick} #${defendTarget.id}   (ETA: ${eta} ticks)`;
+    return {
+      state: "Defending",
+      tone: "friendly",
+      message: `Defending ${defendTarget.nick} #${defendTarget.id} (ETA: ${eta} ticks)`,
+    };
   }
 
-  return "";
+  return { state: "Away", tone: "caution", message: "" };
 };
 
 const FleetTable: FC<FleetStatusProps> = ({ paPlayer }) => {
@@ -55,21 +76,20 @@ const FleetTable: FC<FleetStatusProps> = ({ paPlayer }) => {
     });
 
   const isLoading = isLoadingAttacked || isLoadingDefended;
-  const statusMessage = getFleetStatusMessage(
-    paPlayer,
-    paAttackedName,
-    paDefendedName,
-  );
+  const status = getFleetStatus(paPlayer, paAttackedName, paDefendedName);
 
   return (
-    <div className="mt-6 flex h-full w-full flex-col items-center justify-center">
-      <h2 className="py-4 text-center text-2xl font-bold text-white">
-        Fleet status
-      </h2>
-      <span className="text-md mx-auto mb-10 flex min-h-[6.25rem] w-full flex-col items-center justify-center rounded bg-white px-6 py-2 text-center shadow md:px-0 md:text-lg">
-        {isLoading ? <LoadingSpinner /> : statusMessage}
-      </span>
-    </div>
+    <Panel
+      className="h-full"
+      title="Fleet status"
+      actions={!isLoading && <Badge tone={status.tone}>{status.state}</Badge>}
+    >
+      {isLoading ? (
+        <Skeleton className="h-5 w-48" />
+      ) : (
+        <p className="text-sm text-ink">{status.message}</p>
+      )}
+    </Panel>
   );
 };
 

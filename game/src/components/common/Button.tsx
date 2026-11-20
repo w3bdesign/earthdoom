@@ -1,10 +1,29 @@
 import type { ButtonHTMLAttributes } from "react";
 
+type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
+type ButtonSize = "sm" | "md";
+
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "danger";
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   disabled?: boolean;
   extraClasses?: string;
 }
+
+const VARIANTS: Record<ButtonVariant, string> = {
+  primary:
+    "bg-accent text-accent-ink hover:bg-accent-strong focus-visible:bg-accent-strong",
+  secondary:
+    "border border-line-strong bg-raised text-ink hover:border-muted/60 hover:bg-line",
+  danger:
+    "border border-hostile/40 bg-hostile/10 text-hostile hover:bg-hostile/20",
+  ghost: "text-muted hover:bg-raised hover:text-ink",
+};
+
+const SIZES: Record<ButtonSize, string> = {
+  sm: "h-8 px-3 text-sm",
+  md: "h-10 px-4 text-sm",
+};
 
 /**
  * Button component
@@ -14,23 +33,16 @@ interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button: React.FC<IButtonProps> = ({
   children,
   variant = "primary",
+  size = "md",
   disabled,
   extraClasses = "",
+  type = "button",
   ...rest
 }) => {
-  const isPrimary = variant === "primary";
-  const bgColor = isPrimary ? "bg-primary" : "bg-danger";
-  const hoverBgColor = isPrimary
-    ? "hover:bg-primary-600"
-    : "hover:bg-danger-600";
-  const focusBgColor = isPrimary
-    ? "focus:bg-primary-600"
-    : "focus:bg-danger-600";
-
-  const classNames = `disabled:opacity-50 disabled:cursor-not-allowed inline-block rounded p-8 w-32 pb-2 pt-2.5 text-sm leading-normal text-white transition duration-150 ease-in-out ${extraClasses} ${bgColor} ${hoverBgColor} ${focusBgColor}`;
+  const classNames = `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50 ${VARIANTS[variant]} ${SIZES[size]} ${extraClasses}`;
 
   return (
-    <button disabled={disabled} className={classNames} {...rest}>
+    <button type={type} disabled={disabled} className={classNames} {...rest}>
       {children}
     </button>
   );

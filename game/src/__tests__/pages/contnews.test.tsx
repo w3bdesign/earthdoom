@@ -32,6 +32,7 @@ jest.mock("../../components/common/Layout", () => ({
 }));
 
 jest.mock("../../components/ui", () => ({
+  ...jest.requireActual("../../components/ui"),
   RenderIncoming: ({
     isLoading,
     hostiles,

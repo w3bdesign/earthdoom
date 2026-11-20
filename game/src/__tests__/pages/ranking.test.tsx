@@ -43,10 +43,17 @@ interface MockTableProps {
   caption: string;
   columns: MockColumn[];
   data: Record<string, unknown>[];
+  highlightRow?: (row: Record<string, unknown>) => boolean;
 }
 
 jest.mock("../../components/ui", () => ({
-  AdvancedDataTable: ({ caption, columns, data }: MockTableProps) => {
+  AdvancedDataTable: ({
+    caption,
+    columns,
+    data,
+    highlightRow,
+  }: MockTableProps) => {
+    const playerCol = columns.find((c) => c.label === "Player");
     // Render the accessor function for the Actions column to cover it
     const actionsCol = columns.find((c) => c.label === "Actions");
     let actionsOutput = null;
@@ -58,6 +65,20 @@ jest.mock("../../components/ui", () => ({
     return (
       <div data-testid="data-table">
         {caption}
+        {data.map((row, index) => (
+          <div
+            key={index}
+            data-testid="player-cell"
+            data-highlighted={String(highlightRow?.(row) ?? false)}
+          >
+            {typeof playerCol?.accessor === "function" &&
+              (
+                playerCol.accessor as (
+                  row: Record<string, unknown>,
+                ) => React.ReactNode
+              )(row)}
+          </div>
+        ))}
         <div data-testid="actions-output">{actionsOutput}</div>
       </div>
     );
@@ -138,5 +159,45 @@ describe("Ranking page", () => {
     render(<RankingPage />);
     // If the accessor renders, we should see ranking-actions
     expect(screen.getByTestId("ranking-actions")).toBeInTheDocument();
+  });
+
+  it("shows tag, nick, score and size in the player cell", () => {
+    setupAuthenticated([
+      createMockPaPlayer({
+        nick: "Tagged",
+        tag: "VOID",
+        score: 182340,
+        size: 412,
+      }),
+      createMockPaPlayer({ id: 2, nick: "Untagged", tag: "" }),
+    ]);
+    render(<RankingPage />);
+    const [tagged, untagged] = screen.getAllByTestId("player-cell");
+    expect(tagged).toHaveTextContent("[VOID]");
+    expect(tagged).toHaveTextContent("182,340 score");
+    expect(tagged).toHaveTextContent("size 412");
+    expect(untagged).not.toHaveTextContent("[");
+  });
+
+  it("describes how many players are ranked", () => {
+    setupAuthenticated([
+      createMockPaPlayer(),
+      createMockPaPlayer({ id: 2, nick: "Player2" }),
+    ]);
+    render(<RankingPage />);
+    expect(screen.getByText("2 players, ranked by score.")).toBeInTheDocument();
+  });
+
+  it("highlights the current player's row", () => {
+    setupAuthenticated([
+      createMockPaPlayer(),
+      createMockPaPlayer({ id: 2, nick: "Someone else" }),
+    ]);
+    render(<RankingPage />);
+    const cells = screen.getAllByTestId("player-cell");
+    expect(cells.map((cell) => cell.dataset.highlighted)).toEqual([
+      "true",
+      "false",
+    ]);
   });
 });

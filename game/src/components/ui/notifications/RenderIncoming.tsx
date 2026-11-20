@@ -1,4 +1,7 @@
-import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
+import { LuShieldAlert, LuShieldCheck } from "react-icons/lu";
+
+import Panel from "@/components/ui/Panel";
+import Skeleton from "@/components/ui/Skeleton";
 
 interface INewsProps {
   isLoading: boolean;
@@ -6,19 +9,24 @@ interface INewsProps {
   friendlies?: string;
 }
 
-const HostileNews = ({ content }: { content: string }) => {
-  return (
-    <h2 className="px-6 py-4 text-center text-xl font-bold text-red-500">
-      {content}
-    </h2>
-  );
-};
+/** The router joins one line per fleet with "\n". */
+const lines = (text?: string) =>
+  (text ?? "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
 
-const FriendlyNews = ({ content }: { content: string }) => {
+const FleetRow = ({ text, hostile }: { text: string; hostile: boolean }) => {
+  const Icon = hostile ? LuShieldAlert : LuShieldCheck;
   return (
-    <h2 className="px-6 py-4 text-center text-xl font-bold text-green-500">
-      {content}
-    </h2>
+    <li className="flex items-start gap-3 px-4 py-3 text-sm text-ink">
+      <Icon
+        aria-hidden
+        className={`mt-0.5 h-4 w-4 shrink-0 ${hostile ? "text-hostile" : "text-friendly"}`}
+      />
+      <span className="sr-only">{hostile ? "Hostile: " : "Friendly: "}</span>
+      <span className="min-w-0">{text}</span>
+    </li>
   );
 };
 
@@ -27,42 +35,37 @@ export const RenderIncoming = ({
   hostiles,
   friendlies,
 }: INewsProps) => {
-  const hasNews = hostiles || friendlies;
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center p-4">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
-  if (hasNews) {
-    return (
-      <div className="mt-8 flex min-w-[32.5rem] flex-col bg-white text-black">
-        <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-            <div className="overflow-hidden">
-              {hostiles && <HostileNews content={hostiles} />}
-              {friendlies && <FriendlyNews content={friendlies} />}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const hostileLines = lines(hostiles);
+  const friendlyLines = lines(friendlies);
+  const count = hostileLines.length + friendlyLines.length;
 
   return (
-    <div className="mt-4 flex min-w-[32.5rem] flex-col bg-white text-black">
-      <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center overflow-hidden">
-            <h1 className="text-bold p-4 text-center text-2xl text-black">
-              No data
-            </h1>
-          </div>
+    <Panel
+      title="Fleet movements"
+      meta={
+        isLoading ? undefined : `${count} ${count === 1 ? "fleet" : "fleets"}`
+      }
+      flush
+    >
+      {isLoading ? (
+        <div className="space-y-2 p-4">
+          <Skeleton className="h-5 w-3/4" />
+          <Skeleton className="h-5 w-2/3" />
         </div>
-      </div>
-    </div>
+      ) : count === 0 ? (
+        <p className="px-4 py-6 text-sm text-muted">
+          No fleets are moving in your continent right now.
+        </p>
+      ) : (
+        <ul className="divide-y divide-line">
+          {hostileLines.map((text) => (
+            <FleetRow key={`h-${text}`} text={text} hostile />
+          ))}
+          {friendlyLines.map((text) => (
+            <FleetRow key={`f-${text}`} text={text} hostile={false} />
+          ))}
+        </ul>
+      )}
+    </Panel>
   );
 };

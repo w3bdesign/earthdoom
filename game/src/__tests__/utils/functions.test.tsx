@@ -9,10 +9,13 @@ import {
   canAffordToTrain,
   renderIncomeData,
   getShipCount,
+  formatNumber,
+  formatCompact,
+  maximumAffordable,
 } from "../../utils/functions";
 import type { PaPlayerBase } from "../../types/player";
 import type { IProduction } from "../../components/features/Production/types/types";
-import { createMockPaUser } from "../../test-utils/players";
+import { createMockPaPlayer, createMockPaUser } from "../../test-utils/players";
 
 const createMockPlayer = (
   overrides: Partial<PaPlayerBase> = {},
@@ -288,5 +291,60 @@ describe("getShipCount", () => {
       scorpions: 0,
     });
     expect(getShipCount(player)).toBe(0);
+  });
+});
+
+describe("formatNumber", () => {
+  it("adds thousands separators", () => {
+    expect(formatNumber(12480)).toBe("12,480");
+    expect(formatNumber(0)).toBe("0");
+  });
+
+  it("formats bigint values", () => {
+    expect(formatNumber(BigInt(1234567))).toBe("1,234,567");
+  });
+});
+
+describe("formatCompact", () => {
+  it("keeps numbers below 10,000 in full", () => {
+    expect(formatCompact(9999)).toBe("9,999");
+    expect(formatCompact(-9999)).toBe("-9,999");
+  });
+
+  it("uses compact notation from 10,000", () => {
+    expect(formatCompact(48250)).toBe("48.3K");
+    expect(formatCompact(1_500_000)).toBe("1.5M");
+  });
+});
+
+describe("maximumAffordable", () => {
+  const player = createMockPaPlayer({ crystal: 1000, metal: 300, ui_roids: 4 });
+
+  it("is limited by credits", () => {
+    expect(maximumAffordable(player, 100, 0)).toBe(10);
+  });
+
+  it("is limited by titanium", () => {
+    expect(maximumAffordable(player, 100, 100)).toBe(3);
+  });
+
+  it("is limited by undeveloped land when asked", () => {
+    expect(maximumAffordable(player, 100, 0, true)).toBe(4);
+  });
+
+  it("is null when nothing limits it", () => {
+    expect(maximumAffordable(player, 0, 0)).toBeNull();
+  });
+
+  it("never goes below zero", () => {
+    const broke = createMockPaPlayer({ crystal: -50, metal: 0 });
+    expect(maximumAffordable(broke, 100, 0)).toBe(0);
+  });
+});
+
+describe("Stringifier with bigint", () => {
+  it("formats bigint values", () => {
+    render(<Stringifier value={BigInt(5000)} />);
+    expect(screen.getByText("5,000")).toBeInTheDocument();
   });
 });

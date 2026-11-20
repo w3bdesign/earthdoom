@@ -1,5 +1,7 @@
 import { toast } from "react-hot-toast";
 
+import Button from "@/components/common/Button";
+
 interface ConfirmationToastProps {
   message: string;
   onConfirm: () => void;
@@ -16,30 +18,32 @@ export const showConfirmationToast = ({
   toast(
     (t) => (
       <div className="flex flex-col gap-3">
-        <p className="font-semibold">{message}</p>
+        <p className="font-semibold text-ink">{message}</p>
         <div className="flex gap-2">
-          <button
+          <Button
+            variant="danger"
+            size="sm"
             onClick={() => {
               onConfirm();
               toast.dismiss(t.id);
             }}
-            className="rounded bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700"
           >
             {confirmText}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={() => toast.dismiss(t.id)}
-            className="rounded bg-gray-300 px-4 py-2 font-semibold text-gray-700 hover:bg-gray-400"
           >
             {cancelText}
-          </button>
+          </Button>
         </div>
       </div>
     ),
     {
       duration: Infinity,
       position: "top-center",
-    }
+    },
   );
 };
 

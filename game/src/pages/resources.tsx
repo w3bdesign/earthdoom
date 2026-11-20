@@ -9,6 +9,8 @@ import { RESOURCE } from "@/components/features/Resources/constants/RESOURCE";
 import BarGraph from "@/components/features/Resources/BarGraph";
 import LoadingSpinner from "@/components/common/Loader/LoadingSpinner";
 import PageShell from "@/components/common/PageShell";
+import PageHeader from "@/components/ui/PageHeader";
+import Panel from "@/components/ui/Panel";
 
 const columns = [
   { label: "Name", accessor: "buildingName" },
@@ -28,16 +30,17 @@ const Resources: NextPage = () => {
   const ctx = api.useContext();
   const { paPlayer, isAuthenticated, isLoaded } = usePlayerData();
 
-  const { mutate, isPending: isLoading } = api.paConstruct.developLand.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Resource initiated", type: "success" });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate, isPending: isLoading } =
+    api.paConstruct.developLand.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Resource initiated", type: "success" });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   return (
     <PageShell
@@ -45,32 +48,34 @@ const Resources: NextPage = () => {
       paPlayer={paPlayer}
       showSpinnerOnUnauthenticated
     >
-      <div className="container mb-6 flex flex-col items-center justify-center">
-        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
-          {!isLoaded && <LoadingSpinner />}
-          {paPlayer && <IncomeSection paPlayer={paPlayer} />}
-          {paPlayer && paPlayer.ui_roids === 0 && (
-            <UndevelopedLandMessage message="You have no land to develop" />
-          )}
-          {paPlayer && paPlayer.ui_roids > 0 && (
-            <>
-              <UndevelopedLandMessage
-                message={`Undeveloped land: ${paPlayer.ui_roids}`}
-              />
-              <AdvancedDataTable
-                isLoading={isLoading}
-                columns={columns}
-                data={[paPlayer]}
-                caption="Resources"
-                renderData={RESOURCE}
-                action={mutate as unknown as TMutateType}
-                actionText="Construct"
-                actionInProgress="Constructing ..."
-                considerLand={true}
-              />
-            </>
-          )}
-        </div>
+      <PageHeader
+        title="Resources"
+        description="Develop land into houses, which raise credit income, or titanium mines."
+      />
+      {!isLoaded && <LoadingSpinner />}
+      <div className="flex flex-col gap-4">
+        {paPlayer && <IncomeSection paPlayer={paPlayer} />}
+        {paPlayer && paPlayer.ui_roids === 0 && (
+          <UndevelopedLandMessage message="You have no land to develop" />
+        )}
+        {paPlayer && paPlayer.ui_roids > 0 && (
+          <>
+            <UndevelopedLandMessage
+              message={`Undeveloped land: ${paPlayer.ui_roids}`}
+            />
+            <AdvancedDataTable
+              isLoading={isLoading}
+              columns={columns}
+              data={[paPlayer]}
+              caption="Resources"
+              renderData={RESOURCE}
+              action={mutate as unknown as TMutateType}
+              actionText="Construct"
+              actionInProgress="Constructing ..."
+              considerLand={true}
+            />
+          </>
+        )}
       </div>
     </PageShell>
   );
@@ -88,22 +93,21 @@ const IncomeSection = ({
     paPlayer.asteroid_metal === 0;
 
   return (
-    <div className="mx-auto mb-4 mt-6 rounded bg-white py-4 shadow md:w-[47.125rem]">
+    <Panel title="Income per tick">
       {hasNoLand ? (
-        <h2 className="p-4 text-center text-2xl font-bold">
-          No land, no income.
-        </h2>
+        <p className="text-sm text-muted">No land, no income.</p>
       ) : (
         <BarGraph chartData={renderIncomeData(paPlayer)} />
       )}
-    </div>
+    </Panel>
   );
 };
 
-/** Displays undeveloped land info message */
+/** Heading for the land table, with the undeveloped land count */
 const UndevelopedLandMessage = ({ message }: { message: string }) => (
-  <div className="mx-auto mt-4 w-[20.625rem] rounded bg-white py-4 shadow md:w-[47.125rem]">
-    <h1 className="py-4 text-center text-2xl">{message}</h1>
+  <div className="mt-2 flex flex-wrap items-baseline justify-between gap-2">
+    <h2 className="text-base font-semibold text-ink">Develop land</h2>
+    <p className="text-sm text-muted">{message}</p>
   </div>
 );
 

@@ -1,26 +1,14 @@
-import { IconContext } from "react-icons";
-import { BiCopyright } from "react-icons/bi";
-
 /**
  * Renders the footer for the application
  * @function Footer
- * @returns {JSX.Element} - Rendered Hamburger component
+ * @returns {JSX.Element} - The footer
  */
 const Footer = () => (
   <footer
-    aria-label="Innholdet for bunnteksten med copyright"
     data-testid="footer"
-    className="fixed bottom-0 hidden w-full md:block"
+    className="mx-auto w-full max-w-6xl px-4 pb-24 pt-8 text-xs text-muted md:px-8 md:pb-8"
   >
-    <div className="w-full bg-gray-800 shadow">
-      <div className="mx-auto inline-block w-full p-6 text-center font-semibold text-white">
-        Copyright killaH
-        <IconContext.Provider value={{ className: "inline-block m-2" }}>
-          <BiCopyright size="1.2em" />
-        </IconContext.Provider>
-        {new Date().getFullYear()}
-      </div>
-    </div>
+    © {new Date().getFullYear()} killaH · Earth Doom
   </footer>
 );
 

@@ -5,6 +5,7 @@ import type { FC, ChangeEvent, FormEvent } from "react";
 import type { PaUsers } from "@prisma/client";
 
 import { Button, ToastComponent } from "@/components/ui";
+import Field, { INPUT_CLASS } from "@/components/ui/Field";
 
 interface PaPlayer extends PaUsers {
   [key: string]: number | string | null;
@@ -31,16 +32,17 @@ const NewMail: FC<INewMailProps> = ({ paPlayer, recipient }) => {
   const [mailHeader, setMailHeader] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { mutate: sendMail, isPending: isLoading } = api.paMail.sendMail.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Mail sent!", type: "success" });
-      await ctx.paMail.getAllMailByNick.invalidate();
-      await ctx.paMail.getAllMailByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Error ...", type: "error" });
-    },
-  });
+  const { mutate: sendMail, isPending: isLoading } =
+    api.paMail.sendMail.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Mail sent!", type: "success" });
+        await ctx.paMail.getAllMailByNick.invalidate();
+        await ctx.paMail.getAllMailByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Error ...", type: "error" });
+      },
+    });
 
   const handleInputMailContentChange: IHandleInputChange = (event) => {
     setMailContent(event.target.value);
@@ -62,51 +64,48 @@ const NewMail: FC<INewMailProps> = ({ paPlayer, recipient }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-4">
-      <div className="w-full">
-        <form ref={formRef} onSubmit={handleMailSubmit}>
-          <div className="mb-4 rounded-lg bg-white px-8 py-5 shadow-md">
-            <h2 className="py-4 text-center text-xl font-bold">Mail</h2>
-            <div className="flex flex-col items-center justify-center">
-              <label className="text-md py-4" htmlFor="nick">
-                To:
-              </label>
-              <input
-                type="text"
-                id="nick"
-                value={recipient}
-                readOnly
-                className="w-64 rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-600"
-              />
-              <label className="text-md py-4" htmlFor="title">
-                Title:
-              </label>
-              <input
-                type="text"
-                id="title"
-                name="attack"
-                onChange={handleInputMailHeaderChange}
-                className="w-64 rounded-md border border-gray-300 px-3 py-2"
-                required
-              />
-              <label className="text-md py-4" htmlFor="content">
-                Content:
-              </label>
-              <textarea
-                id="content"
-                name="attack"
-                onChange={handleInputMailContentChange}
-                className="w-64 rounded-md border border-gray-300 px-3 py-2"
-                required
-              />
-              <Button disabled={isLoading} extraClasses="w-32 mt-4">
-                Send
-              </Button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    <form
+      ref={formRef}
+      onSubmit={handleMailSubmit}
+      className="flex max-w-2xl flex-col gap-4"
+    >
+      <Field label="To" htmlFor="nick">
+        <input
+          type="text"
+          id="nick"
+          value={recipient}
+          readOnly
+          className={INPUT_CLASS}
+        />
+      </Field>
+      <Field label="Title" htmlFor="title">
+        <input
+          type="text"
+          id="title"
+          name="attack"
+          onChange={handleInputMailHeaderChange}
+          className={INPUT_CLASS}
+          required
+        />
+      </Field>
+      <Field label="Content" htmlFor="content">
+        <textarea
+          id="content"
+          name="attack"
+          rows={5}
+          onChange={handleInputMailContentChange}
+          className={`${INPUT_CLASS} h-auto py-2`}
+          required
+        />
+      </Field>
+      <Button
+        type="submit"
+        disabled={isLoading}
+        extraClasses="w-full sm:w-auto sm:self-start"
+      >
+        Send
+      </Button>
+    </form>
   );
 };
 

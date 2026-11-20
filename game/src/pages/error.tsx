@@ -1,6 +1,9 @@
+import Link from "next/link";
+
 import type { NextPage } from "next";
 
 import { Layout } from "@/components/common/Layout";
+import { Alert, PageHeader } from "@/components/ui";
 
 /**
  * Renders the error page with a heading.
@@ -9,15 +12,23 @@ import { Layout } from "@/components/common/Layout";
  */
 const Error: NextPage = () => {
   return (
-    <>
-      <Layout>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">Error page</p>
-          </div>
-        </div>
-      </Layout>
-    </>
+    <Layout>
+      <PageHeader title="Error page" />
+      <Alert
+        tone="hostile"
+        title="Something went wrong"
+        action={
+          <Link
+            href="/"
+            className="text-sm font-semibold text-accent hover:text-accent-strong"
+          >
+            Back to Overview
+          </Link>
+        }
+      >
+        The page couldn&apos;t be loaded. Try again in a moment.
+      </Alert>
+    </Layout>
   );
 };
 

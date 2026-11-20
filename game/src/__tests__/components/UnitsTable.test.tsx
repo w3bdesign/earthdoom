@@ -4,7 +4,7 @@ import UnitsTable from "../../components/ui/tables/UnitsTable";
 import { createMockPaPlayer } from "../../test-utils/players";
 
 describe("UnitsTable", () => {
-  it("renders the caption with total ship count", () => {
+  it("renders the heading with total ship count", () => {
     const player = createMockPaPlayer({
       astropods: 10,
       infinitys: 5,
@@ -14,10 +14,12 @@ describe("UnitsTable", () => {
       scorpions: 4,
     });
     render(<UnitsTable paPlayer={player} />);
-    expect(screen.getByText("Units (25 total)")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^Units/ })).toHaveTextContent(
+      "25 total",
+    );
   });
 
-  it("renders caption with 0 total when no ships", () => {
+  it("renders heading with 0 total when no ships", () => {
     const player = createMockPaPlayer({
       astropods: 0,
       infinitys: 0,
@@ -27,7 +29,9 @@ describe("UnitsTable", () => {
       scorpions: 0,
     });
     render(<UnitsTable paPlayer={player} />);
-    expect(screen.getByText("Units (0 total)")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^Units/ })).toHaveTextContent(
+      "0 total",
+    );
   });
 
   it("renders all unit column headers", () => {
@@ -59,9 +63,9 @@ describe("UnitsTable", () => {
     expect(screen.getByText("9")).toBeInTheDocument();
   });
 
-  it("renders a table element", () => {
+  it("renders the values as a description list", () => {
     const player = createMockPaPlayer();
     const { container } = render(<UnitsTable paPlayer={player} />);
-    expect(container.querySelector("table")).toBeInTheDocument();
+    expect(container.querySelector("dl")).toBeInTheDocument();
   });
 });

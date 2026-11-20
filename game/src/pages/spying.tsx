@@ -6,6 +6,7 @@ import { usePlayerData } from "@/utils/usePlayerData";
 import { ToastComponent, Button, AdvancedDataTable } from "@/components/ui";
 import { SPYING } from "@/components/features/Spying/constants/SPYING";
 import PageShell from "@/components/common/PageShell";
+import PageHeader from "@/components/ui/PageHeader";
 
 const columns = [
   { label: "Name", accessor: "buildingName" },
@@ -27,20 +28,21 @@ const Spying: NextPage = () => {
 
   const uiRoids = paPlayer?.ui_roids || 0;
 
-  const { mutate, isPending: isLoading } = api.paSpying.spyingInitiate.useMutation({
-    onSuccess: async (data) => {
-      const newAmountOfRoids = data.ui_roids - uiRoids;
-      ToastComponent({
-        message: `Spying complete - found ${newAmountOfRoids} land`,
-        type: "success",
-      });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate, isPending: isLoading } =
+    api.paSpying.spyingInitiate.useMutation({
+      onSuccess: async (data) => {
+        const newAmountOfRoids = data.ui_roids - uiRoids;
+        ToastComponent({
+          message: `Spying complete - found ${newAmountOfRoids} land`,
+          type: "success",
+        });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   return (
     <PageShell
@@ -48,22 +50,22 @@ const Spying: NextPage = () => {
       paPlayer={paPlayer}
       showSpinnerOnUnauthenticated
     >
-      <div className="container mb-6 flex flex-col items-center justify-center">
-        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
-          {!isLoaded && <div data-testid="loading-spinner" />}
-          {paPlayer && (
-            <AdvancedDataTable
-              isLoading={isLoading}
-              columns={columns}
-              data={[paPlayer]}
-              caption="Spying"
-              renderData={SPYING}
-              action={mutate as unknown as TMutateType}
-              actionText="Spy"
-            />
-          )}
-        </div>
-      </div>
+      <PageHeader
+        title="Spying"
+        description="Send scouts to find undeveloped land. Develop it on the Resources page."
+      />
+      {!isLoaded && <div data-testid="loading-spinner" />}
+      {paPlayer && (
+        <AdvancedDataTable
+          isLoading={isLoading}
+          columns={columns}
+          data={[paPlayer]}
+          caption="Spying"
+          renderData={SPYING}
+          action={mutate as unknown as TMutateType}
+          actionText="Spy"
+        />
+      )}
     </PageShell>
   );
 };

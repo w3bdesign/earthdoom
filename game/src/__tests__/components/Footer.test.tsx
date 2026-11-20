@@ -10,7 +10,7 @@ describe("Footer", () => {
 
   it("renders copyright text", () => {
     render(<Footer />);
-    expect(screen.getByText(/Copyright killaH/)).toBeInTheDocument();
+    expect(screen.getByText(/© .*killaH · Earth Doom/)).toBeInTheDocument();
   });
 
   it("renders the current year", () => {
@@ -19,19 +19,13 @@ describe("Footer", () => {
     expect(screen.getByText(new RegExp(currentYear))).toBeInTheDocument();
   });
 
-  it("has aria-label for accessibility", () => {
+  it("is a footer landmark", () => {
     render(<Footer />);
-    const footer = screen.getByTestId("footer");
-    expect(footer).toHaveAttribute(
-      "aria-label",
-      "Innholdet for bunnteksten med copyright",
-    );
+    expect(screen.getByRole("contentinfo")).toBe(screen.getByTestId("footer"));
   });
 
-  it("has fixed bottom positioning class", () => {
+  it("is static, not fixed over the content", () => {
     render(<Footer />);
-    const footer = screen.getByTestId("footer");
-    expect(footer).toHaveClass("fixed");
-    expect(footer).toHaveClass("bottom-0");
+    expect(screen.getByTestId("footer")).not.toHaveClass("fixed");
   });
 });

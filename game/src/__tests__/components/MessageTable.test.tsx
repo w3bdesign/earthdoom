@@ -31,22 +31,21 @@ describe("MessageTable", () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it("renders a table with correct headers", () => {
-    const { container } = render(<MessageTable {...defaultProps} />);
-    const headers = container.querySelectorAll("th");
-    const headerTexts = Array.from(headers).map((h) => h.textContent?.trim());
-    expect(headerTexts).toContain("Time");
-    expect(headerTexts).toContain("Title");
-    expect(headerTexts).toContain("Content");
-    expect(headerTexts).toContain("Delete");
+  it("renders a list with one item per message", () => {
+    render(<MessageTable {...defaultProps} />);
+    expect(screen.getAllByRole("listitem")).toHaveLength(3);
+    expect(
+      screen.getByRole("heading", { name: "Test Title 1" }),
+    ).toBeInTheDocument();
   });
-
-  it("renders custom timeColumnLabel", () => {
-    render(<MessageTable {...defaultProps} timeColumnLabel="Date" />);
-    expect(screen.getByText("Date")).toBeInTheDocument();
-    expect(screen.queryByText("Time")).not.toBeInTheDocument();
+  it("uses a custom timeColumnLabel as the time's tooltip", () => {
+    const { container } = render(
+      <MessageTable {...defaultProps} timeColumnLabel="Date" />,
+    );
+    container.querySelectorAll("time").forEach((time) => {
+      expect(time).toHaveAttribute("title", "Date");
+    });
   });
-
   it("renders all items as rows", () => {
     render(<MessageTable {...defaultProps} />);
     expect(screen.getByText("Test Title 1")).toBeInTheDocument();
@@ -58,18 +57,18 @@ describe("MessageTable", () => {
   });
 
   it("formats time correctly using date-fns format", () => {
-    // time: 1700000000 => new Date(1700000000 * 1000) => 14/11-2023 22:13:20 UTC
     const items = [{ id: 1, time: 1700000000, header: "Title", news: "News" }];
-    render(<MessageTable {...defaultProps} items={items} />);
-    // The date will be formatted with the user's local timezone,
-    // so we check that it contains a date-like pattern
-    const cells = screen.getAllByRole("cell");
-    // First cell should contain the formatted date
-    expect(cells[0]?.textContent).toMatch(
-      /\d{2}\/\d{2}-\d{4} \d{2}:\d{2}:\d{2}/,
+    const { container } = render(
+      <MessageTable {...defaultProps} items={items} />,
+    );
+    const time = container.querySelector("time");
+    // Formatted in the local timezone, so check the shape
+    expect(time?.textContent).toMatch(/\d{2}\/\d{2}-\d{4} \d{2}:\d{2}:\d{2}/);
+    expect(time).toHaveAttribute(
+      "dateTime",
+      new Date(1700000000 * 1000).toISOString(),
     );
   });
-
   it("renders Delete buttons for each row", () => {
     render(<MessageTable {...defaultProps} />);
     const deleteButtons = screen.getAllByRole("button", { name: /delete/i });
@@ -108,21 +107,22 @@ describe("MessageTable", () => {
     expect(screen.getByText("Test Title 3")).toBeInTheDocument();
   });
 
-  it("renders proper table structure", () => {
-    const { container } = render(<MessageTable {...defaultProps} />);
-    expect(container.querySelector("table")).toBeInTheDocument();
-    expect(container.querySelector("thead")).toBeInTheDocument();
-    expect(container.querySelector("tbody")).toBeInTheDocument();
+  it("marks unread messages as new", () => {
+    const items = [
+      { id: 1, time: 1700000000, header: "Unread", news: "x", seen: 0 },
+      { id: 2, time: 1700000000, header: "Read", news: "y", seen: 1 },
+    ];
+    render(<MessageTable {...defaultProps} items={items} />);
+    expect(screen.getAllByText("New")).toHaveLength(1);
   });
-
-  it("renders correct number of rows in tbody", () => {
-    const { container } = render(<MessageTable {...defaultProps} />);
-    const rows = container.querySelectorAll("tbody tr");
-    expect(rows).toHaveLength(3);
-  });
-
-  it('uses default timeColumnLabel of "Time" when not specified', () => {
+  it("names each delete button after its message", () => {
     render(<MessageTable {...defaultProps} />);
-    expect(screen.getByText("Time")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: 'Delete "Test Title 2"' }),
+    ).toBeInTheDocument();
+  });
+  it('uses default timeColumnLabel of "Time" when not specified', () => {
+    const { container } = render(<MessageTable {...defaultProps} />);
+    expect(container.querySelector("time")).toHaveAttribute("title", "Time");
   });
 });

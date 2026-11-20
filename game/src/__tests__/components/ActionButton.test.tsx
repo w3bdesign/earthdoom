@@ -1,6 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import ActionButton from "../../components/ui/tables/AdvancedDataTable/ActionButton";
+import ActionButton, {
+  buildShortfall,
+} from "../../components/ui/tables/AdvancedDataTable/ActionButton";
 import { createMockPaPlayer } from "../../test-utils/players";
 import type { Building } from "../../components/features/Construct/types/types";
 
@@ -47,7 +49,9 @@ function renderInTable(ui: React.ReactElement) {
   return render(
     <table>
       <tbody>
-        <tr>{ui}</tr>
+        <tr>
+          <td>{ui}</td>
+        </tr>
       </tbody>
     </table>,
   );
@@ -64,14 +68,14 @@ describe("ActionButton - null rendering", () => {
     const { container } = renderInTable(
       <ActionButton {...defaultProps} paPlayer={[]} />,
     );
-    expect(container.querySelector("td")).toBeNull();
+    expect(container.querySelector("td")).toBeEmptyDOMElement();
   });
 
   it("renders null when building is undefined", () => {
     const { container } = renderInTable(
       <ActionButton {...defaultProps} building={undefined} />,
     );
-    expect(container.querySelector("td")).toBeNull();
+    expect(container.querySelector("td")).toBeEmptyDOMElement();
   });
 });
 
@@ -158,13 +162,13 @@ describe("ActionButton - click behavior", () => {
     });
     renderInTable(<ActionButton {...defaultProps} building={freeBuilding} />);
     fireEvent.click(screen.getByRole("button", { name: "Build" }));
-    
+
     // Should NOT show quantity error for free buildings without input field
     expect(mockToast).not.toHaveBeenCalledWith({
       message: "Quantity needs to be more than 0",
       type: "error",
     });
-    
+
     // Should call mutate successfully
     expect(mockMutate).toHaveBeenCalledWith({
       buildingFieldName: "c_crystal",
@@ -284,8 +288,8 @@ describe("ActionButton - building progress status", () => {
   });
 });
 
-describe("ActionButton - tooltip behavior", () => {
-  it("renders tooltip when player cannot afford building", () => {
+describe("ActionButton - affordability hint", () => {
+  it("explains what is missing when player cannot afford building", () => {
     const poorPlayer = createMockPaPlayer({ crystal: 10, metal: 5 });
     const building = createBuilding({
       buildingCostCrystal: 100,
@@ -298,22 +302,67 @@ describe("ActionButton - tooltip behavior", () => {
         building={building}
       />,
     );
-    const tooltipDiv = container.querySelector("[title]");
-    expect(tooltipDiv).toBeInTheDocument();
-    expect(tooltipDiv?.getAttribute("title")).toContain("Need");
+    expect(container).toBeTruthy();
+    const hint = screen.getByText("Need 90 more credits and 45 more titanium");
+    const button = screen.getByRole("button", { name: "Build" });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-describedby", hint.id);
   });
 
-  it('renders tooltip with "Action in progress..." when isLoading', () => {
-    const { container } = renderInTable(
-      <ActionButton {...defaultProps} isLoading={true} />,
+  it("shows the in-progress label while loading", () => {
+    renderInTable(
+      <ActionButton
+        {...defaultProps}
+        isLoading={true}
+        actionInProgress="Building ..."
+      />,
     );
-    const tooltipDiv = container.querySelector("[title]");
-    expect(tooltipDiv?.getAttribute("title")).toBe("Action in progress...");
+    expect(screen.getByRole("button", { name: "Building ..." })).toBeDisabled();
   });
 
-  it("renders no tooltip when player can afford building and not loading", () => {
-    const { container } = renderInTable(<ActionButton {...defaultProps} />);
-    const tooltipDiv = container.querySelector("[title]");
-    expect(tooltipDiv?.getAttribute("title")).toBeFalsy();
+  it("shows no hint when player can afford building and not loading", () => {
+    renderInTable(<ActionButton {...defaultProps} />);
+    expect(screen.queryByText(/^Need /)).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Build" })).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+});
+
+describe("buildShortfall", () => {
+  const building = createBuilding({
+    buildingCostCrystal: 100,
+    buildingCostTitanium: 50,
+  });
+
+  it("returns nothing when the player can afford it", () => {
+    expect(
+      buildShortfall(true, createMockPaPlayer(), building),
+    ).toBeUndefined();
+  });
+
+  it("names the missing credits and titanium", () => {
+    const player = createMockPaPlayer({ crystal: 40, metal: 20 });
+    expect(buildShortfall(false, player, building)).toBe(
+      "Need 60 more credits and 30 more titanium",
+    );
+  });
+
+  it("explains missing land when resources are enough", () => {
+    const player = createMockPaPlayer({
+      crystal: 1000,
+      metal: 1000,
+      ui_roids: 0,
+    });
+    expect(buildShortfall(false, player, building, true)).toBe(
+      "No undeveloped land",
+    );
+  });
+
+  it("falls back to a general message", () => {
+    const player = createMockPaPlayer({ crystal: 1000, metal: 1000 });
+    expect(buildShortfall(false, player, building)).toBe(
+      "You cannot afford this",
+    );
   });
 });

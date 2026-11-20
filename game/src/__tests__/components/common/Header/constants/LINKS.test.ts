@@ -1,4 +1,9 @@
-import { LINKS } from "../../../../../components/common/Header/constants/LINKS";
+import {
+  LINKS,
+  LINK_GROUPS,
+  TAB_BAR_HREFS,
+  TAB_BAR_LABELS,
+} from "../../../../../components/common/Header/constants/LINKS";
 
 describe("LINKS constant", () => {
   it("is an array of link objects", () => {
@@ -17,8 +22,8 @@ describe("LINKS constant", () => {
     });
   });
 
-  it("contains the Main link pointing to /", () => {
-    const mainLink = LINKS.find((l) => l.text === "Main");
+  it("contains the Overview link pointing to /", () => {
+    const mainLink = LINKS.find((l) => l.text === "Overview");
     expect(mainLink).toBeDefined();
     expect(mainLink?.href).toBe("/");
   });
@@ -27,12 +32,12 @@ describe("LINKS constant", () => {
     const manualLink = LINKS.find((l) => l.text === "Manual");
     expect(manualLink).toBeDefined();
     expect(manualLink?.href).toBe("https://earthdoom.com/manual");
-    expect(manualLink?.target).toBe("_new");
+    expect(manualLink?.target).toBe("_blank");
   });
 
   it("contains all expected navigation links", () => {
     const expectedTexts = [
-      "Main",
+      "Overview",
       "Manual",
       "News",
       "Mail",
@@ -45,7 +50,7 @@ describe("LINKS constant", () => {
       "Spying",
       "Ranking",
       "Alliance",
-      "Logout",
+      "Log out",
     ];
     const linkTexts = LINKS.map((l) => l.text);
     expectedTexts.forEach((text) => {
@@ -59,9 +64,9 @@ describe("LINKS constant", () => {
     expect(uniqueIds.size).toBe(ids.length);
   });
 
-  it("has the Logout link as the last item", () => {
+  it("has the Log out link as the last item", () => {
     const lastLink = LINKS[LINKS.length - 1];
-    expect(lastLink?.text).toBe("Logout");
+    expect(lastLink?.text).toBe("Log out");
     expect(lastLink?.href).toBe("/logout");
   });
 
@@ -76,5 +81,25 @@ describe("LINKS constant", () => {
     const linksWithTarget = LINKS.filter((l) => l.target !== undefined);
     expect(linksWithTarget).toHaveLength(1);
     expect(linksWithTarget[0]?.text).toBe("Manual");
+  });
+
+  it("puts every link in a known group with an icon", () => {
+    const groups = [...LINK_GROUPS.map((g) => g.id), "account"];
+    LINKS.forEach((link) => {
+      expect(groups).toContain(link.group);
+      expect(link.icon).toBeDefined();
+    });
+  });
+
+  it("only uses existing links in the mobile tab bar", () => {
+    const hrefs = LINKS.map((l) => l.href);
+    TAB_BAR_HREFS.forEach((href) => expect(hrefs).toContain(href));
+  });
+
+  it("has a short tab bar label for every tab", () => {
+    TAB_BAR_HREFS.forEach((href) => {
+      expect(typeof TAB_BAR_LABELS[href]).toBe("string");
+    });
+    expect(TAB_BAR_LABELS["/construct"]).toBe("Build");
   });
 });

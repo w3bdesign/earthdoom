@@ -8,6 +8,8 @@ import { usePlayerData } from "@/utils/usePlayerData";
 import { AdvancedDataTable } from "@/components/ui";
 import RankingActions from "@/components/ui/tables/RankingActions";
 import PageShell from "@/components/common/PageShell";
+import PageHeader from "@/components/ui/PageHeader";
+import { formatNumber } from "@/utils/functions";
 
 /**
  * Renders the Ranking page component, which displays the player ranking table.
@@ -22,12 +24,38 @@ const RankingPage: NextPage = () => {
   });
 
   const columns: AdvancedTableColumn[] = [
-    { label: "Nick", accessor: "nick" },
-    { label: "Score", accessor: "score" },
-    { label: "Size", accessor: "size" },
-    { label: "Rank", accessor: "rank" },
+    { label: "Rank", accessor: "rank", align: "right" },
+    {
+      label: "Player",
+      primary: true,
+      accessor: (row: PaPlayerBase | Building) => {
+        const player = row as PaPlayerBase;
+        return (
+          <span className="inline-flex flex-wrap items-center gap-2">
+            {player.tag && (
+              <span className="text-sm font-normal text-muted">
+                [{player.tag}]
+              </span>
+            )}
+            <span>{player.nick}</span>
+            <span className="block w-full text-xs font-normal text-muted md:hidden">
+              <span className="whitespace-nowrap">
+                {formatNumber(player.score)} score
+              </span>{" "}
+              ·{" "}
+              <span className="whitespace-nowrap">
+                size {formatNumber(player.size)}
+              </span>
+            </span>
+          </span>
+        );
+      },
+    },
+    { label: "Score", accessor: "score", align: "right", hideOnMobile: true },
+    { label: "Size", accessor: "size", align: "right", hideOnMobile: true },
     {
       label: "Actions",
+      type: "button",
       accessor: (row: PaPlayerBase | Building) => {
         if (!paPlayer) return <></>;
         if ("nick" in row && typeof row.nick === "string") {
@@ -49,17 +77,22 @@ const RankingPage: NextPage = () => {
 
   return (
     <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer}>
-      <div className="container mb-6 flex flex-col items-center justify-center">
-        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-          {paPlayer && paRanking && (
-            <AdvancedDataTable
-              columns={columns}
-              data={paRanking as PaPlayerBase[]}
-              caption="Player ranking"
-            />
-          )}
-        </div>
-      </div>
+      <PageHeader
+        title="Ranking"
+        description={
+          paRanking
+            ? `${paRanking.length} players, ranked by score.`
+            : undefined
+        }
+      />
+      {paPlayer && paRanking && (
+        <AdvancedDataTable
+          columns={columns}
+          data={paRanking as PaPlayerBase[]}
+          caption="Player ranking"
+          highlightRow={(row) => row.nick === paPlayer.nick}
+        />
+      )}
     </PageShell>
   );
 };

@@ -32,11 +32,7 @@ const MailTable: FC<IMailTableProps> = ({ mail }) => {
     });
 
   if (mail.length === 0) {
-    return (
-      <h1 className="text-bold p-4 text-center text-2xl text-black">
-        No email to display
-      </h1>
-    );
+    return <p className="px-4 py-6 text-sm text-muted">No email to display</p>;
   }
 
   return (

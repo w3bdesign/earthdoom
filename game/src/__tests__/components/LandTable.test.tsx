@@ -4,24 +4,28 @@ import LandTable from "../../components/ui/tables/LandTable";
 import { createMockPaPlayer } from "../../test-utils/players";
 
 describe("LandTable", () => {
-  it("renders the caption with total land count", () => {
+  it("renders the heading with total land count", () => {
     const player = createMockPaPlayer({
       asteroid_metal: 10,
       asteroid_crystal: 8,
       ui_roids: 5,
     });
     render(<LandTable paPlayer={player} />);
-    expect(screen.getByText("Land (23 total)")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^Land/ })).toHaveTextContent(
+      "23 total",
+    );
   });
 
-  it("renders caption with 0 total when no land", () => {
+  it("renders heading with 0 total when no land", () => {
     const player = createMockPaPlayer({
       asteroid_metal: 0,
       asteroid_crystal: 0,
       ui_roids: 0,
     });
     render(<LandTable paPlayer={player} />);
-    expect(screen.getByText("Land (0 total)")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^Land/ })).toHaveTextContent(
+      "0 total",
+    );
   });
 
   it("renders all land column headers", () => {
@@ -44,9 +48,9 @@ describe("LandTable", () => {
     expect(screen.getByText("4")).toBeInTheDocument();
   });
 
-  it("renders a table element", () => {
+  it("renders the values as a description list", () => {
     const player = createMockPaPlayer();
     const { container } = render(<LandTable paPlayer={player} />);
-    expect(container.querySelector("table")).toBeInTheDocument();
+    expect(container.querySelector("dl")).toBeInTheDocument();
   });
 });

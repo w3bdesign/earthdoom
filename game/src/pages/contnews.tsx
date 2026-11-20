@@ -5,7 +5,7 @@ import type { NextPage } from "next";
 import { api } from "@/utils/api";
 
 import { Layout } from "@/components/common/Layout";
-import { RenderIncoming } from "@/components/ui";
+import { PageHeader, RenderIncoming } from "@/components/ui";
 
 /**
  * Returns a Next.js page component that displays incoming continent news for a signed-in user.
@@ -36,15 +36,15 @@ const ContNews: NextPage = () => {
   return (
     <>
       <Layout paPlayer={paPlayer}>
-        <div className="container mb-6 flex flex-col items-center justify-center">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900">
-            <RenderIncoming
-              isLoading={isLoading}
-              hostiles={paNews?.hostiles}
-              friendlies={paNews?.friendly}
-            />
-          </div>
-        </div>
+        <PageHeader
+          title="Continent news"
+          description="Attacks and defence fleets heading for players in your continent."
+        />
+        <RenderIncoming
+          isLoading={isLoading}
+          hostiles={paNews?.hostiles}
+          friendlies={paNews?.friendly}
+        />
       </Layout>
     </>
   );

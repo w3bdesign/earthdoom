@@ -9,6 +9,7 @@ import { usePlayerData } from "@/utils/usePlayerData";
 import { Button, AdvancedDataTable, ToastComponent } from "@/components/ui";
 import { BUILDINGS } from "@/components/features/Construct/constants/BUILDINGS";
 import PageShell from "@/components/common/PageShell";
+import PageHeader from "@/components/ui/PageHeader";
 
 const columns: AdvancedTableColumn[] = [
   { label: "Name", accessor: "buildingName" },
@@ -27,37 +28,36 @@ const Construction: NextPage = () => {
   const ctx = api.useContext();
   const { paPlayer, isAuthenticated } = usePlayerData();
 
-  const { mutate, isPending: isLoading } = api.paConstruct.constructBuilding.useMutation({
-    onSuccess: async () => {
-      ToastComponent({ message: "Building started", type: "success" });
-      await ctx.paUsers.getPlayerByNick.invalidate();
-      await ctx.paUsers.getPlayerByNick.refetch();
-    },
-    onError: () => {
-      ToastComponent({ message: "Database error", type: "error" });
-    },
-  });
+  const { mutate, isPending: isLoading } =
+    api.paConstruct.constructBuilding.useMutation({
+      onSuccess: async () => {
+        ToastComponent({ message: "Building started", type: "success" });
+        await ctx.paUsers.getPlayerByNick.invalidate();
+        await ctx.paUsers.getPlayerByNick.refetch();
+      },
+      onError: () => {
+        ToastComponent({ message: "Database error", type: "error" });
+      },
+    });
 
   return (
     <PageShell isAuthenticated={isAuthenticated} paPlayer={paPlayer}>
-      <div className="container mb-6 flex flex-col items-center justify-center">
-        <div className="relative flex flex-col justify-center overflow-hidden bg-neutral-900 md:w-[63rem]">
-          <div className="relative sm:mx-auto">
-            {paPlayer && (
-              <AdvancedDataTable
-                isLoading={isLoading}
-                columns={columns}
-                data={[paPlayer]}
-                caption="Construction"
-                renderData={BUILDINGS}
-                action={mutate as unknown as TMutateType}
-                actionText="Construct"
-                actionInProgress="Constructing ..."
-              />
-            )}
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Construction"
+        description="Each building unlocks new units, research or income. You can build each one once."
+      />
+      {paPlayer && (
+        <AdvancedDataTable
+          isLoading={isLoading}
+          columns={columns}
+          data={[paPlayer]}
+          caption="Construction"
+          renderData={BUILDINGS}
+          action={mutate as unknown as TMutateType}
+          actionText="Construct"
+          actionInProgress="Constructing ..."
+        />
+      )}
     </PageShell>
   );
 };

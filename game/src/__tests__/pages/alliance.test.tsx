@@ -73,7 +73,7 @@ describe("Alliance page", () => {
     mockGetAll.mockReturnValue({ data: null, isLoading: false });
 
     render(<AlliancePage />);
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
   it("renders loading spinner when tags are loading", () => {
@@ -85,7 +85,7 @@ describe("Alliance page", () => {
     mockGetAll.mockReturnValue({ data: null, isLoading: true });
 
     render(<AlliancePage />);
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
   it("renders Alliance component when player and tag data are available", () => {

@@ -14,14 +14,15 @@ class MyDocument extends Document {
 
   render = () => {
     return (
-      <Html lang="nb">
+      <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <link rel="apple-touch-icon" href="/logo.png" />
+          <meta name="theme-color" content="#0a0f16" />
 
           <meta property="og:title" content="Earth Doom - www.earthdoom.com" />
           <meta name="author" content="Daniel" />
-          <meta property="og:locale" content="nb_NO" />
+          <meta property="og:locale" content="en_US" />
           <meta name="description" content="Earth Doom - www.earthdoom.com" />
           <meta
             property="og:description"
@@ -31,7 +32,7 @@ class MyDocument extends Document {
           <meta property="og:url" content="https://www.earthdoom.com" />
           <meta property="og:site_name" content="earthdoom.com" />
         </Head>
-        <body className="bg-neutral-900 font-body md:mb-[5rem]">
+        <body>
           <Main />
           <NextScript />
         </body>

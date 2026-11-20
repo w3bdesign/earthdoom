@@ -1,26 +1,51 @@
 import { forwardRef } from "react";
 
-import type { canAffordToTrain } from "@/utils/functions";
+import { INPUT_CLASS } from "@/components/ui/Field";
+import { formatNumber } from "@/utils/functions";
 
 interface IInputNumberProps {
-  canAffordToTrain: typeof canAffordToTrain;
+  id?: string;
+  /** Accessible name, e.g. "Amount of Houses" */
+  label?: string;
+  /** The largest amount the player can afford; adds a "Max" button */
+  max?: number | null;
 }
 
+/** A quantity input with an optional "Max" shortcut. */
 const InputNumber = forwardRef<HTMLInputElement, IInputNumberProps>(
-  (props, ref) => {
+  ({ id, label = "Amount", max }, ref) => {
+    const fillMax = () => {
+      if (ref && typeof ref === "object" && ref.current && max != null) {
+        ref.current.value = String(max);
+        ref.current.focus();
+      }
+    };
+
     return (
-      <td className="flex items-center py-2 pr-6 text-base text-black transition duration-300 before:text-black first:border-l-0 sm:table-cell sm:before:content-none md:h-12">
+      <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-2">
         <input
           type="number"
-          aria-label="Amount"
-          className="peer relative block min-h-[auto] w-32 rounded bg-slate-200 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-          id="exampleFormControlInput1"
-          placeholder="Amount"
+          inputMode="numeric"
+          aria-label={label}
+          className={`${INPUT_CLASS} w-20 text-right tabular-nums sm:w-28`}
+          id={id}
+          placeholder="0"
           ref={ref}
           defaultValue={0}
           min="0"
+          max={max ?? undefined}
         />
-      </td>
+        {max != null && (
+          <button
+            type="button"
+            onClick={fillMax}
+            title={`Set to the maximum you can afford (${formatNumber(max)})`}
+            className="rounded-md px-1 text-xs font-semibold text-accent hover:bg-accent/10 sm:h-10 sm:px-2"
+          >
+            Max
+          </button>
+        )}
+      </div>
     );
   },
 );

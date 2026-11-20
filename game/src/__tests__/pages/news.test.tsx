@@ -147,7 +147,7 @@ describe("News page", () => {
       { data: null, isLoading: true },
     );
     render(<News />);
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
   it('renders "No news to report" when news array is empty', () => {
@@ -169,7 +169,9 @@ describe("News page", () => {
       news: [{ id: 1, news: "Test news", time: 1000000, userId: 1, seen: 0 }],
     });
     render(<News />);
-    expect(screen.getByText("Delete All")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Delete all" }),
+    ).toBeInTheDocument();
   });
 
   it("calls deleteAllNews when Delete All is clicked", () => {
@@ -177,7 +179,7 @@ describe("News page", () => {
       news: [{ id: 1, news: "Test news", time: 1000000, userId: 1, seen: 0 }],
     });
     render(<News />);
-    fireEvent.click(screen.getByText("Delete All"));
+    fireEvent.click(screen.getByRole("button", { name: "Delete all" }));
     expect(mockDeleteAllNews).toHaveBeenCalledWith({ nick: "TestUser" });
   });
 

@@ -8,12 +8,28 @@ import {
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useRouter } from "next/router";
+import { Archivo } from "next/font/google";
 
 import type { AppProps } from "next/app";
 
 import { api } from "@/utils/api";
 
 import "@/styles/globals.css";
+
+import type { ToasterProps } from "react-hot-toast";
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const TOAST_OPTIONS: ToasterProps["toastOptions"] = {
+  className: "!bg-raised !text-ink !border !border-line-strong !shadow-panel",
+  success: { iconTheme: { primary: "#5fd68f", secondary: "#05131d" } },
+  error: { iconTheme: { primary: "#ef5f5f", secondary: "#05131d" } },
+};
 
 //  List pages you want to be publicly accessible, or leave empty if
 //  every page requires authentication. Use this naming strategy:
@@ -40,19 +56,21 @@ function MyApp({ Component, pageProps }: AppProps) {
   // Otherwise, use Clerk to require authentication
   return (
     <ClerkProvider {...pageProps}>
-      {isPublicPage ? (
-        <Component {...pageProps} />
-      ) : (
-        <>
-          <SignedIn>
-            <Toaster position="bottom-center" />
-            <Component {...pageProps} />
-          </SignedIn>
-          <SignedOut>
-            <RedirectToSignIn />
-          </SignedOut>
-        </>
-      )}
+      <div className={`${archivo.variable} font-sans`}>
+        {isPublicPage ? (
+          <Component {...pageProps} />
+        ) : (
+          <>
+            <SignedIn>
+              <Toaster position="top-center" toastOptions={TOAST_OPTIONS} />
+              <Component {...pageProps} />
+            </SignedIn>
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
+          </>
+        )}
+      </div>
       {process.env.NODE_ENV !== "production" && (
         <ReactQueryDevtools initialIsOpen={false} />
       )}
