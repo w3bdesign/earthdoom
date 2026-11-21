@@ -1,25 +1,201 @@
 ---
-import BaseHead from "../components/Header/BaseHead.astro";
-import Header from "../components/Header/Header.astro";
-import Footer from "../components/Footer/Footer.astro";
-import ManualContent from "../components/Manual/ManualContent.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/common/Button.astro";
 import Stats from "../components/Manual/Stats.astro";
+import { SECTIONS } from "../components/Manual/sections";
+import { PLAY_URL } from "../consts";
 
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+const toc = [
+  ...SECTIONS.map(({ id, title }) => ({ id, title })),
+  { id: "damage-table", title: "Damage table" },
+];
 ---
 
-<!DOCTYPE html>
-<html lang="en" class="flex items-center justify-center">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-neutral-900 font-roboto text-white max-w-[95vw]">
-    <Header title={SITE_TITLE} />
-    <main class="flex flex-col items-center justify-center">
-      <ManualContent />
-      <Stats />
-    </main>
-    <Footer />
-  </body>
-</html>
+<BaseLayout
+  title="Manual"
+  description="How to play Earth Doom: credits and titanium, land, units, energy, attacking and the damage table."
+>
+  <div class="mx-auto max-w-7xl px-4 md:px-8">
+    <header class="manual-head">
+      <h1 class="section-title">Earth Doom manual</h1>
+      <p class="mt-4 max-w-2xl text-lg text-soft">
+        A walk through your first days, from the first credits to your first
+        battle. Read it in order, or jump to the part you need.
+      </p>
+    </header>
+
+    <div class="manual-grid">
+      <nav class="toc" aria-label="Manual contents">
+        <details class="toc-details" open>
+          <summary>Contents</summary>
+          <ol>
+            {
+              toc.map((item) => (
+                <li>
+                  <a href={`#${item.id}`} data-toc={item.id}>
+                    {item.title}
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </details>
+        <Button href={PLAY_URL} class="toc-play">Play now</Button>
+      </nav>
+
+      <article class="min-w-0">
+        {
+          SECTIONS.map((section) => (
+            <section id={section.id} class="manual-section" aria-labelledby={`${section.id}-title`}>
+              <h2 id={`${section.id}-title`}>{section.title}</h2>
+              <div class="prose" set:html={section.content} />
+            </section>
+          ))
+        }
+        <Stats />
+      </article>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .manual-head {
+    padding-block: clamp(3.5rem, 3rem + 3vw, 6rem) clamp(2.5rem, 2rem + 2vw, 4rem);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .manual-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    padding-top: 2.5rem;
+  }
+  @media (min-width: 1024px) {
+    .manual-grid {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      gap: 4rem;
+      padding-top: 3.5rem;
+    }
+  }
+
+  .toc {
+    align-self: start;
+  }
+  .toc summary {
+    padding-bottom: 0.75rem;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .toc ol {
+    border-left: 1px solid var(--color-line);
+  }
+  .toc ol a {
+    display: block;
+    margin-left: -1px;
+    padding: 0.4rem 0 0.4rem 1rem;
+    border-left: 2px solid transparent;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    transition:
+      color 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .toc ol a:hover {
+    color: var(--color-ink);
+  }
+  .toc ol a[aria-current="true"] {
+    border-left-color: var(--color-accent);
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .toc :global(.toc-play) {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .toc {
+      position: sticky;
+      top: 6rem;
+    }
+    .toc summary {
+      pointer-events: none;
+      list-style: none;
+    }
+    .toc summary::-webkit-details-marker {
+      display: none;
+    }
+    .toc :global(.toc-play) {
+      display: inline-flex;
+      margin-top: 1.75rem;
+      margin-left: 1rem;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .toc-details {
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-lg);
+      background: var(--color-panel);
+      padding: 0.875rem 1rem;
+    }
+    .toc summary {
+      padding-bottom: 0;
+      color: var(--color-ink);
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+    .toc-details[open] summary {
+      padding-bottom: 0.75rem;
+    }
+  }
+
+  article :global(.manual-section) {
+    min-width: 0;
+    padding-bottom: 3rem;
+    scroll-margin-top: 5.5rem;
+  }
+  article :global(.manual-section + .manual-section) {
+    padding-top: 3rem;
+    border-top: 1px solid var(--color-line);
+  }
+  article :global(.manual-section h2) {
+    color: var(--color-ink);
+    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  article :global(.manual-section .prose) {
+    margin-top: 1.25rem;
+  }
+</style>
+
+<script>
+  // Scroll-spy: mark the section being read in the contents list.
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>("[data-toc]")].map((a) => [a.dataset.toc!, a]),
+  );
+  let current: HTMLAnchorElement | undefined;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        current?.removeAttribute("aria-current");
+        current = links.get(entry.target.id);
+        current?.setAttribute("aria-current", "true");
+      }
+    },
+    { rootMargin: "-20% 0px -70% 0px" },
+  );
+  links.forEach((_, id) => {
+    const section = document.getElementById(id);
+    if (section) observer.observe(section);
+  });
+
+  // On small screens the contents list starts closed.
+  if (matchMedia("(max-width: 1023px)").matches) {
+    document.querySelector<HTMLDetailsElement>(".toc-details")?.removeAttribute("open");
+  }
+</script>

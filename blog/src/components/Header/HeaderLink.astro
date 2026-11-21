@@ -1,21 +1,44 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
-export interface Props extends HTMLAttributes<'a'> {
-  activeClass?: string;
-}
+type Props = HTMLAttributes<"a">;
 
-const { href, class: className, activeClass, ...props } = Astro.props;
+const { href, class: className, ...props } = Astro.props;
 
-const { pathname } = Astro.url;
-const isActive = href === pathname || href === pathname.replace(/\/$/, "");
-
-const computedClass = [
-  className,
-  isActive ? activeClass : ''
-].filter(Boolean).join(" ");
+const normalise = (path: string) => path.replace(/\/$/, "") || "/";
+const isActive = normalise(String(href)) === normalise(Astro.url.pathname);
 ---
 
-<a href={href} class={computedClass} {...props}>
+<a
+  href={href}
+  class:list={["nav-link", className]}
+  aria-current={isActive ? "page" : undefined}
+  {...props}
+>
   <slot />
 </a>
+
+<style>
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 2.5rem;
+    padding-inline: 0.75rem;
+    border-radius: var(--radius-md);
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition:
+      color 150ms ease-out,
+      background-color 150ms ease-out;
+  }
+  .nav-link:hover {
+    color: var(--color-ink);
+    background: rgb(255 255 255 / 0.05);
+  }
+  .nav-link[aria-current="page"] {
+    color: var(--color-ink);
+    background: rgb(76 195 242 / 0.15);
+  }
+</style>

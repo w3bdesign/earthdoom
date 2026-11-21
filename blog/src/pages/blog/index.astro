@@ -1,54 +1,32 @@
 ---
-import BaseHead from "../../components/Header/BaseHead.astro";
-import Header from "../../components/Header/Header.astro";
-import Footer from "../../components/Footer/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
 import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
 
 const posts = (await getCollection("blog")).sort(
-  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <style>
-      ul {
-        list-style-type: none;
-        padding: unset;
-      }
-      ul li {
-        display: flex;
-      }
-      ul li :global(time) {
-        flex: 0 0 130px;
-        font-style: italic;
-        color: #595959;
-      }
-      ul li a:visited {
-        color: #8e32dc;
-      }
-    </style>
-  </head>
-  <body class="bg-neutral-900">
-    <Header />
-    <main>
-      <section>
-        <ul>
-          {
-            posts.map((post) => (
-              <li>
+<BaseLayout title="Blog" description="News and notes from Earth Doom." noindex>
+  <div class="mx-auto max-w-3xl px-4 pt-14 md:px-8 md:pt-20">
+    <h1 class="section-title">Blog</h1>
+    <ol class="mt-10 border-t border-line">
+      {
+        posts.map((post) => (
+          <li class="border-b border-line">
+            <a href={`/blog/${post.id}/`} class="post-link group block py-6">
+              <span class="text-sm text-muted">
                 <FormattedDate date={post.data.pubDate} />
-                <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
-    </main>
-    <Footer />
-  </body>
-</html>
+              </span>
+              <span class="mt-1 block text-xl font-semibold text-ink group-hover:text-accent-strong">
+                {post.data.title}
+              </span>
+              <span class="mt-2 block text-soft">{post.data.description}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</BaseLayout>

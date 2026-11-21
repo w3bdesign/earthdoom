@@ -1,72 +1,83 @@
-# Earth Doom
+# Earth Doom website
 
-Welcome to the **Earth Doom** website project! This site is built using [Astro](https://astro.build/) and serves as a platform for the Earth Doom blog and manual.
+The marketing site for [earthdoom.com](https://earthdoom.com): home page, game manual, about page and blog. It is a static site built with [Astro](https://astro.build/), and its look follows the game's own design system (`../game/DESIGN.md`).
 
-## 🛠️ Tech Stack
+## Tech stack
 
-- **Framework:** [Astro](https://astro.build/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Content:** [MDX](https://mdxjs.com/) for blog posts
-- **Deployment:** Static Site Generation (SSG)
+- **Framework:** Astro 7 (static output, Content Layer for blog posts, Fonts API, `astro:assets` image optimisation, CSS view transitions)
+- **Styling:** Tailwind CSS 4, with the design tokens in `src/styles/global.css` (`@theme`)
+- **Content:** Markdown / MDX blog posts in `src/content/blog/`
+- **Icons:** Lucide (`@lucide/astro`)
+- **Font:** Archivo (self-hosted at build time by the Astro Fonts API)
 
-## 🚀 Getting Started
-
-To get a local copy up and running, follow these simple steps.
+## Getting started
 
 ### Prerequisites
 
-- Node.js (v18.14.1 or higher)
+- Node.js 22.23.4 or newer
 - npm
 
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/earthdoom/blog.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-
-### Development
-
-Start the local development server:
+### Install and run
 
 ```sh
+npm install
 npm run dev
 ```
 
-The site will be available at `http://localhost:4321/`.
+The site is served at `http://localhost:4321/`.
 
-## 🧞 Commands
+## Commands
 
-All commands are run from the root of the project, from a terminal:
+| Command           | Action                                              |
+| :---------------- | :-------------------------------------------------- |
+| `npm install`     | Install dependencies                                |
+| `npm run dev`     | Start the dev server at `localhost:4321`            |
+| `npm run build`   | Build the production site to `./dist/`              |
+| `npm run preview` | Preview the built site locally                      |
+| `npm run check`   | Type-check the project (`astro check`)              |
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Deploying
 
-## 📂 Project Structure
+The site is fully static. Run `npm run build` and upload the **contents** of `dist/` to the web root. Files in `dist/_astro/` have hashed names, so files from earlier builds can be deleted from the server.
+
+## Project structure
 
 ```text
 /
-├── public/           # Static assets (fonts, images, etc.)
+├── public/                 # Favicons, manifest, files copied as-is
 ├── src/
-│   ├── components/   # Reusable UI components
-│   ├── content/      # Content collections (blog posts)
-│   ├── layouts/      # Page layouts
-│   ├── pages/        # File-based routing
-│   └── styles/       # Global styles
-├── astro.config.mjs  # Astro configuration
-└── package.json      # Project dependencies and scripts
+│   ├── assets/             # Logo and spaceship artwork (optimised at build time)
+│   ├── components/
+│   │   ├── common/         # Button
+│   │   ├── Header/         # BaseHead (meta tags), Header, Wordmark, HeaderLink
+│   │   ├── Footer/
+│   │   ├── Index/          # Home page sections: Hero, GameLoop, ManualIndex, FinalCall
+│   │   └── Manual/         # Manual text (ManualSections.js), section ids, damage table
+│   ├── content/blog/       # Blog posts (Markdown / MDX)
+│   ├── data/game.ts        # Game facts quoted on the home page (costs, ETAs, attack timing)
+│   ├── layouts/            # BaseLayout (every page) and BlogPost
+│   ├── pages/              # Routes: /, /manual, /about, /blog, /404, /rss.xml
+│   ├── styles/global.css   # Design tokens and shared styles
+│   └── consts.ts           # Site title, description, Play URL, nav links
+├── PRODUCT.md              # Product and audience notes used for design work
+├── DESIGN.md               # The site's design system
+└── astro.config.mjs
 ```
 
-## 📝 License
+## Content notes
+
+- Game numbers on the home page come from `src/data/game.ts`. Keep them in step with the game and the manual.
+- The manual text lives in `src/components/Manual/ManualSections.js`; section anchors (`/manual/#getting-started`) are generated from the titles.
+- The blog is not linked from the navigation yet, and its posts are still placeholders.
+
+## Design checks
+
+The design was built with [impeccable](https://impeccable.style/). With it installed, run its detector from this folder:
+
+```sh
+~/.claude/skills/impeccable/scripts/impeccable detect src
+```
+
+## License
 
 Distributed under the MIT License.

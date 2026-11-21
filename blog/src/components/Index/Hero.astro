@@ -1,26 +1,162 @@
 ---
-import CallToAction from "./CallToAction.astro";
+import { Picture } from "astro:assets";
+import Check from "@lucide/astro/icons/check";
+import spaceship from "../../assets/spaceship.jpg";
+import Button from "../common/Button.astro";
+import { PLAY_URL } from "../../consts";
+
+const facts = ["Free to play", "Nothing to install", "Play in short visits"];
 ---
 
-<main class="w-full relative">
-  <div
-    class="h-[25rem] md:h-[30rem] bg-cool-space-ship bg-cover bg-center flex items-center justify-center"
-  >
-    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/65"></div>
-    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-      <div class="flex justify-center">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 overflow-hidden whitespace-nowrap mx-auto tracking-wider p-2.5 animate-typed-out border-r-[0.15em] border-white">
-          Earth Doom
-        </h1>
-      </div>
-      <p class="text-xl md:text-2xl mb-4 opacity-0 animate-fade-in-top-second text-left md:text-center">
-        Explore the world like never before and conquer your enemies!
-      </p>
-      <p class="text-sm md:text-base mb-8 opacity-0 animate-fade-in-top-third text-left md:text-center">
-        I am manually running the game ticker when I am developing and testing
-        the game. Please be patient.
-      </p>
-      <CallToAction />
+<section class="hero" aria-labelledby="hero-title">
+  <Picture
+    src={spaceship}
+    formats={["avif", "webp"]}
+    widths={[768, 1280, 1920, 2560]}
+    sizes="(max-aspect-ratio: 3/2) 135vh, 100vw"
+    alt="A squadron of fighter spacecraft streaking above the clouds at sunrise, under laser fire."
+    loading="eager"
+    fetchpriority="high"
+    class="hero-art"
+  />
+  <div class="hero-scrim" aria-hidden="true"></div>
+
+  <div class="hero-copy mx-auto w-full max-w-7xl px-4 md:px-8">
+    <h1 id="hero-title" class="hero-title">
+      <span class="text-muted">Build an army.</span>
+      Take their land.
+    </h1>
+    <p class="hero-lede">
+      Earth Doom is a strategy game of raids and rivals, played in your
+      browser. Grow an economy, send your fleet against real players, carry
+      their land home and climb the rankings.
+    </p>
+    <div class="mt-9 flex flex-wrap gap-3">
+      <Button href={PLAY_URL} size="lg">Play now</Button>
+      <Button href="/manual/" size="lg" variant="secondary">Read the manual</Button>
     </div>
+    <ul class="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-soft">
+      {
+        facts.map((fact) => (
+          <li class="flex items-center gap-2">
+            <Check size={16} class="text-friendly" aria-hidden="true" />
+            {fact}
+          </li>
+        ))
+      }
+    </ul>
   </div>
-</main>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    min-height: min(calc(100svh - 4rem), 52rem);
+    padding-block: 6rem 5rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .hero :global(.hero-art) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 50%;
+  }
+
+  /* Solid navy on the copy side, clearing towards the art. */
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        90deg,
+        rgb(10 15 22 / 0.94) 0%,
+        rgb(10 15 22 / 0.86) 34%,
+        rgb(10 15 22 / 0.35) 62%,
+        rgb(10 15 22 / 0.1) 100%
+      ),
+      linear-gradient(0deg, var(--color-ground) 0%, rgb(10 15 22 / 0) 26%);
+  }
+
+  .hero-title {
+    max-width: 15ch;
+    color: var(--color-ink);
+    font-size: clamp(2.75rem, 1.4rem + 4.6vw, 5rem);
+    font-weight: 750;
+    font-stretch: 118%;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .hero-title span {
+    display: block;
+  }
+
+  .hero-lede {
+    max-width: 34rem;
+    margin-top: 1.5rem;
+    color: var(--color-soft);
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  /* One entrance: the art settles while the copy rises into place. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero :global(.hero-art) {
+      animation: settle 900ms var(--ease-out-expo) both;
+    }
+    .hero-copy > * {
+      animation: rise 900ms var(--ease-out-expo) both;
+    }
+    .hero-copy > :nth-child(2) {
+      animation-delay: 80ms;
+    }
+    .hero-copy > :nth-child(3) {
+      animation-delay: 160ms;
+    }
+    .hero-copy > :nth-child(4) {
+      animation-delay: 240ms;
+    }
+  }
+
+  @keyframes settle {
+    from {
+      scale: 1.06;
+      filter: brightness(0.6);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0.2;
+      translate: 0 14px;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .hero {
+      align-items: flex-end;
+      min-height: 0;
+      padding-block: 14rem 3.5rem;
+    }
+    .hero :global(.hero-art) {
+      object-position: 40% 50%;
+    }
+    .hero-scrim {
+      background: linear-gradient(
+        0deg,
+        var(--color-ground) 0%,
+        rgb(10 15 22 / 0.94) 52%,
+        rgb(10 15 22 / 0.35) 82%,
+        rgb(10 15 22 / 0.15) 100%
+      );
+    }
+  }
+</style>
