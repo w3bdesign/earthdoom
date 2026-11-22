@@ -130,12 +130,11 @@ components:
   nav-link:
     textColor: "{colors.muted}"
     typography: "{typography.data}"
-    rounded: "{rounded.md}"
     padding: "0 12px"
     height: "40px"
   nav-link-active:
-    backgroundColor: "rgb(76 195 242 / 0.15)"
     textColor: "{colors.ink}"
+    underline: "2px {colors.signal-cyan}"
   panel:
     backgroundColor: "{colors.panel}"
     textColor: "{colors.ink}"
@@ -187,7 +186,7 @@ Density is lower than the game's: wider section rhythm, 17px reading text, large
 The game's palette, extended by one reading tone (Soft) for long-form and lede text.
 
 ### Primary
-- **Signal Cyan** (`signal-cyan`): every Play now button, inline links in prose, the active nav tint, the active manual TOC rule, focus rings, text selection (30% tint) and the travel segments of the tick strip. Hover moves to **Signal Cyan Strong**; text on a cyan fill is **Signal Cyan Ink**.
+- **Signal Cyan** (`signal-cyan`): every Play now button, inline links in prose, the active nav underline, the active manual TOC rule, focus rings, text selection (30% tint) and the travel segments of the tick strip. Hover moves to **Signal Cyan Strong**; text on a cyan fill is **Signal Cyan Ink**.
 
 ### Secondary
 - **Hostile Coral** (`hostile-coral`): state only. On the site it marks battle only (the battle badge and battle segments of the tick strip).
@@ -274,7 +273,7 @@ The marketing register adds one depth device: **artwork behind a scrim**. The he
 
 ## Shapes
 
-The parent's corners: 6px (`md`) for buttons, nav links, the menu toggle and the skip link; 8px (`lg`) for panels, the closing-call card, blockquotes, code blocks, post images and the mobile TOC box; full pills for badges and land bars; 2px for tick-strip segments; 4px for inline code. Hairline (1px Line) borders define every container and rule every list. The 8px resource dot is the only circle.
+The parent's corners: 6px (`md`) for buttons, the menu toggle and the skip link; 8px (`lg`) for panels, the closing-call card, blockquotes, code blocks, post images and the mobile TOC box; full pills for badges and land bars; 2px for tick-strip segments; 4px for inline code. Hairline (1px Line) borders define every container and rule every list. The 8px resource dot is the only circle.
 
 ## Components
 
@@ -299,7 +298,7 @@ The parent's table spec (`.data-table`): 40px Raised header row with 12px Muted 
 
 ### Navigation
 - **Header:** sticky, 64px, translucent Abyss with blur and a Line bottom rule. Logo + wordmark left; nav links and a `md` Play now right.
-- **Nav links:** 40px, 12px padding, 14px/500 Muted; hover Ink on a 5% white tint; current page Ink on a 15% cyan tint.
+- **Nav links:** plain text, not buttons. 40px, 12px padding, 14px/500 Muted. Hover turns the text Ink and draws a 2px Ink underline that grows from the left (240ms, ease-out-expo). The current page is Ink at 600 with a full-width 2px Signal Cyan underline; on desktop that underline slides to the new link on page change (cross-document view transition, 320ms). Play now stays the only button in the header.
 - **Mobile:** a 44px menu toggle opens a top-anchored popover on Rail with 48px links and a full-width `lg` Play now; slides down 12px and fades in over 240ms; closing takes 160ms.
 - **Footer:** Rail band, wordmark with a one-line description, Muted links and a cyan text Play now; copyright in a hairline-separated strip.
 

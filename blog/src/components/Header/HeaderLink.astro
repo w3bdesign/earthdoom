@@ -16,6 +16,7 @@ const isActive = normalise(String(href)) === normalise(Astro.url.pathname);
   {...props}
 >
   <slot />
+  <span class="nav-underline" aria-hidden="true"></span>
 </a>
 
 <style>
@@ -25,20 +26,54 @@ const isActive = normalise(String(href)) === normalise(Astro.url.pathname);
     align-items: center;
     height: 2.5rem;
     padding-inline: 0.75rem;
-    border-radius: var(--radius-md);
     color: var(--color-muted);
     font-size: 0.875rem;
     font-weight: 500;
-    transition:
-      color 150ms ease-out,
-      background-color 150ms ease-out;
+    transition: color 150ms ease-out;
   }
   .nav-link:hover {
     color: var(--color-ink);
-    background: rgb(255 255 255 / 0.05);
   }
   .nav-link[aria-current="page"] {
     color: var(--color-ink);
-    background: rgb(76 195 242 / 0.15);
+    font-weight: 600;
+  }
+
+  /* Bold underline under the text: grows from the left on hover,
+     stays full width in Signal Cyan on the current page. */
+  .nav-underline {
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.25rem;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--color-ink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 240ms var(--ease-out-expo);
+  }
+  .nav-link:hover .nav-underline {
+    transform: scaleX(1);
+  }
+  .nav-link[aria-current="page"] .nav-underline {
+    background: var(--color-accent);
+    transform: scaleX(1);
+  }
+
+  /* On page change the underline slides from the old link to the new one
+     (cross-document view transition). Desktop only: the mobile menu is
+     closed during navigation, so only one underline carries the name. */
+  @media (min-width: 768px) {
+    .nav-link[aria-current="page"] .nav-underline {
+      view-transition-name: nav-underline;
+    }
+  }
+</style>
+
+<style is:global>
+  ::view-transition-group(nav-underline) {
+    animation-duration: 320ms;
+    animation-timing-function: var(--ease-out-expo);
   }
 </style>
