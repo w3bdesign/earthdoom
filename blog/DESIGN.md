@@ -273,7 +273,7 @@ The marketing register adds one depth device: **artwork behind a scrim**. The he
 
 ## Shapes
 
-The parent's corners: 6px (`md`) for buttons, nav links, the menu toggle and the skip link; 8px (`lg`) for panels, the closing-call card, blockquotes, code blocks, post images and the mobile TOC box; full pills for badges and land bars; 2px for tick-strip segments; 4px for inline code. Hairline (1px Line) borders define every container and rule every list. The 8px resource dot is the only circle.
+The parent's corners: 6px (`md`) for buttons, the menu toggle and the skip link; 8px (`lg`) for panels, the closing-call card, blockquotes, code blocks, post images and the mobile TOC box; full pills for badges and land bars; 2px for tick-strip segments; 4px for inline code. Hairline (1px Line) borders define every container and rule every list. The 8px resource dot is the only circle.
 
 ## Components
 
