@@ -177,7 +177,7 @@ const ProductionRow: FC<BuildingRowProps> = ({ paPlayer, production }) => {
   const shortfall = isIdle && !canAffordOne ? tooltip : undefined;
 
   return (
-    <tr key={production.buildingName} className="hover:bg-white/[0.02]">
+    <tr key={production.buildingName} className="hover:bg-white/2">
       <td className={`${TD} font-semibold`}>
         {production.buildingName}
         <span className="block text-xs font-normal text-muted md:hidden">

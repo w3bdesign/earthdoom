@@ -18,11 +18,11 @@ const Sidebar = ({ unreadMail = 0 }: { unreadMail?: number }) => {
       >
         <span
           aria-hidden
-          className="grid h-7 w-7 place-items-center rounded bg-accent text-sm font-bold text-accent-ink"
+          className="grid h-7 w-7 place-items-center rounded-sm bg-accent text-sm font-bold text-accent-ink"
         >
           E
         </span>
-        <span className="text-sm font-bold uppercase tracking-[0.18em] text-ink [font-stretch:125%] md:sr-only lg:not-sr-only">
+        <span className="text-sm font-bold tracking-[0.18em] text-ink uppercase font-stretch-125% md:sr-only lg:not-sr-only">
           Earth Doom
         </span>
       </Link>

@@ -38,7 +38,7 @@ const ModeSwitch: FC<{ mode: Mode; onChange: (mode: Mode) => void }> = ({
       ).map(({ value, label, icon: Icon }) => (
         <label
           key={value}
-          className={`flex h-9 cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-semibold transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-accent ${
+          className={`flex h-9 cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-semibold transition-colors has-focus-visible:outline-2 has-focus-visible:outline-accent has-focus-visible:outline-solid ${
             mode === value
               ? value === "attack"
                 ? "bg-hostile/15 text-hostile"

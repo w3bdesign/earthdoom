@@ -6,7 +6,7 @@
 const Footer = () => (
   <footer
     data-testid="footer"
-    className="mx-auto w-full max-w-6xl px-4 pb-24 pt-8 text-xs text-muted md:px-8 md:pb-8"
+    className="mx-auto w-full max-w-6xl px-4 pt-8 pb-24 text-xs text-muted md:px-8 md:pb-8"
   >
     © {new Date().getFullYear()} killaH · Earth Doom
   </footer>

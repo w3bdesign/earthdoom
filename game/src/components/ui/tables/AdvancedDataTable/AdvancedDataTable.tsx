@@ -281,9 +281,7 @@ const AdvancedDataTable: FC<AdvancedDataTableProps> = ({
                 <tr
                   key={rowKey}
                   aria-current={highlighted ? "true" : undefined}
-                  className={
-                    highlighted ? "bg-accent/10" : "hover:bg-white/[0.02]"
-                  }
+                  className={highlighted ? "bg-accent/10" : "hover:bg-white/2"}
                 >
                   {columns.map((col, colIndex) => {
                     const isPrimary = colIndex === primaryIndex;

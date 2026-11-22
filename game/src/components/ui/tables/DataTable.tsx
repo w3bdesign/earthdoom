@@ -27,7 +27,7 @@ export const DataTable: React.FC<DataTableProps> = ({
   return (
     <div className="overflow-hidden rounded-lg border border-line bg-panel shadow-panel">
       <table className="block w-full text-left text-sm md:table">
-        <caption className="block border-b border-line px-4 py-3 text-left text-base font-semibold text-ink [font-stretch:112%]">
+        <caption className="block border-b border-line px-4 py-3 text-left text-base font-semibold text-ink font-stretch-112%">
           {caption}
         </caption>
         <thead className="hidden md:table-header-group">
@@ -53,7 +53,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 <td
                   key={colIndex}
                   data-th={column.label}
-                  className="flex items-center justify-between px-4 py-2 tabular-nums text-ink before:text-muted before:content-[attr(data-th)] md:table-cell md:py-3 md:text-right md:before:content-none"
+                  className="flex items-center justify-between px-4 py-2 text-ink tabular-nums before:text-muted before:content-[attr(data-th)] md:table-cell md:py-3 md:text-right md:before:content-none"
                 >
                   <Stringifier value={row[column.accessor]} />
                 </td>

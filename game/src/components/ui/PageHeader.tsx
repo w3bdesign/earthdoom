@@ -12,7 +12,7 @@ const PageHeader = ({
 }) => (
   <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
     <div className="min-w-0">
-      <h1 className="text-2xl font-semibold text-ink md:text-[1.75rem]">
+      <h1 className="text-2xl font-semibold text-ink md:text-[1.75rem] md:leading-8">
         {title}
       </h1>
       {description && (

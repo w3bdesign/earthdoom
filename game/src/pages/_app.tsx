@@ -26,7 +26,7 @@ const archivo = Archivo({
 });
 
 const TOAST_OPTIONS: ToasterProps["toastOptions"] = {
-  className: "!bg-raised !text-ink !border !border-line-strong !shadow-panel",
+  className: "bg-raised! text-ink! border! border-line-strong! shadow-panel!",
   success: { iconTheme: { primary: "#5fd68f", secondary: "#05131d" } },
   error: { iconTheme: { primary: "#ef5f5f", secondary: "#05131d" } },
 };

@@ -31,15 +31,15 @@ const NewsTable: FC<INewsTableProps> = ({ news }) => {
       <tbody>
         {news?.map((news) => (
           <tr key={news.id} className="border-b dark:border-neutral-500">
-            <td className="whitespace-nowrap px-6 py-4 font-medium">
+            <td className="px-6 py-4 font-medium whitespace-nowrap">
               {news.id}
             </td>
-            <td className="whitespace-nowrap px-6 py-4">{news.header}</td>
-            <td className="whitespace-nowrap px-6 py-4">{news.news}</td>
-            <td className="whitespace-nowrap px-6 py-4">
+            <td className="px-6 py-4 whitespace-nowrap">{news.header}</td>
+            <td className="px-6 py-4 whitespace-nowrap">{news.news}</td>
+            <td className="px-6 py-4 whitespace-nowrap">
               <Button
                 type="button"
-                className="bg-danger hover:bg-danger-600 focus:bg-danger-600 active:bg-danger-700 inline-block rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
+                className="bg-danger hover:bg-danger-600 focus:bg-danger-600 active:bg-danger-700 inline-block rounded-sm px-6 pt-2.5 pb-2 text-xs leading-normal font-medium text-white uppercase shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:ring-0 focus:outline-hidden active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
                 onClick={() => alert(news.id)}
               >
                 Delete

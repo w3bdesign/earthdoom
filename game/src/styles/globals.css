@@ -1,6 +1,76 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-ground: #0a0f16;
+  --color-rail: #0c1726;
+  --color-panel: #111a26;
+  --color-raised: #172231;
+  --color-sunken: #0c131c;
+  --color-line: #223044;
+  --color-line-strong: #31435b;
+  --color-field: #66778d;
+  --color-ink: #e7edf5;
+  --color-muted: #9aa9bc;
+
+  --color-accent: #4cc3f2;
+  --color-accent-strong: #86d8f8;
+  --color-accent-ink: #05131d;
+
+  --color-hostile: #f68a8a;
+  --color-hostile-strong: #ef5f5f;
+
+  --color-friendly: #5fd68f;
+  --color-caution: #f2c45a;
+  --color-credits: #f2c45a;
+  --color-titanium: #b9c6d6;
+  --color-energy: #a99cf6;
+
+  /*
+    Tailwind 3 read `shadow-panel` as a shadow plus the colour `panel`, so both
+    layers were drawn in #111a26 rather than the white/black written in the old
+    config. These are the values v3 actually rendered.
+  */
+  --shadow-panel: 0 1px 0 0 #111a26 inset, 0 8px 24px -12px #111a26;
+  --shadow-sheet: 0 -12px 32px -8px rgb(0 0 0 / 0.7);
+}
+
+/*
+  `inline` so `font-sans` resolves var(--font-archivo) on the element using it.
+  next/font sets that variable on the app wrapper, not on :root.
+*/
+@theme inline {
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: #e5e7eb; /* v3 gray-200 */
+  }
+
+  /* v3 placeholders were gray-400; v4 uses the text color at 50% */
+  input::placeholder,
+  textarea::placeholder {
+    color: #9ca3af; /* v3 gray-400 */
+  }
+
+  /* v3 gave buttons a pointer cursor; v4 uses the browser default */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
 
 @layer base {
   html {
@@ -31,11 +101,11 @@
   }
 
   :focus-visible {
-    @apply outline outline-2 outline-offset-2 outline-accent;
+    @apply outline-solid outline-2 outline-offset-2 outline-accent;
   }
 
   * {
-    scrollbar-color: theme("colors.line-strong") transparent;
+    scrollbar-color: var(--color-line-strong) transparent;
   }
 
   input[type="number"] {

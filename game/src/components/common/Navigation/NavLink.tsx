@@ -43,15 +43,15 @@ const NavLink = ({
     >
       <Icon
         aria-hidden
-        className={`h-[1.125rem] w-[1.125rem] shrink-0 ${active ? "text-accent" : ""}`}
+        className={`h-4.5 w-4.5 shrink-0 ${active ? "text-accent" : ""}`}
       />
       <span className={`flex-1 truncate ${hide}`}>{text}</span>
       {count > 0 && (
         <span
           aria-hidden={collapsible || undefined}
-          className={`rounded-full bg-accent px-1.5 text-xs font-semibold leading-5 text-accent-ink ${
+          className={`rounded-full bg-accent px-1.5 text-xs leading-5 font-semibold text-accent-ink ${
             collapsible
-              ? "md:absolute md:right-1.5 md:top-1 md:h-2 md:w-2 md:p-0 md:text-[0] lg:static lg:h-auto lg:w-auto lg:px-1.5 lg:text-xs"
+              ? "md:absolute md:top-1 md:right-1.5 md:h-2 md:w-2 md:p-0 md:text-[0] lg:static lg:h-auto lg:w-auto lg:px-1.5 lg:text-xs"
               : ""
           }`}
         >
