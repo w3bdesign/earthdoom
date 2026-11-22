@@ -51,7 +51,7 @@ const { showNav = true } = Astro.props;
         <X size={22} aria-hidden="true" />
       </button>
     </div>
-    <nav aria-label="Main" class="flex flex-col gap-1 px-4 pt-2 pb-6">
+    <nav aria-label="Main" class="flex flex-col items-start gap-1 px-4 pt-2 pb-6">
       {
         NAV_LINKS.map((link) => (
           <HeaderLink href={link.href} class="!h-12 !text-base">
