@@ -1,9 +1,36 @@
 ---
-const today = new Date();
+import Wordmark from "../Header/Wordmark.astro";
+import { NAV_LINKS, PLAY_URL } from "../../consts";
+
+const year = new Date().getFullYear();
 ---
 
-<footer class="text-center mt-4 py-4 text-white p-2.5">
-  <span class="mt-2 md:mt-0 text-lg"
-    >&copy; {today.getFullYear()} Earth Doom</span
+<footer class="mt-24 border-t border-line bg-rail">
+  <div
+    class="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-[1fr_auto] md:px-8"
   >
+    <div class="max-w-sm">
+      <Wordmark />
+      <p class="mt-4 text-sm text-muted">
+        A free strategy game of raids and rivals, played in your browser.
+      </p>
+    </div>
+    <nav aria-label="Footer" class="flex flex-wrap gap-x-8 gap-y-3 text-sm">
+      {
+        NAV_LINKS.map((link) => (
+          <a href={link.href} class="text-muted hover:text-ink">
+            {link.label}
+          </a>
+        ))
+      }
+      <a href={PLAY_URL} class="font-semibold text-accent hover:text-accent-strong"
+        >Play now</a
+      >
+    </nav>
+  </div>
+  <div class="border-t border-line">
+    <p class="mx-auto max-w-7xl px-4 py-5 text-xs text-muted md:px-8">
+      © {year} Earth Doom
+    </p>
+  </div>
 </footer>

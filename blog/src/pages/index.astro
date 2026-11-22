@@ -1,23 +1,45 @@
 ---
-import BaseHead from "../components/Header/BaseHead.astro";
-import Header from "../components/Header/Header.astro";
-import Footer from "../components/Footer/Footer.astro";
-import Intro from "../components/Index/Intro.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Index/Hero.astro";
+import GameLoop from "../components/Index/GameLoop.astro";
+import ManualIndex from "../components/Index/ManualIndex.astro";
+import FinalCall from "../components/Index/FinalCall.astro";
+import { PLAY_URL, SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+// Structured data so search engines know this is a free browser game.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: SITE_TITLE,
+      url: Astro.site?.href,
+    },
+    {
+      "@type": "VideoGame",
+      name: SITE_TITLE,
+      description: SITE_DESCRIPTION,
+      url: Astro.site?.href,
+      genre: ["Strategy", "Massively multiplayer online game"],
+      gamePlatform: "Web browser",
+      applicationCategory: "Game",
+      playMode: "MultiPlayer",
+      offers: {
+        "@type": "Offer",
+        price: 0,
+        priceCurrency: "USD",
+        url: PLAY_URL,
+        availability: "https://schema.org/InStock",
+      },
+    },
+  ],
+};
 ---
 
-<!DOCTYPE html>
-<html lang="en" class="flex items-center justify-center">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-neutral-900 font-roboto text-white">
-    <Header title={SITE_TITLE} />
-    <Hero />
-    <Intro />
-    <Footer />
-  </body>
-</html>
+<BaseLayout title="Earth Doom · Free browser strategy game">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  <Hero />
+  <GameLoop />
+  <ManualIndex />
+  <FinalCall />
+</BaseLayout>

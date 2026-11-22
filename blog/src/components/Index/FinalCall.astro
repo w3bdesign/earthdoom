@@ -1,0 +1,62 @@
+---
+import { Picture } from "astro:assets";
+import spaceship from "../../assets/spaceship.jpg";
+import Button from "../common/Button.astro";
+import { PLAY_URL } from "../../consts";
+---
+
+<section class="mx-auto max-w-7xl px-4 pt-28 md:px-8" aria-labelledby="final-title">
+  <div class="final">
+    <Picture
+      src={spaceship}
+      formats={["avif", "webp"]}
+      widths={[768, 1280, 1920]}
+      sizes="(min-width: 1280px) 1216px, 100vw"
+      alt=""
+      class="final-art"
+    />
+    <div class="final-copy">
+      <h2 id="final-title" class="section-title">The land won’t take itself.</h2>
+      <p class="mt-4 max-w-md text-soft">
+        Sign up free, build your first tax collectors and start scouting
+        for land. Your rivals already have.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href={PLAY_URL} size="lg">Play now</Button>
+        <Button href="/manual/#getting-started" size="lg" variant="ghost">How to start</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    padding: clamp(2rem, 1rem + 4vw, 4.5rem);
+    background: var(--color-panel);
+  }
+  .final :global(.final-art) {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 85% 72%;
+    opacity: 0.55;
+    mask-image: linear-gradient(90deg, transparent 15%, #000 75%);
+  }
+  .final-copy {
+    max-width: 36rem;
+  }
+  @media (max-width: 767px) {
+    .final :global(.final-art) {
+      opacity: 0.3;
+      mask-image: linear-gradient(0deg, transparent 20%, #000 100%);
+    }
+  }
+</style>

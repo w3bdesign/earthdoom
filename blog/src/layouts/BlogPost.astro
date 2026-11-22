@@ -1,38 +1,46 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import BaseHead from "../components/Header/BaseHead.astro";
-import Header from "../components/Header/Header.astro";
-import Footer from "../components/Footer/Footer.astro";
+import { Image } from "astro:assets";
+import ArrowLeft from "@lucide/astro/icons/arrow-left";
+import BaseLayout from "./BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, heroAlt = "" } = Astro.props;
 ---
 
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-  </head>
-
-  <body class="bg-neutral-900">
-    <Header />
-    <main>
-      <article>
-        {heroImage && <img width={720} height={360} src={heroImage} alt="" />}
-        <h1 class="text-4xl my-1">{title}</h1>
+<BaseLayout title={title} description={description} noindex>
+  <article class="mx-auto max-w-3xl px-4 pt-14 md:px-8 md:pt-20">
+    <a href="/blog/" class="inline-flex items-center gap-2 text-sm text-muted hover:text-ink">
+      <ArrowLeft size={16} aria-hidden="true" /> All posts
+    </a>
+    <header class="mt-6 border-b border-line pb-8">
+      <h1 class="section-title">{title}</h1>
+      <p class="mt-4 text-sm text-muted">
         <FormattedDate date={pubDate} />
         {
           updatedDate && (
-            <div class="italic">
-              Last updated on <FormattedDate date={updatedDate} />
-            </div>
+            <>
+              {" · Updated "}
+              <FormattedDate date={updatedDate} />
+            </>
           )
         }
-        <hr class="border-t border-gray-300 my-4" />
-        <slot />
-      </article>
-    </main>
-    <Footer />
-  </body>
-</html>
+      </p>
+    </header>
+    {
+      heroImage && (
+        <Image
+          src={heroImage}
+          alt={heroAlt}
+          width={1200}
+          class="mt-8 w-full rounded-lg border border-line"
+        />
+      )
+    }
+    <div class="prose mt-8">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

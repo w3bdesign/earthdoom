@@ -1,51 +1,116 @@
 ---
+import Menu from "@lucide/astro/icons/menu";
+import X from "@lucide/astro/icons/x";
 import HeaderLink from "./HeaderLink.astro";
+import Wordmark from "./Wordmark.astro";
+import Button from "../common/Button.astro";
+import { NAV_LINKS, PLAY_URL } from "../../consts";
 ---
 
-<header class="container px-4 lg:px-0 mb-8">
-  <nav class="flex justify-between items-center pt-4">
-    <div class="mx-auto md:mx-0">
-      <img
-        class="h-16 w-16"
-        src="/images/logo.png"
-        alt="Earthdoom logo"
-        width="90"
-      />
+<header class="site-header">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 md:px-8">
+    <Wordmark />
+
+    <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+      {NAV_LINKS.map((link) => <HeaderLink href={link.href}>{link.label}</HeaderLink>)}
+      <Button href={PLAY_URL} class="ml-3">Play now</Button>
+    </nav>
+
+    <button
+      type="button"
+      class="menu-toggle md:hidden"
+      popovertarget="mobile-menu"
+      aria-label="Open menu"
+    >
+      <Menu size={22} aria-hidden="true" />
+    </button>
+  </div>
+
+  <div id="mobile-menu" popover class="mobile-menu">
+    <div class="flex h-16 items-center justify-between px-4">
+      <Wordmark />
+      <button
+        type="button"
+        class="menu-toggle"
+        popovertarget="mobile-menu"
+        popovertargetaction="hide"
+        aria-label="Close menu"
+      >
+        <X size={22} aria-hidden="true" />
+      </button>
     </div>
-    <div class="hidden sm:block">
-      <HeaderLink
-        class="text-white text-md uppercase mx-4 font-bold relative after:absolute after:bottom-[-0.45rem] after:left-0 after:w-full after:h-1 after:bg-white after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-        activeClass="after:scale-x-100"
-        href="/"
-      >
-        Home
-      </HeaderLink>
-      <HeaderLink
-        class="text-white text-md uppercase mx-4 font-bold relative after:absolute after:bottom-[-0.45rem] after:left-0 after:w-full after:h-1 after:bg-white after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-        activeClass="after:scale-x-100"
-        href="/manual"
-      >
-        Manual
-      </HeaderLink>
-    </div>
-  </nav>
-  <!-- This is the mobile menu -->
-  <div class="sm:hidden">
-    <div class="flex justify-center items-center py-4 px-6">
-      <HeaderLink
-        class="text-white block text-sm uppercase px-4 font-bold relative after:absolute after:bottom-[-0.45rem] after:left-0 after:w-full after:h-1 after:bg-white after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-        activeClass="after:scale-x-100"
-        href="/"
-      >
-        Home
-      </HeaderLink>
-      <HeaderLink
-        class="text-white block text-sm uppercase px-4 font-bold relative after:absolute after:bottom-[-0.45rem] after:left-0 after:w-full after:h-1 after:bg-white after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-        activeClass="after:scale-x-100"
-        href="/manual"
-      >
-        Manual
-      </HeaderLink>
-    </div>
+    <nav aria-label="Main" class="flex flex-col gap-1 px-4 pt-2 pb-6">
+      {
+        NAV_LINKS.map((link) => (
+          <HeaderLink href={link.href} class="!h-12 !text-base">
+            {link.label}
+          </HeaderLink>
+        ))
+      }
+      <Button href={PLAY_URL} size="lg" class="mt-4 w-full">Play now</Button>
+    </nav>
   </div>
 </header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgb(10 15 22 / 0.86);
+    backdrop-filter: blur(12px) saturate(140%);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .menu-toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-md);
+    color: var(--color-ink);
+    transition: background-color 150ms ease-out;
+  }
+  .menu-toggle:hover {
+    background: var(--color-raised);
+  }
+  @media (min-width: 768px) {
+    .menu-toggle {
+      display: none;
+    }
+  }
+
+  .mobile-menu {
+    inset: 0 0 auto 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-rail);
+    color: var(--color-ink);
+    box-shadow: 0 12px 32px -8px rgb(0 0 0 / 0.7);
+    translate: 0 -0.75rem;
+    opacity: 0;
+    /* Closing is quicker than opening. */
+    transition:
+      translate 160ms var(--ease-out-expo),
+      opacity 160ms var(--ease-out-expo),
+      overlay 160ms allow-discrete,
+      display 160ms allow-discrete;
+  }
+  .mobile-menu:popover-open {
+    translate: 0 0;
+    opacity: 1;
+    transition-duration: 240ms;
+  }
+  @starting-style {
+    .mobile-menu:popover-open {
+      translate: 0 -0.75rem;
+      opacity: 0;
+    }
+  }
+  .mobile-menu::backdrop {
+    background: rgb(0 0 0 / 0.6);
+  }
+</style>

@@ -1,116 +1,93 @@
-<section class="px-4 max-w-[95vw] md:max-w-6xl mx-auto">
-  <div class="container mx-auto py-2">
-    <div class="table-scroll overflow-y-auto">
-      <div class="overflow-x-auto">
-        <p class="text-md text-center text-white font-semibold mb-6">
-          Ships dealing damage (top) Targets (left). Values are the damage dealt
-        </p>
-        <table class="w-full text-center table-fixed bg-gray-800 mt-6">
-          <thead>
-            <tr class="h-12">
-              <th class="w-[7rem]"></th>
-              <th class="w-[7rem]">Infantry</th>
-              <th class="w-[7rem]">Shadows</th>
-              <th class="w-[7rem]">Goliaths</th>
-              <th class="w-[7rem]">Hellspawn</th>
-              <th class="w-[7rem]">Ares</th>
-              <th class="w-[6rem]">Lucius</th>
-              <th class="w-[7rem]">Avengers</th>
-              <th class="w-[6rem]">Reaper</th>
+---
+/** Damage table from the original manual. Rows are targets, columns are attackers. */
+const ATTACKERS = ["Infantry", "Shadows", "Goliaths", "Hellspawn", "Ares", "Lucius", "Avengers", "Reaper"];
+
+const ROWS: [string, (string | null)[]][] = [
+  ["Infantry", ["0.025", "0.02", "1.6", "0.8", "3.00", null, null, null]],
+  ["Shadows", ["0.02", "0.105", "1.2", "0.31", "2.35", null, null, null]],
+  ["Goliaths", ["0.015", "0.025", "0.05", "0.3", "0.125", null, null, null]],
+  ["Grabbers", ["0.015", "0.015", "0.055", "0.11", "0.135", null, null, null]],
+  ["Hellspawn", ["0.0025", "0.027", "0.025", "0.05", "0.18", "0.08", null, null]],
+  ["Ares", ["0.0035", "0.025", "0.025", "0.04", "0.05", "0.1", null, null]],
+  ["Medusas", ["0.02", "0.005", "0.015", "0.25", "1.00", null, null, null]],
+  ["Reaper", ["0.005", "0.04", "0.1", "0.15", "0.25", null, "0.2", null]],
+];
+---
+
+<section id="damage-table" class="manual-section" aria-labelledby="damage-table-title">
+  <h2 id="damage-table-title">Damage table</h2>
+  <p class="mt-5 max-w-[68ch] text-soft">
+    How much damage each attacking unit (columns) deals to each target (rows).
+    An empty cell means that attacker does not hit that target.
+  </p>
+  <div class="damage panel mt-6" tabindex="0" role="region" aria-label="Damage table, scrolls sideways">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th scope="col" class="corner">Target</th>
+          {ATTACKERS.map((a) => <th scope="col" class="num">{a}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {
+          ROWS.map(([target, values]) => (
+            <tr>
+              <th scope="row">{target}</th>
+              {values.map((v) =>
+                v === null ? (
+                  <td class="num empty">
+                    <span aria-hidden="true">–</span>
+                    <span class="sr-only">none</span>
+                  </td>
+                ) : (
+                  <td class="num">{v}</td>
+                ),
+              )}
             </tr>
-          </thead>
-          <tbody class="text-white">
-            <tr class="h-12">
-              <th>Infantry</th>
-              <td>0.025</td>
-              <td>0.02</td>
-              <td>1.6</td>
-              <td>0.8</td>
-              <td>3.00</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr class="bg-gray-700 h-12">
-              <th>Shadows</th>
-              <td>0.02</td>
-              <td>0.105</td>
-              <td>1.2</td>
-              <td>0.31</td>
-              <td>2.35</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr class="h-12">
-              <th>Goliaths</th>
-              <td>0.015</td>
-              <td>0.025</td>
-              <td>0.05</td>
-              <td>0.3</td>
-              <td>0.125</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr class="bg-gray-700 h-12">
-              <th>Grabbers</th>
-              <td>0.015</td>
-              <td>0.015</td>
-              <td>0.055</td>
-              <td>0.11</td>
-              <td>0.135</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr class="h-12">
-              <th>Hellspawn</th>
-              <td>0.0025</td>
-              <td>0.027</td>
-              <td>0.025</td>
-              <td>0.05</td>
-              <td>0.18</td>
-              <td>0.08</td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr class="bg-gray-700 h-12">
-              <th>Ares</th>
-              <td>0.0035</td>
-              <td>0.025</td>
-              <td>0.025</td>
-              <td>0.04</td>
-              <td>0.05</td>
-              <td>0.1</td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr class="h-12">
-              <th>Medusas</th>
-              <td>0.02</td>
-              <td>0.005</td>
-              <td>0.015</td>
-              <td>0.25</td>
-              <td>1.00</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr class="bg-gray-700 h-12">
-              <th>Reaper</th>
-              <td>0.005</td>
-              <td>0.04</td>
-              <td>0.1</td>
-              <td>0.15</td>
-              <td>0.25</td>
-              <td></td>
-              <td>0.2</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+          ))
+        }
+      </tbody>
+    </table>
   </div>
 </section>
+
+<style>
+  .damage {
+    min-width: 0;
+    overflow: auto;
+    max-width: 100%;
+  }
+  .damage table {
+    min-width: 46rem;
+  }
+  .damage thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .damage tbody th {
+    position: sticky;
+    left: 0;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--color-line);
+    background: var(--color-panel);
+    color: var(--color-ink);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: left;
+    box-shadow: 1px 0 0 var(--color-line);
+  }
+  .damage .corner {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    box-shadow: 1px 0 0 var(--color-line);
+  }
+  .damage tbody tr:hover td,
+  .damage tbody tr:hover th {
+    background: var(--color-raised);
+  }
+  .damage .empty {
+    color: var(--color-muted);
+  }
+</style>
