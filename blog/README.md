@@ -49,6 +49,7 @@ The site is fully static. Run `npm run build` and upload the **contents** of `di
 │   ├── assets/             # Logo and spaceship artwork (optimised at build time)
 │   ├── components/
 │   │   ├── common/         # Button
+│   │   ├── FormattedDate.astro  # Date formatting for blog posts
 │   │   ├── Header/         # BaseHead (meta tags), Header, Wordmark, HeaderLink
 │   │   ├── Footer/
 │   │   ├── Index/          # Home page sections: Hero, GameLoop, ManualIndex, FinalCall
@@ -80,4 +81,4 @@ The design was built with [impeccable](https://impeccable.style/). With it insta
 
 ## License
 
-Distributed under the MIT License.
+Distributed under the GNU Affero General Public License v3.0, like the rest of the repository (see `../LICENSE`).
