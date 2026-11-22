@@ -37,7 +37,7 @@ function createBuildingFixture(overrides: Partial<Building> = {}): Building {
     buildingCostCrystal: 100,
     buildingCostTitanium: 50,
     needsFieldName: 0,
-    hasInputField: "undefined",
+    hasInputField: undefined,
     ...overrides,
   };
 }
