@@ -36,7 +36,7 @@ const structuredData = {
 };
 ---
 
-<BaseLayout title="Earth Doom · Free browser strategy game">
+<BaseLayout title="Earth Doom · Free browser strategy game" showHeader={false}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <Hero />
   <GameLoop />
