@@ -2,7 +2,9 @@
 ![Version](https://img.shields.io/badge/version-0.4.9-blue)
 ![React](https://img.shields.io/badge/React-19.2.7-success)
 ![Next.js](https://img.shields.io/badge/Next.js-16.2.9-success)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7.2-success)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-success)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3.5-success)
+![Astro](https://img.shields.io/badge/Astro-7.4.13-success)
 
 ## This game is under active development and may have bugs
 
@@ -16,7 +18,7 @@ The database is handled through PostgreSQL.
 
 Authentication is handled through Clerk.
 
-Front page is developed with Astro.
+The front page (earthdoom.com) is built with Astro 7 and lives in `/blog`.
 
 The application is designed with a modern, responsive and intuitive user interface.
 
@@ -24,12 +26,13 @@ The application is designed with a modern, responsive and intuitive user interfa
 
 - [Next.js](https://nextjs.org)
 - [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
+- [Tailwind CSS](https://tailwindcss.com) v4
 - [tRPC](https://trpc.io)
 - [React Hot Toast](https://react-hot-toast.com)
 - [React Chart.js](https://react-chartjs-2.js.org)
 - [Clerk](https://clerk.com)
-- [Tailwind Elements](https://tailwind-elements.com)
+- [Astro](https://astro.build)
+- [Jest](https://jestjs.io)
 - [Zod](https://github.com/colinhacks/zod)
 
 ## Table of Contents
@@ -37,7 +40,6 @@ The application is designed with a modern, responsive and intuitive user interfa
 - [Installation](#installation)
 - [Usage](#usage)
 - [Scripts](#scripts)
-- [Dependencies](#dependencies)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -48,7 +50,7 @@ To install the required dependencies, simply run the following command in the pr
 ```bash
 npm install
 ```
-You now need to retrieve the API keys for Clerk and Supabase and enter them into .env (you need to rename .env.example to .env)
+Copy `.env.example` to `.env` and fill in a PostgreSQL connection string (`DATABASE_URL`) and your Clerk keys.
 
 ## Usage
 
@@ -68,6 +70,8 @@ This project includes the following npm scripts for development and building:
 - `dev`: Starts the development server.
 - `postinstall`: Generates Prisma client after installing dependencies.
 - `lint`: Lints the codebase using ESLint.
+- `lint:fix`: Lints the codebase and fixes what ESLint can fix automatically.
+- `test`: Runs the test suite with Jest.
 - `start`: Starts the production server.
 - `prisma:generate`: Generates the Prisma client.
 - `format`: Formats the codebase using Prettier.
@@ -85,4 +89,4 @@ If you'd like to contribute to the development of Earthdoom Game, please follow 
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [GNU Affero General Public License v3.0](LICENSE).
