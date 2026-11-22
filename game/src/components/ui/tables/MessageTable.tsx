@@ -46,11 +46,11 @@ const MessageTable: FC<MessageTableProps> = ({
         return (
           <li
             key={item.id}
-            className={`flex gap-3 px-4 py-3 ${unread ? "bg-accent/[0.06]" : ""}`}
+            className={`flex gap-3 px-4 py-3 ${unread ? "bg-accent/6" : ""}`}
           >
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h3 className="text-sm font-semibold text-ink [font-stretch:100%]">
+                <h3 className="text-sm font-semibold text-ink font-stretch-100%">
                   {item.header}
                 </h3>
                 {unread && <Badge tone="accent">New</Badge>}
@@ -62,7 +62,7 @@ const MessageTable: FC<MessageTableProps> = ({
                   {format(date, "dd/MM-yyyy HH:mm:ss")}
                 </time>
               </div>
-              <p className="mt-1 whitespace-pre-line break-words text-sm text-ink/80">
+              <p className="mt-1 text-sm wrap-break-word whitespace-pre-line text-ink/80">
                 {item.news}
               </p>
             </div>

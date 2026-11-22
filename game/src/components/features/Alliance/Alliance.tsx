@@ -199,7 +199,7 @@ const AllianceHeader: FC<{
     />
     {isLeader && paPlayer.tag && (
       <Panel title="Password">
-        <p className="break-all font-mono text-sm text-ink">
+        <p className="font-mono text-sm break-all text-ink">
           {alliancePassword}
         </p>
         <p className="mt-2 text-xs text-muted">

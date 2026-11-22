@@ -39,7 +39,7 @@ const ContinentNavigation: FC<{
       <span className="hidden sm:inline">Previous</span>
     </button>
     <input
-      className={`${INPUT_CLASS} !w-16 text-center tabular-nums`}
+      className={`${INPUT_CLASS} w-16! text-center tabular-nums`}
       type="text"
       inputMode="numeric"
       name="myx"

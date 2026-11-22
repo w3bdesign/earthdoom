@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { IconType } from "react-icons";
 
 /** Shared width so buttons and statuses line up in a table's action column. */
-export const ACTION_WIDTH = "min-w-[8rem]";
+export const ACTION_WIDTH = "min-w-32";
 
 const TONES = {
   friendly: "border-friendly/35 bg-friendly/10 text-friendly",
@@ -23,7 +23,7 @@ const ActionStatus = ({
   children: ReactNode;
 }) => (
   <span
-    className={`inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-md border px-4 text-sm font-semibold ${ACTION_WIDTH} ${TONES[tone]}`}
+    className={`inline-flex h-10 items-center justify-center gap-2 rounded-md border px-4 text-sm font-semibold whitespace-nowrap ${ACTION_WIDTH} ${TONES[tone]}`}
   >
     {Icon && <Icon aria-hidden className="h-4 w-4 shrink-0" />}
     {children}

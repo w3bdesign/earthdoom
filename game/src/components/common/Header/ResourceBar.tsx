@@ -22,7 +22,7 @@ const Resource: FC<ResourceProps> = ({ label, value, dot, detail }) => (
       {dot && <span aria-hidden className={`h-2 w-2 rounded-full ${dot}`} />}
       {label}
     </dt>
-    <dd className="text-sm font-semibold tabular-nums text-ink md:text-base">
+    <dd className="text-sm font-semibold text-ink tabular-nums md:text-base">
       <span className="md:hidden">{formatCompact(value)}</span>
       <span className="hidden md:inline">{formatNumber(value)}</span>
       {detail && <span className="sr-only"> ({detail})</span>}
@@ -45,7 +45,7 @@ const ResourceBar: FC<ResourceBarProps> = ({ paPlayer }) => {
   const protectedTicks = Number(paPlayer.newbie ?? 0);
 
   return (
-    <div className="sticky top-0 z-20 border-b border-line bg-ground/90 backdrop-blur">
+    <div className="sticky top-0 z-20 border-b border-line bg-ground/90 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2.5 md:px-8">
         <dl
           aria-label={`Resources for ${paPlayer.nick}`}

@@ -37,7 +37,7 @@ const CombatReport: React.FC<CombatReportProps> = ({
     <tr key={name} className="border-t border-line">
       <td className={CELL}>{name}</td>
       <td className={`${CELL} text-right tabular-nums`}>{data.total}</td>
-      <td className={`${CELL} text-right tabular-nums text-hostile`}>
+      <td className={`${CELL} text-right text-hostile tabular-nums`}>
         {data.lost}
       </td>
     </tr>
@@ -62,7 +62,7 @@ const CombatReport: React.FC<CombatReportProps> = ({
   return (
     <div className="overflow-x-auto rounded-lg border border-line bg-panel shadow-panel">
       <table className="w-full text-left text-sm">
-        <caption className="border-b border-line px-4 py-3 text-left text-base font-semibold [font-stretch:112%]">
+        <caption className="border-b border-line px-4 py-3 text-left text-base font-semibold font-stretch-112%">
           {title} <span className="text-sm font-normal text-muted">{time}</span>
         </caption>
         <thead>

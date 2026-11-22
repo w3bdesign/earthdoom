@@ -59,7 +59,7 @@ const MobileNav = ({ unreadMail = 0 }: { unreadMail?: number }) => {
             role="dialog"
             aria-modal="true"
             aria-label="All pages"
-            className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl border-t border-line-strong bg-panel px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3 shadow-sheet"
+            className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl border-t border-line-strong bg-panel px-4 pt-3 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-sheet"
           >
             <div className="mb-2 flex items-center justify-between">
               <h2 className="text-base font-semibold">All pages</h2>
@@ -103,7 +103,7 @@ const MobileNav = ({ unreadMail = 0 }: { unreadMail?: number }) => {
       )}
       <nav
         aria-label="Primary"
-        className="fixed inset-x-0 bottom-0 z-30 flex h-16 border-t border-line bg-rail/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
+        className="fixed inset-x-0 bottom-0 z-30 flex h-16 border-t border-line bg-rail/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm"
       >
         {tabs.map((link) => {
           const active = isActive(link.href, pathname);
@@ -119,7 +119,7 @@ const MobileNav = ({ unreadMail = 0 }: { unreadMail?: number }) => {
               <span className="relative">
                 <Icon aria-hidden className="h-5 w-5" />
                 {count > 0 && (
-                  <span className="absolute -right-2.5 -top-1.5 min-w-[1.125rem] rounded-full bg-accent px-1 text-center text-[0.625rem] font-bold leading-[1.125rem] text-accent-ink">
+                  <span className="absolute -top-1.5 -right-2.5 min-w-4.5 rounded-full bg-accent px-1 text-center text-[0.625rem] leading-4.5 font-bold text-accent-ink">
                     {count}
                     <span className="sr-only"> unread</span>
                   </span>

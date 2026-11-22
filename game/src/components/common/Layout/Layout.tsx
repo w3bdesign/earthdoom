@@ -49,7 +49,7 @@ const Layout = ({ paPlayer, children }: ILayoutProps) => {
       </Head>
       <a
         href="#main"
-        className="sr-only z-50 rounded-md bg-accent px-3 py-2 font-semibold text-accent-ink focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+        className="sr-only z-50 rounded-md bg-accent px-3 py-2 font-semibold text-accent-ink focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >
         Skip to content
       </a>
@@ -59,7 +59,7 @@ const Layout = ({ paPlayer, children }: ILayoutProps) => {
           <header className="flex h-12 items-center justify-between border-b border-line bg-rail px-4 md:hidden">
             <Link
               href="/"
-              className="text-sm font-bold uppercase tracking-[0.18em] [font-stretch:125%]"
+              className="text-sm font-bold tracking-[0.18em] uppercase font-stretch-125%"
             >
               Earth Doom
             </Link>
@@ -76,7 +76,7 @@ const Layout = ({ paPlayer, children }: ILayoutProps) => {
           <main
             id="main"
             tabIndex={-1}
-            className="mx-auto w-full max-w-6xl flex-1 px-4 pt-6 focus:outline-none md:px-8 md:pt-8"
+            className="mx-auto w-full max-w-6xl flex-1 px-4 pt-6 focus:outline-hidden md:px-8 md:pt-8"
           >
             {children}
           </main>

@@ -60,7 +60,7 @@ const Home = () => {
         >
           <div className="grid gap-6 md:grid-cols-2 md:gap-10">
             <div>
-              <h3 className="mb-2 text-xs font-medium text-muted [font-stretch:100%]">
+              <h3 className="mb-2 text-xs font-medium text-muted font-stretch-100%">
                 Units · {formatNumber(shipCount)}
               </h3>
               <StatList
@@ -72,7 +72,7 @@ const Home = () => {
               />
             </div>
             <div>
-              <h3 className="mb-2 text-xs font-medium text-muted [font-stretch:100%]">
+              <h3 className="mb-2 text-xs font-medium text-muted font-stretch-100%">
                 Base defence · {formatNumber(bduCount)}
               </h3>
               <StatList
