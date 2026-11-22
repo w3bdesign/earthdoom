@@ -1,5 +1,5 @@
 [![codecov](https://codecov.io/gh/w3bdesign/earthdoom/graph/badge.svg?token=4jZSGuo520)](https://codecov.io/gh/w3bdesign/earthdoom)
-![Version](https://img.shields.io/badge/version-0.4.9-blue)
+![Version](https://img.shields.io/badge/version-0.5.0-blue)
 ![React](https://img.shields.io/badge/React-19.2.7-success)
 ![Next.js](https://img.shields.io/badge/Next.js-16.2.9-success)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-success)
