@@ -18,6 +18,8 @@ const { showDesktopNav = true } = Astro.props;
 ---
 
 <header class="site-header">
+  <div class="header-bg" aria-hidden="true"></div>
+
   <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 md:px-8">
     <Wordmark />
 
@@ -31,28 +33,31 @@ const { showDesktopNav = true } = Astro.props;
     <button
       type="button"
       class="menu-toggle md:hidden"
-      popovertarget="mobile-menu"
-      aria-label="Menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      aria-label="Open menu"
     >
       <span class="menu-icon menu-icon-open"><Menu size={22} aria-hidden="true" /></span>
       <span class="menu-icon menu-icon-close"><X size={22} aria-hidden="true" /></span>
     </button>
   </div>
 
-  <div id="mobile-menu" popover class="mobile-menu">
+  <!-- Manual popover: opening and closing are driven by the script below, so
+       the menu is only hidden after its close animation has finished. -->
+  <div id="mobile-menu" popover="manual" class="mobile-menu">
     <div class="mobile-menu-panel">
       <nav aria-label="Main" class="px-4 pt-3 pb-6">
-        <ul class="flex flex-col items-start gap-1" style={`--n: ${NAV_LINKS.length}`}>
+        <ul class="flex flex-col items-start gap-1">
           {
-            NAV_LINKS.map((link, i) => (
-              <li class="menu-item" style={`--i: ${i}`}>
+            NAV_LINKS.map((link) => (
+              <li class="menu-item">
                 <HeaderLink href={link.href} class="!h-12 !text-base">
                   {link.label}
                 </HeaderLink>
               </li>
             ))
           }
-          <li class="menu-item mt-4 w-full" style={`--i: ${NAV_LINKS.length}`}>
+          <li class="menu-item mt-4 w-full">
             <Button href={PLAY_URL} size="lg" class="w-full">Play now</Button>
           </li>
         </ul>
@@ -68,28 +73,16 @@ const { showDesktopNav = true } = Astro.props;
     z-index: 40;
     border-bottom: 1px solid var(--color-line);
   }
-  /* The blur lives on a pseudo-element, not the header itself. backdrop-filter
-     on the header would make it the containing block for the fixed-position
-     menu: in browsers without `overlay` transitions (Safari, Firefox) the
-     closing menu leaves the top layer at once and collapses into the 64px
-     header, so the close animation never shows. */
-  .site-header::before {
-    content: "";
+  /* Background and blur on their own layer so the script can animate the
+     colour (translucent normally, solid while the menu is open). */
+  .header-bg {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: rgb(10 15 22 / 0.86);
+    background-color: rgb(10 15 22 / 0.86);
     backdrop-filter: blur(12px) saturate(140%);
-    /* Closing: return to translucent once the panel has rolled up. */
-    transition: background-color 220ms ease-in 80ms;
-  }
-  /* While the menu is open the header goes solid so page text doesn't show through. */
-  .site-header:has(#mobile-menu:popover-open)::before {
-    background: var(--color-rail);
-    transition: background-color 280ms ease-out;
   }
 
-  /* Hamburger that morphs into an X in place while the menu is open. */
   .menu-toggle {
     display: inline-grid;
     place-items: center;
@@ -110,32 +103,16 @@ const { showDesktopNav = true } = Astro.props;
   .menu-icon {
     grid-area: 1 / 1;
     display: grid;
-    transition:
-      opacity 200ms var(--ease-out-expo),
-      rotate 280ms var(--ease-out-expo);
   }
   .menu-icon-close {
     opacity: 0;
-    rotate: -90deg;
-  }
-  .site-header:has(#mobile-menu:popover-open) .menu-icon-open {
-    opacity: 0;
-    rotate: 90deg;
-  }
-  .site-header:has(#mobile-menu:popover-open) .menu-icon-close {
-    opacity: 1;
-    rotate: 0deg;
   }
 
-  /* The popover sits below the header (which stays visible) and acts as the
-     scrim. The panel inside unrolls down from the header edge.
-
-     Closing mirrors opening in reverse order:
-       0-190ms    items fade out and drop, last one first
-       80-300ms   panel rolls back up and the scrim fades
-       300ms      popover removed (display/overlay must outlast everything) */
+  /* Below the header, which stays visible. The popover itself is the dark
+     overlay; the panel inside unrolls down from the header edge. Start states
+     match the closed menu; the script animates everything from here. */
   .mobile-menu {
-    /* Overlap the header's 1px bottom border so no sub-pixel seam shows the page. */
+    /* Overlap the header's 1px bottom border so no seam shows the page. */
     inset: calc(4rem - 1px) 0 0 0;
     width: 100%;
     max-width: none;
@@ -147,135 +124,199 @@ const { showDesktopNav = true } = Astro.props;
     background: rgb(0 0 0 / 0.6);
     color: var(--color-ink);
     opacity: 0;
-    transition:
-      opacity 220ms ease-in 80ms,
-      overlay 300ms allow-discrete,
-      display 300ms allow-discrete;
   }
-  .mobile-menu:popover-open {
-    opacity: 1;
-    transition:
-      opacity 280ms ease-out,
-      overlay 280ms allow-discrete,
-      display 280ms allow-discrete;
-  }
-  @starting-style {
-    .mobile-menu:popover-open {
-      opacity: 0;
-    }
-  }
-
   .mobile-menu-panel {
     border-top: 1px solid var(--color-line);
     border-bottom: 1px solid var(--color-line);
     background: var(--color-rail);
     box-shadow: 0 12px 32px -8px rgb(0 0 0 / 0.7);
     clip-path: inset(0 0 100% 0);
-    transition: clip-path 220ms ease-in 80ms;
   }
-  .mobile-menu:popover-open .mobile-menu-panel {
-    /* Leave room below for the shadow. */
-    clip-path: inset(0 0 -3rem 0);
-    transition: clip-path 280ms var(--ease-out-expo);
-  }
-  @starting-style {
-    .mobile-menu:popover-open .mobile-menu-panel {
-      clip-path: inset(0 0 100% 0);
-    }
-  }
-
   .menu-item {
     opacity: 0;
-    translate: 0 0.5rem;
-    /* Reverse stagger: the last item (the Play button) leaves first. */
-    transition:
-      opacity 140ms ease-in,
-      translate 140ms ease-in;
-    transition-delay: calc((var(--n, 0) - var(--i, 0)) * 25ms);
-  }
-  .mobile-menu:popover-open .menu-item {
-    opacity: 1;
-    translate: 0 0;
-    transition:
-      opacity 280ms var(--ease-out-expo),
-      translate 280ms var(--ease-out-expo);
-    transition-delay: calc(60ms + var(--i, 0) * 30ms);
-  }
-  @starting-style {
-    .mobile-menu:popover-open .menu-item {
-      opacity: 0;
-      translate: 0 0.5rem;
-    }
-  }
-
-  /* Set just before navigating: close everything instantly so the page
-     transition snapshot shows a closed menu, not one mid-animation. */
-  .site-header.instant,
-  .site-header.instant::before,
-  .site-header.instant :global(*) {
-    transition: none !important;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    /* Keep only a short, undelayed fade of the scrim. */
-    .mobile-menu,
-    .mobile-menu:popover-open {
-      transition:
-        opacity 150ms ease-out,
-        overlay 150ms allow-discrete,
-        display 150ms allow-discrete;
-    }
-    .site-header::before,
-    .site-header:has(#mobile-menu:popover-open)::before,
-    .menu-icon,
-    .mobile-menu-panel,
-    .mobile-menu:popover-open .mobile-menu-panel,
-    .menu-item,
-    .mobile-menu:popover-open .menu-item {
-      transition: none;
-    }
-    .menu-icon,
-    .site-header:has(#mobile-menu:popover-open) .menu-icon {
-      rotate: 0deg;
-    }
-    .mobile-menu-panel,
-    .mobile-menu:popover-open .mobile-menu-panel {
-      clip-path: none;
-    }
-    .menu-item,
-    .mobile-menu:popover-open .menu-item {
-      opacity: 1;
-      translate: 0 0;
-    }
   }
 </style>
 
 <script>
-  const menu = document.getElementById("mobile-menu");
-  const header = document.querySelector<HTMLElement>(".site-header");
-  if (menu && header) {
-    const supportsPageSwap = "onpageswap" in window;
+  import { animate, stagger } from "motion";
 
+  const header = document.querySelector<HTMLElement>(".site-header");
+  const menu = document.getElementById("mobile-menu");
+  const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
+
+  if (header && menu && toggle) {
+    const bg = header.querySelector<HTMLElement>(".header-bg")!;
+    const panel = menu.querySelector<HTMLElement>(".mobile-menu-panel")!;
+    const items = [...menu.querySelectorAll<HTMLElement>(".menu-item")];
+    const iconOpen = toggle.querySelector<HTMLElement>(".menu-icon-open")!;
+    const iconClose = toggle.querySelector<HTMLElement>(".menu-icon-close")!;
+
+    const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
+    const BG_TRANSLUCENT = "rgba(10, 15, 22, 0.86)";
+    const BG_SOLID = "rgb(12, 23, 38)"; // --color-rail
+    const CLIP_CLOSED = "inset(0px 0px 100% 0px)";
+    const CLIP_OPEN = "inset(0px 0px -48px 0px)"; // room below for the shadow
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+    let isOpen = false;
+    let generation = 0; // bumps on every open/close so stale closes don't hide a reopened menu
+    let running: Array<{ stop(): void }> = [];
+
+    const stopAll = () => {
+      running.forEach((animation) => animation.stop());
+      running = [];
+    };
+    const play = <T extends { stop(): void }>(...animations: T[]) => {
+      running.push(...animations);
+      return Promise.all(animations);
+    };
+
+    const setExpanded = (expanded: boolean) => {
+      toggle.setAttribute("aria-expanded", String(expanded));
+      toggle.setAttribute("aria-label", expanded ? "Close menu" : "Open menu");
+    };
+
+    /** Put everything in the closed state with no animation. */
+    const applyClosedState = () => {
+      stopAll();
+      menu.style.opacity = "0";
+      panel.style.clipPath = CLIP_CLOSED;
+      bg.style.backgroundColor = BG_TRANSLUCENT;
+      for (const item of items) {
+        item.style.opacity = "0";
+        item.style.transform = "translateY(8px)";
+      }
+      iconOpen.style.opacity = "1";
+      iconOpen.style.transform = "rotate(0deg)";
+      iconClose.style.opacity = "0";
+      iconClose.style.transform = "rotate(-90deg)";
+    };
+
+    const onKeydown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      closeMenu();
+      toggle.focus();
+    };
+
+    function openMenu() {
+      if (isOpen) return;
+      isOpen = true;
+      generation++;
+      stopAll();
+      setExpanded(true);
+      if (!menu!.matches(":popover-open")) menu!.showPopover();
+      document.addEventListener("keydown", onKeydown);
+
+      const reduce = reducedMotion.matches;
+      const ease = EASE_OUT_EXPO;
+      play(
+        animate(menu!, { opacity: 1 }, { duration: reduce ? 0.15 : 0.28, ease: "easeOut" }),
+        animate(bg, { backgroundColor: BG_SOLID }, { duration: reduce ? 0 : 0.28, ease: "easeOut" }),
+        animate(panel, { clipPath: CLIP_OPEN }, { duration: reduce ? 0 : 0.28, ease }),
+        animate(
+          items,
+          { opacity: 1, transform: ["translateY(8px)", "translateY(0px)"] },
+          reduce
+            ? { duration: 0 }
+            : { duration: 0.28, ease, delay: stagger(0.03, { startDelay: 0.06 }) },
+        ),
+        animate(
+          iconOpen,
+          { opacity: 0, transform: ["rotate(0deg)", "rotate(90deg)"] },
+          { duration: reduce ? 0 : 0.28, ease },
+        ),
+        animate(
+          iconClose,
+          { opacity: 1, transform: ["rotate(-90deg)", "rotate(0deg)"] },
+          { duration: reduce ? 0 : 0.28, ease },
+        ),
+      );
+    }
+
+    /**
+     * Close in reverse: links leave last-first, then the panel rolls up and
+     * the overlay fades. The popover is hidden only after all of that ends.
+     */
+    async function closeMenu({ instant = false } = {}) {
+      if (!isOpen && !instant) return;
+      isOpen = false;
+      const current = ++generation;
+      setExpanded(false);
+      document.removeEventListener("keydown", onKeydown);
+
+      if (instant) {
+        applyClosedState();
+        if (menu!.matches(":popover-open")) menu!.hidePopover();
+        return;
+      }
+
+      stopAll();
+      const reduce = reducedMotion.matches;
+      await play(
+        animate(
+          items,
+          { opacity: 0, transform: ["translateY(0px)", "translateY(8px)"] },
+          reduce
+            ? { duration: 0 }
+            : { duration: 0.14, ease: "easeIn", delay: stagger(0.025, { from: "last" }) },
+        ),
+        animate(
+          panel,
+          { clipPath: CLIP_CLOSED },
+          reduce ? { duration: 0 } : { duration: 0.22, ease: "easeIn", delay: 0.08 },
+        ),
+        animate(
+          menu!,
+          { opacity: 0 },
+          reduce ? { duration: 0.15, ease: "easeOut" } : { duration: 0.22, ease: "easeIn", delay: 0.08 },
+        ),
+        animate(
+          bg,
+          { backgroundColor: BG_TRANSLUCENT },
+          reduce ? { duration: 0 } : { duration: 0.22, ease: "easeIn", delay: 0.08 },
+        ),
+        animate(
+          iconClose,
+          { opacity: 0, transform: ["rotate(0deg)", "rotate(-90deg)"] },
+          { duration: reduce ? 0 : 0.24, ease: EASE_OUT_EXPO },
+        ),
+        animate(
+          iconOpen,
+          { opacity: 1, transform: ["rotate(90deg)", "rotate(0deg)"] },
+          { duration: reduce ? 0 : 0.24, ease: EASE_OUT_EXPO },
+        ),
+      );
+
+      // Reopened while closing: leave it open.
+      if (current === generation && menu!.matches(":popover-open")) menu!.hidePopover();
+    }
+
+    applyClosedState();
+
+    toggle.addEventListener("click", () => (isOpen ? closeMenu() : openMenu()));
+
+    const supportsPageSwap = "onpageswap" in window;
     menu.addEventListener("click", (event) => {
       const target = event.target as Element;
-      // The scrim is part of the popover, so light dismiss won't fire for it.
-      if (target === menu) menu.hidePopover();
-      // Links: where pageswap exists, the menu is closed there instead (instantly).
-      else if (target.closest("a") && !supportsPageSwap) menu.hidePopover();
+      // Tap on the dark overlay (the popover itself, outside the panel).
+      if (target === menu) closeMenu();
+      // Links: where pageswap exists the menu is closed there, instantly.
+      else if (target.closest("a") && !supportsPageSwap) closeMenu();
     });
 
-    // Fires right before the browser snapshots this page for the view transition.
+    // Right before the browser snapshots the page for the view transition:
+    // close with no animation so the snapshot shows a closed menu.
     window.addEventListener("pageswap", () => {
-      if (!menu.matches(":popover-open")) return;
-      header.classList.add("instant");
-      menu.hidePopover();
+      if (isOpen) closeMenu({ instant: true });
     });
-    // Coming back via back/forward cache: restore normal animations.
-    window.addEventListener("pageshow", () => header.classList.remove("instant"));
+    // Restored from the back/forward cache: make sure it's closed.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) closeMenu({ instant: true });
+    });
 
     // The toggle disappears at desktop width; don't leave the menu stranded open.
-    matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
-      if (e.matches && menu.matches(":popover-open")) menu.hidePopover();
+    matchMedia("(min-width: 768px)").addEventListener("change", (event) => {
+      if (event.matches && isOpen) closeMenu({ instant: true });
     });
   }
 </script>
