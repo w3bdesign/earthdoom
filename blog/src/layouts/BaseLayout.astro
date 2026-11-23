@@ -8,15 +8,15 @@ interface Props {
   title?: string;
   description?: string;
   noindex?: boolean;
-  /** Render the header navigation. Pages that open with their own call to action can opt out. */
-  showNav?: boolean;
+  /** Render the desktop header navigation. Pages that open with their own call to action can opt out; the mobile menu always shows. */
+  showDesktopNav?: boolean;
 }
 
 const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
   noindex = false,
-  showNav = true,
+  showDesktopNav = true,
 } = Astro.props;
 ---
 
@@ -32,7 +32,7 @@ const {
       class="fixed top-2 left-2 z-50 -translate-y-20 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-ink focus:translate-y-0"
       >Skip to content</a
     >
-    <Header showNav={showNav} />
+    <Header showDesktopNav={showDesktopNav} />
     <main id="main">
       <slot />
     </main>
