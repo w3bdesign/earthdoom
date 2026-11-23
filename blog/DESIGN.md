@@ -170,7 +170,7 @@ This file records the marketing register of earthdoom.com. It is an extension of
 
 The site is the game's own console, opened up for someone who has not played yet. The same abyss-navy ground, hairlines, panel surfaces and Signal Cyan carry over, so a visitor who presses Play now lands somewhere that already looks familiar. What the marketing register adds is scale and one image: the spaceship artwork as a full-bleed hero, wide display headlines (116–118% width, up to 80px), and long-form reading measures for the manual and blog.
 
-Persuasion is done with the game's real material, not with ornament. The home page explains the loop through miniatures of game screens built from real numbers: a building table with resource dots, a land-income bar set, a unit table, and a tick strip that shows an attack's travel and battle ticks. Motion is one orchestrated hero entrance, then quiet scroll-driven arrivals on those artefacts, and nothing at all under reduced motion.
+Persuasion is done with the game's real material, not with ornament. The home page explains the loop through miniatures of game screens built from real numbers: a building table with resource dots, a land-income bar set, a unit table, and a tick strip that shows an attack's travel and battle ticks. The hero is static on load; motion is quiet scroll-driven arrivals on those artefacts and the mobile menu, and next to nothing under reduced motion.
 
 Density is lower than the game's: wider section rhythm, 17px reading text, larger buttons for the primary call to action. The tone is still calm and precise; excitement comes from the artwork and the copy (raids, rivals, taking land), never from glows, gradients on UI or decorative colour.
 
@@ -179,7 +179,7 @@ Density is lower than the game's: wider section rhythm, 17px reading text, large
 - One raster world: the spaceship artwork, used for the hero and the closing call, always under a navy scrim or mask
 - Display type set wide (Archivo `wdth` 116–125) with tight negative tracking at large sizes
 - Real game data as the illustration: tables, land bars, tick strip
-- One entrance, then scroll arrivals on artefacts only; fully static under `prefers-reduced-motion`
+- No load animation; scroll arrivals on artefacts only; fully static under `prefers-reduced-motion`
 
 ## Colors
 
@@ -198,7 +198,7 @@ The game's palette, extended by one reading tone (Soft) for long-form and lede t
 
 ### Neutral
 - **Abyss** (`ground`): page background, hero scrim colour, header (86% with blur).
-- **Rail** (`rail`): footer band and mobile menu.
+- **Rail** (`rail`): footer band, mobile menu panel, and the header while the mobile menu is open.
 - **Panel** (`panel`): panels, table wrappers, the closing-call card, the mobile TOC box, sticky row headers of the damage table.
 - **Raised** (`raised`): table header rows, secondary buttons, ghost/hover fills, damage-table row hover, inline code.
 - **Sunken** (`sunken`): wells inside panels (land-bar tracks, table legend strip, code blocks).
@@ -256,7 +256,7 @@ Vertical rhythm is generous and fluid: home sections are separated by 112px (`pt
 
 ## Elevation & Depth
 
-Tonal first, as in the parent: Abyss → Rail/Panel → Raised, with Sunken wells inside panels. The panel shadow (`--shadow-panel`) sits on every panel and table wrapper. The sticky header is the one translucent layer: 86% Abyss with a 12px blur. The mobile menu drops from the top with the parent's sheet shadow pointed downwards (`0 12px 32px -8px rgb(0 0 0 / 0.7)`) over a 60% black backdrop.
+Tonal first, as in the parent: Abyss → Rail/Panel → Raised, with Sunken wells inside panels. The panel shadow (`--shadow-panel`) sits on every panel and table wrapper. The sticky header is the one translucent layer: 86% Abyss with a 12px blur, turning solid Rail while the mobile menu is open so page text never shows through. The mobile menu opens below the header with the parent's sheet shadow pointed downwards (`0 12px 32px -8px rgb(0 0 0 / 0.7)`) over a 60% black overlay that covers the page below the header.
 
 The marketing register adds one depth device: **artwork behind a scrim**. The hero places the spaceship art under a navy gradient (94% → 86% → 35% → 10% from the copy side, plus a bottom fade into Abyss; on phones the gradient runs bottom-up). The closing call places the same art at 55% opacity inside a panel with a horizontal mask (30% and vertical on phones). This is the only place gradients appear.
 
@@ -297,13 +297,13 @@ The parent's pill: Raised fill, Line Strong border, Muted 12px/500 text, 2px × 
 The parent's table spec (`.data-table`): 40px Raised header row with 12px Muted labels, 12px × 16px cells, Line rules between rows, Ink semibold names with a 12px Muted note underneath, right-aligned tabular numbers. Amounts carry a resource dot; a Sunken legend strip under the table names the dots. The damage table adds sticky header row and sticky first column, Raised row hover, an en dash in Field Edge for empty cells, and sideways scrolling inside a focusable region.
 
 ### Navigation
-- **Header:** sticky, 64px, translucent Abyss with blur and a Line bottom rule. Logo + wordmark left; nav links and a `md` Play now right.
+- **Header:** sticky, 64px, translucent Abyss with blur and a Line bottom rule. Logo + wordmark left; nav links and a `md` Play now right. The home page leaves out the desktop nav links and Play now (the hero carries the call to action) but keeps the mobile menu, so the header is the same on every page on phones.
 - **Nav links:** plain text, not buttons. 40px, 12px padding, 14px/500 Muted. Hover turns the text Ink and draws a 2px Ink underline that grows from the left (240ms, ease-out-expo). The current page is Ink at 600 with a full-width 2px Signal Cyan underline; on desktop that underline slides to the new link on page change (cross-document view transition, 320ms). Play now stays the only button in the header.
-- **Mobile:** a 44px menu toggle opens a top-anchored popover on Rail with 48px links and a full-width `lg` Play now; slides down 12px and fades in over 240ms; closing takes 160ms.
+- **Mobile:** a 44px menu toggle opens a panel on Rail below the header, with 48px links and a full-width `lg` Play now. The header stays in place and the toggle's hamburger rotates into an X. Opening (280ms, ease-out-expo): the overlay fades in, the header turns solid, the panel unrolls down from the header edge, and the links rise 8px into place 30ms apart. Closing plays it in reverse: links leave last-first, then the panel rolls up and the overlay fades (about 300ms); the menu is hidden only once that finishes. It closes from the toggle, Esc (focus returns to the toggle), or a tap on the overlay, and closes instantly on page change or when the window widens to desktop. Animated with Motion via `createToggle()` in `src/scripts/animation.ts`.
 - **Footer:** Rail band, wordmark with a one-line description, Muted links and a cyan text Play now; copyright in a hairline-separated strip.
 
 ### Spaceship Hero (signature)
-Full-bleed `<picture>` (AVIF/WebP, 768–2560w) of the spaceship artwork, object-position 62% (40% on phones), under the navy scrim described in Elevation. Left-aligned copy column: Hero Display two-tone headline, lede, `lg` primary + secondary buttons, then a row of three plain facts, each with a 16px green check icon. Below 1024px the copy sits at the bottom of the band over a vertical solid scrim, so text never crosses the bright parts of the art. Entrance: the art settles from 1.06 scale and 60% brightness over 900ms; each copy child rises 14px from 20% opacity (never invisible at first paint) over 900ms, staggered by 80ms; all on ease-out-expo, so art and copy finish together.
+Full-bleed `<picture>` (AVIF/WebP, 768–2560w) of the spaceship artwork, object-position 62% (40% on phones), under the navy scrim described in Elevation. Left-aligned copy column: Hero Display two-tone headline, lede, `lg` primary + secondary buttons, then a row of three plain facts, each with a 16px green check icon. Below 1024px the copy sits at the bottom of the band over a vertical solid scrim, so text never crosses the bright parts of the art. No entrance animation: art and copy are in place at first paint.
 
 ### Game-Loop Artefacts (signature)
 Miniatures of game screens built from real game constants (`src/data/game.ts`), never invented values:
@@ -318,10 +318,11 @@ A left-ruled ordered list (1px Line rail). Links are 14px Muted with a 2px trans
 Hairline-ruled list of manual sections, 60px rows of Ink 500 text with a Field Edge arrow; on hover the text turns Signal Cyan Strong and the arrow turns cyan and slides 4px right (200ms ease-out-expo).
 
 ### Motion
-- Easing: `--ease-out-expo` (`cubic-bezier(0.16, 1, 0.3, 1)`) for entrances, menus, view transitions; 150ms ease-out for hover colour.
+- Easing: `--ease-out-expo` (`cubic-bezier(0.16, 1, 0.3, 1)`) for the mobile menu, nav underlines and view transitions (`EASE_OUT_EXPO` in `src/scripts/animation.ts` mirrors it for Motion); 150ms ease-out for hover colour.
+- **Mobile menu:** animated with Motion (JavaScript), not CSS, so the close animation always finishes before the menu is hidden. See Navigation.
 - **Scroll arrivals** (`.arrive`): artefacts only (the economy, land and unit panels and the manual index) fade up 18px from a 6px blur over the first 55% of their entry, driven by `animation-timeline: view()`. Content is visible by default; browsers without scroll timelines show it static.
 - **Page changes:** cross-document view transitions cross-fade in 220ms.
-- **Reduced motion:** every animation and transition collapses to 0.01ms and view transitions are switched off.
+- **Reduced motion:** every CSS animation and transition collapses to 0.01ms and view transitions are switched off. The mobile menu opens and closes instantly (`createToggle()` uses zero duration).
 
 ## Do's and Don'ts
 
@@ -331,7 +332,7 @@ Hairline-ruled list of manual sections, 60px rows of Ink 500 text with a Field E
 - **Do** illustrate the game with real game data in game-styled panels: tables with resource dots, land bars, the tick strip.
 - **Do** set headings wide (112%+, 116–118% for display) with balanced wrapping, and keep labels sentence case at 12px/500.
 - **Do** give every page a clear route to Play now (`https://game.earthdoom.com/login`) in Signal Cyan, one primary per area.
-- **Do** keep motion to one hero entrance and scroll arrivals on artefacts, and keep everything readable and static under reduced motion.
+- **Do** keep motion to scroll arrivals on artefacts and the mobile menu (no load animation on the hero), and keep everything readable and static under reduced motion.
 - **Do** write copy that sells the game: raids, rivals, taking land from real players.
 
 ### Don't:
