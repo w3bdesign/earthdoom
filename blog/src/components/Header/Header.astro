@@ -30,37 +30,34 @@ const { showNav = true } = Astro.props;
       type="button"
       class="menu-toggle md:hidden"
       popovertarget="mobile-menu"
-      aria-label="Open menu"
+      aria-label="Menu"
     >
-      <Menu size={22} aria-hidden="true" />
+      <span class="menu-icon menu-icon-open"><Menu size={22} aria-hidden="true" /></span>
+      <span class="menu-icon menu-icon-close"><X size={22} aria-hidden="true" /></span>
     </button>
     )}
   </div>
 
   {showNav && (
   <div id="mobile-menu" popover class="mobile-menu">
-    <div class="flex h-16 items-center justify-between px-4">
-      <Wordmark />
-      <button
-        type="button"
-        class="menu-toggle"
-        popovertarget="mobile-menu"
-        popovertargetaction="hide"
-        aria-label="Close menu"
-      >
-        <X size={22} aria-hidden="true" />
-      </button>
+    <div class="mobile-menu-panel">
+      <nav aria-label="Main" class="px-4 pt-3 pb-6">
+        <ul class="flex flex-col items-start gap-1">
+          {
+            NAV_LINKS.map((link, i) => (
+              <li class="menu-item" style={`--i: ${i}`}>
+                <HeaderLink href={link.href} class="!h-12 !text-base">
+                  {link.label}
+                </HeaderLink>
+              </li>
+            ))
+          }
+          <li class="menu-item mt-4 w-full" style={`--i: ${NAV_LINKS.length}`}>
+            <Button href={PLAY_URL} size="lg" class="w-full">Play now</Button>
+          </li>
+        </ul>
+      </nav>
     </div>
-    <nav aria-label="Main" class="flex flex-col items-start gap-1 px-4 pt-2 pb-6">
-      {
-        NAV_LINKS.map((link) => (
-          <HeaderLink href={link.href} class="!h-12 !text-base">
-            {link.label}
-          </HeaderLink>
-        ))
-      }
-      <Button href={PLAY_URL} size="lg" class="mt-4 w-full">Play now</Button>
-    </nav>
   </div>
   )}
 </header>
@@ -75,6 +72,7 @@ const { showNav = true } = Astro.props;
     border-bottom: 1px solid var(--color-line);
   }
 
+  /* Hamburger that morphs into an X in place while the menu is open. */
   .menu-toggle {
     display: inline-grid;
     place-items: center;
@@ -92,38 +90,130 @@ const { showNav = true } = Astro.props;
       display: none;
     }
   }
+  .menu-icon {
+    grid-area: 1 / 1;
+    display: grid;
+    transition:
+      opacity 200ms var(--ease-out-expo),
+      rotate 280ms var(--ease-out-expo);
+  }
+  .menu-icon-close {
+    opacity: 0;
+    rotate: -90deg;
+  }
+  .site-header:has(#mobile-menu:popover-open) .menu-icon-open {
+    opacity: 0;
+    rotate: 90deg;
+  }
+  .site-header:has(#mobile-menu:popover-open) .menu-icon-close {
+    opacity: 1;
+    rotate: 0deg;
+  }
 
+  /* The popover sits below the header (which stays visible) and acts as the
+     scrim. The panel inside unrolls down from the header edge. */
   .mobile-menu {
-    inset: 0 0 auto 0;
+    inset: calc(4rem + 1px) 0 auto 0;
     width: 100%;
     max-width: none;
+    height: calc(100dvh - 4rem - 1px);
+    max-height: none;
     margin: 0;
+    padding: 0;
     border: 0;
-    border-bottom: 1px solid var(--color-line);
-    background: var(--color-rail);
+    background: rgb(0 0 0 / 0.6);
     color: var(--color-ink);
-    box-shadow: 0 12px 32px -8px rgb(0 0 0 / 0.7);
-    translate: 0 -0.75rem;
     opacity: 0;
     /* Closing is quicker than opening. */
     transition:
-      translate 160ms var(--ease-out-expo),
-      opacity 160ms var(--ease-out-expo),
+      opacity 160ms ease-out,
       overlay 160ms allow-discrete,
       display 160ms allow-discrete;
   }
   .mobile-menu:popover-open {
-    translate: 0 0;
     opacity: 1;
-    transition-duration: 240ms;
+    transition-duration: 280ms;
   }
   @starting-style {
     .mobile-menu:popover-open {
-      translate: 0 -0.75rem;
       opacity: 0;
     }
   }
-  .mobile-menu::backdrop {
-    background: rgb(0 0 0 / 0.6);
+
+  .mobile-menu-panel {
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-rail);
+    box-shadow: 0 12px 32px -8px rgb(0 0 0 / 0.7);
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 160ms ease-in;
+  }
+  .mobile-menu:popover-open .mobile-menu-panel {
+    /* Leave room below for the shadow. */
+    clip-path: inset(0 0 -3rem 0);
+    transition: clip-path 280ms var(--ease-out-expo);
+  }
+  @starting-style {
+    .mobile-menu:popover-open .mobile-menu-panel {
+      clip-path: inset(0 0 100% 0);
+    }
+  }
+
+  .menu-item {
+    opacity: 0;
+    translate: 0 0.5rem;
+    transition:
+      opacity 120ms ease-out,
+      translate 120ms ease-out;
+  }
+  .mobile-menu:popover-open .menu-item {
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity 280ms var(--ease-out-expo),
+      translate 280ms var(--ease-out-expo);
+    transition-delay: calc(60ms + var(--i, 0) * 30ms);
+  }
+  @starting-style {
+    .mobile-menu:popover-open .menu-item {
+      opacity: 0;
+      translate: 0 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-icon,
+    .mobile-menu-panel,
+    .mobile-menu:popover-open .mobile-menu-panel,
+    .menu-item,
+    .mobile-menu:popover-open .menu-item {
+      transition: none;
+    }
+    .menu-icon,
+    .site-header:has(#mobile-menu:popover-open) .menu-icon {
+      rotate: 0deg;
+    }
+    .mobile-menu-panel,
+    .mobile-menu:popover-open .mobile-menu-panel {
+      clip-path: none;
+    }
+    .menu-item,
+    .mobile-menu:popover-open .menu-item {
+      opacity: 1;
+      translate: 0 0;
+    }
   }
 </style>
+
+<script>
+  const menu = document.getElementById("mobile-menu");
+  if (menu) {
+    // Close before navigating so the menu isn't captured in the page transition.
+    menu.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("a")) menu.hidePopover();
+    });
+    // The toggle disappears at desktop width; don't leave the menu stranded open.
+    matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
+      if (e.matches && menu.matches(":popover-open")) menu.hidePopover();
+    });
+  }
+</script>
