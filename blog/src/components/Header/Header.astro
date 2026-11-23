@@ -188,6 +188,13 @@ const { showNav = true } = Astro.props;
     }
   }
 
+  /* Set just before navigating: close everything instantly so the page
+     transition snapshot shows a closed menu, not one mid-animation. */
+  .site-header.instant,
+  .site-header.instant :global(*) {
+    transition: none !important;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .menu-icon,
     .mobile-menu-panel,
@@ -214,13 +221,27 @@ const { showNav = true } = Astro.props;
 
 <script>
   const menu = document.getElementById("mobile-menu");
-  if (menu) {
+  const header = document.querySelector<HTMLElement>(".site-header");
+  if (menu && header) {
+    const supportsPageSwap = "onpageswap" in window;
+
     menu.addEventListener("click", (event) => {
       const target = event.target as Element;
       // The scrim is part of the popover, so light dismiss won't fire for it.
-      // Links: close before navigating so the menu isn't captured in the page transition.
-      if (target === menu || target.closest("a")) menu.hidePopover();
+      if (target === menu) menu.hidePopover();
+      // Links: where pageswap exists, the menu is closed there instead (instantly).
+      else if (target.closest("a") && !supportsPageSwap) menu.hidePopover();
     });
+
+    // Fires right before the browser snapshots this page for the view transition.
+    window.addEventListener("pageswap", () => {
+      if (!menu.matches(":popover-open")) return;
+      header.classList.add("instant");
+      menu.hidePopover();
+    });
+    // Coming back via back/forward cache: restore normal animations.
+    window.addEventListener("pageshow", () => header.classList.remove("instant"));
+
     // The toggle disappears at desktop width; don't leave the menu stranded open.
     matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
       if (e.matches && menu.matches(":popover-open")) menu.hidePopover();
