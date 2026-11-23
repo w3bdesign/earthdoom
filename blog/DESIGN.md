@@ -179,7 +179,7 @@ Density is lower than the game's: wider section rhythm, 17px reading text, large
 - One raster world: the spaceship artwork, used for the hero and the closing call, always under a navy scrim or mask
 - Display type set wide (Archivo `wdth` 116–125) with tight negative tracking at large sizes
 - Real game data as the illustration: tables, land bars, tick strip
-- No load animation; scroll arrivals on artefacts only; fully static under `prefers-reduced-motion` apart from a short fade on the mobile menu
+- No load animation; scroll arrivals on artefacts only; fully static under `prefers-reduced-motion`
 
 ## Colors
 
@@ -322,7 +322,7 @@ Hairline-ruled list of manual sections, 60px rows of Ink 500 text with a Field E
 - **Mobile menu:** animated with Motion (JavaScript), not CSS, so the close animation always finishes before the menu is hidden. See Navigation.
 - **Scroll arrivals** (`.arrive`): artefacts only (the economy, land and unit panels and the manual index) fade up 18px from a 6px blur over the first 55% of their entry, driven by `animation-timeline: view()`. Content is visible by default; browsers without scroll timelines show it static.
 - **Page changes:** cross-document view transitions cross-fade in 220ms.
-- **Reduced motion:** every CSS animation and transition collapses to 0.01ms and view transitions are switched off. The mobile menu skips its movement and keeps only a 150ms fade (wait: see note) of the overlay.
+- **Reduced motion:** every CSS animation and transition collapses to 0.01ms and view transitions are switched off. The mobile menu opens and closes instantly (`createToggle()` uses zero duration).
 
 ## Do's and Don'ts
 
