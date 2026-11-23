@@ -42,7 +42,7 @@ const { showDesktopNav = true } = Astro.props;
   <div id="mobile-menu" popover class="mobile-menu">
     <div class="mobile-menu-panel">
       <nav aria-label="Main" class="px-4 pt-3 pb-6">
-        <ul class="flex flex-col items-start gap-1">
+        <ul class="flex flex-col items-start gap-1" style={`--n: ${NAV_LINKS.length}`}>
           {
             NAV_LINKS.map((link, i) => (
               <li class="menu-item" style={`--i: ${i}`}>
@@ -69,12 +69,13 @@ const { showDesktopNav = true } = Astro.props;
     background: rgb(10 15 22 / 0.86);
     backdrop-filter: blur(12px) saturate(140%);
     border-bottom: 1px solid var(--color-line);
-    transition: background-color 160ms ease-out;
+    /* Closing: return to translucent once the panel has rolled up. */
+    transition: background-color 220ms ease-in 80ms;
   }
   /* While the menu is open the header goes solid so page text doesn't show through. */
   .site-header:has(#mobile-menu:popover-open) {
     background: var(--color-rail);
-    transition-duration: 280ms;
+    transition: background-color 280ms ease-out;
   }
 
   /* Hamburger that morphs into an X in place while the menu is open. */
@@ -116,7 +117,12 @@ const { showDesktopNav = true } = Astro.props;
   }
 
   /* The popover sits below the header (which stays visible) and acts as the
-     scrim. The panel inside unrolls down from the header edge. */
+     scrim. The panel inside unrolls down from the header edge.
+
+     Closing mirrors opening in reverse order:
+       0-190ms    items fade out and drop, last one first
+       80-300ms   panel rolls back up and the scrim fades
+       300ms      popover removed (display/overlay must outlast everything) */
   .mobile-menu {
     /* Overlap the header's 1px bottom border so no sub-pixel seam shows the page. */
     inset: calc(4rem - 1px) 0 0 0;
@@ -130,15 +136,17 @@ const { showDesktopNav = true } = Astro.props;
     background: rgb(0 0 0 / 0.6);
     color: var(--color-ink);
     opacity: 0;
-    /* Closing is quicker than opening. */
     transition:
-      opacity 160ms ease-out,
-      overlay 160ms allow-discrete,
-      display 160ms allow-discrete;
+      opacity 220ms ease-in 80ms,
+      overlay 300ms allow-discrete,
+      display 300ms allow-discrete;
   }
   .mobile-menu:popover-open {
     opacity: 1;
-    transition-duration: 280ms;
+    transition:
+      opacity 280ms ease-out,
+      overlay 280ms allow-discrete,
+      display 280ms allow-discrete;
   }
   @starting-style {
     .mobile-menu:popover-open {
@@ -152,7 +160,7 @@ const { showDesktopNav = true } = Astro.props;
     background: var(--color-rail);
     box-shadow: 0 12px 32px -8px rgb(0 0 0 / 0.7);
     clip-path: inset(0 0 100% 0);
-    transition: clip-path 160ms ease-in;
+    transition: clip-path 220ms ease-in 80ms;
   }
   .mobile-menu:popover-open .mobile-menu-panel {
     /* Leave room below for the shadow. */
@@ -168,9 +176,11 @@ const { showDesktopNav = true } = Astro.props;
   .menu-item {
     opacity: 0;
     translate: 0 0.5rem;
+    /* Reverse stagger: the last item (the Play button) leaves first. */
     transition:
-      opacity 120ms ease-out,
-      translate 120ms ease-out;
+      opacity 140ms ease-in,
+      translate 140ms ease-in;
+    transition-delay: calc((var(--n, 0) - var(--i, 0)) * 25ms);
   }
   .mobile-menu:popover-open .menu-item {
     opacity: 1;
@@ -195,6 +205,16 @@ const { showDesktopNav = true } = Astro.props;
   }
 
   @media (prefers-reduced-motion: reduce) {
+    /* Keep only a short, undelayed fade of the scrim. */
+    .mobile-menu,
+    .mobile-menu:popover-open {
+      transition:
+        opacity 150ms ease-out,
+        overlay 150ms allow-discrete,
+        display 150ms allow-discrete;
+    }
+    .site-header,
+    .site-header:has(#mobile-menu:popover-open),
     .menu-icon,
     .mobile-menu-panel,
     .mobile-menu:popover-open .mobile-menu-panel,
