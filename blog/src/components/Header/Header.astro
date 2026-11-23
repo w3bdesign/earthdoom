@@ -70,6 +70,12 @@ const { showNav = true } = Astro.props;
     background: rgb(10 15 22 / 0.86);
     backdrop-filter: blur(12px) saturate(140%);
     border-bottom: 1px solid var(--color-line);
+    transition: background-color 160ms ease-out;
+  }
+  /* While the menu is open the header goes solid so page text doesn't show through. */
+  .site-header:has(#mobile-menu:popover-open) {
+    background: var(--color-rail);
+    transition-duration: 280ms;
   }
 
   /* Hamburger that morphs into an X in place while the menu is open. */
@@ -113,10 +119,11 @@ const { showNav = true } = Astro.props;
   /* The popover sits below the header (which stays visible) and acts as the
      scrim. The panel inside unrolls down from the header edge. */
   .mobile-menu {
-    inset: calc(4rem + 1px) 0 auto 0;
+    /* Overlap the header's 1px bottom border so no sub-pixel seam shows the page. */
+    inset: calc(4rem - 1px) 0 0 0;
     width: 100%;
     max-width: none;
-    height: calc(100dvh - 4rem - 1px);
+    height: auto;
     max-height: none;
     margin: 0;
     padding: 0;
@@ -141,6 +148,7 @@ const { showNav = true } = Astro.props;
   }
 
   .mobile-menu-panel {
+    border-top: 1px solid var(--color-line);
     border-bottom: 1px solid var(--color-line);
     background: var(--color-rail);
     box-shadow: 0 12px 32px -8px rgb(0 0 0 / 0.7);
