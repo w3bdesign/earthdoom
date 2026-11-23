@@ -1,4 +1,4 @@
----
+﻿---
 import Menu from "@lucide/astro/icons/menu";
 import X from "@lucide/astro/icons/x";
 import HeaderLink from "./HeaderLink.astro";
@@ -138,185 +138,54 @@ const { showDesktopNav = true } = Astro.props;
 </style>
 
 <script>
-  import { animate, stagger } from "motion";
+  import { createToggle } from "../../scripts/animation";
 
-  const header = document.querySelector<HTMLElement>(".site-header");
-  const menu = document.getElementById("mobile-menu");
-  const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
+  const header = document.querySelector<HTMLElement>(".site-header")!;
+  const menu = document.getElementById("mobile-menu")!;
+  const toggle = header.querySelector<HTMLButtonElement>(".menu-toggle")!;
+  const $ = (selector: string) => header.querySelector(selector)!;
 
-  if (header && menu && toggle) {
-    const bg = header.querySelector<HTMLElement>(".header-bg")!;
-    const panel = menu.querySelector<HTMLElement>(".mobile-menu-panel")!;
-    const items = [...menu.querySelectorAll<HTMLElement>(".menu-item")];
-    const iconOpen = toggle.querySelector<HTMLElement>(".menu-icon-open")!;
-    const iconClose = toggle.querySelector<HTMLElement>(".menu-icon-close")!;
+  // Each animated part, with its open and closed values.
+  const animateMenu = createToggle([
+    { target: menu, open: { opacity: 1 }, closed: { opacity: 0 } },
+    { target: $(".header-bg"), open: { backgroundColor: "rgb(12, 23, 38)" }, closed: { backgroundColor: "rgba(10, 15, 22, 0.86)" } },
+    { target: $(".mobile-menu-panel"), open: { clipPath: "inset(0px 0px -48px 0px)" }, closed: { clipPath: "inset(0px 0px 100% 0px)" } },
+    { target: [...menu.querySelectorAll(".menu-item")], open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: 8 }, stagger: 0.03 },
+    { target: $(".menu-icon-open"), open: { opacity: 0, rotate: 90 }, closed: { opacity: 1, rotate: 0 } },
+    { target: $(".menu-icon-close"), open: { opacity: 1, rotate: 0 }, closed: { opacity: 0, rotate: -90 } },
+  ]);
 
-    const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
-    const BG_TRANSLUCENT = "rgba(10, 15, 22, 0.86)";
-    const BG_SOLID = "rgb(12, 23, 38)"; // --color-rail
-    const CLIP_CLOSED = "inset(0px 0px 100% 0px)";
-    const CLIP_OPEN = "inset(0px 0px -48px 0px)"; // room below for the shadow
-    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let isOpen = false;
 
-    let isOpen = false;
-    let generation = 0; // bumps on every open/close so stale closes don't hide a reopened menu
-    let running: Array<{ stop(): void }> = [];
+  /** Open or close the menu. `instant` skips the animation (page changes, resizing). */
+  async function setOpen(open: boolean, instant = false) {
+    isOpen = open;
+    toggle.ariaExpanded = String(open);
+    toggle.ariaLabel = open ? "Close menu" : "Open menu";
+    const shown = () => menu.matches(":popover-open");
+    if (open && !shown()) menu.showPopover();
 
-    const stopAll = () => {
-      running.forEach((animation) => animation.stop());
-      running = [];
-    };
-    const play = <T extends { stop(): void }>(...animations: T[]) => {
-      running.push(...animations);
-      return Promise.all(animations);
-    };
-
-    const setExpanded = (expanded: boolean) => {
-      toggle.setAttribute("aria-expanded", String(expanded));
-      toggle.setAttribute("aria-label", expanded ? "Close menu" : "Open menu");
-    };
-
-    /** Put everything in the closed state with no animation. */
-    const applyClosedState = () => {
-      stopAll();
-      menu.style.opacity = "0";
-      panel.style.clipPath = CLIP_CLOSED;
-      bg.style.backgroundColor = BG_TRANSLUCENT;
-      for (const item of items) {
-        item.style.opacity = "0";
-        item.style.transform = "translateY(8px)";
-      }
-      iconOpen.style.opacity = "1";
-      iconOpen.style.transform = "rotate(0deg)";
-      iconClose.style.opacity = "0";
-      iconClose.style.transform = "rotate(-90deg)";
-    };
-
-    const onKeydown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      closeMenu();
-      toggle.focus();
-    };
-
-    function openMenu() {
-      if (isOpen) return;
-      isOpen = true;
-      generation++;
-      stopAll();
-      setExpanded(true);
-      if (!menu!.matches(":popover-open")) menu!.showPopover();
-      document.addEventListener("keydown", onKeydown);
-
-      const reduce = reducedMotion.matches;
-      const ease = EASE_OUT_EXPO;
-      play(
-        animate(menu!, { opacity: 1 }, { duration: reduce ? 0.15 : 0.28, ease: "easeOut" }),
-        animate(bg, { backgroundColor: BG_SOLID }, { duration: reduce ? 0 : 0.28, ease: "easeOut" }),
-        animate(panel, { clipPath: CLIP_OPEN }, { duration: reduce ? 0 : 0.28, ease }),
-        animate(
-          items,
-          { opacity: 1, transform: ["translateY(8px)", "translateY(0px)"] },
-          reduce
-            ? { duration: 0 }
-            : { duration: 0.28, ease, delay: stagger(0.03, { startDelay: 0.06 }) },
-        ),
-        animate(
-          iconOpen,
-          { opacity: 0, transform: ["rotate(0deg)", "rotate(90deg)"] },
-          { duration: reduce ? 0 : 0.28, ease },
-        ),
-        animate(
-          iconClose,
-          { opacity: 1, transform: ["rotate(-90deg)", "rotate(0deg)"] },
-          { duration: reduce ? 0 : 0.28, ease },
-        ),
-      );
-    }
-
-    /**
-     * Close in reverse: links leave last-first, then the panel rolls up and
-     * the overlay fades. The popover is hidden only after all of that ends.
-     */
-    async function closeMenu({ instant = false } = {}) {
-      if (!isOpen && !instant) return;
-      isOpen = false;
-      const current = ++generation;
-      setExpanded(false);
-      document.removeEventListener("keydown", onKeydown);
-
-      if (instant) {
-        applyClosedState();
-        if (menu!.matches(":popover-open")) menu!.hidePopover();
-        return;
-      }
-
-      stopAll();
-      const reduce = reducedMotion.matches;
-      await play(
-        animate(
-          items,
-          { opacity: 0, transform: ["translateY(0px)", "translateY(8px)"] },
-          reduce
-            ? { duration: 0 }
-            : { duration: 0.14, ease: "easeIn", delay: stagger(0.025, { from: "last" }) },
-        ),
-        animate(
-          panel,
-          { clipPath: CLIP_CLOSED },
-          reduce ? { duration: 0 } : { duration: 0.22, ease: "easeIn", delay: 0.08 },
-        ),
-        animate(
-          menu!,
-          { opacity: 0 },
-          reduce ? { duration: 0.15, ease: "easeOut" } : { duration: 0.22, ease: "easeIn", delay: 0.08 },
-        ),
-        animate(
-          bg,
-          { backgroundColor: BG_TRANSLUCENT },
-          reduce ? { duration: 0 } : { duration: 0.22, ease: "easeIn", delay: 0.08 },
-        ),
-        animate(
-          iconClose,
-          { opacity: 0, transform: ["rotate(0deg)", "rotate(-90deg)"] },
-          { duration: reduce ? 0 : 0.24, ease: EASE_OUT_EXPO },
-        ),
-        animate(
-          iconOpen,
-          { opacity: 1, transform: ["rotate(90deg)", "rotate(0deg)"] },
-          { duration: reduce ? 0 : 0.24, ease: EASE_OUT_EXPO },
-        ),
-      );
-
-      // Reopened while closing: leave it open.
-      if (current === generation && menu!.matches(":popover-open")) menu!.hidePopover();
-    }
-
-    applyClosedState();
-
-    toggle.addEventListener("click", () => (isOpen ? closeMenu() : openMenu()));
-
-    const supportsPageSwap = "onpageswap" in window;
-    menu.addEventListener("click", (event) => {
-      const target = event.target as Element;
-      // Tap on the dark overlay (the popover itself, outside the panel).
-      if (target === menu) closeMenu();
-      // Links: where pageswap exists the menu is closed there, instantly.
-      else if (target.closest("a") && !supportsPageSwap) closeMenu();
-    });
-
-    // Right before the browser snapshots the page for the view transition:
-    // close with no animation so the snapshot shows a closed menu.
-    window.addEventListener("pageswap", () => {
-      if (isOpen) closeMenu({ instant: true });
-    });
-    // Restored from the back/forward cache: make sure it's closed.
-    window.addEventListener("pageshow", (event) => {
-      if (event.persisted) closeMenu({ instant: true });
-    });
-
-    // The toggle disappears at desktop width; don't leave the menu stranded open.
-    matchMedia("(min-width: 768px)").addEventListener("change", (event) => {
-      if (event.matches && isOpen) closeMenu({ instant: true });
-    });
+    // Hide only after closing has finished, unless the menu was reopened meanwhile.
+    const finished = await animateMenu(open, instant);
+    if (!open && finished && shown()) menu.hidePopover();
   }
+
+  setOpen(false, true);
+
+  toggle.addEventListener("click", () => setOpen(!isOpen));
+  // Taps on the dark overlay land on the popover itself, outside the panel.
+  menu.addEventListener("click", (event) => event.target === menu && setOpen(false));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && isOpen) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  // Close instantly on page change, back/forward restore and resize to desktop,
+  // so the menu never shows up half-closed in the page transition.
+  window.addEventListener("pageswap", () => setOpen(false, true));
+  window.addEventListener("pagehide", () => setOpen(false, true));
+  matchMedia("(min-width: 768px)").addEventListener("change", (event) => event.matches && setOpen(false, true));
 </script>
+
