@@ -66,14 +66,25 @@ const { showDesktopNav = true } = Astro.props;
     position: sticky;
     top: 0;
     z-index: 40;
+    border-bottom: 1px solid var(--color-line);
+  }
+  /* The blur lives on a pseudo-element, not the header itself. backdrop-filter
+     on the header would make it the containing block for the fixed-position
+     menu: in browsers without `overlay` transitions (Safari, Firefox) the
+     closing menu leaves the top layer at once and collapses into the 64px
+     header, so the close animation never shows. */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: rgb(10 15 22 / 0.86);
     backdrop-filter: blur(12px) saturate(140%);
-    border-bottom: 1px solid var(--color-line);
     /* Closing: return to translucent once the panel has rolled up. */
     transition: background-color 220ms ease-in 80ms;
   }
   /* While the menu is open the header goes solid so page text doesn't show through. */
-  .site-header:has(#mobile-menu:popover-open) {
+  .site-header:has(#mobile-menu:popover-open)::before {
     background: var(--color-rail);
     transition: background-color 280ms ease-out;
   }
@@ -200,6 +211,7 @@ const { showDesktopNav = true } = Astro.props;
   /* Set just before navigating: close everything instantly so the page
      transition snapshot shows a closed menu, not one mid-animation. */
   .site-header.instant,
+  .site-header.instant::before,
   .site-header.instant :global(*) {
     transition: none !important;
   }
@@ -213,8 +225,8 @@ const { showDesktopNav = true } = Astro.props;
         overlay 150ms allow-discrete,
         display 150ms allow-discrete;
     }
-    .site-header,
-    .site-header:has(#mobile-menu:popover-open),
+    .site-header::before,
+    .site-header:has(#mobile-menu:popover-open)::before,
     .menu-icon,
     .mobile-menu-panel,
     .mobile-menu:popover-open .mobile-menu-panel,
