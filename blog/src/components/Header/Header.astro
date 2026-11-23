@@ -207,9 +207,11 @@ const { showNav = true } = Astro.props;
 <script>
   const menu = document.getElementById("mobile-menu");
   if (menu) {
-    // Close before navigating so the menu isn't captured in the page transition.
     menu.addEventListener("click", (event) => {
-      if ((event.target as Element).closest("a")) menu.hidePopover();
+      const target = event.target as Element;
+      // The scrim is part of the popover, so light dismiss won't fire for it.
+      // Links: close before navigating so the menu isn't captured in the page transition.
+      if (target === menu || target.closest("a")) menu.hidePopover();
     });
     // The toggle disappears at desktop width; don't leave the menu stranded open.
     matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
