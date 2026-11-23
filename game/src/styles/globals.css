@@ -74,8 +74,6 @@
 
 @layer base {
   html {
-    /* 18px base (from the browser's 16px). Everything sized in rem scales with it. */
-    font-size: 112.5%;
     color-scheme: dark;
     -webkit-tap-highlight-color: transparent;
   }
