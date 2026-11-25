@@ -58,7 +58,7 @@
     "prisma": "^6.19.3",
     "tailwindcss": "^4.3.5",
     "ts-jest": "^29.4.11",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.0"
   },
   "ct3aMetadata": {
     "initVersion": "7.15.0"
