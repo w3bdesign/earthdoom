@@ -170,7 +170,7 @@ This file records the marketing register of earthdoom.com. It is an extension of
 
 The site is the game's own console, opened up for someone who has not played yet. The same abyss-navy ground, hairlines, panel surfaces and Signal Cyan carry over, so a visitor who presses Play now lands somewhere that already looks familiar. What the marketing register adds is scale and one image: the spaceship artwork as a full-bleed hero, wide display headlines (116–118% width, up to 80px), and long-form reading measures for the manual and blog.
 
-Persuasion is done with the game's real material, not with ornament. The home page explains the loop through miniatures of game screens built from real numbers: a building table with resource dots, a land-income bar set, a unit table, and a tick strip that shows an attack's travel and battle ticks. The hero is static on load; motion is quiet scroll-driven arrivals on those artefacts and the mobile menu, and next to nothing under reduced motion.
+Persuasion is done with the game's real material, not with ornament. The home page explains the loop through miniatures of game screens built from real numbers: a building table with resource dots, a land-income bar set, a unit table, and a tick strip that shows an attack's travel and battle ticks. The hero is static on load; motion is quiet scroll-driven arrivals on those artefacts and the mobile menu, and nothing at all under reduced motion.
 
 Density is lower than the game's: wider section rhythm, 17px reading text, larger buttons for the primary call to action. The tone is still calm and precise; excitement comes from the artwork and the copy (raids, rivals, taking land), never from glows, gradients on UI or decorative colour.
 

@@ -89,11 +89,13 @@ const facts = ["Free to play", "Nothing to install", "Play in short visits"];
   .hero-title {
     max-width: 15ch;
     color: var(--color-ink);
-    font-size: clamp(2.75rem, 1.4rem + 4.6vw, 5rem);
+    /* Scales with viewport so each line fits on one row on phones. */
+    font-size: clamp(1.625rem, 8vw, 5rem);
     font-weight: 750;
     font-stretch: 118%;
     line-height: 1;
     letter-spacing: -0.02em;
+    text-wrap: balance;
   }
   .hero-title span {
     display: block;
