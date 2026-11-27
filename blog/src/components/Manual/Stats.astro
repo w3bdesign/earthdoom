@@ -12,35 +12,52 @@ const ROWS: [string, (string | null)[]][] = [
   ["Medusas", ["0.02", "0.005", "0.015", "0.25", "1.00", null, null, null]],
   ["Reaper", ["0.005", "0.04", "0.1", "0.15", "0.25", null, "0.2", null]],
 ];
+
+const th = "sticky top-0 z-10 h-10 bg-raised px-4 text-xs font-medium whitespace-nowrap text-muted";
+const td = "border-t border-line px-4 py-3 text-right whitespace-nowrap text-soft group-hover:bg-raised";
+// The first column stays put while the table scrolls sideways.
+const stickyCol = "sticky left-0 shadow-[1px_0_0_var(--color-line)]";
 ---
 
-<section id="damage-table" class="manual-section" aria-labelledby="damage-table-title">
-  <h2 id="damage-table-title">Damage table</h2>
+<section id="damage-table" class="scroll-mt-22 py-12" aria-labelledby="damage-table-title">
+  <h2 id="damage-table-title" class="text-[clamp(1.5rem,1.3rem+0.8vw,2rem)] leading-[1.15] font-bold text-ink">
+    Damage table
+  </h2>
   <p class="mt-5 max-w-[68ch] text-soft">
     How much damage each attacking unit (columns) deals to each target (rows).
     An empty cell means that attacker does not hit that target.
   </p>
-  <div class="damage panel mt-6" tabindex="0" role="region" aria-label="Damage table, scrolls sideways">
-    <table class="data-table">
+  <div
+    class="relative mt-6 max-w-full min-w-0 overflow-auto rounded-lg border border-line bg-panel shadow-panel"
+    tabindex="0"
+    role="region"
+    aria-label="Damage table, scrolls sideways"
+  >
+    <table class="w-full min-w-[46rem] text-sm">
       <thead>
         <tr>
-          <th scope="col" class="corner">Target</th>
-          {ATTACKERS.map((a) => <th scope="col" class="num">{a}</th>)}
+          <th scope="col" class={`${th} ${stickyCol} z-20 text-left`}>Target</th>
+          {ATTACKERS.map((a) => <th scope="col" class={`${th} text-right`}>{a}</th>)}
         </tr>
       </thead>
       <tbody>
         {
           ROWS.map(([target, values]) => (
-            <tr>
-              <th scope="row">{target}</th>
+            <tr class="group">
+              <th
+                scope="row"
+                class={`${stickyCol} border-t border-line bg-panel px-4 py-3 text-left font-semibold text-ink group-hover:bg-raised`}
+              >
+                {target}
+              </th>
               {values.map((v) =>
                 v === null ? (
-                  <td class="num empty">
+                  <td class={`${td} text-muted`}>
                     <span aria-hidden="true">–</span>
                     <span class="sr-only">none</span>
                   </td>
                 ) : (
-                  <td class="num">{v}</td>
+                  <td class={td}>{v}</td>
                 ),
               )}
             </tr>
@@ -50,44 +67,3 @@ const ROWS: [string, (string | null)[]][] = [
     </table>
   </div>
 </section>
-
-<style>
-  .damage {
-    min-width: 0;
-    overflow: auto;
-    max-width: 100%;
-  }
-  .damage table {
-    min-width: 46rem;
-  }
-  .damage thead th {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  .damage tbody th {
-    position: sticky;
-    left: 0;
-    padding: 0.75rem 1rem;
-    border-top: 1px solid var(--color-line);
-    background: var(--color-panel);
-    color: var(--color-ink);
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-align: left;
-    box-shadow: 1px 0 0 var(--color-line);
-  }
-  .damage .corner {
-    position: sticky;
-    left: 0;
-    z-index: 2;
-    box-shadow: 1px 0 0 var(--color-line);
-  }
-  .damage tbody tr:hover td,
-  .damage tbody tr:hover th {
-    background: var(--color-raised);
-  }
-  .damage .empty {
-    color: var(--color-muted);
-  }
-</style>
