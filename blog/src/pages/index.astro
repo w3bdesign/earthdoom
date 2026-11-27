@@ -2,7 +2,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Index/Hero.astro";
 import GameLoop from "../components/Index/GameLoop.astro";
-import ManualIndex from "../components/Index/ManualIndex.astro";
 import FinalCall from "../components/Index/FinalCall.astro";
 import { PLAY_URL, SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
@@ -36,10 +35,9 @@ const structuredData = {
 };
 ---
 
-<BaseLayout title="Earth Doom · Free browser strategy game" showDesktopNav={false}>
+<BaseLayout title="Earth Doom · Free browser strategy game">
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <Hero />
   <GameLoop />
-  <ManualIndex />
   <FinalCall />
 </BaseLayout>
