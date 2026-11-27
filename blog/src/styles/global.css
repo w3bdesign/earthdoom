@@ -102,7 +102,7 @@
     & :is(h2, h3) + * { @apply mt-[0.6em]; }
     & strong { @apply font-semibold text-ink; }
     & a { @apply text-accent underline underline-offset-[0.22em] hover:text-accent-strong; }
-    & ul { @apply list-square pl-5 marker:text-muted; }
+    & ul { @apply list-[square] pl-5 marker:text-muted; }
     & ol { @apply list-decimal pl-5 marker:text-muted; }
     & li + li { @apply mt-[0.4em]; }
     & blockquote { @apply rounded-lg border border-line bg-panel px-5 py-4 text-ink; }
