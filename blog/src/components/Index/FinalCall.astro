@@ -17,11 +17,11 @@ import { PLAY_URL } from "../../consts";
     />
     <div class="final-copy">
       <h2 id="final-title" class="section-title">The land won’t take itself.</h2>
-      <p class="mt-4 max-w-md text-soft">
+      <p class="mx-auto mt-4 max-w-md text-soft md:mx-0">
         Sign up free, build your first tax collectors and start scouting
         for land. Your rivals already have.
       </p>
-      <div class="mt-8 flex flex-wrap gap-3">
+      <div class="final-actions mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <Button href={PLAY_URL} size="lg">Play now</Button>
         <Button href="/manual/#getting-started" size="lg" variant="secondary">How to start</Button>
       </div>
@@ -54,6 +54,16 @@ import { PLAY_URL } from "../../consts";
     max-width: 36rem;
   }
   @media (max-width: 767px) {
+    .final-copy {
+      text-align: center;
+    }
+    .final-actions {
+      align-items: stretch;
+    }
+    .final-actions :global(a) {
+      justify-content: center;
+      text-align: center;
+    }
     .final :global(.final-art) {
       opacity: 0.3;
       mask-image: linear-gradient(0deg, transparent 20%, #000 100%);
