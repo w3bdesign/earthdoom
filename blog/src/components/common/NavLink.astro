@@ -1,9 +1,16 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-type Props = HTMLAttributes<"a">;
+/** Navigation link used in the header and footer. Marks the current page. */
+type Props = HTMLAttributes<"a"> & {
+  /**
+   * Let the current-page underline slide between links on page change.
+   * Only one element per page may carry the transition name, so only the header uses it.
+   */
+  transition?: boolean;
+};
 
-const { href, class: className, ...props } = Astro.props;
+const { href, class: className, transition = false, ...props } = Astro.props;
 
 const normalise = (path: string) => path.replace(/\/$/, "") || "/";
 const isActive = normalise(String(href)) === normalise(Astro.url.pathname);
@@ -25,8 +32,8 @@ const isActive = normalise(String(href)) === normalise(Astro.url.pathname);
     class:list={[
       "absolute inset-x-3 bottom-1 h-0.5 origin-left scale-x-0 rounded-[1px] bg-ink transition-transform duration-240 ease-out-expo",
       "group-hover:scale-x-100 group-aria-[current=page]:scale-x-100 group-aria-[current=page]:bg-accent",
-      // Slides between links on page change (desktop only; the mobile menu is closed during navigation).
-      isActive && "md:[view-transition-name:nav-underline]",
+      // Desktop only: the mobile menu is closed during navigation.
+      transition && isActive && "md:[view-transition-name:nav-underline]",
     ]}
     aria-hidden="true"
   ></span>
