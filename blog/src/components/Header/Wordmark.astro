@@ -3,26 +3,11 @@ import { Image } from "astro:assets";
 import logo from "../../assets/logo.png";
 ---
 
-<a href="/" class="wordmark" aria-label="Earth Doom home">
-  <Image src={logo} alt="" width={36} height={36} densities={[1, 2]} loading="eager" />
+<a
+  href="/"
+  class="inline-flex items-center gap-3 rounded-md text-[0.9375rem] font-bold tracking-[0.18em] whitespace-nowrap text-ink [font-stretch:125%]"
+  aria-label="Earth Doom home"
+>
+  <Image src={logo} alt="" width={36} height={36} densities={[1, 2]} loading="eager" class="size-9" />
   <span aria-hidden="true">EARTH DOOM</span>
 </a>
-
-<style>
-  .wordmark {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    border-radius: var(--radius-md);
-    color: var(--color-ink);
-    font-size: 0.9375rem;
-    font-weight: 700;
-    font-stretch: 125%;
-    letter-spacing: 0.18em;
-    white-space: nowrap;
-  }
-  .wordmark img {
-    width: 2.25rem;
-    height: 2.25rem;
-  }
-</style>
