@@ -2,7 +2,7 @@
 
 export const SITE_TITLE = "Earth Doom";
 export const SITE_DESCRIPTION =
-  "Earth Doom is a free strategy game of raids and rivals, played in your browser. Build an economy, raise an army and take land from real players.";
+  "Earth Doom is an epic war game that plunges you into a relentless fight for survival and dominance. Gain critical resources, research powerful technologies, and conquer enemy lands - all while defending against those who would conquer you.";
 
 /** Where "Play now" goes. */
 export const PLAY_URL = "https://game.earthdoom.com/login";
