@@ -2,7 +2,9 @@
 import { ATTACK, ECONOMY, SCOUT_COST, UNITS, formatNumber, type Cost } from "../../data/game";
 import { TICK_SECONDS } from "../../consts";
 
-const cost = (c: Cost | "free") =>
+type Kind = "credits" | "titanium";
+
+const cost = (c: Cost | "free"): { label: string; kind: Kind | null } =>
   c === "free"
     ? { label: "Free", kind: null }
     : c.titanium
@@ -11,11 +13,30 @@ const cost = (c: Cost | "free") =>
 
 const totalTicks = ATTACK.travelTicks + ATTACK.battleTicks;
 const minutes = Math.round((totalTicks * TICK_SECONDS) / 60);
+
+// Class lists used more than once in this file.
+const step = "mt-[clamp(3.5rem,3rem+3vw,6rem)] grid items-center gap-7 lg:grid-cols-[5fr_7fr] lg:gap-16";
+const stepTitle = "text-title font-semibold text-ink";
+const stepText = "mt-3.5 max-w-[34rem] leading-[1.7] text-soft";
+const panel = "rounded-lg border border-line bg-panel shadow-panel";
+const th = "h-10 bg-raised px-4 text-left text-xs font-medium whitespace-nowrap text-muted";
+const td = "border-t border-line px-4 py-3 text-soft";
+const num = "text-right! whitespace-nowrap";
+const dot = "mr-1.5 inline-block size-2 rounded-full align-[0.05em]";
+const dotColor: Record<Kind, string> = { credits: "bg-credits", titanium: "bg-titanium" };
+const caption = "mt-5 border-t border-line pt-4 text-sm text-muted";
+const badge = "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium";
+
+const land = [
+  { label: "Undeveloped", kind: null, width: "22%", bar: "bg-line-strong", note: "Found by scouts. Produces nothing." },
+  { label: "Titanium", kind: "titanium", width: "52%", bar: "bg-titanium", note: "Mines. Pays titanium every tick." },
+  { label: "Houses", kind: "credits", width: "26%", bar: "bg-credits", note: "Pays credits every tick." },
+] as const;
 ---
 
-<section class="loop mx-auto max-w-7xl px-4 md:px-8" aria-labelledby="loop-title">
+<section class="mx-auto max-w-7xl px-4 pt-[clamp(5rem,4rem+4vw,8rem)] md:px-8" aria-labelledby="loop-title">
   <div class="max-w-2xl">
-    <h2 id="loop-title" class="section-title">How a game plays</h2>
+    <h2 id="loop-title" class="text-display font-bold text-ink">How a game plays</h2>
     <p class="mt-4 text-lg text-soft">
       You log in, give orders and come back later. Each tick, about once a
       minute, pays out your income and counts down everything you have
@@ -24,23 +45,23 @@ const minutes = Math.round((totalTicks * TICK_SECONDS) / 60);
   </div>
 
   <!-- Economy -->
-  <div class="step">
-    <div class="step-copy">
-      <h3 class="step-title">Start with credits</h3>
-      <p>
+  <div class={step}>
+    <div>
+      <h3 class={stepTitle}>Start with credits</h3>
+      <p class={stepText}>
         You begin with nothing. Build tax collectors for your first credits,
         then a titanium extractor. Titanium pays for heavy units and for
         developing land, so most players want a lot of it.
       </p>
     </div>
-    <figure class="panel arrive overflow-hidden">
-      <table class="data-table">
+    <figure class={`${panel} arrive overflow-hidden`}>
+      <table class="w-full text-sm">
         <caption class="sr-only">First buildings and research</caption>
         <thead>
           <tr>
-            <th scope="col">Building or research</th>
-            <th scope="col" class="num">Cost</th>
-            <th scope="col" class="num">ETA</th>
+            <th scope="col" class={th}>Building or research</th>
+            <th scope="col" class={`${th} ${num}`}>Cost</th>
+            <th scope="col" class={`${th} ${num}`}>ETA</th>
           </tr>
         </thead>
         <tbody>
@@ -49,56 +70,55 @@ const minutes = Math.round((totalTicks * TICK_SECONDS) / 60);
               const c = cost(item.cost);
               return (
                 <tr>
-                  <td>
-                    <span class="name">{item.name}</span>
+                  <td class={td}>
+                    <span class="font-semibold text-ink">{item.name}</span>
                     <span class="block text-xs text-muted">{item.note}</span>
                   </td>
-                  <td class="num">
-                    {c.kind && <span class={`dot dot-${c.kind}`} aria-hidden="true" />}
+                  <td class={`${td} ${num}`}>
+                    {c.kind && <span class={`${dot} ${dotColor[c.kind]}`} aria-hidden="true" />}
                     {c.label}
                     {c.kind && <span class="sr-only"> {c.kind}</span>}
                   </td>
-                  <td class="num">{item.eta} ticks</td>
+                  <td class={`${td} ${num}`}>{item.eta} ticks</td>
                 </tr>
               );
             })
           }
         </tbody>
       </table>
-      <figcaption class="table-legend">
-        <span><span class="dot dot-credits" aria-hidden="true"></span>Credits</span>
-        <span><span class="dot dot-titanium" aria-hidden="true"></span>Titanium</span>
+      <figcaption class="flex gap-5 border-t border-line bg-sunken px-4 py-3 text-xs text-muted">
+        <span><span class={`${dot} bg-credits`} aria-hidden="true"></span>Credits</span>
+        <span><span class={`${dot} bg-titanium`} aria-hidden="true"></span>Titanium</span>
       </figcaption>
     </figure>
   </div>
 
-  <!-- Land -->
-  <div class="step">
-    <div class="step-copy">
-      <h3 class="step-title">Find land, then develop it</h3>
-      <p>
+  <!-- Land: a miniature of the game's income screen. -->
+  <div class={step}>
+    <div>
+      <h3 class={stepTitle}>Find land, then develop it</h3>
+      <p class={stepText}>
         Land is what pays. Send scouts at {formatNumber(SCOUT_COST)} credits
         each to find new land, then spend titanium to develop it into houses for
         credits or mines for titanium.
       </p>
     </div>
-    <figure class="panel arrive land">
-      <div class="land-row">
-        <span class="land-label">Undeveloped</span>
-        <span class="land-bar"><span style="--w: 22%" class="bg-line-strong"></span></span>
-        <span class="land-note">Found by scouts. Produces nothing.</span>
-      </div>
-      <div class="land-row">
-        <span class="land-label"><span class="dot dot-titanium" aria-hidden="true"></span>Titanium</span>
-        <span class="land-bar"><span style="--w: 52%" class="bg-titanium"></span></span>
-        <span class="land-note">Mines. Pays titanium every tick.</span>
-      </div>
-      <div class="land-row">
-        <span class="land-label"><span class="dot dot-credits" aria-hidden="true"></span>Houses</span>
-        <span class="land-bar"><span style="--w: 26%" class="bg-credits"></span></span>
-        <span class="land-note">Pays credits every tick.</span>
-      </div>
-      <figcaption class="mt-5 border-t border-line pt-4 text-sm text-muted">
+    <figure class={`${panel} arrive p-6`}>
+      {
+        land.map((row) => (
+          <div class="grid items-center gap-x-4 gap-y-1 not-first:mt-4 sm:grid-cols-[7.5rem_1fr]">
+            <span class="text-sm font-semibold text-ink">
+              {row.kind && <span class={`${dot} ${dotColor[row.kind]}`} aria-hidden="true" />}
+              {row.label}
+            </span>
+            <span class="h-2.5 overflow-hidden rounded-full bg-sunken inset-ring inset-ring-line">
+              <span class={`block h-full rounded-full ${row.bar}`} style={`width: ${row.width}`} />
+            </span>
+            <span class="text-xs text-muted sm:col-start-2">{row.note}</span>
+          </div>
+        ))
+      }
+      <figcaption class={caption}>
         The manual suggests about two thirds titanium and one third credits
         if you plan to build heavy units.
       </figcaption>
@@ -106,23 +126,23 @@ const minutes = Math.round((totalTicks * TICK_SECONDS) / 60);
   </div>
 
   <!-- Army -->
-  <div class="step">
-    <div class="step-copy">
-      <h3 class="step-title">Raise an army that fits the fight</h3>
-      <p>
+  <div class={step}>
+    <div>
+      <h3 class={stepTitle}>Raise an army that fits the fight</h3>
+      <p class={stepText}>
         Every unit has its own cost, build time and targets. Light infantry and
         shadows work best together. Grabbers are the only unit that takes land
         home after a battle, so a war without them gains nothing.
       </p>
     </div>
-    <figure class="panel arrive overflow-x-auto">
-      <table class="data-table">
+    <figure class={`${panel} arrive overflow-x-auto`}>
+      <table class="w-full text-sm">
         <caption class="sr-only">Early units</caption>
         <thead>
           <tr>
-            <th scope="col">Unit</th>
-            <th scope="col" class="num">Cost</th>
-            <th scope="col" class="num">ETA</th>
+            <th scope="col" class={th}>Unit</th>
+            <th scope="col" class={`${th} ${num}`}>Cost</th>
+            <th scope="col" class={`${th} ${num}`}>ETA</th>
           </tr>
         </thead>
         <tbody>
@@ -131,16 +151,16 @@ const minutes = Math.round((totalTicks * TICK_SECONDS) / 60);
               const c = cost(unit.cost);
               return (
                 <tr>
-                  <td>
-                    <span class="name">{unit.name}</span>
+                  <td class={td}>
+                    <span class="font-semibold text-ink">{unit.name}</span>
                     <span class="block text-xs text-muted">{unit.note}</span>
                   </td>
-                  <td class="num">
-                    {c.kind && <span class={`dot dot-${c.kind}`} aria-hidden="true" />}
+                  <td class={`${td} ${num}`}>
+                    {c.kind && <span class={`${dot} ${dotColor[c.kind]}`} aria-hidden="true" />}
                     {c.label}
                     {c.kind && <span class="sr-only"> {c.kind}</span>}
                   </td>
-                  <td class="num">{unit.eta} ticks</td>
+                  <td class={`${td} ${num}`}>{unit.eta} ticks</td>
                 </tr>
               );
             })
@@ -150,176 +170,48 @@ const minutes = Math.round((totalTicks * TICK_SECONDS) / 60);
     </figure>
   </div>
 
-  <!-- Attack -->
-  <div class="step">
-    <div class="step-copy">
-      <h3 class="step-title">Attack, then wait for the report</h3>
-      <p>
+  <!-- Attack: one segment per tick, lit in sequence as the panel scrolls in. -->
+  <div class={step}>
+    <div>
+      <h3 class={stepTitle}>Attack, then wait for the report</h3>
+      <p class={stepText}>
         Pick a player in your score range, load your squadron and launch. Your
         fleet flies for {ATTACK.travelTicks} ticks and fights
         for {ATTACK.battleTicks}. Any land you take is added to yours.
       </p>
     </div>
-    <figure class="panel attack">
-      <div class="ticks" role="img" aria-label={`${ATTACK.travelTicks} ticks of travel, then ${ATTACK.battleTicks} ticks of battle`}>
+    <figure class={`${panel} p-6`}>
+      <div
+        class="grid grid-cols-[repeat(35,minmax(0,1fr))] gap-0.5 sm:gap-[3px]"
+        role="img"
+        aria-label={`${ATTACK.travelTicks} ticks of travel, then ${ATTACK.battleTicks} ticks of battle`}
+      >
         {
           Array.from({ length: totalTicks }, (_, i) => (
-            <span class={i < ATTACK.travelTicks ? "tick" : "tick tick-battle"} style={`--i: ${i}`} />
+            <span
+              class:list={[
+                "tick-on h-8 rounded-[2px] inset-ring sm:h-10",
+                i < ATTACK.travelTicks ? "bg-accent/28 inset-ring-accent/35" : "bg-hostile/32 inset-ring-hostile/50",
+              ]}
+              style={`--i: ${i}`}
+            />
           ))
         }
       </div>
-      <div class="ticks-legend">
-        <span>
-          <span class="badge badge-accent">Travel</span>
-          <span class="tabular-nums">{ATTACK.travelTicks} ticks</span>
+      <div class="mt-3.5 grid grid-cols-[minmax(0,1fr)_auto] gap-4 text-sm text-soft">
+        <span class="flex items-center gap-2">
+          <span class={`${badge} border-accent/40 bg-accent/10 text-accent`}>Travel</span>
+          {ATTACK.travelTicks} ticks
         </span>
-        <span>
-          <span class="badge badge-hostile">Battle</span>
-          <span class="tabular-nums">{ATTACK.battleTicks} ticks</span>
+        <span class="flex items-center gap-2">
+          <span class={`${badge} border-hostile/40 bg-hostile/10 text-hostile`}>Battle</span>
+          {ATTACK.battleTicks} ticks
         </span>
       </div>
-      <figcaption class="mt-5 border-t border-line pt-4 text-sm text-muted">
+      <figcaption class={caption}>
         About {minutes} minutes from launch to the end of the battle. The
         combat report arrives in your News screen.
       </figcaption>
     </figure>
   </div>
 </section>
-
-<style>
-  .loop {
-    padding-top: clamp(5rem, 4rem + 4vw, 8rem);
-  }
-
-  .step {
-    display: grid;
-    gap: 1.75rem;
-    align-items: center;
-    margin-top: clamp(3.5rem, 3rem + 3vw, 6rem);
-  }
-  @media (min-width: 900px) {
-    .step {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      gap: 4rem;
-    }
-  }
-
-  .step-copy p {
-    margin-top: 0.875rem;
-    max-width: 34rem;
-    color: var(--color-soft);
-    line-height: 1.7;
-  }
-
-  .table-legend {
-    display: flex;
-    gap: 1.25rem;
-    padding: 0.75rem 1rem;
-    border-top: 1px solid var(--color-line);
-    background: var(--color-sunken);
-    color: var(--color-muted);
-    font-size: 0.75rem;
-  }
-
-  /* Land: a miniature of the game's income screen. */
-  .land {
-    padding: 1.5rem;
-  }
-  .land-row {
-    display: grid;
-    grid-template-columns: 7.5rem 1fr;
-    gap: 0.25rem 1rem;
-    align-items: center;
-  }
-  .land-row + .land-row {
-    margin-top: 1rem;
-  }
-  .land-label {
-    color: var(--color-ink);
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-  .land-bar {
-    height: 0.625rem;
-    border-radius: 999px;
-    background: var(--color-sunken);
-    box-shadow: inset 0 0 0 1px var(--color-line);
-    overflow: hidden;
-  }
-  .land-bar > span {
-    display: block;
-    width: var(--w);
-    height: 100%;
-    border-radius: inherit;
-  }
-  .land-note {
-    grid-column: 2;
-    color: var(--color-muted);
-    font-size: 0.75rem;
-  }
-
-  /* Attack: one segment per tick. */
-  .attack {
-    padding: 1.5rem;
-  }
-  .ticks {
-    display: grid;
-    grid-template-columns: repeat(35, minmax(0, 1fr));
-    gap: 3px;
-  }
-  .tick {
-    height: 2.5rem;
-    border-radius: 2px;
-    background: rgb(76 195 242 / 0.28);
-    box-shadow: inset 0 0 0 1px rgb(76 195 242 / 0.35);
-  }
-  .tick-battle {
-    background: rgb(246 138 138 / 0.32);
-    box-shadow: inset 0 0 0 1px rgb(246 138 138 / 0.5);
-  }
-  .ticks-legend {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 1rem;
-    margin-top: 0.875rem;
-    font-size: 0.875rem;
-    color: var(--color-soft);
-  }
-  .ticks-legend > span {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  /* The fleet's flight plays out as the panel scrolls into view. */
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .tick {
-        animation: tick-on linear both;
-        animation-timeline: view();
-        animation-range: entry calc(10% + var(--i) * 0.8%) cover calc(20% + var(--i) * 0.8%);
-      }
-    }
-  }
-  @keyframes tick-on {
-    from {
-      opacity: 0.15;
-      scale: 1 0.4;
-    }
-  }
-
-  @media (max-width: 520px) {
-    .tick {
-      height: 2rem;
-    }
-    .ticks {
-      gap: 2px;
-    }
-    .land-row {
-      grid-template-columns: 1fr;
-    }
-    .land-note {
-      grid-column: 1;
-    }
-  }
-</style>

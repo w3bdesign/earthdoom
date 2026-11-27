@@ -11,69 +11,23 @@ const isActive = normalise(String(href)) === normalise(Astro.url.pathname);
 
 <a
   href={href}
-  class:list={["nav-link", className]}
+  class:list={[
+    "group relative inline-flex h-10 items-center px-3 text-sm font-medium text-muted transition-colors duration-150 ease-out",
+    "hover:text-ink aria-[current=page]:font-semibold aria-[current=page]:text-ink",
+    className,
+  ]}
   aria-current={isActive ? "page" : undefined}
   {...props}
 >
   <slot />
-  <span class="nav-underline" aria-hidden="true"></span>
+  <!-- Underline grows from the left on hover; stays full width in accent on the current page. -->
+  <span
+    class:list={[
+      "absolute inset-x-3 bottom-1 h-0.5 origin-left scale-x-0 rounded-[1px] bg-ink transition-transform duration-240 ease-out-expo",
+      "group-hover:scale-x-100 group-aria-[current=page]:scale-x-100 group-aria-[current=page]:bg-accent",
+      // Slides between links on page change (desktop only; the mobile menu is closed during navigation).
+      isActive && "md:[view-transition-name:nav-underline]",
+    ]}
+    aria-hidden="true"
+  ></span>
 </a>
-
-<style>
-  .nav-link {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    height: 2.5rem;
-    padding-inline: 0.75rem;
-    color: var(--color-muted);
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: color 150ms ease-out;
-  }
-  .nav-link:hover {
-    color: var(--color-ink);
-  }
-  .nav-link[aria-current="page"] {
-    color: var(--color-ink);
-    font-weight: 600;
-  }
-
-  /* Bold underline under the text: grows from the left on hover,
-     stays full width in Signal Cyan on the current page. */
-  .nav-underline {
-    position: absolute;
-    left: 0.75rem;
-    right: 0.75rem;
-    bottom: 0.25rem;
-    height: 2px;
-    border-radius: 1px;
-    background: var(--color-ink);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 240ms var(--ease-out-expo);
-  }
-  .nav-link:hover .nav-underline {
-    transform: scaleX(1);
-  }
-  .nav-link[aria-current="page"] .nav-underline {
-    background: var(--color-accent);
-    transform: scaleX(1);
-  }
-
-  /* On page change the underline slides from the old link to the new one
-     (cross-document view transition). Desktop only: the mobile menu is
-     closed during navigation, so only one underline carries the name. */
-  @media (min-width: 768px) {
-    .nav-link[aria-current="page"] .nav-underline {
-      view-transition-name: nav-underline;
-    }
-  }
-</style>
-
-<style is:global>
-  ::view-transition-group(nav-underline) {
-    animation-duration: 320ms;
-    animation-timing-function: var(--ease-out-expo);
-  }
-</style>

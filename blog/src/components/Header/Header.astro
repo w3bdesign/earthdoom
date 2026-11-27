@@ -1,4 +1,4 @@
-﻿---
+---
 import Menu from "@lucide/astro/icons/menu";
 import X from "@lucide/astro/icons/x";
 import HeaderLink from "./HeaderLink.astro";
@@ -17,8 +17,12 @@ interface Props {
 const { showDesktopNav = true } = Astro.props;
 ---
 
-<header class="site-header">
-  <div class="header-bg" aria-hidden="true"></div>
+<header class="site-header sticky top-0 z-40 border-b border-line">
+  <!-- Background on its own layer so the script can animate its colour. -->
+  <div
+    class="header-bg absolute inset-0 -z-10 bg-ground/86 backdrop-blur-md backdrop-saturate-140"
+    aria-hidden="true"
+  ></div>
 
   <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 md:px-8">
     <Wordmark />
@@ -32,32 +36,38 @@ const { showDesktopNav = true } = Astro.props;
 
     <button
       type="button"
-      class="menu-toggle md:hidden"
+      class="menu-toggle inline-grid size-11 place-items-center rounded-md text-ink transition-colors duration-150 ease-out hover:bg-raised md:hidden"
       aria-controls="mobile-menu"
       aria-expanded="false"
       aria-label="Open menu"
     >
-      <span class="menu-icon menu-icon-open"><Menu size={22} aria-hidden="true" /></span>
-      <span class="menu-icon menu-icon-close"><X size={22} aria-hidden="true" /></span>
+      <span class="menu-icon-open col-start-1 row-start-1 grid"><Menu size={22} aria-hidden="true" /></span>
+      <span class="menu-icon-close col-start-1 row-start-1 grid opacity-0"><X size={22} aria-hidden="true" /></span>
     </button>
   </div>
 
   <!-- Manual popover: opening and closing are driven by the script below, so
        the menu is only hidden after its close animation has finished. -->
-  <div id="mobile-menu" popover="manual" class="mobile-menu">
-    <div class="mobile-menu-panel">
+  <!-- Sits under the header (overlapping its 1px border). The popover is the
+       dark overlay; the panel unrolls from the header edge. -->
+  <div
+    id="mobile-menu"
+    popover="manual"
+    class="inset-x-0 top-[calc(4rem-1px)] bottom-0 m-0 h-auto max-h-none w-full max-w-none border-0 bg-[rgb(0_0_0/0.6)] p-0 text-ink opacity-0"
+  >
+    <div class="mobile-menu-panel border-y border-line bg-rail shadow-[0_12px_32px_-8px_rgb(0_0_0/0.7)] [clip-path:inset(0_0_100%_0)]">
       <nav aria-label="Main" class="px-4 pt-3 pb-6">
         <ul class="flex flex-col items-start gap-1">
           {
             NAV_LINKS.map((link) => (
-              <li class="menu-item">
+              <li class="menu-item opacity-0">
                 <HeaderLink href={link.href} class="!h-12 !text-base">
                   {link.label}
                 </HeaderLink>
               </li>
             ))
           }
-          <li class="menu-item mt-4 w-full">
+          <li class="menu-item mt-4 w-full opacity-0">
             <Button href={PLAY_URL} size="lg" class="w-full">Play now</Button>
           </li>
         </ul>
@@ -65,77 +75,6 @@ const { showDesktopNav = true } = Astro.props;
     </div>
   </div>
 </header>
-
-<style>
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    border-bottom: 1px solid var(--color-line);
-  }
-  /* Background and blur on their own layer so the script can animate the
-     colour (translucent normally, solid while the menu is open). */
-  .header-bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-color: rgb(10 15 22 / 0.86);
-    backdrop-filter: blur(12px) saturate(140%);
-  }
-
-  .menu-toggle {
-    display: inline-grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: var(--radius-md);
-    color: var(--color-ink);
-    transition: background-color 150ms ease-out;
-  }
-  .menu-toggle:hover {
-    background: var(--color-raised);
-  }
-  @media (min-width: 768px) {
-    .menu-toggle {
-      display: none;
-    }
-  }
-  .menu-icon {
-    grid-area: 1 / 1;
-    display: grid;
-  }
-  .menu-icon-close {
-    opacity: 0;
-  }
-
-  /* Below the header, which stays visible. The popover itself is the dark
-     overlay; the panel inside unrolls down from the header edge. Start states
-     match the closed menu; the script animates everything from here. */
-  .mobile-menu {
-    /* Overlap the header's 1px bottom border so no seam shows the page. */
-    inset: calc(4rem - 1px) 0 0 0;
-    width: 100%;
-    max-width: none;
-    height: auto;
-    max-height: none;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: rgb(0 0 0 / 0.6);
-    color: var(--color-ink);
-    opacity: 0;
-  }
-  .mobile-menu-panel {
-    border-top: 1px solid var(--color-line);
-    border-bottom: 1px solid var(--color-line);
-    background: var(--color-rail);
-    box-shadow: 0 12px 32px -8px rgb(0 0 0 / 0.7);
-    clip-path: inset(0 0 100% 0);
-  }
-  .menu-item {
-    opacity: 0;
-  }
-</style>
 
 <script>
   import { createToggle } from "../../scripts/animation";

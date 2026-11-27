@@ -6,7 +6,7 @@ import { SECTIONS } from "../Manual/sections";
 <section class="mx-auto max-w-7xl px-4 pt-28 md:px-8" aria-labelledby="manual-title">
   <div class="flex flex-wrap items-end justify-between gap-6">
     <div class="max-w-2xl">
-      <h2 id="manual-title" class="section-title">The manual</h2>
+      <h2 id="manual-title" class="text-display font-bold text-ink">The manual</h2>
       <p class="mt-4 text-lg text-soft">
         Everything above, step by step, from your first tax collectors to
         reading a combat report.
@@ -17,59 +17,23 @@ import { SECTIONS } from "../Manual/sections";
     </a>
   </div>
 
-  <ol class="manual-index arrive">
+  <ol class="arrive mt-10 grid border-t border-line sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-3">
     {
       SECTIONS.map((section) => (
         <li>
-          <a href={`/manual/#${section.id}`}>
+          <a
+            href={`/manual/#${section.id}`}
+            class="group flex min-h-15 items-center justify-between gap-4 border-b border-line font-medium text-ink transition-colors duration-150 ease-out hover:text-accent-strong"
+          >
             <span>{section.title}</span>
-            <ArrowRight size={16} aria-hidden="true" class="arrow" />
+            <ArrowRight
+              size={16}
+              aria-hidden="true"
+              class="text-field transition-[translate,color] duration-200 ease-out-expo group-hover:translate-x-1 group-hover:text-accent"
+            />
           </a>
         </li>
       ))
     }
   </ol>
 </section>
-
-<style>
-  .manual-index {
-    display: grid;
-    margin-top: 2.5rem;
-    border-top: 1px solid var(--color-line);
-  }
-  @media (min-width: 640px) {
-    .manual-index {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: 2rem;
-    }
-  }
-  @media (min-width: 1024px) {
-    .manual-index {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-  .manual-index a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    min-height: 3.75rem;
-    border-bottom: 1px solid var(--color-line);
-    color: var(--color-ink);
-    font-weight: 500;
-    transition: color 150ms ease-out;
-  }
-  .manual-index .arrow {
-    color: var(--color-field);
-    transition:
-      translate 200ms var(--ease-out-expo),
-      color 150ms ease-out;
-  }
-  .manual-index a:hover {
-    color: var(--color-accent-strong);
-  }
-  .manual-index a:hover .arrow {
-    color: var(--color-accent);
-    translate: 4px 0;
-  }
-</style>

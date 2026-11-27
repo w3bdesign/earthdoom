@@ -58,7 +58,7 @@ The site is fully static. Run `npm run build` and upload the **contents** of `di
 │   ├── data/game.ts        # Game facts quoted on the home page (costs, ETAs, attack timing)
 │   ├── layouts/            # BaseLayout (every page) and BlogPost
 │   ├── pages/              # Routes: /, /manual, /about, /blog, /404, /rss.xml
-│   ├── styles/global.css   # Design tokens and shared styles
+│   ├── styles/global.css   # Design tokens (@theme) and .prose; everything else is utilities
 │   └── consts.ts           # Site title, description, Play URL, nav links
 ├── PRODUCT.md              # Product and audience notes used for design work
 ├── DESIGN.md               # The site's design system

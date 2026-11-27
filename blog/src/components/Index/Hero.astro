@@ -8,7 +8,10 @@ import { PLAY_URL } from "../../consts";
 const facts = ["Free to play", "Conquer your enemies", "Instant action"];
 ---
 
-<section class="hero" aria-labelledby="hero-title">
+<section
+  class="relative isolate flex items-end overflow-hidden border-b border-line pt-56 pb-14 lg:min-h-[min(calc(100svh-4rem),52rem)] lg:items-center lg:pt-24 lg:pb-20"
+  aria-labelledby="hero-title"
+>
   <Picture
     src={spaceship}
     formats={["avif", "webp"]}
@@ -17,16 +20,24 @@ const facts = ["Free to play", "Conquer your enemies", "Instant action"];
     alt="A squadron of fighter spacecraft streaking above the clouds at sunrise, under laser fire."
     loading="eager"
     fetchpriority="high"
-    class="hero-art"
+    class="absolute inset-0 -z-20 size-full object-cover object-[40%_50%] lg:object-[62%_50%]"
   />
-  <div class="hero-scrim" aria-hidden="true"></div>
+  <!-- Scrim: solid navy behind the copy, clearing towards the art. -->
+  <div
+    class="absolute inset-0 -z-10 bg-linear-to-t from-ground via-ground/94 via-52% to-ground/15 lg:bg-linear-to-r lg:from-ground/94 lg:via-ground/35 lg:via-62% lg:to-ground/10"
+    aria-hidden="true"
+  ></div>
+  <div class="absolute inset-x-0 bottom-0 -z-10 hidden h-1/4 bg-linear-to-t from-ground lg:block" aria-hidden="true"></div>
 
-  <div class="hero-copy mx-auto w-full max-w-7xl px-4 md:px-8">
-    <h1 id="hero-title" class="hero-title">
+  <div class="mx-auto w-full max-w-7xl px-4 md:px-8">
+    <h1
+      id="hero-title"
+      class="text-[clamp(1.5rem,6.8vw,5rem)] leading-none font-[750] tracking-[-0.02em] text-ink *:block *:whitespace-nowrap"
+    >
       <span class="text-muted">Dominate your enemies</span>
-      Take their land
+      <span>Take their land</span>
     </h1>
-    <p class="hero-lede">
+    <p class="mt-6 text-[clamp(1.0625rem,1rem+0.3vw,1.25rem)] leading-relaxed text-soft">
       Earth Doom is a strategy game, explore and dominate the world and conquer your enemies!
     </p>
     <div class="mt-9 flex flex-wrap gap-3">
@@ -45,84 +56,3 @@ const facts = ["Free to play", "Conquer your enemies", "Instant action"];
     </ul>
   </div>
 </section>
-
-<style>
-  .hero {
-    position: relative;
-    isolation: isolate;
-    display: flex;
-    align-items: center;
-    min-height: min(calc(100svh - 4rem), 52rem);
-    padding-block: 6rem 5rem;
-    overflow: hidden;
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .hero :global(.hero-art) {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 62% 50%;
-  }
-
-  /* Solid navy on the copy side, clearing towards the art. */
-  .hero-scrim {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background:
-      linear-gradient(
-        90deg,
-        rgb(10 15 22 / 0.94) 0%,
-        rgb(10 15 22 / 0.86) 34%,
-        rgb(10 15 22 / 0.35) 62%,
-        rgb(10 15 22 / 0.1) 100%
-      ),
-      linear-gradient(0deg, var(--color-ground) 0%, rgb(10 15 22 / 0) 26%);
-  }
-
-  .hero-title {
-    color: var(--color-ink);
-    /* Scales with viewport so each line fits on one row on phones. */
-    font-size: clamp(1.5rem, 6.8vw, 5rem);
-    font-weight: 750;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-  }
-  .hero-title span {
-    display: block;
-    white-space: nowrap;
-  }
-
-  .hero-lede {
-    margin-top: 1.5rem;
-    color: var(--color-soft);
-    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
-    line-height: 1.6;
-    text-wrap: pretty;
-  }
-
-  @media (max-width: 1023px) {
-    .hero {
-      align-items: flex-end;
-      min-height: 0;
-      padding-block: 14rem 3.5rem;
-    }
-    .hero :global(.hero-art) {
-      object-position: 40% 50%;
-    }
-    .hero-scrim {
-      background: linear-gradient(
-        0deg,
-        var(--color-ground) 0%,
-        rgb(10 15 22 / 0.94) 52%,
-        rgb(10 15 22 / 0.35) 82%,
-        rgb(10 15 22 / 0.15) 100%
-      );
-    }
-  }
-</style>

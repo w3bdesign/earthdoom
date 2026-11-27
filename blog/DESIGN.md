@@ -164,6 +164,8 @@ components:
 
 This file records the marketing register of earthdoom.com. It is an extension of the game's system in [`../game/DESIGN.md`](../game/DESIGN.md) ("The Command Console"), which stays the parent identity: the colour tokens, Archivo, the 6px/8px radii, the panel shadow, tinted state badges, resource dots and the table spec are the game's, carried over unchanged in `src/styles/global.css`. Read the parent for those rules; this file restates them only where the site applies them differently, and documents what the site adds.
 
+**Styling convention.** Tailwind utilities in markup, nothing else. Components have no `<style>` blocks. `global.css` holds only the `@theme` tokens, a few base rules, the two scroll-timeline utilities (`arrive`, `tick-on`), view transitions and `.prose` (for HTML we don't write ourselves: markdown and manual content). When a class list repeats inside a component, store it in a frontmatter constant; when it repeats across components, make an Astro component.
+
 ## Overview
 
 **Creative North Star: "The Console, Seen From Orbit"**
