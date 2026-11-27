@@ -14,7 +14,7 @@ const toc = [
   description="How to play Earth Doom: credits and titanium, land, units, energy, attacking and the damage table."
 >
   <div class="mx-auto max-w-7xl px-4 md:px-8">
-    <header class="manual-head">
+    <header class="border-b border-line pt-[clamp(3.5rem,3rem+3vw,6rem)] pb-[clamp(2.5rem,2rem+2vw,4rem)]">
       <h1 class="text-display font-bold text-ink">Earth Doom manual</h1>
       <p class="mt-4 max-w-2xl text-lg text-soft">
         A walk through your first days, from the first credits to your first
@@ -22,15 +22,27 @@ const toc = [
       </p>
     </header>
 
-    <div class="manual-grid">
-      <nav class="toc" aria-label="Manual contents">
-        <details class="toc-details" open>
-          <summary>Contents</summary>
-          <ol>
+    <div class="grid grid-cols-1 gap-8 pt-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16 lg:pt-14">
+      <nav class="self-start lg:sticky lg:top-24" aria-label="Manual contents">
+        <!-- A collapsible card on small screens, a fixed list on large ones. -->
+        <details
+          class="toc-details group max-lg:rounded-lg max-lg:border max-lg:border-line max-lg:bg-panel max-lg:px-4 max-lg:py-3.5"
+          open
+        >
+          <summary
+            class="cursor-pointer pb-3 text-xs font-medium text-muted max-lg:pb-0 max-lg:text-[0.9375rem] max-lg:font-semibold max-lg:text-ink max-lg:group-open:pb-3 lg:pointer-events-none lg:list-none lg:[&::-webkit-details-marker]:hidden"
+          >
+            Contents
+          </summary>
+          <ol class="border-l border-line">
             {
               toc.map((item) => (
                 <li>
-                  <a href={`#${item.id}`} data-toc={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    data-toc={item.id}
+                    class="-ml-px block border-l-2 border-transparent py-1.5 pl-4 text-sm leading-[1.4] text-muted transition-colors duration-150 ease-out hover:text-ink aria-[current=true]:border-accent aria-[current=true]:font-semibold aria-[current=true]:text-ink"
+                  >
                     {item.title}
                   </a>
                 </li>
@@ -40,12 +52,17 @@ const toc = [
         </details>
       </nav>
 
-      <article class="min-w-0">
+      <article class="min-w-0 divide-y divide-line *:first:pt-0">
         {
           SECTIONS.map((section) => (
-            <section id={section.id} class="manual-section" aria-labelledby={`${section.id}-title`}>
-              <h2 id={`${section.id}-title`}>{section.title}</h2>
-              <div class="prose" set:html={section.content} />
+            <section id={section.id} class="scroll-mt-22 py-12" aria-labelledby={`${section.id}-title`}>
+              <h2
+                id={`${section.id}-title`}
+                class="text-[clamp(1.5rem,1.3rem+0.8vw,2rem)] leading-[1.15] font-bold text-ink"
+              >
+                {section.title}
+              </h2>
+              <div class="prose mt-5" set:html={section.content} />
             </section>
           ))
         }
@@ -54,112 +71,6 @@ const toc = [
     </div>
   </div>
 </BaseLayout>
-
-<style>
-  .manual-head {
-    padding-block: clamp(3.5rem, 3rem + 3vw, 6rem) clamp(2.5rem, 2rem + 2vw, 4rem);
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .manual-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2rem;
-    padding-top: 2.5rem;
-  }
-  @media (min-width: 1024px) {
-    .manual-grid {
-      grid-template-columns: 15rem minmax(0, 1fr);
-      gap: 4rem;
-      padding-top: 3.5rem;
-    }
-  }
-
-  .toc {
-    align-self: start;
-  }
-  .toc summary {
-    padding-bottom: 0.75rem;
-    color: var(--color-muted);
-    font-size: 0.75rem;
-    font-weight: 500;
-    cursor: pointer;
-  }
-  .toc ol {
-    border-left: 1px solid var(--color-line);
-  }
-  .toc ol a {
-    display: block;
-    margin-left: -1px;
-    padding: 0.4rem 0 0.4rem 1rem;
-    border-left: 2px solid transparent;
-    color: var(--color-muted);
-    font-size: 0.875rem;
-    line-height: 1.4;
-    transition:
-      color 150ms ease-out,
-      border-color 150ms ease-out;
-  }
-  .toc ol a:hover {
-    color: var(--color-ink);
-  }
-  .toc ol a[aria-current="true"] {
-    border-left-color: var(--color-accent);
-    color: var(--color-ink);
-    font-weight: 600;
-  }
-
-  @media (min-width: 1024px) {
-    .toc {
-      position: sticky;
-      top: 6rem;
-    }
-    .toc summary {
-      pointer-events: none;
-      list-style: none;
-    }
-    .toc summary::-webkit-details-marker {
-      display: none;
-    }
-  }
-
-  @media (max-width: 1023px) {
-    .toc-details {
-      border: 1px solid var(--color-line);
-      border-radius: var(--radius-lg);
-      background: var(--color-panel);
-      padding: 0.875rem 1rem;
-    }
-    .toc summary {
-      padding-bottom: 0;
-      color: var(--color-ink);
-      font-size: 0.9375rem;
-      font-weight: 600;
-    }
-    .toc-details[open] summary {
-      padding-bottom: 0.75rem;
-    }
-  }
-
-  article :global(.manual-section) {
-    min-width: 0;
-    padding-bottom: 3rem;
-    scroll-margin-top: 5.5rem;
-  }
-  article :global(.manual-section + .manual-section) {
-    padding-top: 3rem;
-    border-top: 1px solid var(--color-line);
-  }
-  article :global(.manual-section h2) {
-    color: var(--color-ink);
-    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
-    font-weight: 700;
-    line-height: 1.15;
-  }
-  article :global(.manual-section .prose) {
-    margin-top: 1.25rem;
-  }
-</style>
 
 <script>
   // Scroll-spy: mark the section being read in the contents list.

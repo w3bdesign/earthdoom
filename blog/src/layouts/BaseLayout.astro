@@ -21,12 +21,12 @@ const {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-pt-22 bg-ground scheme-dark [scrollbar-color:var(--color-line-strong)_transparent]">
   <head>
     <BaseHead title={title} description={description} noindex={noindex} />
     <slot name="head" />
   </head>
-  <body class="min-h-dvh">
+  <body class="min-h-dvh bg-ground leading-[1.55] text-ink tabular-nums antialiased caret-accent selection:bg-accent/30 selection:text-ink">
     <a
       href="#main"
       class="fixed top-2 left-2 z-50 -translate-y-20 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-ink focus:translate-y-0"
