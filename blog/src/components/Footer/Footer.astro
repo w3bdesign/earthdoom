@@ -7,19 +7,31 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="mt-24 border-t border-line bg-rail">
-  <div class="mx-auto max-w-7xl px-4 py-12 md:px-8">
-    <!-- Wordmark and links share one row, so they line up on their centres. -->
-    <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-[minmax(0,1fr)_auto] md:gap-16 md:px-8">
+    <div>
       <Wordmark />
-      <!-- -mx-3 cancels the links' own padding so the text lines up with the page edges. -->
-      <nav aria-label="Footer" class="-mx-3 flex flex-wrap items-center">
-        {NAV_LINKS.map((link) => <NavLink href={link.href}>{link.label}</NavLink>)}
-        <NavLink href={PLAY_URL} class="font-semibold text-accent hover:text-accent-strong">Play now</NavLink>
-      </nav>
+      <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted">
+        Earth Doom is an epic war game that plunges you into a relentless fight for survival and dominance. Gain critical resources, research powerful technologies, and conquer enemy lands - all while defending against those who would conquer you.
+      </p>
     </div>
-    <p class="mt-6 max-w-2xl text-sm leading-relaxed text-muted">
-      Earth Doom is an epic war game that plunges you into a relentless fight for survival and dominance. Gain critical resources, research powerful technologies, and conquer enemy lands - all while defending against those who would conquer you.
-    </p>
+
+    <nav aria-labelledby="footer-nav-title">
+      <h2 id="footer-nav-title" class="text-xs font-medium text-muted">Explore</h2>
+      <!-- -ml-3 cancels the links' own padding so the text lines up with the heading. -->
+      <ul class="mt-2 -ml-3 flex flex-col items-start">
+        {
+          NAV_LINKS.map((link) => (
+            <li>
+              <NavLink href={link.href} class="text-soft!">{link.label}</NavLink>
+            </li>
+          ))
+        }
+        <li>
+          <!-- "!" so the accent wins over NavLink's own colour and weight. -->
+          <NavLink href={PLAY_URL} class="font-semibold! text-accent! hover:text-accent-strong!">Play now</NavLink>
+        </li>
+      </ul>
+    </nav>
   </div>
   <div class="border-t border-line">
     <p class="mx-auto max-w-7xl px-4 py-5 text-xs text-muted md:px-8">
