@@ -1,7 +1,7 @@
 ---
 import Menu from "@lucide/astro/icons/menu";
 import X from "@lucide/astro/icons/x";
-import HeaderLink from "./HeaderLink.astro";
+import NavLink from "../common/NavLink.astro";
 import Wordmark from "../common/Wordmark.astro";
 import Button from "../common/Button.astro";
 import { NAV_LINKS, PLAY_URL } from "../../consts";
@@ -29,7 +29,7 @@ const { showDesktopNav = true } = Astro.props;
 
     {showDesktopNav && (
     <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
-      {NAV_LINKS.map((link) => <HeaderLink href={link.href}>{link.label}</HeaderLink>)}
+      {NAV_LINKS.map((link) => <NavLink href={link.href} transition>{link.label}</NavLink>)}
       <Button href={PLAY_URL} class="ml-3">Play now</Button>
     </nav>
     )}
@@ -61,9 +61,9 @@ const { showDesktopNav = true } = Astro.props;
           {
             NAV_LINKS.map((link) => (
               <li class="menu-item opacity-0">
-                <HeaderLink href={link.href} class="!h-12 !text-base">
+                <NavLink href={link.href} class="h-12! text-base!">
                   {link.label}
-                </HeaderLink>
+                </NavLink>
               </li>
             ))
           }

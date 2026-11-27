@@ -1,32 +1,25 @@
 ---
 import Wordmark from "../common/Wordmark.astro";
+import NavLink from "../common/NavLink.astro";
 import { NAV_LINKS, PLAY_URL } from "../../consts";
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="mt-24 border-t border-line bg-rail">
-  <div
-    class="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-[1fr_auto] md:px-8"
-  >
-    <div>
+  <div class="mx-auto max-w-7xl px-4 py-12 md:px-8">
+    <!-- Wordmark and links share one row, so they line up on their centres. -->
+    <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
       <Wordmark />
-      <p class="mt-4 text-sm text-muted">
-        Earth Doom is an epic war game that plunges you into a relentless fight for survival and dominance. Gain critical resources, research powerful technologies, and conquer enemy lands - all while defending against those who would conquer you.
-      </p>
+      <!-- -mx-3 cancels the links' own padding so the text lines up with the page edges. -->
+      <nav aria-label="Footer" class="-mx-3 flex flex-wrap items-center">
+        {NAV_LINKS.map((link) => <NavLink href={link.href}>{link.label}</NavLink>)}
+        <NavLink href={PLAY_URL} class="font-semibold text-accent hover:text-accent-strong">Play now</NavLink>
+      </nav>
     </div>
-    <nav aria-label="Footer" class="flex flex-wrap gap-x-8 gap-y-3 text-sm">
-      {
-        NAV_LINKS.map((link) => (
-          <a href={link.href} class="text-muted hover:text-ink">
-            {link.label}
-          </a>
-        ))
-      }
-      <a href={PLAY_URL} class="font-semibold text-accent hover:text-accent-strong"
-        >Play now</a
-      >
-    </nav>
+    <p class="mt-6 max-w-2xl text-sm leading-relaxed text-muted">
+      Earth Doom is an epic war game that plunges you into a relentless fight for survival and dominance. Gain critical resources, research powerful technologies, and conquer enemy lands - all while defending against those who would conquer you.
+    </p>
   </div>
   <div class="border-t border-line">
     <p class="mx-auto max-w-7xl px-4 py-5 text-xs text-muted md:px-8">
